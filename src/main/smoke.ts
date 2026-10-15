@@ -713,9 +713,66 @@ async function smokeNotes(main: BrowserWindow, mini: BrowserWindow, dir: string,
   await delay(1500)
   shots['deadlines-note'] = await screenshot(main, dir, 'deadlines-note')
   ;(report['notes'] as Record<string, unknown>)['extras'] = await smokeNoteExtras(main, dir, openPath, shots)
+  report['liveLarge'] = await smokeLargeNote(main, openPath)
   ;(report['notes'] as Record<string, unknown>)['editing'] = await smokeEditing(main, join(setup.root!, openPath), openPath)
   ;(report['notes'] as Record<string, unknown>)['folders'] = await smokeFolders(setup.root!, dir)
   return shots
+}
+
+/**
+ * A long note (about 2 MB) in the live editor: how long a cursor move and an edit take at its end, and whether
+ * formulas, the table and the checkboxes are still drawn there. Keys go to the editor as keyboard events.
+ */
+async function smokeLargeNote(main: BrowserWindow, nextTo: string): Promise<Record<string, unknown>> {
+  const js = (code: string): Promise<unknown> => main.webContents.executeJavaScript(code)
+  const path = createNoteIn(nextTo.slice(0, nextTo.lastIndexOf('/')), 'Lange Notiz')
+  const parts: string[] = []
+  for (let size = 0, n = 1; size < 2_000_000; n++) {
+    const part = `## Abschnitt ${n}\n\n${SAMPLE_NOTE}\n`
+    parts.push(part)
+    size += part.length
+  }
+  writeNote(path, parts.join(''), null)
+  main.webContents.send(IPC.navigate, 'notes', path)
+  await delay(3000)
+  const result = (await js(`(async () => {
+    const content = document.querySelector('.cm-content')
+    if (!content) return { error: 'kein Editor' }
+    content.focus()
+    const key = (key, extra = {}) => content.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true, ...extra }))
+    key('End', { ctrlKey: true })
+    // Let the parser reach the end of the note.
+    await new Promise((resolve) => setTimeout(resolve, 2500))
+    key('ArrowUp')
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const time = (action, times) => {
+      const start = performance.now()
+      for (let i = 0; i < times; i++) action()
+      return (performance.now() - start) / times
+    }
+    const move = time(() => key('ArrowUp'), 40)
+    const edit = time(() => { key('Enter'); key('Backspace') }, 20) / 2
+    // The same without live preview, as the baseline of the editor and the notes view.
+    const toggle = document.querySelector('button[aria-label="Markdown-Zeichen zeigen"]')
+    toggle?.click()
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    const plainEdit = time(() => { key('Enter'); key('Backspace') }, 20) / 2
+    const plainMove = time(() => key('ArrowUp'), 40)
+    toggle?.click()
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    return {
+      length: document.querySelector('.cm-editor') ? ${2_000_000} : 0,
+      msPerMove: Math.round(move * 10) / 10,
+      msPerEdit: Math.round(edit * 10) / 10,
+      plainMsPerMove: Math.round(plainMove * 10) / 10,
+      plainMsPerEdit: Math.round(plainEdit * 10) / 10,
+      math: document.querySelectorAll('.cm-lp-math .katex').length,
+      tables: document.querySelectorAll('.cm-lp-table table').length,
+      tasks: document.querySelectorAll('.cm-lp-task').length
+    }
+  })()`)) as Record<string, unknown>
+  await delay(1500)
+  return result
 }
 
 /** Folders in the notes: create, new note in it, rename (course folders keep their LVA), move, import, protected folders. */
@@ -812,6 +869,8 @@ async function smokeEditing(main: BrowserWindow, file: string, path: string): Pr
   result['liveMath'] = ((await js(`document.querySelectorAll('.cm-lp-math .katex').length`)) as number) >= 2
   result['liveTable'] = ((await js(`document.querySelectorAll('.cm-lp-table table').length`)) as number) === 1
   result['liveTasks'] = ((await js(`document.querySelectorAll('.cm-lp-task').length`)) as number) === 2
+  // Syntax highlighting reaches into code blocks too (Python inside Markdown): "def" and the like get their colour.
+  result['codeHighlighted'] = (await js(`[...document.querySelectorAll('.cm-lp-codeblock span[class]')].some((span) => span.textContent === 'def')`)) as boolean
   await js(`[...document.querySelectorAll('.cm-lp-task')].find((box) => !box.checked)?.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }))`)
   await delay(1500)
   result['liveTaskTicked'] = onDisk().includes('- [x] Beispiel 3 nachrechnen')
