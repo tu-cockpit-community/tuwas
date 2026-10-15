@@ -84,7 +84,7 @@
   --kasten-pruefung: #fdba74;
 }
 
-/* Eingebettet in sout: dieselbe Flaeche wie die Hostapp (helles Blauweiss statt Papier). */
+/* Eingebettet in TUWAS: dieselbe Flaeche wie die Hostapp (helles Blauweiss statt Papier). */
 html[data-embed="1"]:not([data-theme="dark"]) .lernen {
   --lern-flaeche: #eef4f8;
 }

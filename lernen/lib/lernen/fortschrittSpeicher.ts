@@ -4,7 +4,7 @@ import { haenge, uebernahmeId } from "./journal";
 import { lesbarerStand, type Stand } from "./stand";
 
 /**
- * Der Lernstand der Faecher lag frueher als JSON-Datei je Kurs im Ordner LERNEN_DATEN (sout: <userData>/lernen-fortschritt,
+ * Der Lernstand der Faecher lag frueher als JSON-Datei je Kurs im Ordner LERNEN_DATEN (TUWAS: <userData>/lernen-fortschritt,
  * sonst db/fortschritt). Heute gilt das Protokoll (journal.ts); dieses Modul liest die alten Dateien nur noch, um ihren
  * Stand einmal als Uebernahme ins Protokoll zu holen. Die alten Dateien werden weder veraendert noch geloescht.
  */

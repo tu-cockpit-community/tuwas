@@ -5,7 +5,7 @@ Lernbereich mit Kursinhalten für die TU Wien. Eine Seite, **Fächer** (`/lernen
 - die Module des Bachelors Informatik (StEOP, Pflicht, Enge Wahl, Vertiefung, Freie Wahl, Bachelorarbeit, Vorkurs) mit den Lehrveranstaltungen, bei denen du angemeldet bist. Für `ep1` gibt es Kapitel, Training, Glossar, Suche und mündliche Fragen, für die übrigen Lernpfad, Quiz und Programmiertests unter `/kurse/<id>`.
 - optional die **Studienberechtigungsprüfung** (SBP) als eigenes Modul mit ihren fünf Prüfungen. `mathe3` und `physik1` haben Lernkurse mit Prüfungssimulationen und Formelsammlung, das Wahlfach ist eine LVA der StEOP, die übrigen zeigen ihren Stand.
 
-Was „angemeldet“ heißt und ob die SBP erscheint, gibt sout vor (Einstellungen → Lernen): Die Hostapp schreibt `{"lvas": ["185.A91", …], "sbp": true}` in die Datei, auf die `SOUT_ANGEMELDET` zeigt, und aktualisiert sie bei jeder Änderung. Ohne diese Variable zeigt die Seite alle Lehrveranstaltungen mit Lernpfad und die SBP.
+Was „angemeldet“ heißt und ob die SBP erscheint, gibt TUWAS vor (Einstellungen → Lernen): Die Hostapp schreibt `{"lvas": ["185.A91", …], "sbp": true}` in die Datei, auf die `TUWAS_ANGEMELDET` zeigt, und aktualisiert sie bei jeder Änderung. Ohne diese Variable zeigt die Seite alle Lehrveranstaltungen mit Lernpfad und die SBP.
 
 `/` leitet auf `/lernen` weiter.
 
@@ -73,9 +73,9 @@ Kursinhalte schreiben und prüfen: [`content/AUTHORING.md`](content/AUTHORING.md
 
 | System | Ort |
 |---|---|
-| Linux | `$XDG_DATA_HOME/sout/lernen/lernstand.jsonl` (sonst `~/.local/share/sout/lernen/lernstand.jsonl`) |
-| Windows | `%APPDATA%\sout\lernen\lernstand.jsonl` |
-| macOS | `~/Library/Application Support/sout/lernen/lernstand.jsonl` |
+| Linux | `$XDG_DATA_HOME/TUWAS/lernen/lernstand.jsonl` (sonst `~/.local/share/tuwas/lernen/lernstand.jsonl`) |
+| Windows | `%APPDATA%\tuwas\lernen\lernstand.jsonl` |
+| macOS | `~/Library/Application Support/tuwas/lernen/lernstand.jsonl` |
 
 `LERNEN_JOURNAL` (absoluter Dateipfad) legt einen anderen Ort fest. Die Datei ist ein Protokoll: eine Zeile je Ereignis
 (gelöste Aufgabe, gelesene Lektion, Karte, Prüfungsversuch, Lernpfad, Quiz, Programmiertest, Begriff, Kurs- und

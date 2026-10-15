@@ -6,7 +6,7 @@ import { calendarChanged, calendarData, clearCalendar, syncCalendar, updateCours
 import { changes, dismissChange } from './changes'
 import { dismissExam, examsData, syncExams } from './exams'
 import { tuwelExtras } from './tuwelExtras'
-import { checkForUpdates, installUpdate, openUpdateHelp, updateState } from './updater'
+import { checkForUpdates, installUpdate, openUpdateHelp, updateSourceChanged, updateState } from './updater'
 import { addStudyCourse, removeStudyCourse, studiesData, updateStudyCourse } from './studies'
 import { chooseNotesDir, createLinkedNote, createNote, importPdfs, moveNote, noteForEvent, noteForTask, quickNote, setupNotes } from './courseNotes'
 import { flushNote, notesData, readNote, renameNote, resolveNote, saveNoteImage, searchNotes, showInFolder, trashNote, writeNote } from './notes'
@@ -67,7 +67,9 @@ export function registerIpc(): void {
   ipcMain.handle(IPC.updateSettings, (_event, patch: unknown) => {
     // The notes folder only changes through setupNotes, which also creates it.
     const allowed = patch && typeof patch === 'object' ? { ...patch, notesDir: undefined } : patch
+    const before = getSettings().updateRepo
     const settings = updateSettings(allowed)
+    if (settings.updateRepo !== before) updateSourceChanged()
     syncLernenCourses()
     applyTheme()
     changed()

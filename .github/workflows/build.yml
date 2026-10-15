@@ -1,4 +1,4 @@
-# Builds sout on Linux, Windows and macOS, runs the smoke test there (made-up data, see
+# Builds TUWAS on Linux, Windows and macOS, runs the smoke test there (made-up data, see
 # scripts/smoke.mjs) and keeps the installers and the screenshots as downloads.
 # Starts only by hand: GitHub → Actions → "Bauen & testen" → Run workflow.
 name: Bauen & testen
@@ -59,7 +59,7 @@ jobs:
       - name: Installer aufheben
         uses: actions/upload-artifact@v4
         with:
-          name: sout-${{ runner.os }}
+          name: tuwas-${{ runner.os }}
           path: |
             dist/*.AppImage
             dist/*.rpm

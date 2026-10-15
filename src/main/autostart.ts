@@ -13,10 +13,10 @@ const linux = process.platform === 'linux'
 
 /** The .desktop file on Linux; null elsewhere (the system keeps the login items). */
 export function autostartFile(): string | null {
-  return linux ? join(app.getPath('appData'), 'autostart', 'sout.desktop') : null
+  return linux ? join(app.getPath('appData'), 'autostart', 'tuwas.desktop') : null
 }
 
-/** Windows: start sout (in development: Electron with the project folder) with --autostart. macOS can't pass arguments. */
+/** Windows: start TUWAS (in development: Electron with the project folder) with --autostart. macOS can't pass arguments. */
 function loginItem(): Electron.LoginItemSettingsOptions {
   if (process.platform !== 'win32') return {}
   return { path: process.execPath, args: [...(app.isPackaged ? [] : [app.getAppPath()]), ...startupArgs(), AUTOSTART_ARG] }
@@ -41,7 +41,7 @@ export function setAutostart(enabled: boolean): void {
   writeFileSync(file, autostartEntry())
 }
 
-/** Was sout started by the login (and not by hand)? */
+/** Was TUWAS started by the login (and not by hand)? */
 export function startedByAutostart(): boolean {
   if (process.argv.includes(AUTOSTART_ARG)) return true
   // macOS has no arguments for login items, but knows how it started us (if it still says so).
@@ -63,11 +63,11 @@ export function autostartEntry(): string {
   return [
     '[Desktop Entry]',
     'Type=Application',
-    'Name=sout',
+    'Name=TUWAS',
     'Comment=Studium organisieren: TISS, TUWEL, Notizen',
     `Exec=${[...command, ...startupArgs(), AUTOSTART_ARG].map(quoteExecArg).join(' ')}`,
     // Installed packages bring their icon along; from the project folder the file is used.
-    `Icon=${app.isPackaged ? 'sout' : resourcePath('icon.png')}`,
+    `Icon=${app.isPackaged ? 'tuwas' : resourcePath('icon.png')}`,
     'Terminal=false',
     'X-GNOME-Autostart-enabled=true',
     // Give GNOME Shell a moment, so the tray host is up before we register our icon.

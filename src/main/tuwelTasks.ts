@@ -2,7 +2,7 @@ import type { Task } from '../shared/types'
 import { tuwelCall } from './tuwelApi'
 
 // TUWEL data → tasks. fetchSnapshot() collects the raw Moodle answers, toTasks() turns them into
-// our model; keeping them apart lets a saved snapshot (SOUT_TUWEL_FILE) stand in for TUWEL in tests.
+// our model; keeping them apart lets a saved snapshot (TUWAS_TUWEL_FILE) stand in for TUWEL in tests.
 
 export interface MoodleSnapshot {
   site: { userid: number; fullname: string }

@@ -23,9 +23,9 @@ function applyPalettes(settings: Settings): void {
   document.documentElement.dataset['dark'] = settings.darkPalette
 }
 
-window.sout.onStateChanged(() => void window.sout.getSettings().then(applyPalettes))
+window.tuwas.onStateChanged(() => void window.tuwas.getSettings().then(applyPalettes))
 // Colours first, so the page doesn't flash in the standard scheme.
-void window.sout
+void window.tuwas
   .getSettings()
   .then(applyPalettes)
   .finally(() => {

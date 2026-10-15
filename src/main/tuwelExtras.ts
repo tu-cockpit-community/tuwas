@@ -10,7 +10,7 @@ import type { MaterialCourse, RawSection } from './tuwelMaterials'
 // More from TUWEL than the deadlines, with the token of each tasks sync: announcements of the
 // courses, Kreuzerlübungen (which examples are ticked), booked appointments and booking periods
 // ("Terminbuchung"), and the grades with feedback. Raw answers (RawExtras) are kept apart from
-// what sout makes of them, so test data can stand in for TUWEL.
+// what TUWAS makes of them, so test data can stand in for TUWEL.
 
 const DAY = 24 * 60 * 60
 /** Grades change rarely – a look every two hours is plenty. */
@@ -78,7 +78,7 @@ interface RawGradeItem {
   gradeishidden?: boolean
 }
 
-/** What TUWEL answered – saved test data (SOUT_TUWEL_FILE, key "extras") has the same shape. */
+/** What TUWEL answered – saved test data (TUWAS_TUWEL_FILE, key "extras") has the same shape. */
 export interface RawExtras {
   courses: EnrolledCourse[]
   forums: RawForum[]
@@ -232,8 +232,8 @@ export async function fetchExtras(token: string, userid: number, courseKeys: Set
 }
 
 /**
- * Turns TUWEL's answers into what sout shows; returns what is new (announcements, grades).
- * `label`: how sout calls a course (its short name).
+ * Turns TUWEL's answers into what TUWAS shows; returns what is new (announcements, grades).
+ * `label`: how TUWAS calls a course (its short name).
  */
 export function applyExtras(raw: RawExtras, notifyGrades: boolean, label: (courseKey: string | null, fallback: string) => string): NewChange[] {
   const previous = loadCache()

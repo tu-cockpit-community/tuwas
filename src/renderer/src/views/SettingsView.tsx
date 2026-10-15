@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Check, Download, FolderOpen, KeyRound, LoaderCircle, LogIn, LogOut, RefreshCw } from 'lucide-react'
 import { DARK_PALETTES, LIGHT_PALETTES, THEME_MODES, type Palette } from '../../../shared/themes'
 import { REMINDER_CHOICES, type AppInfo, type Course, type SecretsStatus, type Settings, type UpdateState } from '../../../shared/types'
+import { DEFAULT_UPDATE_REPO, githubRepo, repoLink } from '../../../shared/updateSource'
 import { Callout, Command, Toggle } from '../components'
 import { syncStatus, useCalendar } from '../lib/calendar'
 import { useAppState } from '../lib/hooks'
@@ -19,7 +20,7 @@ export default function SettingsView() {
   const { info, settings, autostart, secrets } = state
 
   const toggleAutostart = async (enabled: boolean): Promise<void> => {
-    const result = await window.sout.setAutostart(enabled)
+    const result = await window.tuwas.setAutostart(enabled)
     setAutostartError(result.ok ? null : result.error)
   }
 
@@ -35,7 +36,7 @@ export default function SettingsView() {
           <div className="row">
             <div className="row-text">
               <div className="row-title">Beim Anmelden starten</div>
-              <div className="row-desc">sout startet automatisch, wenn du dich am Laptop anmeldest.</div>
+              <div className="row-desc">TUWAS startet automatisch, wenn du dich am Laptop anmeldest.</div>
             </div>
             <Toggle label="Beim Anmelden starten" checked={autostart} onChange={(value) => void toggleAutostart(value)} />
           </div>
@@ -48,20 +49,20 @@ export default function SettingsView() {
               label="Beim Autostart nur im Hintergrund starten"
               checked={settings.startHiddenOnAutostart}
               disabled={!autostart}
-              onChange={(value) => void window.sout.updateSettings({ startHiddenOnAutostart: value })}
+              onChange={(value) => void window.tuwas.updateSettings({ startHiddenOnAutostart: value })}
             />
           </div>
           <div className="row">
             <div className="row-text">
               <div className="row-title">Beim Schließen die Mini-Ansicht zeigen</div>
               <div className="row-desc">
-                Schließt du das Hauptfenster, wird sout zum kleinen Fenster beim Symbol. Ein Klick daneben schickt es ins Symbol.
+                Schließt du das Hauptfenster, wird TUWAS zum kleinen Fenster beim Symbol. Ein Klick daneben schickt es ins Symbol.
               </div>
             </div>
             <Toggle
               label="Beim Schließen die Mini-Ansicht zeigen"
               checked={settings.miniOnClose}
-              onChange={(value) => void window.sout.updateSettings({ miniOnClose: value })}
+              onChange={(value) => void window.tuwas.updateSettings({ miniOnClose: value })}
             />
           </div>
           <div className="row">
@@ -118,6 +119,7 @@ export default function SettingsView() {
         <h2>Info</h2>
         <div className="rows">
           <UpdateRow packaged={info.packaged} />
+          <UpdateSourceRow current={settings.updateRepo} />
           <div className="row">
             <InfoList info={info} />
           </div>
@@ -129,7 +131,7 @@ export default function SettingsView() {
 
 /** Light, dark or as the system says – and a colour scheme for each. */
 function AppearanceSection({ settings }: { settings: Settings }) {
-  const update = (patch: Partial<Settings>): void => void window.sout.updateSettings(patch)
+  const update = (patch: Partial<Settings>): void => void window.tuwas.updateSettings(patch)
   return (
     <section className="section">
       <h2>Erscheinungsbild</h2>
@@ -154,8 +156,8 @@ function AppearanceSection({ settings }: { settings: Settings }) {
             ))}
           </div>
         </div>
-        <PaletteRow title="Helles Farbschema" hint="Gilt, wenn sout hell ist." palettes={LIGHT_PALETTES} value={settings.lightPalette} onChange={(id) => update({ lightPalette: id })} />
-        <PaletteRow title="Dunkles Farbschema" hint="Gilt, wenn sout dunkel ist." palettes={DARK_PALETTES} value={settings.darkPalette} onChange={(id) => update({ darkPalette: id })} />
+        <PaletteRow title="Helles Farbschema" hint="Gilt, wenn TUWAS hell ist." palettes={LIGHT_PALETTES} value={settings.lightPalette} onChange={(id) => update({ lightPalette: id })} />
+        <PaletteRow title="Dunkles Farbschema" hint="Gilt, wenn TUWAS dunkel ist." palettes={DARK_PALETTES} value={settings.darkPalette} onChange={(id) => update({ darkPalette: id })} />
       </div>
     </section>
   )
@@ -174,7 +176,7 @@ function LernenSection({ settings }: { settings: Settings }) {
           <Toggle
             label="Studienberechtigungsprüfung anzeigen"
             checked={settings.lernenSbp}
-            onChange={(value) => void window.sout.updateSettings({ lernenSbp: value })}
+            onChange={(value) => void window.tuwas.updateSettings({ lernenSbp: value })}
           />
         </div>
       </div>
@@ -226,24 +228,24 @@ function PaletteRow(props: { title: string; hint: string; palettes: Palette[]; v
 function UpdateRow({ packaged }: { packaged: boolean }) {
   const [update, setUpdate] = useState<UpdateState | null>(null)
   useEffect(() => {
-    const load = (): void => void window.sout.getUpdateState().then(setUpdate)
+    const load = (): void => void window.tuwas.getUpdateState().then(setUpdate)
     load()
-    return window.sout.onUpdateChanged(load)
+    return window.tuwas.onUpdateChanged(load)
   }, [])
   if (!update) return null
   const text = !packaged
     ? 'Aus dem Projektordner gestartet: neue Versionen mit git pull, siehe README.'
     : update.status === 'ready'
-      ? `sout ${update.latest} ist geladen und wird beim Beenden installiert.`
+      ? `TUWAS ${update.latest} ist geladen und wird beim Beenden installiert.`
       : update.status === 'downloading'
-        ? `sout ${update.latest} wird geladen …`
+        ? `TUWAS ${update.latest} wird geladen …`
         : update.status === 'available'
-          ? `sout ${update.latest} ist da. Auf diesem System aktualisierst du von Hand – die Anleitung zeigt wie.`
+          ? `TUWAS ${update.latest} ist da. Auf diesem System aktualisierst du von Hand – die Anleitung zeigt wie.`
           : update.status === 'checking'
             ? 'Schaue nach neuen Versionen …'
             : update.automatic
-              ? 'sout lädt neue Versionen selbst und installiert sie beim Beenden.'
-              : 'sout schaut alle sechs Stunden nach neuen Versionen und sagt Bescheid.'
+              ? 'TUWAS lädt neue Versionen selbst und installiert sie beim Beenden.'
+              : 'TUWAS schaut alle sechs Stunden nach neuen Versionen und sagt Bescheid.'
   return (
     <div className="row">
       <div className="row-text">
@@ -254,20 +256,75 @@ function UpdateRow({ packaged }: { packaged: boolean }) {
         </div>
       </div>
       {packaged && update.status === 'ready' && (
-        <button type="button" className="button" onClick={() => window.sout.installUpdate()}>
+        <button type="button" className="button" onClick={() => window.tuwas.installUpdate()}>
           <RefreshCw size={14} /> Jetzt neu starten
         </button>
       )}
       {packaged && update.status === 'available' && (
-        <button type="button" className="button" onClick={() => window.sout.openUpdateHelp()}>
+        <button type="button" className="button" onClick={() => window.tuwas.openUpdateHelp()}>
           <Download size={14} /> So aktualisierst du
         </button>
       )}
       {packaged && (update.status === 'idle' || update.status === 'checking') && (
-        <button type="button" className="button secondary" disabled={update.status === 'checking'} onClick={() => void window.sout.checkForUpdates()}>
+        <button type="button" className="button secondary" disabled={update.status === 'checking'} onClick={() => void window.tuwas.checkForUpdates()}>
           Jetzt nachsehen
         </button>
       )}
+    </div>
+  )
+}
+
+/** The GitHub repository new versions come from, as a link. */
+function UpdateSourceRow({ current }: { current: string }) {
+  const [input, setInput] = useState(current)
+  const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null)
+  const repo = githubRepo(input)
+  const save = async (link: string): Promise<void> => {
+    const target = githubRepo(link)
+    if (!target) {
+      setMessage({ kind: 'error', text: 'Das ist kein GitHub-Repository. Erwartet wird ein Link wie https://github.com/name/repo.' })
+      return
+    }
+    const settings = await window.tuwas.updateSettings({ updateRepo: repoLink(target) })
+    setInput(settings.updateRepo)
+    setMessage({ kind: 'ok', text: `Updates kommen jetzt aus ${settings.updateRepo.replace('https://github.com/', '')}.` })
+  }
+  return (
+    <div className="row column">
+      <div className="row-text">
+        <div className="row-title">Update-Quelle</div>
+        <div className="row-desc">GitHub-Repository, aus dessen Releases neue Versionen kommen. Ein Link genügt, z. B. {DEFAULT_UPDATE_REPO}.</div>
+      </div>
+      <form
+        className="form-row"
+        onSubmit={(event) => {
+          event.preventDefault()
+          void save(input)
+        }}
+      >
+        <input
+          className="input"
+          type="url"
+          placeholder={DEFAULT_UPDATE_REPO}
+          aria-label="Update-Quelle (GitHub-Link)"
+          autoComplete="off"
+          spellCheck={false}
+          value={input}
+          onChange={(event) => {
+            setInput(event.target.value)
+            setMessage(null)
+          }}
+        />
+        <button type="submit" className="button" disabled={!repo || repoLink(repo) === current}>
+          Speichern
+        </button>
+        {current !== DEFAULT_UPDATE_REPO && (
+          <button type="button" className="button secondary" onClick={() => void save(DEFAULT_UPDATE_REPO)}>
+            Standard
+          </button>
+        )}
+      </form>
+      {message && <Callout kind={message.kind} title={message.text} />}
     </div>
   )
 }
@@ -276,7 +333,7 @@ function TrayStatus({ available, platform }: { available: boolean | null; platfo
   if (available || platform !== 'linux') {
     return (
       <Callout kind="ok" title={`Das Symbol ${trayPlace(platform)} wird angezeigt.`}>
-        Schließen beendet sout nicht. Ein Klick aufs Symbol öffnet die Mini-Ansicht, Rechtsklick das Menü.
+        Schließen beendet TUWAS nicht. Ein Klick aufs Symbol öffnet die Mini-Ansicht, Rechtsklick das Menü.
       </Callout>
     )
   }
@@ -315,7 +372,7 @@ function TissRow({ connected, onChanged }: { connected: boolean; onChanged: () =
 
   const save = (): Promise<void> =>
     run(async () => {
-      const result = await window.sout.saveTissToken(input)
+      const result = await window.tuwas.saveTissToken(input)
       if (!result.ok) {
         setMessage({ kind: 'error', text: result.error })
         return
@@ -327,7 +384,7 @@ function TissRow({ connected, onChanged }: { connected: boolean; onChanged: () =
 
   const test = (): Promise<void> =>
     run(async () => {
-      const result = await window.sout.testTiss()
+      const result = await window.tuwas.testTiss()
       setMessage(
         result.ok
           ? { kind: 'ok', text: `Verbindung klappt: ${result.value.events} Termine in deinem TISS-Kalender.` }
@@ -337,7 +394,7 @@ function TissRow({ connected, onChanged }: { connected: boolean; onChanged: () =
 
   const remove = (): Promise<void> =>
     run(async () => {
-      await window.sout.clearSecret('tissToken')
+      await window.tuwas.clearSecret('tissToken')
       setMessage(null)
       await onChanged()
     })
@@ -463,7 +520,7 @@ function CoursesSection() {
 const ectsFormat = new Intl.NumberFormat('de-AT', { maximumFractionDigits: 1 })
 
 function CourseRow({ course }: { course: Course }) {
-  const update = (patch: Parameters<typeof window.sout.updateCourse>[1]): void => void window.sout.updateCourse(course.key, patch)
+  const update = (patch: Parameters<typeof window.tuwas.updateCourse>[1]): void => void window.tuwas.updateCourse(course.key, patch)
   return (
     <div className="row course-row">
       <input
@@ -514,7 +571,7 @@ function TuwelRow() {
 
   const login = async (): Promise<void> => {
     setBusy(true)
-    const result = await window.sout.loginTuwel()
+    const result = await window.tuwas.loginTuwel()
     setBusy(false)
     setError(result.ok ? null : result.error)
   }
@@ -529,7 +586,7 @@ function TuwelRow() {
               ? [tasks.user && `Angemeldet als ${tasks.user}`, tasks.syncedAt && `Stand: ${tuwelSync.format(new Date(tasks.syncedAt))}`]
                   .filter(Boolean)
                   .join(' · ')
-              : 'Anmeldung über den TU-Wien-Login, wie bei der Moodle-App. Dein Passwort sieht und speichert sout nie.'}
+              : 'Anmeldung über den TU-Wien-Login, wie bei der Moodle-App. Dein Passwort sieht und speichert TUWAS nie.'}
           </div>
         </div>
         <span className={`pill${tasks.connected && !tasks.expired ? ' ok' : tasks.expired ? ' warn' : ''}`}>
@@ -541,7 +598,7 @@ function TuwelRow() {
           {busy ? <LoaderCircle size={14} className="spin" /> : <LogIn size={14} />} {tasks.connected ? 'Neu anmelden' : 'Bei TUWEL anmelden'}
         </button>
         {tasks.connected && (
-          <button type="button" className="button danger" disabled={busy} onClick={() => void window.sout.logoutTuwel()}>
+          <button type="button" className="button danger" disabled={busy} onClick={() => void window.tuwas.logoutTuwel()}>
             <LogOut size={14} /> Abmelden
           </button>
         )}
@@ -555,7 +612,7 @@ function TuwelRow() {
 function RemindersSection({ settings }: { settings: Settings }) {
   const toggle = (minutes: number, on: boolean): void => {
     const reminders = on ? [...settings.reminders, minutes] : settings.reminders.filter((value) => value !== minutes)
-    void window.sout.updateSettings({ reminders })
+    void window.tuwas.updateSettings({ reminders })
   }
   return (
     <section className="section">
@@ -564,7 +621,7 @@ function RemindersSection({ settings }: { settings: Settings }) {
         <div className="row column">
           <div className="row-text">
             <div className="row-title">Vor Abgaben, Tests und Anmeldeschlüssen erinnern</div>
-            <div className="row-desc">Als Benachrichtigung, solange sout läuft – auch im Hintergrund.</div>
+            <div className="row-desc">Als Benachrichtigung, solange TUWAS läuft – auch im Hintergrund.</div>
           </div>
           <div className="reminder-choices">
             {REMINDER_CHOICES.map((choice) => (
@@ -587,7 +644,7 @@ function RemindersSection({ settings }: { settings: Settings }) {
           <Toggle
             label="Bescheid geben, sobald etwas aufmacht"
             checked={settings.notifyOpening}
-            onChange={(value) => void window.sout.updateSettings({ notifyOpening: value })}
+            onChange={(value) => void window.tuwas.updateSettings({ notifyOpening: value })}
           />
         </div>
         <div className="row">
@@ -601,7 +658,7 @@ function RemindersSection({ settings }: { settings: Settings }) {
           <Toggle
             label="An Prüfungsanmeldungen erinnern"
             checked={settings.notifyExamRegistration}
-            onChange={(value) => void window.sout.updateSettings({ notifyExamRegistration: value })}
+            onChange={(value) => void window.tuwas.updateSettings({ notifyExamRegistration: value })}
           />
         </div>
         <div className="row">
@@ -609,21 +666,21 @@ function RemindersSection({ settings }: { settings: Settings }) {
             <div className="row-title">Änderungen im Stundenplan melden</div>
             <div className="row-desc">Raumwechsel, verschobene oder entfallene Termine der nächsten zwei Wochen und deine Prüfungsanmeldungen, sobald sie im TISS-Kalender stehen.</div>
           </div>
-          <Toggle label="Änderungen im Stundenplan melden" checked={settings.notifyChanges} onChange={(value) => void window.sout.updateSettings({ notifyChanges: value })} />
+          <Toggle label="Änderungen im Stundenplan melden" checked={settings.notifyChanges} onChange={(value) => void window.tuwas.updateSettings({ notifyChanges: value })} />
         </div>
         <div className="row">
           <div className="row-text">
             <div className="row-title">Neue Aufgaben in TUWEL melden</div>
             <div className="row-desc">Sobald eine neue Abgabe oder ein neuer Test in TUWEL auftaucht.</div>
           </div>
-          <Toggle label="Neue Aufgaben in TUWEL melden" checked={settings.notifyNewTasks} onChange={(value) => void window.sout.updateSettings({ notifyNewTasks: value })} />
+          <Toggle label="Neue Aufgaben in TUWEL melden" checked={settings.notifyNewTasks} onChange={(value) => void window.tuwas.updateSettings({ notifyNewTasks: value })} />
         </div>
         <div className="row">
           <div className="row-text">
             <div className="row-title">Neue Bewertungen melden</div>
-            <div className="row-desc">sout schaut alle zwei Stunden in TUWEL nach neuen Noten und Punkten (zu sehen unter „Noten“).</div>
+            <div className="row-desc">TUWAS schaut alle zwei Stunden in TUWEL nach neuen Noten und Punkten (zu sehen unter „Noten“).</div>
           </div>
-          <Toggle label="Neue Bewertungen melden" checked={settings.notifyGrades} onChange={(value) => void window.sout.updateSettings({ notifyGrades: value })} />
+          <Toggle label="Neue Bewertungen melden" checked={settings.notifyGrades} onChange={(value) => void window.tuwas.updateSettings({ notifyGrades: value })} />
         </div>
         <div className="row">
           <div className="row-text">
@@ -633,7 +690,7 @@ function RemindersSection({ settings }: { settings: Settings }) {
           <Toggle
             label="Neue Ankündigungen melden"
             checked={settings.notifyAnnouncements}
-            onChange={(value) => void window.sout.updateSettings({ notifyAnnouncements: value })}
+            onChange={(value) => void window.tuwas.updateSettings({ notifyAnnouncements: value })}
           />
         </div>
       </div>
@@ -647,9 +704,9 @@ function NotesSection({ settings }: { settings: Settings }) {
   if (!notes) return null
 
   const change = async (): Promise<void> => {
-    const dir = await window.sout.chooseNotesDir()
+    const dir = await window.tuwas.chooseNotesDir()
     if (!dir) return
-    const result = await window.sout.setupNotes(dir)
+    const result = await window.tuwas.setupNotes(dir)
     setError(result.ok ? null : result.error)
     await reload()
   }
@@ -679,7 +736,7 @@ function NotesSection({ settings }: { settings: Settings }) {
           </div>
           {notes.root && (
             <div className="form-row">
-              <button type="button" className="button secondary" onClick={() => window.sout.showNoteInFolder(null)} disabled={notes.missing}>
+              <button type="button" className="button secondary" onClick={() => window.tuwas.showNoteInFolder(null)} disabled={notes.missing}>
                 <FolderOpen size={14} /> Im Dateimanager öffnen
               </button>
               <button type="button" className="button secondary" onClick={() => void change()}>
@@ -699,10 +756,10 @@ function NotesSection({ settings }: { settings: Settings }) {
               nicht wieder.
             </div>
           </div>
-          <Toggle label="TUWEL-Unterlagen laden" checked={settings.loadMaterials} onChange={(value) => void window.sout.updateSettings({ loadMaterials: value })} />
+          <Toggle label="TUWEL-Unterlagen laden" checked={settings.loadMaterials} onChange={(value) => void window.tuwas.updateSettings({ loadMaterials: value })} />
         </div>
       </div>
-      <p className="section-hint">Beim Wechsel werden vorhandene Notizen nicht verschoben – sout zeigt dann die Notizen im neuen Ordner.</p>
+      <p className="section-hint">Beim Wechsel werden vorhandene Notizen nicht verschoben – TUWAS zeigt dann die Notizen im neuen Ordner.</p>
     </section>
   )
 }

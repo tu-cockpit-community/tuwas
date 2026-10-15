@@ -1,9 +1,9 @@
-import type { SoutApi } from '../../shared/types'
+import type { TuwasApi } from '../../shared/types'
 
 declare global {
   interface Window {
     /** Provided by the preload script (src/preload/index.ts). */
-    sout: SoutApi
+    tuwas: TuwasApi
   }
 }
 

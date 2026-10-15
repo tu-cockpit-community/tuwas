@@ -150,7 +150,7 @@
   --font-sans: var(--font-archivo), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
-  /* Weiche Rundungen wie im Lernbereich und in sout, aber ohne Schatten */
+  /* Weiche Rundungen wie im Lernbereich und in TUWAS, aber ohne Schatten */
   --radius-xs: 2px;
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -245,7 +245,7 @@ body {
   padding-inline-end: 0.75em !important;
 }
 
-/* Eingebettet in sout: dieselben Flaechen wie die Hostapp, damit Rahmen und Inhalt wie eine Oberflaeche wirken. */
+/* Eingebettet in TUWAS: dieselben Flaechen wie die Hostapp, damit Rahmen und Inhalt wie eine Oberflaeche wirken. */
 html[data-embed="1"]:not([data-theme="dark"]) {
   --app-surface: #eef4f8;
   --app-surface-sunken: #e6eef4;

@@ -1,19 +1,23 @@
 import { app, net, Notification, shell } from 'electron'
 import electronUpdater from 'electron-updater'
 import type { UpdateState } from '../shared/types'
+import { DEFAULT_UPDATE_REPO, githubRepo, type GithubRepo } from '../shared/updateSource'
 import { resourcePath } from './paths'
+import { getSettings } from './settings'
 import { showMain } from './windows'
 
-// New versions come from the GitHub releases of sout. Windows (installer) and Linux (AppImage)
-// update themselves: download in the background, install when sout quits – or right away with
+// New versions come from the GitHub releases of the repository set in the settings (Einstellungen → Info → Updates). Windows (installer) and Linux (AppImage)
+// update themselves: download in the background, install when TUWAS quits – or right away with
 // "Jetzt neu starten". macOS and the RPM can't do that without a paid signature or root rights:
-// there sout only says that there is a new version and leads to the download.
+// there TUWAS only says that there is a new version and leads to the download.
 
-const OWNER = 'MentorDerGrosse'
-const REPO = 'sout'
-const RELEASES = `https://github.com/${OWNER}/${REPO}/releases/latest`
+/** The repository from the settings; read on every check, so a changed link counts right away. */
+function source(): GithubRepo {
+  return githubRepo(getSettings().updateRepo) ?? (githubRepo(DEFAULT_UPDATE_REPO) as GithubRepo)
+}
+const releasesPage = ({ owner, repo }: GithubRepo): string => `https://github.com/${owner}/${repo}/releases/latest`
 /** The README part that explains updating by hand. */
-const HOW_TO = `https://github.com/${OWNER}/${REPO}#aktualisieren`
+const howToPage = ({ owner, repo }: GithubRepo): string => `https://github.com/${owner}/${repo}#aktualisieren`
 const CHECK_INTERVAL_MS = 6 * 60 * 60_000
 
 let state: UpdateState = { current: app.getVersion(), latest: null, status: 'idle', automatic: false, error: null }
@@ -40,14 +44,14 @@ export function startUpdates(listener: () => void): void {
     autoUpdater.autoDownload = true
     autoUpdater.autoInstallOnAppQuit = true
     // For trying updates out: a folder with a newer build served over http.
-    const testFeed = process.env['SOUT_UPDATE_URL']
+    const testFeed = process.env['TUWAS_UPDATE_URL']
     if (testFeed) autoUpdater.setFeedURL({ provider: 'generic', url: testFeed })
     autoUpdater.on('checking-for-update', () => set({ status: 'checking', error: null }))
     autoUpdater.on('update-not-available', () => set({ status: 'idle' }))
     autoUpdater.on('update-available', (info) => set({ status: 'downloading', latest: info.version }))
     autoUpdater.on('update-downloaded', (info) => {
       set({ status: 'ready', latest: info.version })
-      tell(info.version, `sout ${info.version} ist geladen und wird beim Beenden installiert – oder gleich in den Einstellungen.`)
+      tell(info.version, `TUWAS ${info.version} ist geladen und wird beim Beenden installiert – oder gleich in den Einstellungen.`)
     })
     autoUpdater.on('error', (error) => set({ status: 'idle', error: error.message }))
   }
@@ -59,18 +63,28 @@ export async function checkForUpdates(): Promise<UpdateState> {
   if (!app.isPackaged) return updateState()
   try {
     if (state.automatic) {
-      if (state.status !== 'ready' && state.status !== 'downloading') await electronUpdater.autoUpdater.checkForUpdates()
+      if (state.status !== 'ready' && state.status !== 'downloading') {
+        if (!process.env['TUWAS_UPDATE_URL']) electronUpdater.autoUpdater.setFeedURL({ provider: 'github', ...source() })
+        await electronUpdater.autoUpdater.checkForUpdates()
+      }
     } else {
       set({ status: 'checking', error: null })
       const latest = await latestRelease()
       const newer = latest !== null && isNewer(latest, state.current)
       set({ status: newer ? 'available' : 'idle', latest })
-      if (newer) tell(latest, `sout ${latest} ist da. Klick hier – die README erklärt, wie du aktualisierst.`)
+      if (newer) tell(latest, `TUWAS ${latest} ist da. Klick hier – die README erklärt, wie du aktualisierst.`)
     }
   } catch (error) {
     set({ status: 'idle', error: error instanceof Error ? error.message : String(error) })
   }
   return updateState()
+}
+
+/** The update source changed in the settings: forget what the old one said and ask the new one. */
+export function updateSourceChanged(): void {
+  if (state.status === 'ready' || state.status === 'downloading') return // already on its way; applies on quit
+  set({ latest: null, status: 'idle', error: null })
+  void checkForUpdates()
 }
 
 /** Windows and AppImage: quit and install the downloaded version. */
@@ -79,12 +93,13 @@ export function installUpdate(): void {
 }
 
 export function openUpdateHelp(): void {
-  void shell.openExternal(state.automatic ? RELEASES : HOW_TO)
+  void shell.openExternal(state.automatic ? releasesPage(source()) : howToPage(source()))
 }
 
 /** The newest release on GitHub, e.g. "0.3.0"; null if there is none. */
 async function latestRelease(): Promise<string | null> {
-  const response = await net.fetch(`https://api.github.com/repos/${OWNER}/${REPO}/releases/latest`, {
+  const { owner, repo } = source()
+  const response = await net.fetch(`https://api.github.com/repos/${owner}/${repo}/releases/latest`, {
     headers: { Accept: 'application/vnd.github+json' },
     signal: AbortSignal.timeout(20_000)
   })
@@ -106,7 +121,7 @@ export function isNewer(candidate: string, current: string): boolean {
 function tell(version: string, body: string): void {
   if (notified === version || !Notification.isSupported()) return
   notified = version
-  const notification = new Notification({ title: `Neue Version von sout: ${version}`, body, icon: resourcePath('icon.png') })
+  const notification = new Notification({ title: `Neue Version von TUWAS: ${version}`, body, icon: resourcePath('icon.png') })
   notification.on('click', () => (state.automatic ? showMain('settings') : openUpdateHelp()))
   notification.show()
 }

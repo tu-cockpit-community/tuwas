@@ -44,7 +44,7 @@ export function NewNoteDialog(props: { courses: Course[]; defaults: NewNoteDefau
   const submit = async (event: FormEvent): Promise<void> => {
     event.preventDefault()
     setBusy(true)
-    const result = await window.sout.createNote({ courseKey: courseKey || null, template, title, date })
+    const result = await window.tuwas.createNote({ courseKey: courseKey || null, template, title, date })
     setBusy(false)
     if (result.ok) props.onCreated(result.value)
     else setError(result.error)

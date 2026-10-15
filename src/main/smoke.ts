@@ -31,7 +31,7 @@ import { applyTheme, broadcast, printNote, createMainWindow, createMiniWindow, i
 
 // `--smoke-test=<dir>`: starts everything without showing a window, takes screenshots of the views,
 // writes report.json and quits. Uses its own data folder and no keyring, so it also works on an
-// installed package (to check the package itself); the test data from SOUT_TISS_FILE etc. only
+// installed package (to check the package itself); the test data from TUWAS_TISS_FILE etc. only
 // in development.
 
 const FLAG = '--smoke-test='
@@ -74,8 +74,8 @@ export async function runSmokeTest(dir: string): Promise<void> {
 
   try {
     await app.whenReady()
-    // SOUT_SMOKE_THEME=light|dark checks the other colour scheme without touching the GNOME setting.
-    const theme = process.env['SOUT_SMOKE_THEME']
+    // TUWAS_SMOKE_THEME=light|dark checks the other colour scheme without touching the GNOME setting.
+    const theme = process.env['TUWAS_SMOKE_THEME']
     if (theme === 'light' || theme === 'dark') updateSettings({ themeMode: theme })
     applyTheme()
     report['gpu'] = app.getGPUFeatureStatus()
@@ -121,7 +121,7 @@ export async function runSmokeTest(dir: string): Promise<void> {
       await delay(500)
       screenshots[view] = await screenshot(main, dir, view)
     }
-    // Calendar details and the other views (only meaningful with events, e.g. via SOUT_TISS_FILE).
+    // Calendar details and the other views (only meaningful with events, e.g. via TUWAS_TISS_FILE).
     main.webContents.send(IPC.navigate, 'calendar')
     await delay(500)
     const click = (selector: string): Promise<unknown> =>
@@ -368,7 +368,7 @@ function addSampleOwnEvents(): void {
 }
 
 /**
- * Linux: what GNOME's AppIndicator extension does on a click – tell sout's tray menu it opened.
+ * Linux: what GNOME's AppIndicator extension does on a click – tell TUWAS's tray menu it opened.
  * The mini view has to come along, ticked in the menu; a click on that tick closes it again.
  */
 async function smokeTrayMenu(report: Record<string, unknown>): Promise<void> {
@@ -546,14 +546,14 @@ async function smokeOwnEvents(main: BrowserWindow, dir: string, report: Record<s
 /** A second sync with changed data: the changes show up on "Heute" (and as notifications). */
 async function smokeChanges(main: BrowserWindow, mini: BrowserWindow, dir: string, report: Record<string, unknown>): Promise<Record<string, string>> {
   const shots: Record<string, string> = {}
-  const tiss = process.env['SOUT_SMOKE_SECOND_TISS']
-  const tuwel = process.env['SOUT_SMOKE_SECOND_TUWEL']
-  if (tiss) process.env['SOUT_TISS_FILE'] = tiss
-  if (tuwel) process.env['SOUT_TUWEL_FILE'] = tuwel
+  const tiss = process.env['TUWAS_SMOKE_SECOND_TISS']
+  const tuwel = process.env['TUWAS_SMOKE_SECOND_TUWEL']
+  if (tiss) process.env['TUWAS_TISS_FILE'] = tiss
+  if (tuwel) process.env['TUWAS_TUWEL_FILE'] = tuwel
   if (tiss || tuwel) await Promise.all([syncCalendar(), syncTasks()])
-  const pages = process.env['SOUT_SMOKE_SECOND_PAGES']
+  const pages = process.env['TUWAS_SMOKE_SECOND_PAGES']
   if (pages) {
-    process.env['SOUT_TISS_PAGES'] = pages
+    process.env['TUWAS_TISS_PAGES'] = pages
     await syncExams(true)
   }
   ;(report['exams'] as Record<string, unknown>)['second'] = examReport()
@@ -660,8 +660,8 @@ async function smokeNotes(main: BrowserWindow, mini: BrowserWindow, dir: string,
     tagSearch: searchNotes('#prüfung'),
     tags: notesData().tags,
     protocol: {
-      pdf: pdfPath ? await status(`sout-file://notes/${pdfPath.split('/').map(encodeURIComponent).join('/')}`) : null,
-      outside: await status('sout-file://notes/..%2F..%2Fetc%2Fhostname')
+      pdf: pdfPath ? await status(`tuwas-file://notes/${pdfPath.split('/').map(encodeURIComponent).join('/')}`) : null,
+      outside: await status('tuwas-file://notes/..%2F..%2Fetc%2Fhostname')
     }
   }
 
@@ -758,7 +758,7 @@ async function smokeEditing(main: BrowserWindow, file: string, path: string): Pr
   await type(' Tippen')
   writeFileSync(file, `${onDisk()}\nNochmal von außen\n`)
   await delay(1500)
-  result['conflictShown'] = (await js(`document.body.innerText.includes('außerhalb von sout geändert')`)) as boolean
+  result['conflictShown'] = (await js(`document.body.innerText.includes('außerhalb von TUWAS geändert')`)) as boolean
   result['conflictKeptOutsideVersion'] = onDisk().includes('Nochmal von außen') && !onDisk().includes('Tippen')
   await js(`[...document.querySelectorAll('button')].find((b) => b.textContent.includes('Meine Fassung speichern'))?.click()`)
   await delay(1000)
@@ -811,7 +811,7 @@ async function screenshot(win: BrowserWindow, dir: string, name: string): Promis
 const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms))
 
 /**
- * The dump tools run next to a running sout: a temporary profile folder of their own (two
+ * The dump tools run next to a running TUWAS: a temporary profile folder of their own (two
  * processes on one profile block each other), but the encrypted tokens from the real one.
  */
 function useOwnProfile(): { realUserData: string; done: () => void } {
@@ -820,9 +820,9 @@ function useOwnProfile(): { realUserData: string; done: () => void } {
   const realUserData = app.getPath('userData')
   // Chromium may still write into the folder while exiting; clean up leftovers of earlier runs.
   for (const entry of readdirSync(app.getPath('temp'))) {
-    if (entry.startsWith('sout-dump-')) rmSync(join(app.getPath('temp'), entry), { recursive: true, force: true })
+    if (entry.startsWith('tuwas-dump-')) rmSync(join(app.getPath('temp'), entry), { recursive: true, force: true })
   }
-  const temp = join(app.getPath('temp'), `sout-dump-${process.pid}`)
+  const temp = join(app.getPath('temp'), `tuwas-dump-${process.pid}`)
   app.setPath('userData', temp)
   return { realUserData, done: () => rmSync(temp, { recursive: true, force: true }) }
 }
@@ -880,7 +880,7 @@ export async function dumpExams(file: string): Promise<void> {
   }
 }
 
-/** `--dump-tuwel=<file>` (development only): saves what TUWEL returns, for SOUT_TUWEL_FILE. */
+/** `--dump-tuwel=<file>` (development only): saves what TUWEL returns, for TUWAS_TUWEL_FILE. */
 export function tuwelDumpFile(argv: string[]): string | null {
   const arg = argv.find((value) => value.startsWith('--dump-tuwel='))
   return arg && !app.isPackaged ? arg.slice('--dump-tuwel='.length) : null
@@ -932,7 +932,7 @@ export async function probeTuwel(): Promise<void> {
 
 /**
  * `--tuwel-calls=<file>` (development only): calls the TUWEL web service functions listed in
- * SOUT_TUWEL_CALLS (JSON: [["core_webservice_get_site_info", {}], …]) with a fresh token from a copy
+ * TUWAS_TUWEL_CALLS (JSON: [["core_webservice_get_site_info", {}], …]) with a fresh token from a copy
  * of the stored login and saves the answers – to look at what TUWEL offers. Prints only counts.
  */
 export function tuwelCallsFile(argv: string[]): string | null {
@@ -946,7 +946,7 @@ export async function tuwelCalls(file: string): Promise<void> {
   await app.whenReady()
   let code = 0
   try {
-    const calls = JSON.parse(process.env['SOUT_TUWEL_CALLS'] ?? '[]') as [string, Record<string, unknown>][]
+    const calls = JSON.parse(process.env['TUWAS_TUWEL_CALLS'] ?? '[]') as [string, Record<string, unknown>][]
     const token = await trySilent('session')
     const answers: { call: string; args: Record<string, unknown>; result?: unknown; error?: string }[] = []
     for (const [name, args] of calls) {

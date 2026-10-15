@@ -7,8 +7,8 @@ import type { LernenStatus } from '../shared/types'
 import { getSettings } from './settings'
 import { studiesData } from './studies'
 
-// The Lernen tab shows the separate Lernen project (a Next.js app) inside sout. sout starts it on demand as a
-// local server on 127.0.0.1 and stops it on quit. SOUT_LERNEN_URL points at an already running one instead.
+// The Lernen tab shows the separate Lernen project (a Next.js app) inside TUWAS. TUWAS starts it on demand as a
+// local server on 127.0.0.1 and stops it on quit. TUWAS_LERNEN_URL points at an already running one instead.
 
 const READY_TIMEOUT_MS = 60_000
 
@@ -16,13 +16,13 @@ let child: ChildProcess | null = null
 let pending: Promise<LernenStatus> | null = null
 let ready: LernenStatus | null = null
 
-/** Folder of the Lernen project: SOUT_LERNEN_DIR, otherwise lernen/ next to the app (development). */
+/** Folder of the Lernen project: TUWAS_LERNEN_DIR, otherwise lernen/ next to the app (development). */
 function projectDir(): string | null {
-  const candidates = [process.env['SOUT_LERNEN_DIR'], join(app.getAppPath(), 'lernen')]
+  const candidates = [process.env['TUWAS_LERNEN_DIR'], join(app.getAppPath(), 'lernen')]
   return candidates.find((dir): dir is string => Boolean(dir) && existsSync(join(dir as string, 'package.json'))) ?? null
 }
 
-/** What the Lernen server needs from sout, as a file it reads on every request: the user's courses and the SBP setting. */
+/** What the Lernen server needs from TUWAS, as a file it reads on every request: the user's courses and the SBP setting. */
 function enrolledFile(): string {
   return join(app.getPath('userData'), 'lernen-angemeldet.json')
 }
@@ -40,12 +40,12 @@ export function syncLernenCourses(): void {
   }
 }
 
-/** The server's process id. A sout that was killed (crash, kill -9) cannot stop it, and it would keep the port. */
+/** The server's process id. A TUWAS that was killed (crash, kill -9) cannot stop it, and it would keep the port. */
 function pidFile(): string {
   return join(app.getPath('userData'), 'lernen-server.pid')
 }
 
-/** Stops a Lernen server a previous sout left behind, so the preferred port is free again. Linux only: it checks
+/** Stops a Lernen server a previous TUWAS left behind, so the preferred port is free again. Linux only: it checks
  * /proc to be sure the process still is a Next server before stopping it. */
 async function stopLeftover(): Promise<void> {
   try {
@@ -96,11 +96,11 @@ async function waitUntilServing(url: string, server: ChildProcess): Promise<bool
 }
 
 async function launch(): Promise<LernenStatus> {
-  const external = process.env['SOUT_LERNEN_URL']
+  const external = process.env['TUWAS_LERNEN_URL']
   if (external) return { state: 'ready', url: external.replace(/\/$/, '') }
 
   const dir = projectDir()
-  if (!dir) return unavailable('Das Lernen-Projekt wurde nicht gefunden. Lege es nach lernen/ oder setze SOUT_LERNEN_DIR.')
+  if (!dir) return unavailable('Das Lernen-Projekt wurde nicht gefunden. Lege es nach lernen/ oder setze TUWAS_LERNEN_DIR.')
   if (!existsSync(join(dir, '.next', 'BUILD_ID'))) return unavailable(`Das Lernen-Projekt ist noch nicht gebaut. Im Ordner ${dir}: npm install && npm run build`)
 
   syncLernenCourses()
@@ -110,7 +110,7 @@ async function launch(): Promise<LernenStatus> {
   let output = ''
   const server = spawn('node', [join(dir, 'node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port), '-H', '127.0.0.1'], {
     cwd: dir,
-    env: { ...process.env, SOUT_ANGEMELDET: enrolledFile(), LERNEN_DATEN: join(app.getPath('userData'), 'lernen-fortschritt') },
+    env: { ...process.env, TUWAS_ANGEMELDET: enrolledFile(), LERNEN_DATEN: join(app.getPath('userData'), 'lernen-fortschritt') },
     stdio: ['ignore', 'pipe', 'pipe']
   })
   child = server

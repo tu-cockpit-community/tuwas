@@ -41,8 +41,8 @@ export default function App({ initialView, initialNote }: { initialView: View; i
   const [lernenOpened, setLernenOpened] = useState(view === 'lernen')
   if (view === 'lernen' && !lernenOpened) setLernenOpened(true)
 
-  const [sidebarWidth, setSidebarWidth] = useRemembered('sout.sidebar.width', SIDEBAR.default)
-  const [collapsed, setCollapsed] = useRemembered('sout.sidebar.collapsed', false)
+  const [sidebarWidth, setSidebarWidth] = useRemembered('tuwas.sidebar.width', SIDEBAR.default)
+  const [collapsed, setCollapsed] = useRemembered('tuwas.sidebar.collapsed', false)
   const resizeSidebar = (width: number): void => {
     setCollapsed(width < COLLAPSE_BELOW)
     if (width >= COLLAPSE_BELOW) setSidebarWidth(clamp(width, SIDEBAR.min, SIDEBAR.max))
@@ -56,7 +56,7 @@ export default function App({ initialView, initialNote }: { initialView: View; i
   // The tray menu and the mini window can ask for a specific view (and note).
   useEffect(
     () =>
-      window.sout.onNavigate((next, note) => {
+      window.tuwas.onNavigate((next, note) => {
         if (note) openNote(note)
         else navigate(next)
       }),

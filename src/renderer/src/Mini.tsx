@@ -29,7 +29,7 @@ export default function Mini() {
           <div className="mini-title">Heute</div>
           <div className="mini-date">{formatShortDate(now)}</div>
         </div>
-        <button type="button" className="icon-button" title="sout öffnen" aria-label="sout öffnen" onClick={() => window.sout.openMain()}>
+        <button type="button" className="icon-button" title="TUWAS öffnen" aria-label="TUWAS öffnen" onClick={() => window.tuwas.openMain()}>
           <Maximize2 size={16} />
         </button>
       </header>
@@ -41,7 +41,7 @@ export default function Mini() {
         <DayPlan calendar={calendar} tasks={tasks} now={now} />
         {!tissConnected && (
           <p className="mini-empty">
-            <button type="button" className="link" onClick={() => window.sout.openMain('settings')}>
+            <button type="button" className="link" onClick={() => window.tuwas.openMain('settings')}>
               TISS verbinden
             </button>
           </p>
@@ -59,7 +59,7 @@ export default function Mini() {
           <p className="mini-empty">Nichts offen.</p>
         ) : (
           <p className="mini-empty">
-            <button type="button" className="link" onClick={() => window.sout.openMain('deadlines')}>
+            <button type="button" className="link" onClick={() => window.tuwas.openMain('deadlines')}>
               TUWEL verbinden
             </button>
           </p>
@@ -69,10 +69,10 @@ export default function Mini() {
       <QuickNote ready={state ? Boolean(state.settings.notesDir) : null} />
 
       <footer className="mini-footer">
-        <button type="button" className="button" onClick={() => window.sout.openMain()}>
-          sout öffnen
+        <button type="button" className="button" onClick={() => window.tuwas.openMain()}>
+          TUWAS öffnen
         </button>
-        <button type="button" className="button secondary" onClick={() => window.sout.openMain('settings')}>
+        <button type="button" className="button secondary" onClick={() => window.tuwas.openMain('settings')}>
           <Settings size={14} /> Einstellungen
         </button>
       </footer>
@@ -93,7 +93,7 @@ function QuickNote({ ready }: { ready: boolean | null }) {
           <NotebookPen size={13} /> Schnellnotiz
         </h3>
         <p className="mini-empty">
-          <button type="button" className="link" onClick={() => window.sout.openMain('notes')}>
+          <button type="button" className="link" onClick={() => window.tuwas.openMain('notes')}>
             Notizen einrichten
           </button>
         </p>
@@ -104,7 +104,7 @@ function QuickNote({ ready }: { ready: boolean | null }) {
   const submit = async (event?: FormEvent): Promise<void> => {
     event?.preventDefault()
     if (!text.trim()) return
-    const result = await window.sout.quickNote(text)
+    const result = await window.tuwas.quickNote(text)
     if (!result.ok) {
       setError(result.error)
       return
@@ -139,7 +139,7 @@ function QuickNote({ ready }: { ready: boolean | null }) {
       {saved && (
         <p className="quick-note-saved">
           <Check size={13} /> In der Inbox gespeichert ·{' '}
-          <button type="button" className="link" onClick={() => window.sout.openMain('notes', saved)}>
+          <button type="button" className="link" onClick={() => window.tuwas.openMain('notes', saved)}>
             öffnen
           </button>
         </p>

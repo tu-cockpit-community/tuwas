@@ -70,8 +70,8 @@ const MODES: { mode: Mode; label: string; icon: typeof Eye }[] = [
 
 /** Small things remembered between starts: last note, view mode, open folders, widths. */
 const prefs = {
-  get: <T,>(key: string, fallback: T): T => remembered(`sout.notes.${key}`, fallback),
-  set: (key: string, value: unknown): void => remember(`sout.notes.${key}`, value)
+  get: <T,>(key: string, fallback: T): T => remembered(`tuwas.notes.${key}`, fallback),
+  set: (key: string, value: unknown): void => remember(`tuwas.notes.${key}`, value)
 }
 
 const TREE = { default: 264, min: 180, max: 480 }
@@ -95,12 +95,12 @@ function NotesSetup(props: { notes: NotesData; calendar: CalendarData | null; on
   const courses = props.calendar?.courses.filter((course) => !course.hidden) ?? []
 
   const choose = async (): Promise<void> => {
-    const chosen = await window.sout.chooseNotesDir()
+    const chosen = await window.tuwas.chooseNotesDir()
     if (chosen) setDir(chosen)
   }
   const create = async (): Promise<void> => {
     setBusy(true)
-    const result = await window.sout.setupNotes(dir)
+    const result = await window.tuwas.setupNotes(dir)
     setBusy(false)
     if (result.ok) await props.onDone()
     else setError(result.error)
@@ -133,7 +133,7 @@ function NotesSetup(props: { notes: NotesData; calendar: CalendarData | null; on
               <FolderOpen size={13} /> Anderer Ordner …
             </button>
           </div>
-          <p>Darin legt sout an:</p>
+          <p>Darin legt TUWAS an:</p>
           <ul className="folder-preview">
             <li>
               <code>Inbox/</code> für Schnellnotizen, die du später einem Fach zuordnest
@@ -181,9 +181,9 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const notesRef = useRef<HTMLDivElement | null>(null)
   const panesRef = useRef<HTMLDivElement | null>(null)
   // Widths: the list in px, two panes side by side as share of the space (one for preview, one for slides).
-  const [treeWidth, setTreeWidth] = useRemembered('sout.notes.treeWidth', TREE.default)
-  const [splitPreview, setSplitPreview] = useRemembered('sout.notes.splitPreview', 0.5)
-  const [splitPdf, setSplitPdf] = useRemembered('sout.notes.splitPdf', 0.5)
+  const [treeWidth, setTreeWidth] = useRemembered('tuwas.notes.treeWidth', TREE.default)
+  const [splitPreview, setSplitPreview] = useRemembered('tuwas.notes.splitPreview', 0.5)
+  const [splitPdf, setSplitPdf] = useRemembered('tuwas.notes.splitPdf', 0.5)
 
   const [doc, setDoc] = useState<OpenNote | null>(null)
   const [content, setContent] = useState('')
@@ -233,7 +233,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
       if (!note || !dirty.current) return true
       const snapshot = text.current
       setSaveState('saving')
-      const result = await window.sout.writeNote(note.path, snapshot, force ? null : note.base)
+      const result = await window.tuwas.writeNote(note.path, snapshot, force ? null : note.base)
       if (result.ok) {
         note.base = result.modified
         blocked.current = false
@@ -290,7 +290,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
         return
       }
       if (!(await save())) return
-      const result = await window.sout.readNote(path)
+      const result = await window.tuwas.readNote(path)
       if (result.ok) show(result.value, then)
       else setProblem(result.error)
     },
@@ -333,7 +333,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
         return
       }
       const dir = current.current ? dirOf(current.current.path) : INBOX
-      const result = await window.sout.createLinkedNote(dir, target)
+      const result = await window.tuwas.createLinkedNote(dir, target)
       if (result.ok) void openNote(result.value, (view) => view.dispatch({ selection: { anchor: view.state.doc.length } }))
       else setProblem(result.error)
     },
@@ -344,7 +344,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const pasteImage = useCallback(async (file: File): Promise<string | null> => {
     const path = current.current?.path
     if (!path) return null
-    const result = await window.sout.saveNoteImage(path, new Uint8Array(await file.arrayBuffer()), file.type)
+    const result = await window.tuwas.saveNoteImage(path, new Uint8Array(await file.arrayBuffer()), file.type)
     if (result.ok) return result.value
     setProblem(result.error)
     return null
@@ -354,7 +354,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     const path = current.current?.path
     if (!path || !(await save())) return
     setExporting(true)
-    const result = await window.sout.exportNotePdf(path)
+    const result = await window.tuwas.exportNotePdf(path)
     setExporting(false)
     if (!result.ok) setProblem(result.error)
     else if (result.value) setExported(result.value)
@@ -381,7 +381,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     }
   }, [props.request, openNote, notes.tree])
 
-  // Changed outside of sout (another editor, sync tool) or gone: follow the file, unless something is unsaved here.
+  // Changed outside of TUWAS (another editor, sync tool) or gone: follow the file, unless something is unsaved here.
   useEffect(() => {
     if (pdf && !findNode(notes.tree, pdf)) setPdf(null)
     const note = current.current
@@ -392,7 +392,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
       return
     }
     if (node.modified === note.base || dirty.current) return
-    void window.sout.readNote(note.path).then((result) => {
+    void window.tuwas.readNote(note.path).then((result) => {
       if (!result.ok || current.current !== note || dirty.current) return
       if (result.value.content === text.current) note.base = result.value.modified
       else show(result.value)
@@ -403,7 +403,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   useEffect(() => {
     const flush = (): void => {
       const note = current.current
-      if (note && dirty.current && !blocked.current) window.sout.flushNote(note.path, text.current, note.base)
+      if (note && dirty.current && !blocked.current) window.tuwas.flushNote(note.path, text.current, note.base)
       dirty.current = false
     }
     window.addEventListener('beforeunload', flush)
@@ -420,7 +420,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
       setHits(null)
       return
     }
-    const id = window.setTimeout(() => void window.sout.searchNotes(trimmed).then(setHits), 150)
+    const id = window.setTimeout(() => void window.tuwas.searchNotes(trimmed).then(setHits), 150)
     return () => window.clearTimeout(id)
   }, [query, notes])
 
@@ -457,7 +457,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const openLectureNote = async (): Promise<void> => {
     if (!lecture) return
     const fresh = !eventNotePath(notes, lecture)
-    const result = await window.sout.noteForEvent(lecture.id)
+    const result = await window.tuwas.noteForEvent(lecture.id)
     if (result.ok) void openNote(result.value, fresh ? focusFirstSection : undefined)
     else setProblem(result.error)
   }
@@ -465,7 +465,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const onOpenNode = (node: NoteFileNode): void => {
     if (node.kind === 'pdf') openPdf(node.path)
     else if (node.kind === 'note') void openNote(node.path)
-    else window.sout.showNoteInFolder(node.path)
+    else window.tuwas.showNoteInFolder(node.path)
   }
 
   const rename = async (name: string): Promise<void> => {
@@ -473,7 +473,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     const note = current.current
     if (!note || !doc || !name.trim() || name.trim() === displayNameForRename(note.path)) return
     if (!(await save())) return
-    const result = await window.sout.renameNote(note.path, name)
+    const result = await window.tuwas.renameNote(note.path, name)
     if (!result.ok) {
       setProblem(result.error)
       return
@@ -488,7 +488,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     const note = current.current
     if (!note || !doc) return
     if (!(await save())) return
-    const result = await window.sout.moveNote(note.path, target || null)
+    const result = await window.tuwas.moveNote(note.path, target || null)
     if (!result.ok) {
       setProblem(result.error)
       return
@@ -503,7 +503,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     const note = current.current
     if (!note) return
     setConfirmDelete(false)
-    const result = await window.sout.trashNote(note.path)
+    const result = await window.tuwas.trashNote(note.path)
     if (result.ok) close()
     else setProblem(result.error)
   }
@@ -516,13 +516,13 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const takeTheirs = async (): Promise<void> => {
     const note = current.current
     if (!note) return
-    const result = await window.sout.readNote(note.path)
+    const result = await window.tuwas.readNote(note.path)
     if (result.ok) show(result.value)
     else setProblem(result.error)
   }
 
   const importSlides = async (files?: string[]): Promise<void> => {
-    const result = await window.sout.importPdfs(courseKey, files)
+    const result = await window.tuwas.importPdfs(courseKey, files)
     if (!result.ok) setProblem(result.error)
     else if (result.value[0]) openPdf(result.value[0])
   }
@@ -530,7 +530,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const onDrop = (event: DragEvent): void => {
     event.preventDefault()
     setDropping(false)
-    const files = [...event.dataTransfer.files].map((file) => window.sout.filePath(file)).filter(Boolean)
+    const files = [...event.dataTransfer.files].map((file) => window.tuwas.filePath(file)).filter(Boolean)
     if (files.length > 0) void importSlides(files)
   }
 
@@ -694,7 +694,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
                 <button type="button" className="icon-button" title="Als PDF speichern" aria-label="Als PDF speichern" disabled={exporting} onClick={() => void exportPdf()}>
                   <FileDown size={16} />
                 </button>
-                <button type="button" className="icon-button" title="Im Dateimanager zeigen" aria-label="Im Dateimanager zeigen" onClick={() => window.sout.showNoteInFolder(doc.path)}>
+                <button type="button" className="icon-button" title="Im Dateimanager zeigen" aria-label="Im Dateimanager zeigen" onClick={() => window.tuwas.showNoteInFolder(doc.path)}>
                   <FolderOpen size={16} />
                 </button>
                 {confirmDelete ? (
@@ -758,7 +758,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
         )}
 
         {saveState === 'conflict' && (
-          <Callout kind="warn" title="Die Datei wurde außerhalb von sout geändert.">
+          <Callout kind="warn" title="Die Datei wurde außerhalb von TUWAS geändert.">
             <p>Was du hier geschrieben hast, ist noch nicht gespeichert.</p>
             <div className="form-row">
               <button type="button" className="button small" onClick={keepMine}>
@@ -818,7 +818,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
                 onToggleTask={(line) => viewRef.current && toggleTask(viewRef.current, line)}
                 onOpenNote={(path) => void openNote(path)}
                 onOpenPdf={openPdf}
-                onOtherFile={(path) => window.sout.showNoteInFolder(path)}
+                onOtherFile={(path) => window.tuwas.showNoteInFolder(path)}
               />
             </div>
           )}

@@ -2,6 +2,7 @@ import { app } from 'electron'
 import { join } from 'node:path'
 import { DARK_PALETTES, LIGHT_PALETTES, THEME_MODES } from '../shared/themes'
 import { REMINDER_CHOICES, type Settings } from '../shared/types'
+import { DEFAULT_UPDATE_REPO, githubRepo, repoLink } from '../shared/updateSource'
 import { readJson, writeJson } from './jsonFile'
 
 const DEFAULTS: Settings = {
@@ -20,7 +21,8 @@ const DEFAULTS: Settings = {
   lernenSbp: false,
   themeMode: 'system',
   lightPalette: 'standard',
-  darkPalette: 'standard'
+  darkPalette: 'standard',
+  updateRepo: DEFAULT_UPDATE_REPO
 }
 
 /** Settings that only take one of a few values. */
@@ -52,7 +54,11 @@ function sanitize(input: unknown): Partial<Settings> {
     for (const [key, fallback] of Object.entries(DEFAULTS)) {
       const value = (input as Record<string, unknown>)[key]
       const choices = CHOICES[key as keyof Settings]
-      if (Array.isArray(fallback)) {
+      if (key === 'updateRepo') {
+        // only a valid GitHub repository, stored as its canonical link; anything else keeps the old value
+        const repo = typeof value === 'string' ? githubRepo(value) : null
+        if (repo) result[key] = repoLink(repo)
+      } else if (Array.isArray(fallback)) {
         if (Array.isArray(value)) result[key] = value.filter((item) => REMINDER_CHOICES.some((choice) => choice.minutes === item))
       } else if (choices) {
         if (typeof value === 'string' && choices.includes(value)) result[key] = value

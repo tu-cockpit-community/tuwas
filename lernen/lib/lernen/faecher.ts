@@ -2,7 +2,7 @@ import type { Kurs } from "@/lib/types";
 import { lvaSchluessel } from "./lva";
 import { MODULE, modulVon } from "./module";
 
-/** Was die Seite "Faecher" zeigt: aus den Kursen der Datenbank, den SBP-Pruefungen und dem, was sout vorgibt. */
+/** Was die Seite "Faecher" zeigt: aus den Kursen der Datenbank, den SBP-Pruefungen und dem, was TUWAS vorgibt. */
 
 export interface Inhaltskurs {
   id: string;
@@ -14,7 +14,7 @@ export interface Pruefung {
   id: string;
 }
 
-export interface SoutVorgabe {
+export interface TuwasVorgabe {
   lvas: Set<string>;
   sbp: boolean;
 }
@@ -24,8 +24,8 @@ export interface FaecherEingabe<P extends Pruefung> {
   pruefungen: P[];
   /** Kurse mit Inhalt unter content/ (Kapitel, Training ...) */
   inhalte: Inhaltskurs[];
-  /** `null`: ohne sout, dann gilt: alles mit Lernpfad oder Inhalt, samt SBP */
-  sout: SoutVorgabe | null;
+  /** `null`: ohne TUWAS, dann gilt: alles mit Lernpfad oder Inhalt, samt SBP */
+  tuwas: TuwasVorgabe | null;
   hatLernpfad: (kursId: string) => boolean;
 }
 
@@ -56,14 +56,14 @@ export function baueFaecher<P extends Pruefung>(e: FaecherEingabe<P>): FaecherAn
   const nachSbp = new Map(e.inhalte.filter((i) => i.sbp).map((i) => [i.sbp!, i.id]));
 
   const zeilen: Kurszeile[] = e.kurse
-    .filter((k) => (e.sout ? e.sout.lvas.has(lvaSchluessel(k.lva_nummer)) : e.hatLernpfad(k.id) || nachLva.has(lvaSchluessel(k.lva_nummer))))
+    .filter((k) => (e.tuwas ? e.tuwas.lvas.has(lvaSchluessel(k.lva_nummer)) : e.hatLernpfad(k.id) || nachLva.has(lvaSchluessel(k.lva_nummer))))
     .map((kurs) => ({ kurs, inhaltId: nachLva.get(lvaSchluessel(kurs.lva_nummer)), hatLernpfad: e.hatLernpfad(kurs.id) }));
 
   const gruppen = MODULE.map((titel) => ({ titel, zeilen: zeilen.filter((z) => modulVon(z.kurs.kategorie) === titel) })).filter((m) => m.zeilen.length > 0);
 
   // Das Wahlfach der SBP ist eine LVA der StEOP, die doppelt zaehlt.
   const wahlfach = e.kurse.find((k) => k.sbp_wahlfach);
-  const zeigeSbp = e.sout?.sbp ?? true;
+  const zeigeSbp = e.tuwas?.sbp ?? true;
 
   return {
     sbp: zeigeSbp ? e.pruefungen.map((pruefung) => ({ pruefung, inhaltId: nachSbp.get(pruefung.id), wahlfach: pruefung.id === "sbp-wahlfach" ? wahlfach : undefined })) : null,

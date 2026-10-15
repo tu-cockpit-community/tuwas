@@ -21,7 +21,7 @@ function loginSession(): Electron.Session {
   const ses = session.fromPartition(PARTITION)
   if (!sessionPrepared) {
     // Look like plain Chrome (in case a login page treats unknown browsers differently) and ask for German pages.
-    ses.setUserAgent(app.userAgentFallback.replace(/\s(?:sout|Electron)\/\S+/g, ''), 'de-AT,de;q=0.9,en;q=0.5')
+    ses.setUserAgent(app.userAgentFallback.replace(/\s(?:TUWAS|Electron)\/\S+/g, ''), 'de-AT,de;q=0.9,en;q=0.5')
     sessionPrepared = true
   }
   return ses
@@ -157,7 +157,7 @@ function attempt(startUrl: string, launchUrl: string, passport: string, silent: 
 }
 
 /**
- * Login cookies of TUWEL and the TU Wien login are session cookies, which Electron forgets when sout
+ * Login cookies of TUWEL and the TU Wien login are session cookies, which Electron forgets when TUWAS
  * quits. Like a browser that restores its session, keep them (encrypted in the profile) so the
  * silent renewal still works after a restart. Whether the login is still valid decides the server.
  */

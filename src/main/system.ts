@@ -35,7 +35,7 @@ export function fixCursorSize(): void {
 }
 
 /**
- * Command line flags sout needs. Electron reads them before any of our code runs, so they only
+ * Command line flags TUWAS needs. Electron reads them before any of our code runs, so they only
  * work as real command line flags (see index.ts).
  * - XWayland: Wayland doesn't let apps place their own windows, but the mini window has to sit
  *   under the tray icon.

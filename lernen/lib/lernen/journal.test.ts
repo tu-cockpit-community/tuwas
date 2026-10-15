@@ -103,9 +103,9 @@ test("Journal: Pfad aus LERNEN_JOURNAL, sonst der XDG-Datenordner", () => {
   const alt = process.env.XDG_DATA_HOME;
   try {
     process.env.XDG_DATA_HOME = "/daten";
-    assert.equal(journalPfad(), "/daten/sout/lernen/lernstand.jsonl");
+    assert.equal(journalPfad(), "/daten/tuwas/lernen/lernstand.jsonl");
     delete process.env.XDG_DATA_HOME;
-    assert.equal(journalPfad(), path.join(os.homedir(), ".local", "share", "sout", "lernen", "lernstand.jsonl"));
+    assert.equal(journalPfad(), path.join(os.homedir(), ".local", "share", "tuwas", "lernen", "lernstand.jsonl"));
   } finally {
     if (alt === undefined) delete process.env.XDG_DATA_HOME;
     else process.env.XDG_DATA_HOME = alt;

@@ -13,7 +13,7 @@ import { rememberCourses } from './studies'
 import { devPagesDir, readCoursePage } from './tissPages'
 
 // Exam dates and their registration windows only reach the TISS calendar once you are registered.
-// The public course pages list them, though: sout reads the pages of the courses in your TISS
+// The public course pages list them, though: TUWAS reads the pages of the courses in your TISS
 // calendar – no login needed – every few hours, one page per second. Whether you are registered
 // it sees in the TISS calendar.
 
@@ -90,7 +90,7 @@ export function examsData(): ExamsData {
   const fromCalendar = events.filter((event) => event.kind === 'exam' && event.ownId === null)
   const registered = registeredIds(stored, fromCalendar)
   const dismissed = new Set(cached.dismissed)
-  /** Why an exam you aren't registered for isn't needed – so sout doesn't remind you of it. */
+  /** Why an exam you aren't registered for isn't needed – so TUWAS doesn't remind you of it. */
   const covered = (exam: StoredExam): string | null => {
     if (registered.has(exam.id)) return null
     const mine = stored.filter((other) => registered.has(other.id) && other.courseKey === exam.courseKey)

@@ -57,7 +57,7 @@ function load(win: BrowserWindow, hash: string): void {
   else void win.loadFile(rendererHtml(), { hash })
 }
 
-/** Only sout's own page – not, say, a file dropped onto the window. */
+/** Only TUWAS's own page – not, say, a file dropped onto the window. */
 function isAppUrl(url: string): boolean {
   const devServer = process.env['ELECTRON_RENDERER_URL']
   if (!app.isPackaged && devServer) return url.startsWith(devServer)
@@ -170,7 +170,7 @@ export function createMainWindow(view: View, show = true, note?: string): Browse
     minWidth: MAIN_MIN.width,
     minHeight: MAIN_MIN.height,
     show: false,
-    title: 'sout',
+    title: 'TUWAS',
     icon: windowIcon(),
     backgroundColor: backgroundColor(),
     // plugins: Chromium's PDF viewer, for slides next to a note.
@@ -205,7 +205,7 @@ export function createMainWindow(view: View, show = true, note?: string): Browse
   return win
 }
 
-/** macOS: a Dock icon only while the main window is open – otherwise sout lives in the menu bar. */
+/** macOS: a Dock icon only while the main window is open – otherwise TUWAS lives in the menu bar. */
 export function syncDock(): void {
   if (process.platform !== 'darwin' || !app.dock) return
   if (mainWindow) void app.dock.show()
@@ -236,7 +236,7 @@ export function createMiniWindow(): BrowserWindow {
     fullscreenable: false,
     skipTaskbar: true,
     alwaysOnTop: true,
-    title: 'sout',
+    title: 'TUWAS',
     backgroundColor: backgroundColor(),
     webPreferences: { preload: preloadPath(), sandbox: true, contextIsolation: true }
   })
@@ -363,7 +363,7 @@ export function notifyRunningInBackground(): void {
   if (getSettings().closeHintShown || !Notification.isSupported()) return
   const quit = process.platform === 'darwin' ? 'Cmd+Q' : 'Strg+Q'
   new Notification({
-    title: 'sout läuft im Hintergrund weiter',
+    title: 'TUWAS läuft im Hintergrund weiter',
     body: `Das Symbol ${trayPlace()} öffnet die Mini-Ansicht. Ganz beenden: ${quit} oder „Beenden“ im Menü des Symbols.`,
     icon: resourcePath('icon.png')
   }).show()

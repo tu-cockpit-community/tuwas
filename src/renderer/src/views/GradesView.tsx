@@ -49,7 +49,7 @@ export default function GradesView() {
 
       {studies.courses.length === 0 && (
         <Callout kind="info" title="Noch keine LVAs.">
-          Sobald sout deinen TISS-Kalender kennt, stehen deine LVAs hier – mit ECTS aus TISS. Ältere trägst du unten selbst ein.
+          Sobald TUWAS deinen TISS-Kalender kennt, stehen deine LVAs hier – mit ECTS aus TISS. Ältere trägst du unten selbst ein.
         </Callout>
       )}
 
@@ -98,7 +98,7 @@ function Tile(props: { label: string; value: string; hint: string }) {
 
 function StudyRow({ course, calendar }: { course: StudyCourse; calendar: CalendarData | null }) {
   const color = calendar?.courses.find((candidate) => candidate.key === course.key)?.color
-  const update = (patch: { grade?: CourseGrade | null; ects?: number | null }): void => void window.sout.updateStudyCourse(course.key, course.semester, patch)
+  const update = (patch: { grade?: CourseGrade | null; ects?: number | null }): void => void window.tuwas.updateStudyCourse(course.key, course.semester, patch)
   return (
     <div className="row study-row">
       <span className="chip-dot" style={{ background: color ?? 'var(--border)' }} />
@@ -144,7 +144,7 @@ function StudyRow({ course, calendar }: { course: StudyCourse; calendar: Calenda
         className="icon-button"
         title="Aus der Liste nehmen"
         aria-label={`${course.title} aus der Liste nehmen`}
-        onClick={() => void window.sout.removeStudyCourse(course.key, course.semester)}
+        onClick={() => void window.tuwas.removeStudyCourse(course.key, course.semester)}
       >
         <Trash2 size={14} />
       </button>
@@ -161,7 +161,7 @@ function AddCourse({ current }: { current: string }) {
   const submit = async (event: FormEvent): Promise<void> => {
     event.preventDefault()
     setBusy(true)
-    const result = await window.sout.addStudyCourse(key, semester)
+    const result = await window.tuwas.addStudyCourse(key, semester)
     setBusy(false)
     setError(result.ok ? null : result.error)
     if (result.ok) setKey('')

@@ -1,4 +1,4 @@
-// Adds sout to the GNOME app overview and creates the `sout` command (~/.local/bin/sout).
+// Adds TUWAS to the GNOME app overview and creates the `TUWAS` command (~/.local/bin/tuwas).
 // Usage: npm run install-desktop      (remove again: npm run uninstall-desktop)
 import { chmodSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
@@ -7,8 +7,8 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const launcher = join(homedir(), '.local', 'bin', 'sout')
-const desktopFile = join(process.env.XDG_DATA_HOME || join(homedir(), '.local', 'share'), 'applications', 'sout.desktop')
+const launcher = join(homedir(), '.local', 'bin', 'tuwas')
+const desktopFile = join(process.env.XDG_DATA_HOME || join(homedir(), '.local', 'share'), 'applications', 'tuwas.desktop')
 
 if (process.platform !== 'linux') {
   console.log('Nur unter Linux nötig. Unter Windows und macOS: npm run dist baut einen Installer (siehe README).')
@@ -23,7 +23,7 @@ if (process.argv.includes('--remove')) {
 }
 
 if (!existsSync(join(root, 'out', 'main', 'index.js'))) {
-  console.error('sout ist noch nicht gebaut – bitte zuerst `npm run build` ausführen.')
+  console.error('TUWAS ist noch nicht gebaut – bitte zuerst `npm run build` ausführen.')
   process.exit(1)
 }
 
@@ -43,13 +43,13 @@ writeFileSync(
   [
     '[Desktop Entry]',
     'Type=Application',
-    'Name=sout',
+    'Name=TUWAS',
     'Comment=Studium organisieren: TISS, TUWEL, Notizen',
     `Exec=${execQuote(launcher)}`,
     `Icon=${join(root, 'resources', 'icon.png')}`,
     'Terminal=false',
     'Categories=Education;Office;',
-    'StartupWMClass=sout',
+    'StartupWMClass=TUWAS',
     ''
   ].join('\n')
 )

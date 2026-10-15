@@ -94,7 +94,7 @@ export default function CalendarView(props: { onNavigate: (view: View) => void; 
     }
     const allDay = change.event.allDay
     const end = change.event.end ?? new Date(start.getTime() + (allDay ? 24 * 60 : 60) * 60_000)
-    const result = await window.sout.updateOwnEvent(original.id, {
+    const result = await window.tuwas.updateOwnEvent(original.id, {
       ...original,
       allDay,
       start: allDay ? isoDate(start) : start.toISOString(),
@@ -219,7 +219,7 @@ export default function CalendarView(props: { onNavigate: (view: View) => void; 
           </p>
         </div>
         <div className="header-actions">
-          <button type="button" className="button secondary" disabled={data.syncing} onClick={() => void window.sout.syncCalendar()}>
+          <button type="button" className="button secondary" disabled={data.syncing} onClick={() => void window.tuwas.syncCalendar()}>
             <RefreshCw size={14} className={data.syncing ? 'spin' : undefined} /> Aktualisieren
           </button>
           <button type="button" className="button" title="Oder im Kalender eine Zeit aufziehen" onClick={() => setDialog({ draft: newDraft() })}>
@@ -249,7 +249,7 @@ export default function CalendarView(props: { onNavigate: (view: View) => void; 
             className={`chip${course.hidden ? ' off' : ''}`}
             aria-pressed={!course.hidden}
             title={`${course.key} ${course.title}`}
-            onClick={() => void window.sout.updateCourse(course.key, { hidden: !course.hidden })}
+            onClick={() => void window.tuwas.updateCourse(course.key, { hidden: !course.hidden })}
           >
             <span className="chip-dot" style={{ background: course.color }} />
             <span className="chip-label">{course.shortName}</span>
@@ -539,7 +539,7 @@ function NoteButton(props: { event: CalendarEvent; onNavigate: (view: View) => v
     // Without a notes folder the notes page explains how to set it up.
     if (!notes?.root) return props.onNavigate('notes')
     if (existing) return props.onOpenNote(existing)
-    const result = await window.sout.noteForEvent(event.id)
+    const result = await window.tuwas.noteForEvent(event.id)
     if (result.ok) props.onOpenNote(result.value, true)
     else setError(result.error)
   }
@@ -564,7 +564,7 @@ function OwnEventDetails(props: { data: CalendarData; event: CalendarEvent; own:
   const start = new Date(event.allDay ? `${event.start}T00:00` : event.start)
   const day = isoDate(start)
   const remove = async (onlyThisDay: boolean): Promise<void> => {
-    const result = await window.sout.deleteOwnEvent(own.id, onlyThisDay ? day : null)
+    const result = await window.tuwas.deleteOwnEvent(own.id, onlyThisDay ? day : null)
     if (result.ok) props.onClose()
   }
   return (

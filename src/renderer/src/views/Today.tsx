@@ -129,7 +129,7 @@ export default function Today({ onNavigate }: { onNavigate: (view: View) => void
                 title={`Symbol ${trayPlace(state.info.platform)}`}
                 hint={
                   state.info.trayAvailable
-                    ? 'Schließen versteckt sout nur – ein Klick aufs Symbol öffnet die Mini-Ansicht.'
+                    ? 'Schließen versteckt TUWAS nur – ein Klick aufs Symbol öffnet die Mini-Ansicht.'
                     : 'GNOME braucht dafür die AppIndicator-Erweiterung. Anleitung in den Einstellungen.'
                 }
                 action={state.info.trayAvailable ? undefined : toSettings}
@@ -137,7 +137,7 @@ export default function Today({ onNavigate }: { onNavigate: (view: View) => void
               <Step
                 status={state.autostart ? 'done' : 'todo'}
                 title="Startet beim Anmelden"
-                hint={state.autostart ? 'sout startet automatisch mit deinem Laptop.' : 'Lässt sich in den Einstellungen einschalten.'}
+                hint={state.autostart ? 'TUWAS startet automatisch mit deinem Laptop.' : 'Lässt sich in den Einstellungen einschalten.'}
                 action={state.autostart ? undefined : toSettings}
               />
               <Step
@@ -202,7 +202,7 @@ function News({ now, onNavigate }: { now: Date; onNavigate: (view: View) => void
     <section className="card span-2 news">
       <h2 className="card-title">
         <Bell size={16} /> Neuigkeiten
-        <button type="button" className="link news-clear" onClick={() => void window.sout.dismissChange(null)}>
+        <button type="button" className="link news-clear" onClick={() => void window.tuwas.dismissChange(null)}>
           Alle gelesen
         </button>
       </h2>
@@ -217,7 +217,7 @@ function News({ now, onNavigate }: { now: Date; onNavigate: (view: View) => void
                 <span className="news-detail">{change.detail}</span>
               </button>
               <span className="news-when">{ago(change.at, now)}</span>
-              <button type="button" className="icon-button" aria-label="Gelesen" title="Gelesen" onClick={() => void window.sout.dismissChange(change.id)}>
+              <button type="button" className="icon-button" aria-label="Gelesen" title="Gelesen" onClick={() => void window.tuwas.dismissChange(change.id)}>
                 <X size={14} />
               </button>
             </li>

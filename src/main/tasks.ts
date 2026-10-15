@@ -146,11 +146,11 @@ const TOKEN_ERRORS = new Set(['invalidtoken', 'accessexception'])
 
 const isTokenError = (error: unknown): error is TuwelError => error instanceof TuwelError && TOKEN_ERRORS.has(error.code)
 
-/** Reads TUWEL (or, in development, the snapshot in SOUT_TUWEL_FILE) and replaces the cached tasks. */
+/** Reads TUWEL (or, in development, the snapshot in TUWAS_TUWEL_FILE) and replaces the cached tasks. */
 export function syncTasks(): Promise<void> {
   syncing ??= (async () => {
     onChange()
-    const devFile = app.isPackaged ? undefined : process.env['SOUT_TUWEL_FILE']
+    const devFile = app.isPackaged ? undefined : process.env['TUWAS_TUWEL_FILE']
     const token = devFile ? null : getSecret('tuwelToken')
     try {
       if (!devFile && !token) return

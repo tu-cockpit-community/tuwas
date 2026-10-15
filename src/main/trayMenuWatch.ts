@@ -3,7 +3,7 @@ import { createInterface } from 'node:readline'
 
 // GNOME's AppIndicator extension opens the tray menu on a single click; the "activate" that
 // Electron reports as 'click' (and that Windows and macOS send on a single click) only comes with
-// a double click there. Electron doesn't tell when its tray menu opens either. So on Linux sout
+// a double click there. Electron doesn't tell when its tray menu opens either. So on Linux TUWAS
 // watches the session bus for the menu's "opened" call addressed to its own process (busctl
 // monitor, part of systemd) – then the mini view opens together with the menu. Without busctl,
 // or if the bus doesn't allow watching, nothing happens and the menu works as before.

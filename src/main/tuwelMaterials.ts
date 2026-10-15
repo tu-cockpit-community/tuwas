@@ -52,7 +52,7 @@ export interface MaterialCourse {
 interface Known {
   path: string
   timemodified: number
-  /** Size and mtime when sout wrote it: unchanged since then means it may be replaced. */
+  /** Size and mtime when TUWAS wrote it: unchanged since then means it may be replaced. */
   size: number
   mtime: number
 }
@@ -114,7 +114,7 @@ export async function syncMaterials(token: string | null, courses: MaterialCours
         // Known and unchanged in TUWEL – also when it was deleted here on purpose.
         if (known && known.timemodified >= item.timemodified) continue
         if (downloads >= MAX_DOWNLOADS) break
-        // Changed in TUWEL. Replaced if it is still as sout wrote it; edited here: the new one next to it.
+        // Changed in TUWEL. Replaced if it is still as TUWAS wrote it; edited here: the new one next to it.
         const present = known ? noteFileExists(known.path) : false
         const target = known && present && unchanged(known) ? known.path : targetPath(courseDir, module, item, items.length, present)
         try {
@@ -142,7 +142,7 @@ export async function syncMaterials(token: string | null, courses: MaterialCours
   return news
 }
 
-/** The file is as sout wrote it: may be replaced by a newer version. */
+/** The file is as TUWAS wrote it: may be replaced by a newer version. */
 function unchanged(known: Known): boolean {
   try {
     const stat = statSync(join(notesRoot()!, known.path))

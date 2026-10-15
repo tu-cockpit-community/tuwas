@@ -5,7 +5,7 @@ import { alleKurse } from "@/lib/db/queries/kurse";
 import { hatLernpfad } from "@/lib/db/queries/kurs-inhalt";
 import { hatLernModul } from "@/lib/db/queries/lernen";
 import { sbpPruefungen } from "@/lib/db/queries/sbp";
-import { soutDaten } from "@/lib/lernen/angemeldet";
+import { tuwasDaten } from "@/lib/lernen/angemeldet";
 import { baueFaecher } from "@/lib/lernen/faecher";
 import { InhaltAktualisieren } from "@/components/InhaltAktualisieren";
 import { lokalerStatus } from "@/lib/inhalt/service";
@@ -77,7 +77,7 @@ export default async function LernenSeite() {
     kurse: alleKurse(),
     pruefungen: sbpPruefungen(),
     inhalte: [...inhalte.values()],
-    sout: soutDaten(),
+    tuwas: tuwasDaten(),
     hatLernpfad: (id) => hatLernpfad(id) || hatLernModul(id),
   });
 
