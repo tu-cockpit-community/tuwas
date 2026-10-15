@@ -1,0 +1,379 @@
+id: simulation-2
+titel: 'Simulation 2: Parameter, Reihen, Wurzeln, Regression'
+art: simulation
+dauer_minuten: 120
+hinweis: |
+  Selbst erstellte Prüfung im Stil von G. Schranz-Kirlinger (4 Beispiele zu je 10 Punkten, 120 Minuten).
+  Themen: Gleichungssystem mit Parameter und Determinante, inverse Matrix (Bedarfsrechnung),
+  Grenzwert mit $\varepsilon$-Nachweis, geometrische Reihe, Konvergenz von Reihen, Rentenrechnung,
+  komplexe Zahlen (quadratische Gleichung, Polarform, Potenzen, Wurzeln), Kennzahlen, lineare
+  Regression, Korrelation, Normalverteilung.
+
+  **Erlaubt:** nicht programmierbarer, nicht grafikfähiger Taschenrechner. Hinweise und Lösungen
+  siehst du erst nach der Abgabe.
+aufgaben:
+  - id: sim5-1
+    titel: Gleichungssystem mit Parameter und Rohstoffbedarf
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **1.1)** (6 P.) Gegeben ist das lineare Gleichungssystem mit den Parametern $a, b \in \R$:
+      $$\begin{aligned} x + y + z &= 6\\ 2x - y + z &= 3\\ x + 4y + a z &= b \end{aligned}$$
+
+      (a) Berechnen Sie die Determinante der Koeffizientenmatrix in Abhängigkeit von $a$. Für welche
+      $a$ ist das System eindeutig lösbar?
+
+      (b) Lösen Sie das System für $a = 3$, $b = 18$.
+
+      (c) Untersuchen Sie den Fall $a = 2$: Für welches $b$ gibt es unendlich viele Lösungen, für welche
+      keine? Geben Sie im ersten Fall die Lösungsmenge in Parameterform an und deuten Sie das Ergebnis
+      geometrisch.
+
+      **1.2)** (4 P.) Ein Betrieb fertigt zwei Produkte $P_1$ und $P_2$. Für ein Stück $P_1$ braucht er
+      2 Einheiten des Rohstoffs $R_1$ und 5 Einheiten von $R_2$, für ein Stück $P_2$ eine Einheit $R_1$
+      und 3 Einheiten $R_2$. Mit der Bedarfsmatrix $A = \begin{pmatrix} 2 & 1\\ 5 & 3\end{pmatrix}$ gilt
+      $A\vec x = \vec r$ (Stückzahlen $\vec x$, Rohstoffverbrauch $\vec r$).
+
+      (a) Berechnen Sie $A^{-1}$.
+
+      (b) Im Lager liegen 70 Einheiten $R_1$ und 180 Einheiten $R_2$. Wie viele Stück von $P_1$ und $P_2$
+      kann man herstellen, wenn alles verbraucht werden soll?
+    teile:
+      - typ: term
+        label: '1.1 a) $\det$ als Term in $a$'
+        variable: a
+        loesung: "6 - 3a"
+      - typ: zahl
+        label: '1.1 a) Für welches $a$ ist das System **nicht** eindeutig lösbar?'
+        loesung: "2"
+      - typ: vektor
+        label: '1.1 b) Lösung für $a = 3$, $b = 18$'
+        namen: ["x", "y", "z"]
+        loesung: ["1", "2", "3"]
+      - typ: zahl
+        label: '1.1 c) $b$ für unendlich viele Lösungen'
+        loesung: "15"
+      - typ: text
+        label: '1.1 c) Lösungsmenge und geometrische Deutung'
+        muster: |
+          Für $a = 2$, $b = 15$: $L = \{(2t - 3,\ t,\ 9 - 3t) : t \in \R\}$ (oder gleichwertig). Die drei Ebenen
+          schneiden einander in einer gemeinsamen Geraden (Ebenenbüschel). Für $a = 2$, $b \neq 15$ gibt es
+          keine Lösung: Die dritte Ebene ist parallel zur Schnittgeraden der ersten beiden, enthält sie
+          aber nicht.
+      - typ: vektor
+        label: '1.2 a) $A^{-1}$ zeilenweise: $(m_{11}, m_{12}, m_{21}, m_{22})$'
+        loesung: ["3", "-1", "-5", "2"]
+      - typ: vektor
+        label: '1.2 b) Stückzahlen $(x_1, x_2)$'
+        namen: ["x1", "x2"]
+        loesung: ["30", "10"]
+    hinweise:
+      - '1.1 a) Regel von Sarrus oder Entwicklung nach der ersten Zeile.'
+      - '1.1 c) Prüfe, ob die dritte Zeile der Koeffizientenmatrix für $a = 2$ eine Linearkombination $\lambda\cdot\text{I} + \mu\cdot\text{II}$ der ersten beiden ist. Dann muss auch $b = 6\lambda + 3\mu$ gelten.'
+      - '1.2 a) $\begin{pmatrix} p & q\\ r & s\end{pmatrix}^{-1} = \frac{1}{ps - qr}\begin{pmatrix} s & -q\\ -r & p\end{pmatrix}$.'
+    loesung: |
+      **1.1 a)** Entwicklung nach der ersten Zeile:
+      $$\det\begin{pmatrix} 1 & 1 & 1\\ 2 & -1 & 1\\ 1 & 4 & a\end{pmatrix} = 1\cdot(-a - 4) - 1\cdot(2a - 1) + 1\cdot(8 + 1) = 6 - 3a.$$
+      Eindeutig lösbar genau dann, wenn $\det \neq 0$, also $a \neq 2$.
+      ---
+      **1.1 b)** $\text{II} - 2\cdot\text{I}$: $-3y - z = -9$. $\text{III} - \text{I}$: $3y + 2z = 12$.
+      Addieren: $z = 3$. Dann $3y = 12 - 6 \Rightarrow y = 2$ und $x = 6 - 2 - 3 = 1$.
+      Probe in III: $1 + 8 + 9 = 18$ ✓. Lösung $(1, 2, 3)$.
+      ---
+      **1.1 c)** Für $a = 2$: $(1, 4, 2) = \lambda(1, 1, 1) + \mu(2, -1, 1)$ liefert $\lambda + 2\mu = 1$,
+      $\lambda - \mu = 4$, also $\mu = -1$, $\lambda = 3$ (Kontrolle dritte Komponente: $3 - 1 = 2$ ✓).
+      Die linke Seite von III ist $3\cdot\text{I} - \text{II}$, also braucht es $b = 3\cdot 6 - 3 = 15$.
+      ---
+      $b = 15$: III ist überflüssig. Aus $\text{I} - \text{II}$: $-x + 2y = 3 \Rightarrow x = 2y - 3$; mit
+      $y = t$: $x = 2t - 3$, $z = 6 - x - y = 9 - 3t$. $L = \{(2t - 3, t, 9 - 3t) : t \in \R\}$, eine Gerade
+      (drei Ebenen durch eine gemeinsame Gerade).
+      ---
+      $b \neq 15$: Widerspruch ($0 = b - 15 \neq 0$), keine Lösung. Die Ebenen schneiden einander
+      paarweise in drei parallelen Geraden.
+      ---
+      **1.2 a)** $\det A = 2\cdot 3 - 1\cdot 5 = 1$, also $A^{-1} = \begin{pmatrix} 3 & -1\\ -5 & 2\end{pmatrix}$.
+      Probe: $A A^{-1} = \begin{pmatrix} 6 - 5 & -2 + 2\\ 15 - 15 & -5 + 6\end{pmatrix} = E$ ✓.
+      ---
+      **1.2 b)** $\vec x = A^{-1}\vec r = \begin{pmatrix} 3\cdot 70 - 180\\ -5\cdot 70 + 2\cdot 180\end{pmatrix} = \begin{pmatrix} 30\\ 10\end{pmatrix}$.
+      Probe: $R_1$: $60 + 10 = 70$ ✓, $R_2$: $150 + 30 = 180$ ✓. Also 30 Stück $P_1$ und 10 Stück $P_2$.
+
+  - id: sim5-2
+    titel: Grenzwert, springender Ball und Sparplan
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **2.1)** (3 P.) Gegeben ist die Folge $a_n = \dfrac{3n + 1}{n + 2}$, $n \ge 1$. Zeigen Sie mit der
+      Definition des Grenzwerts, dass $\lim_{n\to\infty} a_n = 3$ gilt. Ab welchem Index $N$ gilt
+      $|a_n - 3| < 0{,}01$ für alle $n \ge N$?
+
+      **2.2)** (2 P.) Ein Ball fällt aus 2 m Höhe und springt nach jedem Aufprall auf $75\,\%$ der
+      vorigen Höhe zurück. Welchen Gesamtweg legt er (theoretisch, bei unendlich vielen Sprüngen) zurück?
+
+      **2.3)** (2 P.) Welche der folgenden Reihen konvergieren?
+
+      **2.4)** (3 P.) Jemand zahlt 10 Jahre lang jeweils am Ende des Jahres 1200 Euro auf ein Sparkonto
+      ein, das mit $3\,\%$ p. a. verzinst wird. Wie hoch ist das Guthaben unmittelbar nach der zehnten
+      Einzahlung? Wie viel davon sind Zinsen?
+    teile:
+      - typ: text
+        label: '2.1) $\varepsilon$-Nachweis'
+        muster: |
+          $|a_n - 3| = \left|\frac{3n + 1 - 3n - 6}{n + 2}\right| = \frac{5}{n + 2}$. Zu beliebigem
+          $\varepsilon > 0$ gilt $\frac{5}{n+2} < \varepsilon \iff n > \frac5\varepsilon - 2$. Wählt man
+          $N > \frac{5}{\varepsilon} - 2$ (das gibt es nach dem Archimedischen Prinzip), so ist
+          $|a_n - 3| < \varepsilon$ für alle $n \ge N$. Also $\lim a_n = 3$.
+      - typ: zahl
+        label: '2.1) kleinstes $N$ für $\varepsilon = 0{,}01$'
+        loesung: "499"
+      - typ: zahl
+        label: '2.2) Gesamtweg'
+        loesung: "2 + 2*1.5/(1 - 0.75)"
+        anzeige: '14'
+        einheit: m
+      - typ: auswahl
+        label: '2.3) Konvergente Reihen'
+        optionen:
+          - '$\sum_{n=0}^{\infty} \left(\tfrac23\right)^n$'
+          - '$\sum_{n=1}^{\infty} \tfrac1n$'
+          - '$\sum_{n=0}^{\infty} (-1)^n$'
+          - '$\sum_{n=1}^{\infty} \tfrac{1}{2^n}$'
+          - '$\sum_{n=0}^{\infty} 1{,}01^n$'
+        richtig: [0, 3]
+        mehrfach: true
+      - typ: zahl
+        label: '2.4) Endwert'
+        loesung: "1200*(1.03^10 - 1)/0.03"
+        anzeige: '13\,756{,}66'
+        einheit: Euro
+        toleranz: 0.5
+      - typ: zahl
+        label: '2.4) davon Zinsen'
+        loesung: "1200*(1.03^10 - 1)/0.03 - 12000"
+        anzeige: '1\,756{,}66'
+        einheit: Euro
+        toleranz: 0.5
+    hinweise:
+      - '2.1) Bringe $a_n - 3$ auf einen Bruchstrich und schätze nach oben ab.'
+      - '2.2) Nach dem ersten Fall geht der Ball jede Sprunghöhe zweimal (hinauf und hinunter): $2 + 2(1{,}5 + 1{,}125 + \ldots)$.'
+      - '2.3) Geometrische Reihe $\sum q^n$ konvergiert genau für $|q| < 1$. Die harmonische Reihe divergiert. Notwendig für Konvergenz ist, dass die Glieder gegen 0 gehen.'
+      - '2.4) Nachschüssige Rente: $E = R\cdot\frac{q^n - 1}{q - 1}$ mit $q = 1{,}03$.'
+    loesung: |
+      **2.1)** $a_n - 3 = \frac{3n + 1 - 3(n + 2)}{n + 2} = \frac{-5}{n + 2}$, also $|a_n - 3| = \frac{5}{n+2}$.
+      ---
+      Sei $\varepsilon > 0$ beliebig. $\frac{5}{n+2} < \varepsilon \iff n + 2 > \frac{5}{\varepsilon} \iff n > \frac5\varepsilon - 2$.
+      Für $N > \frac5\varepsilon - 2$ und alle $n \ge N$ ist $|a_n - 3| < \varepsilon$. Damit ist $\lim a_n = 3$ bewiesen.
+      ---
+      Für $\varepsilon = 0{,}01$: $n > 500 - 2 = 498$, also $N = 499$. Kontrolle: $|a_{499} - 3| = \frac{5}{501} < 0{,}01$,
+      aber $|a_{498} - 3| = \frac{5}{500} = 0{,}01$ (nicht kleiner).
+      ---
+      **2.2)** Sprunghöhen $1{,}5;\ 1{,}125;\ \ldots$ bilden eine geometrische Folge mit $q = 0{,}75$, Summe
+      $\frac{1{,}5}{1 - 0{,}75} = 6$. Jede Höhe wird hinauf und hinunter durchlaufen: $s = 2 + 2\cdot 6 = 14$ m.
+      ---
+      **2.3)** $\sum (\tfrac23)^n = \frac{1}{1 - 2/3} = 3$ und $\sum_{n\ge1} \frac{1}{2^n} = 1$ konvergieren
+      ($|q| < 1$). $\sum \frac1n$ divergiert (harmonische Reihe), $\sum(-1)^n$ und $\sum 1{,}01^n$
+      divergieren, weil die Glieder keine Nullfolge bilden.
+      ---
+      **2.4)** Die erste Rate wird 9 Jahre verzinst, die letzte gar nicht:
+      $E = 1200\,(1{,}03^9 + \ldots + 1{,}03 + 1) = 1200\cdot\frac{1{,}03^{10} - 1}{0{,}03} \approx 13\,756{,}66$ Euro.
+      ---
+      Eingezahlt wurden $10\cdot 1200 = 12\,000$ Euro, die Zinsen betragen also etwa $1\,756{,}66$ Euro.
+
+  - id: sim5-3
+    titel: Komplexe Zahlen
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **3.1)** (2 P.) Lösen Sie die Gleichung $z^2 - 4z + 13 = 0$ in $\C$.
+
+      **3.2)** (4 P.) Gegeben ist $w = 1 - \sqrt3\, i$.
+
+      (a) Stellen Sie $w$ in der Gauß’schen Zahlenebene dar und geben Sie $w$ in Polarform an
+      (Argument in $[0°, 360°)$).
+
+      (b) Berechnen Sie $w^6$ mit der Formel von Moivre.
+
+      **3.3)** (4 P.) Bestimmen Sie alle Lösungen der Gleichung $z^3 = -8i$ in algebraischer Form und
+      zeichnen Sie sie in der Gauß’schen Zahlenebene ein. Welche Figur bilden sie?
+    teile:
+      - typ: komplex
+        label: '3.1) Lösung mit positivem Imaginärteil'
+        loesung: "2 + 3i"
+        anzeige: '2 + 3i'
+      - typ: komplex
+        label: '3.1) Lösung mit negativem Imaginärteil'
+        loesung: "2 - 3i"
+        anzeige: '2 - 3i'
+      - typ: zahl
+        label: '3.2 a) $|w|$'
+        loesung: "abs(1 - sqrt(3)*i)"
+        anzeige: '2'
+      - typ: zahl
+        label: '3.2 a) $\arg w$ in Grad'
+        loesung: "300"
+        einheit: °
+      - typ: komplex
+        label: '3.2 b) $w^6$'
+        loesung: "(1 - sqrt(3)*i)^6"
+        anzeige: '64'
+        toleranz: 0.001
+      - typ: komplex
+        label: '3.3) Lösung mit Realteil 0'
+        loesung: "2i"
+        anzeige: '2i'
+      - typ: komplex
+        label: '3.3) Lösung mit negativem Realteil'
+        loesung: "-sqrt(3) - i"
+        anzeige: '-\sqrt3 - i'
+      - typ: komplex
+        label: '3.3) Lösung mit positivem Realteil'
+        loesung: "sqrt(3) - i"
+        anzeige: '\sqrt3 - i'
+      - typ: text
+        label: '3.3) Figur'
+        muster: |
+          Die drei Lösungen liegen auf dem Kreis mit Radius 2 um 0, im Winkelabstand von $120°$
+          (bei $90°$, $210°$, $330°$). Sie bilden ein gleichseitiges Dreieck.
+    hinweise:
+      - '3.1) Lösungsformel; die Diskriminante ist negativ: $\sqrt{-36} = 6i$.'
+      - '3.2) $w$ liegt im 4. Quadranten. $\tan\varphi = \frac{-\sqrt3}{1}$, also Bezugswinkel $60°$.'
+      - '3.3) $-8i = 8\,(\cos 270° + i\sin 270°)$. Die Wurzeln haben Betrag $\sqrt[3]{8} = 2$ und Argumente $\frac{270° + k\cdot 360°}{3}$, $k = 0, 1, 2$.'
+    loesung: |
+      **3.1)** $z = \frac{4 \pm \sqrt{16 - 52}}{2} = \frac{4 \pm \sqrt{-36}}{2} = \frac{4 \pm 6i}{2} = 2 \pm 3i$.
+      Probe: $(2 + 3i)^2 - 4(2 + 3i) + 13 = -5 + 12i - 8 - 12i + 13 = 0$ ✓.
+      ---
+      **3.2 a)** $|w| = \sqrt{1 + 3} = 2$. $w$ liegt im 4. Quadranten (Re $> 0$, Im $< 0$), Bezugswinkel
+      $\arctan\sqrt3 = 60°$, also $\varphi = 360° - 60° = 300°$. $w = 2\,(\cos 300° + i\sin 300°)$.
+      ---
+      **3.2 b)** Moivre: $w^6 = 2^6\,(\cos 1800° + i\sin 1800°)$. $1800° = 5\cdot 360°$, also
+      $w^6 = 64\,(1 + 0i) = 64$.
+      ---
+      **3.3)** $-8i$ hat Betrag 8 und Argument $270°$. Die drei Wurzeln haben Betrag 2 und die Argumente
+      $90°$, $90° + 120° = 210°$ und $330°$.
+      ---
+      $z_0 = 2(\cos 90° + i\sin 90°) = 2i$,
+      $z_1 = 2(\cos 210° + i\sin 210°) = 2\left(-\tfrac{\sqrt3}{2} - \tfrac12 i\right) = -\sqrt3 - i$,
+      $z_2 = 2(\cos 330° + i\sin 330°) = \sqrt3 - i$.
+      ---
+      Probe: $(2i)^3 = 8i^3 = -8i$ ✓. Die Lösungen bilden ein gleichseitiges Dreieck auf dem Kreis mit
+      Radius 2.
+
+  - id: sim5-4
+    titel: Übungsstunden, Punkte und Abfüllmengen
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **4.1)** (6 P.) Fünf Studierende notieren ihre wöchentlichen Übungsstunden $x$ und ihre Punkte $y$
+      in einem Test:
+
+      | $x$ (Stunden) | 1 | 2 | 3 | 4 | 5 |
+      |---|---|---|---|---|---|
+      | $y$ (Punkte) | 12 | 16 | 20 | 18 | 24 |
+
+      (a) Berechnen Sie arithmetisches Mittel, Median und (empirische) Standardabweichung der Punkte
+      (Division durch $n$).
+
+      (b) Bestimmen Sie die Gleichung der Regressionsgeraden $y = kx + d$ nach der Methode der kleinsten
+      Quadrate.
+
+      (c) Berechnen Sie den Korrelationskoeffizienten $r$ und interpretieren Sie ihn.
+
+      (d) Welche Punktezahl prognostiziert das Modell bei 6 Stunden? Darf man schließen, dass mehr
+      Üben die Ursache für mehr Punkte ist?
+
+      **4.2)** (4 P.) Eine Maschine füllt Kaffeepackungen ab. Die Füllmenge ist normalverteilt mit
+      $\mu = 500$ g und $\sigma = 4$ g.
+
+      (a) Wie viel Prozent der Packungen enthalten weniger als 492 g?
+
+      (b) Mit welcher Wahrscheinlichkeit liegt die Füllmenge zwischen 495 g und 505 g?
+
+      (c) Geben Sie ein um $\mu$ symmetrisches Intervall an, in dem $95\,\%$ aller Füllmengen liegen.
+    teile:
+      - typ: zahl
+        label: '4.1 a) Mittelwert $\bar y$'
+        loesung: "mean(12, 16, 20, 18, 24)"
+        anzeige: '18'
+      - typ: zahl
+        label: '4.1 a) Median'
+        loesung: "median(12, 16, 20, 18, 24)"
+        anzeige: '18'
+      - typ: zahl
+        label: '4.1 a) Standardabweichung $s_y$ (Division durch $n$)'
+        loesung: "std([12, 16, 20, 18, 24], \"uncorrected\")"
+        anzeige: '4'
+      - typ: zahl
+        label: '4.1 b) Steigung $k$'
+        loesung: "26/10"
+        anzeige: '2{,}6'
+      - typ: zahl
+        label: '4.1 b) Achsenabschnitt $d$'
+        loesung: "18 - 2.6*3"
+        anzeige: '10{,}2'
+      - typ: zahl
+        label: '4.1 c) $r$'
+        loesung: "26/sqrt(10*80)"
+        anzeige: '0{,}919'
+        toleranz: 0.002
+      - typ: zahl
+        label: '4.1 d) Prognose für $x = 6$'
+        loesung: "2.6*6 + 10.2"
+        anzeige: '25{,}8'
+        einheit: Punkte
+      - typ: text
+        label: '4.1 c, d) Interpretation'
+        muster: |
+          $r \approx 0{,}92$ ist nahe bei 1: starker positiver linearer Zusammenhang. Pro zusätzlicher
+          Übungsstunde steigen die Punkte im Modell um 2,6. Eine Korrelation beweist aber keine Kausalität:
+          Es könnte eine dritte Ursache geben (z. B. Motivation oder Vorwissen), die beides beeinflusst.
+          Außerdem sind 5 Datenpunkte sehr wenig, und die Prognose für $x = 6$ liegt außerhalb des
+          beobachteten Bereichs (Extrapolation).
+      - typ: zahl
+        label: '4.2 a) Anteil unter 492 g (in Prozent)'
+        loesung: "100*normcdf(492, 500, 4)"
+        anzeige: '2{,}28'
+        einheit: '%'
+        toleranz: 0.05
+      - typ: zahl
+        label: '4.2 b) $P(495 \le X \le 505)$'
+        loesung: "normcdf(505, 500, 4) - normcdf(495, 500, 4)"
+        anzeige: '0{,}7887'
+        toleranz: 0.002
+      - typ: zahl
+        label: '4.2 c) untere Grenze'
+        loesung: "invnorm(0.025, 500, 4)"
+        anzeige: '492{,}16'
+        einheit: g
+        toleranz: 0.05
+      - typ: zahl
+        label: '4.2 c) obere Grenze'
+        loesung: "invnorm(0.975, 500, 4)"
+        anzeige: '507{,}84'
+        einheit: g
+        toleranz: 0.05
+    hinweise:
+      - '4.1) Arbeite mit den Abweichungen von den Mittelwerten $\bar x = 3$, $\bar y = 18$: $k = \frac{\sum (x_i - \bar x)(y_i - \bar y)}{\sum (x_i - \bar x)^2}$, $d = \bar y - k\bar x$.'
+      - '4.1) $r = \frac{\sum (x_i - \bar x)(y_i - \bar y)}{\sqrt{\sum (x_i - \bar x)^2\cdot\sum (y_i - \bar y)^2}}$.'
+      - '4.2) Standardisieren: $z = \frac{x - \mu}{\sigma}$, dann $\Phi(z)$ aus der Tabelle. Für $95\,\%$ symmetrisch gilt $z = 1{,}96$.'
+    loesung: |
+      **4.1 a)** $\bar y = \frac{12 + 16 + 20 + 18 + 24}{5} = \frac{90}{5} = 18$. Geordnet: $12, 16, 18, 20, 24$,
+      Median $= 18$.
+      ---
+      Abweichungen $y_i - \bar y$: $-6, -2, 2, 0, 6$; Quadratsumme $36 + 4 + 4 + 0 + 36 = 80$.
+      $s_y = \sqrt{80/5} = \sqrt{16} = 4$. (Mit $n - 1$ wäre es $\sqrt{20} \approx 4{,}47$.)
+      ---
+      **4.1 b)** $x_i - \bar x$: $-2, -1, 0, 1, 2$, $\sum (x_i - \bar x)^2 = 10$.
+      $\sum (x_i - \bar x)(y_i - \bar y) = 12 + 2 + 0 + 0 + 12 = 26$.
+      $k = \frac{26}{10} = 2{,}6$, $d = 18 - 2{,}6\cdot 3 = 10{,}2$. Regressionsgerade $y = 2{,}6x + 10{,}2$.
+      ---
+      **4.1 c)** $r = \frac{26}{\sqrt{10\cdot 80}} = \frac{26}{\sqrt{800}} \approx 0{,}919$: starker positiver
+      linearer Zusammenhang.
+      ---
+      **4.1 d)** $y(6) = 2{,}6\cdot 6 + 10{,}2 = 25{,}8$ Punkte. Kausalität folgt daraus nicht: Korrelation ist
+      kein Ursachenbeweis (mögliche Drittvariablen, kleine Stichprobe, Extrapolation).
+      ---
+      **4.2 a)** $z = \frac{492 - 500}{4} = -2$, $P(X < 492) = \Phi(-2) = 1 - \Phi(2) \approx 1 - 0{,}97725 = 0{,}02275$,
+      also etwa $2{,}28\,\%$.
+      ---
+      **4.2 b)** $z = \pm 1{,}25$: $P = 2\Phi(1{,}25) - 1 \approx 2\cdot 0{,}89435 - 1 \approx 0{,}7887$.
+      ---
+      **4.2 c)** $\mu \pm 1{,}96\,\sigma = 500 \pm 7{,}84$, also $[492{,}16\ \text{g};\ 507{,}84\ \text{g}]$.

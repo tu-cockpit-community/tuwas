@@ -1,0 +1,299 @@
+id: physik1-simulation-a
+titel: Prüfungssimulation A (gemischt)
+art: simulation
+dauer_minuten: 180
+hinweis: |
+  Selbst erstellte Simulation im Niveau der AHS-Schulbücher (für Physik 1 an der TU Wien gibt es keine
+  öffentlichen Altprüfungen). Hilfsmittel: einfacher wissenschaftlicher Taschenrechner, **keine**
+  Formelsammlung. Rechne jede Aufgabe mit Ansatz, Formel, eingesetzten Werten und Einheit. Konstanten:
+  $g = 9{,}81\,\text{m/s}^2$, $c_{\text{Wasser}} = 4190\,\text{J/(kg K)}$, $r_{\text{Wasser}} = 2257\,\text{kJ/kg}$.
+aufgaben:
+  - id: psa-1-anhalteweg
+    titel: Anhalteweg eines Autos
+    niveau: 3
+    punkte: 9
+    angabe: |
+      Ein Auto ($m = 1200\,\text{kg}$) fährt mit $90\,\text{km/h}$. Die Fahrerin sieht ein Hindernis und bremst nach
+      einer Reaktionszeit von $0{,}8\,\text{s}$ mit der konstanten Verzögerung $7{,}5\,\text{m/s}^2$.
+
+      a) Berechne den gesamten Anhalteweg (Reaktionsweg plus Bremsweg).
+
+      b) Welche Haftreibungszahl zwischen Reifen und Straße ist mindestens nötig, damit diese Verzögerung möglich ist?
+
+      c) Wie viel Energie wird beim Bremsen in Wärme umgewandelt?
+    teile:
+      - typ: zahl
+        label: a) Anhalteweg
+        loesung: "25*0.8 + 25^2/(2*7.5)"
+        einheit: m
+        anzeige: '61{,}7'
+      - typ: zahl
+        label: b) Haftreibungszahl
+        loesung: "7.5/9.81"
+        anzeige: '0{,}76'
+      - typ: zahl
+        label: c) Energie in kJ
+        loesung: "0.5*1200*25^2/1000"
+        einheit: kJ
+        anzeige: '375'
+    hinweise:
+      - '$90\,\text{km/h} = 25\,\text{m/s}$. Während der Reaktionszeit fährt das Auto gleichförmig weiter.'
+      - 'Bremsweg aus $v^2 = 2as$. Die Reibungskraft $\mu m g$ muss die Bremskraft $ma$ liefern.'
+    loesung: |
+      **a)** $v = 25\,\text{m/s}$. Reaktionsweg $s_R = v\,t_R = 25\cdot 0{,}8\,\text{m} = 20\,\text{m}$.
+      Bremsweg $s_B = \dfrac{v^2}{2a} = \dfrac{625}{15}\,\text{m} = 41{,}7\,\text{m}$. Anhalteweg $61{,}7\,\text{m}$.
+      ---
+      **b)** $\mu m g \ge m a \Rightarrow \mu \ge \dfrac{a}{g} = \dfrac{7{,}5}{9{,}81} = 0{,}76$ (trockener Asphalt schafft das).
+      ---
+      **c)** Die gesamte kinetische Energie: $E = \tfrac12 m v^2 = \tfrac12\cdot 1200\cdot 625\,\text{J} = 375\,\text{kJ}$.
+
+  - id: psa-2-federpendel
+    titel: Federpendel
+    niveau: 3
+    punkte: 8
+    angabe: |
+      Ein Körper der Masse $0{,}40\,\text{kg}$ hängt an einer Feder mit $D = 25\,\text{N/m}$. Er wird $5{,}0\,\text{cm}$
+      aus der Ruhelage nach unten gezogen und losgelassen.
+
+      a) Berechne die Schwingungsdauer.
+
+      b) Wie groß ist die maximale Geschwindigkeit?
+
+      c) Wie groß ist die Schwingungsenergie?
+
+      d) Wie ändert sich die Schwingungsdauer, wenn man das Pendel auf den Mond bringt? Begründe.
+    teile:
+      - typ: zahl
+        label: a) T
+        loesung: "2*pi*sqrt(0.40/25)"
+        einheit: s
+        anzeige: '0{,}795'
+      - typ: zahl
+        label: b) v_max
+        loesung: "0.05*sqrt(25/0.40)"
+        einheit: m/s
+        anzeige: '0{,}395'
+      - typ: zahl
+        label: c) Energie in mJ
+        loesung: "0.5*25*0.05^2*1000"
+        einheit: mJ
+        anzeige: '31{,}3'
+      - typ: text
+        label: d)
+        muster: |
+          Gar nicht. $T = 2\pi\sqrt{m/D}$ enthält $g$ nicht; die Schwerkraft verschiebt nur die Ruhelage.
+    hinweise:
+      - '$T = 2\pi\sqrt{m/D}$, $\omega = 2\pi/T$, $v_{\max} = A\omega$.'
+      - 'Energie: $E = \tfrac12 D A^2$.'
+    loesung: |
+      **a)** $T = 2\pi\sqrt{\dfrac{0{,}40}{25}}\,\text{s} = 2\pi\cdot 0{,}1265\,\text{s} = 0{,}795\,\text{s}$
+      ---
+      **b)** $\omega = \sqrt{D/m} = 7{,}91\,\text{s}^{-1}$, $v_{\max} = A\omega = 0{,}050\cdot 7{,}91\,\text{m/s} = 0{,}395\,\text{m/s}$
+      ---
+      **c)** $E = \tfrac12 D A^2 = \tfrac12\cdot 25\cdot 0{,}05^2\,\text{J} = 0{,}0313\,\text{J}$. Probe: $\tfrac12 m v_{\max}^2 = \tfrac12\cdot 0{,}4\cdot 0{,}395^2 = 0{,}0313\,\text{J}$ ✓
+      ---
+      **d)** Unverändert, weil $T$ nicht von $g$ abhängt (anders als beim Fadenpendel).
+
+  - id: psa-3-wasserkocher
+    titel: Wasserkocher
+    niveau: 3
+    punkte: 8
+    angabe: |
+      In einem Wasserkocher (Leistung $2{,}0\,\text{kW}$, Wirkungsgrad $90\,\%$) werden $2{,}0\,\text{kg}$ Wasser von
+      $15\,^\circ\text{C}$ zum Sieden gebracht.
+
+      a) Welche Wärme muss dem Wasser zugeführt werden?
+
+      b) Wie lange dauert das Erhitzen?
+
+      c) Der Kocher schaltet nicht ab. Wie lange dauert es zusätzlich, bis $0{,}20\,\text{kg}$ Wasser verdampft sind?
+    teile:
+      - typ: zahl
+        label: a) Wärme in kJ
+        loesung: "2.0*4190*85/1000"
+        einheit: kJ
+        anzeige: '712'
+      - typ: zahl
+        label: b) Zeit in s
+        loesung: "2.0*4190*85/(0.9*2000)"
+        einheit: s
+        anzeige: '396'
+      - typ: zahl
+        label: c) Zeit in s
+        loesung: "0.20*2257e3/(0.9*2000)"
+        einheit: s
+        anzeige: '251'
+    hinweise:
+      - '$Q = c\,m\,\Delta T$ mit $\Delta T = 85\,\text{K}$.'
+      - 'Nutzleistung $0{,}9\cdot 2000\,\text{W}$. Beim Verdampfen: $Q = r\,m$.'
+    loesung: |
+      **a)** $Q = c\,m\,\Delta T = 4190\cdot 2{,}0\cdot 85\,\text{J} = 712\,\text{kJ}$
+      ---
+      **b)** $t = \dfrac{Q}{\eta P} = \dfrac{712\,300\,\text{J}}{1800\,\text{W}} = 396\,\text{s} \approx 6{,}6\,\text{min}$
+      ---
+      **c)** $Q_V = r\,m = 2257\,\text{kJ/kg}\cdot 0{,}20\,\text{kg} = 451\,\text{kJ}$, $t = 451\,400/1800\,\text{s} = 251\,\text{s}$.
+
+  - id: psa-4-reifen
+    titel: Reifendruck im Sommer
+    niveau: 3
+    punkte: 6
+    angabe: |
+      Ein Autoreifen wird bei $10\,^\circ\text{C}$ auf $2{,}2\,\text{bar}$ **Überdruck** aufgepumpt (äußerer Luftdruck
+      $1{,}0\,\text{bar}$). Nach längerer Fahrt hat die Luft im Reifen $40\,^\circ\text{C}$. Das Volumen bleibt gleich.
+
+      a) Wie groß ist jetzt der absolute Druck im Reifen?
+
+      b) Welchen Überdruck zeigt das Manometer an der Tankstelle?
+
+      c) Warum muss man mit der absoluten Temperatur und dem absoluten Druck rechnen?
+    teile:
+      - typ: zahl
+        label: a) absoluter Druck in bar
+        loesung: "3.2*313.15/283.15"
+        einheit: bar
+        anzeige: '3{,}54'
+      - typ: zahl
+        label: b) Überdruck in bar
+        loesung: "3.2*313.15/283.15 - 1.0"
+        einheit: bar
+        anzeige: '2{,}54'
+      - typ: text
+        label: c)
+        muster: |
+          Das Gesetz von Amontons $p/T = \text{konst.}$ beschreibt Proportionalität. Die gilt nur für Größen mit
+          echtem Nullpunkt: Druck null heißt keine Teilchenstöße, $T = 0\,\text{K}$ heißt keine Teilchenbewegung.
+          In °C oder mit Überdruck wäre die Proportionalität falsch.
+    hinweise:
+      - 'Absoluter Anfangsdruck $= 2{,}2 + 1{,}0 = 3{,}2\,\text{bar}$; Temperaturen in Kelvin.'
+    loesung: |
+      **a)** Isochor: $\dfrac{p_1}{T_1} = \dfrac{p_2}{T_2} \Rightarrow p_2 = 3{,}2\,\text{bar}\cdot\dfrac{313{,}15}{283{,}15} = 3{,}54\,\text{bar}$
+      ---
+      **b)** Überdruck $3{,}54 - 1{,}0 = 2{,}54\,\text{bar}$. Deshalb Reifendruck kalt prüfen.
+      ---
+      **c)** Proportionalität gilt nur ab dem absoluten Nullpunkt bzw. Vakuum.
+
+  - id: psa-5-schaltung
+    titel: Gemischte Schaltung
+    niveau: 3
+    punkte: 10
+    angabe: |
+      Ein Widerstand $R_1 = 10\,\Omega$ ist in Serie mit einer Parallelschaltung aus $R_2 = 20\,\Omega$ und
+      $R_3 = 30\,\Omega$ an eine Spannung $U = 24\,\text{V}$ angeschlossen.
+
+      a) Berechne den Gesamtwiderstand.
+
+      b) Berechne den Gesamtstrom und die Spannung an $R_1$.
+
+      c) Welcher Strom fließt durch $R_2$?
+
+      d) Welche Leistung nimmt die Schaltung insgesamt auf?
+    teile:
+      - typ: zahl
+        label: a) R_ges
+        loesung: "10 + 20*30/(20+30)"
+        einheit: Ω
+        anzeige: '22'
+      - typ: zahl
+        label: b) I
+        loesung: "24/22"
+        einheit: A
+        anzeige: '1{,}09'
+      - typ: zahl
+        label: b) U_1
+        loesung: "10*24/22"
+        einheit: V
+        anzeige: '10{,}9'
+      - typ: zahl
+        label: c) I_2
+        loesung: "(24 - 10*24/22)/20"
+        einheit: A
+        anzeige: '0{,}655'
+      - typ: zahl
+        label: d) P
+        loesung: "24*24/22"
+        einheit: W
+        anzeige: '26{,}2'
+    hinweise:
+      - 'Parallel: $\frac{1}{R_p} = \frac{1}{R_2} + \frac{1}{R_3}$, also $R_p = 12\,\Omega$.'
+      - 'An der Parallelschaltung liegt $U - U_1$.'
+    loesung: |
+      **a)** $R_p = \dfrac{20\cdot 30}{50}\,\Omega = 12\,\Omega$, $R = 10 + 12 = 22\,\Omega$
+      ---
+      **b)** $I = U/R = 24/22\,\text{A} = 1{,}09\,\text{A}$, $U_1 = R_1 I = 10{,}9\,\text{V}$
+      ---
+      **c)** $U_p = 24 - 10{,}9 = 13{,}1\,\text{V}$, $I_2 = 13{,}1/20\,\text{A} = 0{,}655\,\text{A}$ (und $I_3 = 0{,}436\,\text{A}$, Summe $1{,}09\,\text{A}$ ✓, Knotenregel)
+      ---
+      **d)** $P = U I = 24\cdot 1{,}09\,\text{W} = 26{,}2\,\text{W}$
+
+  - id: psa-6-linse
+    titel: Abbildung mit einer Sammellinse
+    niveau: 3
+    punkte: 7
+    angabe: |
+      Ein $2{,}0\,\text{cm}$ hoher Gegenstand steht $7{,}5\,\text{cm}$ vor einer Sammellinse mit $f = 5{,}0\,\text{cm}$.
+
+      a) Berechne die Bildweite.
+
+      b) Berechne die Bildgröße (negativ = umgekehrt).
+
+      c) Beschreibe das Bild und nenne ein Gerät, das so abbildet.
+    teile:
+      - typ: zahl
+        label: a) b in cm
+        loesung: "1/(1/5 - 1/7.5)"
+        einheit: cm
+        anzeige: '15'
+      - typ: zahl
+        label: b) B in cm
+        loesung: "-2*15/7.5"
+        einheit: cm
+        anzeige: '-4'
+      - typ: text
+        label: c)
+        muster: |
+          Reell, umgekehrt, doppelt so groß (Gegenstand zwischen f und 2f). So bildet ein Projektor (Beamer, Diaprojektor) ab.
+    hinweise:
+      - '$\frac{1}{f} = \frac{1}{g} + \frac{1}{b}$ und $\frac{B}{G} = -\frac{b}{g}$.'
+    loesung: |
+      **a)** $\dfrac{1}{b} = \dfrac{1}{5} - \dfrac{1}{7{,}5} = \dfrac{1}{15}\,\text{cm}^{-1} \Rightarrow b = 15\,\text{cm}$
+      ---
+      **b)** $B = -G\,\dfrac{b}{g} = -2\cdot\dfrac{15}{7{,}5}\,\text{cm} = -4\,\text{cm}$
+      ---
+      **c)** reell, umgekehrt, vergrößert ($V = 2$): Projektor.
+
+  - id: psa-7-iod
+    titel: Radioaktives Iod
+    niveau: 3
+    punkte: 6
+    angabe: |
+      Iod-131 hat eine Halbwertszeit von $8{,}0$ Tagen.
+
+      a) Welcher Bruchteil einer Probe ist nach 24 Tagen noch nicht zerfallen?
+
+      b) Nach wie vielen Tagen ist nur noch 1 % übrig?
+
+      c) Welche Strahlung sendet I-131 hauptsächlich aus, und warum ist es nach einem Reaktorunfall gefährlich?
+    teile:
+      - typ: zahl
+        label: a) Bruchteil
+        loesung: "0.5^(24/8)"
+        anzeige: '0{,}125'
+      - typ: zahl
+        label: b) Tage
+        loesung: "8*ln(100)/ln(2)"
+        einheit: d
+        anzeige: '53{,}2'
+      - typ: text
+        label: c)
+        muster: |
+          β⁻-Strahlung (mit begleitender γ-Strahlung). Iod reichert sich in der Schilddrüse an und bestrahlt sie von innen;
+          deshalb gibt man vorbeugend Kaliumiodid-Tabletten, die die Schilddrüse mit stabilem Iod sättigen.
+    hinweise:
+      - '24 Tage sind 3 Halbwertszeiten.'
+      - '$0{,}5^{t/T} = 0{,}01 \Rightarrow t = T\,\dfrac{\ln 100}{\ln 2}$.'
+    loesung: |
+      **a)** $N/N_0 = (1/2)^{3} = 1/8 = 0{,}125$
+      ---
+      **b)** $t = 8{,}0\,\text{d}\cdot\dfrac{\ln 100}{\ln 2} = 8{,}0\cdot 6{,}64\,\text{d} = 53\,\text{d}$
+      ---
+      **c)** β⁻ und γ; Anreicherung in der Schilddrüse, innere Bestrahlung.

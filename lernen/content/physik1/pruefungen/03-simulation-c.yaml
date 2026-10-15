@@ -1,0 +1,266 @@
+id: physik1-simulation-c
+titel: Prüfungssimulation C (gemischt)
+art: simulation
+dauer_minuten: 180
+hinweis: |
+  Selbst erstellte Simulation im Niveau der AHS-Schulbücher. Hilfsmittel: einfacher wissenschaftlicher
+  Taschenrechner, **keine** Formelsammlung. Konstanten: $g = 9{,}81\,\text{m/s}^2$,
+  $G = 6{,}674\cdot 10^{-11}\,\text{N m}^2/\text{kg}^2$, $M_E = 5{,}97\cdot 10^{24}\,\text{kg}$, $R_E = 6370\,\text{km}$,
+  $e = 1{,}602\cdot 10^{-19}\,\text{C}$, $m_e = 9{,}109\cdot 10^{-31}\,\text{kg}$, $h = 6{,}626\cdot 10^{-34}\,\text{J s}$,
+  $c = 3{,}00\cdot 10^{8}\,\text{m/s}$.
+aufgaben:
+  - id: psc-1-satellit
+    titel: Raumstation auf der Umlaufbahn
+    niveau: 3
+    punkte: 8
+    angabe: |
+      Eine Raumstation umkreist die Erde in $400\,\text{km}$ Höhe auf einer Kreisbahn.
+
+      a) Leite aus dem Kräftegleichgewicht die Bahngeschwindigkeit her und berechne sie.
+
+      b) Wie lange dauert ein Umlauf (in Minuten)?
+
+      c) Die Astronauten schweben. Ist die Schwerkraft dort oben null? Begründe.
+    teile:
+      - typ: zahl
+        label: a) v in m/s
+        loesung: "sqrt(6.674e-11*5.97e24/(6370e3+400e3))"
+        einheit: m/s
+        anzeige: '7672'
+      - typ: zahl
+        label: b) T in min
+        loesung: "2*pi*(6770e3)/sqrt(6.674e-11*5.97e24/6770e3)/60"
+        einheit: min
+        anzeige: '92{,}4'
+      - typ: text
+        label: c)
+        muster: |
+          Nein, $g$ beträgt dort noch etwa $8{,}7\,\text{m/s}^2$. Station und Astronauten fallen gemeinsam frei um die Erde
+          (die Gravitation wirkt genau als Zentripetalkraft), deshalb gibt es keine Kraft zwischen Astronaut und Boden:
+          Schwerelosigkeit ist freier Fall.
+    hinweise:
+      - '$\dfrac{GMm}{r^2} = \dfrac{mv^2}{r}$ mit $r = R_E + h$.'
+      - '$T = 2\pi r/v$.'
+    loesung: |
+      **a)** Gravitation liefert die Zentripetalkraft: $\dfrac{GMm}{r^2} = \dfrac{mv^2}{r} \Rightarrow v = \sqrt{\dfrac{GM}{r}}$.
+      Mit $r = 6{,}77\cdot 10^{6}\,\text{m}$: $v = 7{,}67\,\text{km/s}$.
+      ---
+      **b)** $T = \dfrac{2\pi r}{v} = 5545\,\text{s} = 92{,}4\,\text{min}$
+      ---
+      **c)** Schwerkraft ist nicht null, sondern Zentripetalkraft; Schwerelosigkeit ist freier Fall.
+
+  - id: psc-2-flaschenzug
+    titel: Flaschenzug
+    niveau: 3
+    punkte: 7
+    angabe: |
+      Mit einem Flaschenzug, bei dem die Last an 4 Seilstücken hängt, wird eine Masse von $200\,\text{kg}$ um $2{,}0\,\text{m}$
+      gehoben. Der Wirkungsgrad beträgt $80\,\%$.
+
+      a) Welche Zugkraft ist nötig?
+
+      b) Wie viel Seil muss man einziehen?
+
+      c) Welche Arbeit verrichtet die Person insgesamt (in kJ)?
+    teile:
+      - typ: zahl
+        label: a) Zugkraft
+        loesung: "200*9.81/(4*0.8)"
+        einheit: N
+        anzeige: '613'
+      - typ: zahl
+        label: b) Seillänge
+        loesung: "4*2.0"
+        einheit: m
+        anzeige: '8'
+      - typ: zahl
+        label: c) Arbeit in kJ
+        loesung: "200*9.81*2.0/0.8/1000"
+        einheit: kJ
+        anzeige: '4{,}91'
+    hinweise:
+      - 'Ideal: $F = F_G/n$. Goldene Regel: was an Kraft gespart wird, wird an Weg zugesetzt.'
+      - 'Real: $F = F_G/(n\eta)$, Arbeit $W = W_{\text{Nutz}}/\eta$.'
+    loesung: |
+      **a)** ideal $F_G/4 = 490{,}5\,\text{N}$; real $490{,}5/0{,}8 = 613\,\text{N}$
+      ---
+      **b)** $s = 4\cdot 2{,}0\,\text{m} = 8{,}0\,\text{m}$
+      ---
+      **c)** Nutzarbeit $mgh = 3924\,\text{J}$, aufgewendet $3924/0{,}8 = 4905\,\text{J} \approx 4{,}91\,\text{kJ}$ (Probe: $613\,\text{N}\cdot 8\,\text{m} = 4905\,\text{J}$ ✓)
+
+  - id: psc-3-waermepumpe
+    titel: Wärmepumpe
+    niveau: 3
+    punkte: 7
+    angabe: |
+      Eine Wärmepumpe entzieht dem Grundwasser ($0\,^\circ\text{C}$) Wärme und heizt einen Fußbodenkreislauf auf $35\,^\circ\text{C}$.
+
+      a) Wie groß ist die ideale (Carnot-)Leistungszahl?
+
+      b) Die reale Leistungszahl beträgt $4{,}0$. Welche elektrische Leistung braucht die Pumpe für $10\,\text{kW}$ Heizleistung?
+
+      c) Wie viel Wärme wird dabei pro Sekunde dem Grundwasser entzogen?
+    teile:
+      - typ: zahl
+        label: a) ε_Carnot
+        loesung: "308.15/35"
+        anzeige: '8{,}8'
+      - typ: zahl
+        label: b) elektrische Leistung in kW
+        loesung: "10/4.0"
+        einheit: kW
+        anzeige: '2{,}5'
+      - typ: zahl
+        label: c) Wärmestrom in kW
+        loesung: "10 - 10/4.0"
+        einheit: kW
+        anzeige: '7{,}5'
+    hinweise:
+      - '$\varepsilon = \dfrac{T_{\text{warm}}}{T_{\text{warm}} - T_{\text{kalt}}}$ in Kelvin.'
+      - 'Energiebilanz: $Q_{\text{warm}} = Q_{\text{kalt}} + W$.'
+    loesung: |
+      **a)** $\varepsilon_C = \dfrac{308{,}15}{35} = 8{,}8$
+      ---
+      **b)** $P_{el} = \dfrac{10\,\text{kW}}{4{,}0} = 2{,}5\,\text{kW}$
+      ---
+      **c)** 1. Hauptsatz: $10 - 2{,}5 = 7{,}5\,\text{kW}$ kommen aus dem Grundwasser.
+
+  - id: psc-4-transformator
+    titel: Transformator
+    niveau: 3
+    punkte: 7
+    angabe: |
+      Ein (idealer) Transformator hat primär $1000$ und sekundär $50$ Windungen. Primär liegt die Netzspannung $230\,\text{V}$ an.
+
+      a) Welche Sekundärspannung liefert er?
+
+      b) Sekundär fließen $4{,}0\,\text{A}$. Wie groß ist der Primärstrom?
+
+      c) Warum funktioniert ein Transformator nur mit Wechselstrom?
+    teile:
+      - typ: zahl
+        label: a) U₂
+        loesung: "230*50/1000"
+        einheit: V
+        anzeige: '11{,}5'
+      - typ: zahl
+        label: b) I₁
+        loesung: "4.0*50/1000"
+        einheit: A
+        anzeige: '0{,}2'
+      - typ: text
+        label: c)
+        muster: |
+          Die Sekundärspannung entsteht durch Induktion, also durch ein sich änderndes Magnetfeld im Eisenkern. Gleichstrom
+          erzeugt ein konstantes Feld, das nach dem Einschalten keine Spannung mehr induziert.
+    hinweise:
+      - '$U_1/U_2 = N_1/N_2$, beim idealen Trafo $U_1 I_1 = U_2 I_2$.'
+    loesung: |
+      **a)** $U_2 = 230\cdot\dfrac{50}{1000}\,\text{V} = 11{,}5\,\text{V}$
+      ---
+      **b)** $I_1 = I_2\,\dfrac{N_2}{N_1} = 4{,}0\cdot 0{,}05\,\text{A} = 0{,}20\,\text{A}$ (Leistung je $46\,\text{W}$)
+      ---
+      **c)** Induktion braucht eine Flussänderung.
+
+  - id: psc-5-elektron-magnetfeld
+    titel: Elektron im Magnetfeld
+    niveau: 3
+    punkte: 6
+    angabe: |
+      Ein Elektron fliegt mit $1{,}0\cdot 10^{7}\,\text{m/s}$ senkrecht zu den Feldlinien in ein homogenes Magnetfeld mit
+      $B = 2{,}0\,\text{mT}$.
+
+      a) Warum bewegt es sich auf einer Kreisbahn?
+
+      b) Berechne den Bahnradius in cm.
+    teile:
+      - typ: text
+        label: a)
+        muster: |
+          Die Lorentzkraft $F = evB$ steht immer senkrecht zur Geschwindigkeit. Sie ändert nur die Richtung, nicht den Betrag
+          der Geschwindigkeit, und wirkt deshalb als konstante Zentripetalkraft.
+      - typ: zahl
+        label: b) r in cm
+        loesung: "9.109e-31*1.0e7/(1.602e-19*2.0e-3)*100"
+        einheit: cm
+        anzeige: '2{,}84'
+    hinweise:
+      - '$evB = \dfrac{m v^2}{r}$.'
+    loesung: |
+      **a)** Lorentzkraft senkrecht zu $\vec v$: Zentripetalkraft.
+      ---
+      **b)** $r = \dfrac{mv}{eB} = \dfrac{9{,}109\cdot 10^{-31}\cdot 10^{7}}{1{,}602\cdot 10^{-19}\cdot 2\cdot 10^{-3}}\,\text{m} = 0{,}0284\,\text{m} = 2{,}84\,\text{cm}$
+
+  - id: psc-6-gitter
+    titel: Beugungsgitter
+    niveau: 3
+    punkte: 7
+    angabe: |
+      Rotes Laserlicht ($\lambda = 633\,\text{nm}$) fällt senkrecht auf ein Gitter mit 600 Linien pro mm.
+
+      a) Unter welchem Winkel erscheint das Maximum 1. Ordnung?
+
+      b) Bis zu welcher Ordnung sind Maxima sichtbar?
+
+      c) Was ändert sich, wenn man grünes Licht verwendet?
+    teile:
+      - typ: zahl
+        label: a) Winkel in Grad
+        loesung: "inGrad(asin(633e-9*600e3))"
+        einheit: °
+        anzeige: '22{,}3'
+      - typ: zahl
+        label: b) höchste Ordnung
+        loesung: "floor(1/(600e3*633e-9))"
+        anzeige: '2'
+      - typ: text
+        label: c)
+        muster: |
+          Grünes Licht hat eine kleinere Wellenlänge, also werden alle Ablenkwinkel kleiner ($\sin\alpha = k\lambda/d$), und
+          es sind eventuell mehr Ordnungen sichtbar.
+    hinweise:
+      - 'Gitterkonstante $d = 1\,\text{mm}/600$. Maxima bei $d\sin\alpha = k\lambda$.'
+      - '$\sin\alpha \le 1$ begrenzt $k$.'
+    loesung: |
+      **a)** $d = 1{,}667\,\mu\text{m}$, $\sin\alpha_1 = \dfrac{633\cdot 10^{-9}}{1{,}667\cdot 10^{-6}} = 0{,}380 \Rightarrow \alpha_1 = 22{,}3^\circ$
+      ---
+      **b)** $k \le d/\lambda = 2{,}63$, also höchstens 2. Ordnung.
+      ---
+      **c)** kleineres $\lambda$, kleinere Winkel.
+
+  - id: psc-7-wasserstoff
+    titel: Rote Wasserstofflinie
+    niveau: 3
+    punkte: 6
+    angabe: |
+      Im Bohrschen Atommodell hat das Wasserstoffatom die Energieniveaus $E_n = -\dfrac{13{,}6\,\text{eV}}{n^2}$.
+
+      a) Welche Energie (in eV) wird beim Übergang von $n = 3$ nach $n = 2$ frei?
+
+      b) Welche Wellenlänge (in nm) hat das ausgesandte Licht?
+
+      c) Warum besteht das Spektrum von Wasserstoff aus einzelnen Linien?
+    teile:
+      - typ: zahl
+        label: a) Energie in eV
+        loesung: "13.6*(1/4 - 1/9)"
+        einheit: eV
+        anzeige: '1{,}89'
+      - typ: zahl
+        label: b) Wellenlänge in nm
+        loesung: "6.626e-34*3.00e8/(13.6*(1/4-1/9)*1.602e-19)*1e9"
+        einheit: nm
+        anzeige: '657'
+      - typ: text
+        label: c)
+        muster: |
+          Das Elektron kann nur bestimmte Energiewerte annehmen. Bei einem Übergang wird genau die Energiedifferenz als ein
+          Photon abgegeben, $hf = E_m - E_n$. Weil es nur diskrete Differenzen gibt, gibt es nur diskrete Frequenzen.
+    hinweise:
+      - '$\Delta E = E_3 - E_2$, dann $\lambda = hc/\Delta E$ (eV in J umrechnen).'
+    loesung: |
+      **a)** $\Delta E = 13{,}6\,\text{eV}\left(\tfrac14 - \tfrac19\right) = 1{,}89\,\text{eV}$
+      ---
+      **b)** $\lambda = \dfrac{hc}{\Delta E} = \dfrac{1{,}988\cdot 10^{-25}}{3{,}03\cdot 10^{-19}}\,\text{m} = 657\,\text{nm}$ (rote H-α-Linie)
+      ---
+      **c)** Diskrete Energieniveaus führen zu diskreten Photonenenergien.

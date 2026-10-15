@@ -1,0 +1,193 @@
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
+import { Award, BookOpen, CalendarDays, ClipboardList, GraduationCap, NotebookPen, PanelLeftClose, PanelLeftOpen, Settings, Sun, type LucideIcon } from 'lucide-react'
+import type { View } from '../../shared/types'
+import { Logo, ResizeHandle } from './components'
+import { currentSemester } from './lib/dates'
+import { useViewHistory } from './lib/hooks'
+import { clamp, useRemembered } from './lib/storage'
+import CalendarView from './views/CalendarView'
+import DeadlinesView from './views/DeadlinesView'
+import ExamsView from './views/ExamsView'
+import GradesView from './views/GradesView'
+import SettingsView from './views/SettingsView'
+import type { NoteRequest } from './views/NotesView'
+import Today from './views/Today'
+
+// Editor, formulas and code highlighting are big; they load when the notes are opened first.
+const NotesView = lazy(() => import('./views/NotesView'))
+const LernenView = lazy(() => import('./views/LernenView'))
+
+const SIDEBAR = { default: 216, min: 180, max: 360, collapsed: 64 }
+/** Dragged narrower than this, the sidebar collapses to its icons. */
+const COLLAPSE_BELOW = 130
+
+const NAV: { view: View; label: string; icon: LucideIcon }[] = [
+  { view: 'today', label: 'Heute', icon: Sun },
+  { view: 'calendar', label: 'Kalender', icon: CalendarDays },
+  { view: 'deadlines', label: 'Abgaben', icon: ClipboardList },
+  { view: 'exams', label: 'Prüfungen', icon: GraduationCap },
+  { view: 'grades', label: 'Noten', icon: Award },
+  { view: 'notes', label: 'Notizen', icon: NotebookPen },
+  { view: 'lernen', label: 'Lernen', icon: BookOpen }
+]
+
+export default function App({ initialView, initialNote }: { initialView: View; initialNote?: string }) {
+  const { view, navigate, back, forward } = useViewHistory(initialView)
+  const [noteRequest, setNoteRequest] = useState<NoteRequest | null>(initialNote ? { path: initialNote, id: 0 } : null)
+  // Once opened, the notes stay mounted: switching views keeps cursor, undo and the PDF next to it.
+  const [notesOpened, setNotesOpened] = useState(view === 'notes')
+  if (view === 'notes' && !notesOpened) setNotesOpened(true)
+  // Same for Lernen: the frame keeps its page, scroll position and progress while you are elsewhere.
+  const [lernenOpened, setLernenOpened] = useState(view === 'lernen')
+  if (view === 'lernen' && !lernenOpened) setLernenOpened(true)
+
+  const [sidebarWidth, setSidebarWidth] = useRemembered('sout.sidebar.width', SIDEBAR.default)
+  const [collapsed, setCollapsed] = useRemembered('sout.sidebar.collapsed', false)
+  const resizeSidebar = (width: number): void => {
+    setCollapsed(width < COLLAPSE_BELOW)
+    if (width >= COLLAPSE_BELOW) setSidebarWidth(clamp(width, SIDEBAR.min, SIDEBAR.max))
+  }
+
+  const openNote = useCallback((path: string, fresh?: boolean) => {
+    setNoteRequest({ path, fresh, id: Date.now() })
+    navigate('notes')
+  }, [navigate])
+
+  // The tray menu and the mini window can ask for a specific view (and note).
+  useEffect(
+    () =>
+      window.sout.onNavigate((next, note) => {
+        if (note) openNote(note)
+        else navigate(next)
+      }),
+    [openNote, navigate]
+  )
+
+  // The mouse's back/forward buttons (3 and 4) and Alt+←/→ step through the views visited. Not under
+  // an open dialog; Alt+←/→ stays with the cursor in text fields (also the notes editor).
+  useEffect(() => {
+    const modalOpen = (): boolean => document.querySelector('.modal-backdrop') !== null
+    const inTextField = (target: EventTarget | null): boolean =>
+      target instanceof HTMLElement && (target.isContentEditable || target.closest('input, textarea, select, .cm-editor') !== null)
+    const sideButton = (event: MouseEvent): boolean => event.button === 3 || event.button === 4
+    const onMouseUp = (event: MouseEvent): void => {
+      if (!sideButton(event)) return
+      event.preventDefault()
+      if (!modalOpen()) (event.button === 3 ? back : forward)()
+    }
+    // Keep Chromium from doing anything of its own with the buttons.
+    const onAuxClick = (event: MouseEvent): void => {
+      if (sideButton(event)) event.preventDefault()
+    }
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+      if (modalOpen() || inTextField(event.target)) return
+      event.preventDefault()
+      ;(event.key === 'ArrowLeft' ? back : forward)()
+    }
+    window.addEventListener('mouseup', onMouseUp)
+    window.addEventListener('auxclick', onAuxClick)
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('mouseup', onMouseUp)
+      window.removeEventListener('auxclick', onAuxClick)
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [back, forward])
+
+  return (
+    <div className="app">
+      <aside className={`sidebar${collapsed ? ' collapsed' : ''}`} style={{ width: collapsed ? SIDEBAR.collapsed : sidebarWidth }}>
+        <div className="brand">
+          {collapsed ? <Logo variant="icon" size={34} /> : <Logo variant="lockup" size={30} />}
+          <div className="brand-text">
+            <div className="brand-sub">{currentSemester(new Date()).label}</div>
+          </div>
+        </div>
+        <nav className="nav">
+          {NAV.map((item) => (
+            <NavItem key={item.view} {...item} active={view === item.view} onSelect={navigate} />
+          ))}
+        </nav>
+        <div className="nav nav-bottom">
+          <NavItem view="settings" label="Einstellungen" icon={Settings} active={view === 'settings'} onSelect={navigate} />
+          <button
+            type="button"
+            className="nav-item collapse-toggle"
+            title={collapsed ? 'Seitenleiste ausklappen' : 'Seitenleiste einklappen'}
+            aria-label={collapsed ? 'Seitenleiste ausklappen' : 'Seitenleiste einklappen'}
+            aria-expanded={!collapsed}
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+            <span>Einklappen</span>
+          </button>
+        </div>
+      </aside>
+      <ResizeHandle
+        label="Breite der Seitenleiste"
+        onDrag={resizeSidebar}
+        onStep={(delta) => resizeSidebar((collapsed ? SIDEBAR.collapsed : sidebarWidth) + delta * (collapsed && delta > 0 ? 8 : 1))}
+        onReset={() => {
+          setCollapsed(false)
+          setSidebarWidth(SIDEBAR.default)
+        }}
+      />
+      {notesOpened && (
+        <main className="content content-notes" hidden={view !== 'notes'}>
+          <Suspense fallback={null}>
+            <NotesView request={noteRequest} active={view === 'notes'} onNavigate={navigate} />
+          </Suspense>
+        </main>
+      )}
+      {lernenOpened && (
+        <main className="content content-lernen" hidden={view !== 'lernen'}>
+          <Suspense fallback={null}>
+            <LernenView />
+          </Suspense>
+        </main>
+      )}
+      {view === 'calendar' ? (
+        <main className="content content-full">
+          <CalendarView onNavigate={navigate} onOpenNote={openNote} />
+        </main>
+      ) : (
+        view !== 'notes' && view !== 'lernen' && (
+          <main className="content">
+            <div className="page">
+              {view === 'today' ? (
+                <Today onNavigate={navigate} />
+              ) : view === 'settings' ? (
+                <SettingsView />
+              ) : view === 'exams' ? (
+                <ExamsView onNavigate={navigate} />
+              ) : view === 'grades' ? (
+                <GradesView />
+              ) : (
+                <DeadlinesView onOpenNote={openNote} onNavigate={navigate} />
+              )}
+            </div>
+          </main>
+        )
+      )}
+    </div>
+  )
+}
+
+function NavItem(props: { view: View; label: string; icon: LucideIcon; active: boolean; onSelect: (view: View) => void }) {
+  const Icon = props.icon
+  return (
+    <button
+      type="button"
+      className={`nav-item${props.active ? ' active' : ''}`}
+      aria-current={props.active ? 'page' : undefined}
+      // Collapsed, only the icon is left – the name comes as tooltip.
+      title={props.label}
+      onClick={() => props.onSelect(props.view)}
+    >
+      <Icon size={18} />
+      <span>{props.label}</span>
+    </button>
+  )
+}

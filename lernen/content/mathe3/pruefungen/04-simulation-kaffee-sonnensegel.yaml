@@ -1,0 +1,325 @@
+id: simulation-1
+titel: 'Simulation 1: Kaffee, Sonnensegel, Schachtel, Test'
+art: simulation
+dauer_minuten: 120
+hinweis: |
+  Selbst erstellte Prüfung im Stil von G. Schranz-Kirlinger (4 Beispiele zu je 10 Punkten, 120 Minuten).
+  Themen: Gleichungen und Ungleichungen, Logarithmen, Abkühlung (Exponentialfunktion), Ebene im Raum
+  mit Kreuzprodukt und Abstand, Extremwertaufgabe, Fläche zwischen Kurven, Stetigkeit und
+  Differenzierbarkeit einer stückweisen Funktion, Höhenmessung mit dem Sinussatz, bedingte
+  Wahrscheinlichkeit (Bayes).
+
+  **Erlaubt:** nicht programmierbarer, nicht grafikfähiger Taschenrechner. Rechne auf Papier mit
+  vollständigem Lösungsweg und trage die Ergebnisse ein. Hinweise und Lösungen siehst du erst nach der
+  Abgabe. Bestanden ist realistisch ab etwa 20 von 40 Punkten.
+aufgaben:
+  - id: sim4-1
+    titel: Gleichungen und eine abkühlende Tasse Kaffee
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **1.1)** (2 P.) Lösen Sie die Gleichung $\sqrt{x + 7} = x + 1$ über $\R$.
+
+      **1.2)** (2 P.) Bestimmen Sie die Lösungsmenge der Ungleichung $|2x - 3| < 5$ als Intervall.
+
+      **1.3)** (2 P.) Berechnen Sie ohne Taschenrechner: $\log_3 81 - \log_2 \tfrac18 + \ln\!\left(e^5\right)$.
+
+      **1.4)** (4 P.) Eine Tasse Kaffee kühlt in einem Raum mit $20\,°\text{C}$ ab. Ihre Temperatur
+      (in °C) nach $t$ Minuten ist $T(t) = 20 + 70\,e^{-kt}$ mit einer Konstanten $k > 0$. Nach 10 Minuten
+      hat der Kaffee $60\,°\text{C}$.
+
+      (a) Welche Temperatur hat der Kaffee zu Beginn? (b) Bestimmen Sie $k$.
+
+      (c) Nach welcher Zeit ist der Kaffee auf $40\,°\text{C}$ abgekühlt?
+
+      (d) Welchem Wert nähert sich $T(t)$ für $t \to \infty$? Interpretieren Sie.
+    teile:
+      - typ: menge
+        label: '1.1) Lösungsmenge'
+        loesung: ["2"]
+      - typ: zahl
+        label: '1.2) linke Intervallgrenze'
+        loesung: "-1"
+      - typ: zahl
+        label: '1.2) rechte Intervallgrenze'
+        loesung: "4"
+      - typ: zahl
+        label: '1.3) Wert des Terms'
+        loesung: "log(81, 3) - log(1/8, 2) + 5"
+        anzeige: '12'
+      - typ: zahl
+        label: '1.4 a) $T(0)$'
+        loesung: "20 + 70"
+        anzeige: '90'
+        einheit: °C
+      - typ: zahl
+        label: '1.4 b) $k$ (pro Minute)'
+        loesung: "ln(7/4)/10"
+        anzeige: '\frac{\ln 1{,}75}{10} \approx 0{,}0560'
+        toleranz: 0.0002
+      - typ: zahl
+        label: '1.4 c) Zeit bis $40\,°\text{C}$'
+        loesung: "10*ln(3.5)/ln(1.75)"
+        anzeige: '22{,}4'
+        einheit: min
+        toleranz: 0.1
+      - typ: text
+        label: '1.4 d) Grenzwert und Interpretation'
+        muster: |
+          Wegen $e^{-kt} \to 0$ gilt $T(t) \to 20$. Der Kaffee nähert sich der Raumtemperatur von
+          $20\,°\text{C}$ an, erreicht sie aber (im Modell) nie ganz. Die Differenz zur Raumtemperatur nimmt
+          exponentiell ab.
+    hinweise:
+      - '1.1) Quadrieren ist keine Äquivalenzumformung: Probe mit jeder Lösung machen!'
+      - '1.2) $|u| < 5 \iff -5 < u < 5$.'
+      - '1.4) Setze $T(10) = 60$: $70\,e^{-10k} = 40$. Für (c) $70\,e^{-kt} = 20$.'
+    loesung: |
+      **1.1)** Bedingung $x + 7 \ge 0$. Quadrieren: $x + 7 = x^2 + 2x + 1 \iff x^2 + x - 6 = 0 \iff (x+3)(x-2) = 0$.
+      ---
+      Probe: $x = 2$: $\sqrt9 = 3 = 2 + 1$ ✓. $x = -3$: $\sqrt4 = 2$, aber $-3 + 1 = -2$ ✗ (Scheinlösung durch
+      das Quadrieren). $L = \{2\}$.
+      ---
+      **1.2)** $-5 < 2x - 3 < 5 \iff -2 < 2x < 8 \iff -1 < x < 4$. $L = (-1, 4)$ (offenes Intervall).
+      ---
+      **1.3)** $\log_3 81 = 4$ (da $3^4 = 81$), $\log_2\tfrac18 = -3$, $\ln e^5 = 5$. Wert: $4 - (-3) + 5 = 12$.
+      ---
+      **1.4 a)** $T(0) = 20 + 70 = 90\,°\text{C}$.
+      ---
+      **1.4 b)** $20 + 70e^{-10k} = 60 \Rightarrow e^{-10k} = \tfrac{4}{7} \Rightarrow -10k = \ln\tfrac47 \Rightarrow k = \tfrac{\ln(7/4)}{10} \approx 0{,}0560$ pro Minute.
+      ---
+      **1.4 c)** $20 + 70e^{-kt} = 40 \Rightarrow e^{-kt} = \tfrac27 \Rightarrow t = \dfrac{\ln 3{,}5}{k} = \dfrac{10\ln 3{,}5}{\ln 1{,}75} \approx 22{,}4$ min.
+      ---
+      **1.4 d)** $T(t) \to 20$: Der Kaffee nähert sich asymptotisch der Raumtemperatur.
+      Plausibilität: Für die ersten 30 Grad Abkühlung (90 auf 60) brauchte er 10 Minuten, für die
+      nächsten 20 Grad (60 auf 40) über 12 Minuten. Die Abkühlung wird langsamer.
+
+  - id: sim4-2
+    titel: Ein dreieckiges Sonnensegel
+    niveau: 3
+    punkte: 10
+    angabe: |
+      Ein dreieckiges Sonnensegel ist an den Punkten $A(1\mid 0\mid 2)$, $B(3\mid 1\mid 0)$ und
+      $C(0\mid 2\mid 1)$ befestigt (Koordinaten in Metern). Das Segel wird als eben angenommen.
+
+      (a) (3 P.) Berechnen Sie einen Normalvektor $\vec n$ der Ebene $\varepsilon$ durch $A$, $B$, $C$ mit
+      dem Kreuzprodukt und geben Sie eine Gleichung von $\varepsilon$ in Koordinatenform an.
+
+      (b) (2 P.) Berechnen Sie den Flächeninhalt des Segels.
+
+      (c) (2 P.) Berechnen Sie den Winkel des Segels bei $A$.
+
+      (d) (3 P.) Eine Lampe hängt im Punkt $P(4\mid 4\mid 6)$. Berechnen Sie ihren Abstand von der Ebene
+      $\varepsilon$ und den Punkt $F$ der Ebene, der $P$ am nächsten liegt.
+    teile:
+      - typ: vektor
+        label: '(a) Normalvektor $\vec n$'
+        namen: ["n1", "n2", "n3"]
+        loesung: ["3", "4", "5"]
+        vielfaches: true
+      - typ: text
+        label: '(a) Ebenengleichung'
+        muster: '$\varepsilon\colon 3x + 4y + 5z = 13$ (oder jedes Vielfache davon).'
+      - typ: zahl
+        label: '(b) Flächeninhalt'
+        loesung: "sqrt(50)/2"
+        anzeige: '\tfrac{5\sqrt2}{2} \approx 3{,}54'
+        einheit: m²
+      - typ: zahl
+        label: '(c) Winkel bei $A$'
+        loesung: "inGrad(acos(2/(3*sqrt(6))))"
+        anzeige: '74{,}21'
+        einheit: °
+        toleranz: 0.05
+      - typ: zahl
+        label: '(d) Abstand von $P$ zu $\varepsilon$'
+        loesung: "45/sqrt(50)"
+        anzeige: '\tfrac{45}{\sqrt{50}} \approx 6{,}36'
+        einheit: m
+      - typ: vektor
+        label: '(d) Lotfußpunkt $F$'
+        namen: ["x", "y", "z"]
+        loesung: ["1.3", "0.4", "1.5"]
+    hinweise:
+      - '$\vec n = \overrightarrow{AB}\times\overrightarrow{AC}$. Die Konstante der Koordinatenform bekommst du durch Einsetzen von $A$.'
+      - 'Die Dreiecksfläche ist $\tfrac12\,|\overrightarrow{AB}\times\overrightarrow{AC}|$.'
+      - 'Abstand mit der Hesse’schen Normalform: $d = \frac{|3x_P + 4y_P + 5z_P - 13|}{|\vec n|}$. Für $F$: $F = P - \lambda\vec n$ mit passendem $\lambda$.'
+    loesung: |
+      **(a)** $\overrightarrow{AB} = (2, 1, -2)$, $\overrightarrow{AC} = (-1, 2, -1)$.
+      $$\vec n = \begin{pmatrix} 1\cdot(-1) - (-2)\cdot 2\\ (-2)(-1) - 2\cdot(-1)\\ 2\cdot 2 - 1\cdot(-1)\end{pmatrix} = \begin{pmatrix} 3\\ 4\\ 5\end{pmatrix}.$$
+      ---
+      Koordinatenform $3x + 4y + 5z = d$ mit $d = 3\cdot 1 + 0 + 5\cdot 2 = 13$. Kontrolle: $B$: $9 + 4 + 0 = 13$ ✓,
+      $C$: $0 + 8 + 5 = 13$ ✓.
+      ---
+      **(b)** $|\vec n| = \sqrt{9 + 16 + 25} = \sqrt{50}$, Fläche $= \tfrac12\sqrt{50} = \tfrac{5\sqrt2}{2} \approx 3{,}54\ \text{m}^2$.
+      ---
+      **(c)** $\overrightarrow{AB}\cdot\overrightarrow{AC} = -2 + 2 + 2 = 2$, $|\overrightarrow{AB}| = 3$, $|\overrightarrow{AC}| = \sqrt6$.
+      $\cos\alpha = \frac{2}{3\sqrt6} \approx 0{,}2722 \Rightarrow \alpha \approx 74{,}21°$.
+      ---
+      **(d)** Einsetzen: $3\cdot 4 + 4\cdot 4 + 5\cdot 6 - 13 = 45$, also $d = \frac{45}{\sqrt{50}} \approx 6{,}36$ m.
+      ---
+      Lotfußpunkt: $F = P - \lambda\vec n$ mit $\lambda = \frac{45}{|\vec n|^2} = \frac{45}{50} = 0{,}9$:
+      $F = (4 - 2{,}7 \mid 4 - 3{,}6 \mid 6 - 4{,}5) = (1{,}3 \mid 0{,}4 \mid 1{,}5)$.
+      Probe: $3{,}9 + 1{,}6 + 7{,}5 = 13$ ✓, und $|PF| = 0{,}9\cdot\sqrt{50} \approx 6{,}36$ ✓.
+
+  - id: sim4-3
+    titel: Schachtel, Fläche und eine stückweise Funktion
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **3.1)** (4 P.) Aus einem quadratischen Karton mit 24 cm Seitenlänge wird eine oben offene Schachtel
+      gefaltet: An den vier Ecken schneidet man gleich große Quadrate der Seitenlänge $x$ aus und biegt
+      die Ränder hoch. Stellen Sie das Volumen $V(x)$ auf, geben Sie den sinnvollen Definitionsbereich an
+      und bestimmen Sie $x$ so, dass das Volumen maximal wird. Wie groß ist das maximale Volumen?
+
+      **3.2)** (3 P.) Berechnen Sie den Inhalt der Fläche, die von den Graphen von $f(x) = x^2$ und
+      $g(x) = x + 2$ eingeschlossen wird. Fertigen Sie eine Skizze an.
+
+      **3.3)** (3 P.) Gegeben ist
+      $$h(x) = \begin{cases} a x + 1, & x < 1\\ x^2 + 3, & x \ge 1.\end{cases}$$
+
+      (a) Bestimmen Sie $a \in \R$ so, dass $h$ auf ganz $\R$ stetig ist.
+
+      (b) Ist $h$ für dieses $a$ an der Stelle $x = 1$ differenzierbar? Begründen Sie mit den einseitigen
+      Ableitungen.
+    teile:
+      - typ: term
+        label: '3.1) $V(x)$ in cm³'
+        loesung: "x*(24 - 2x)^2"
+        bereich: [0.5, 11.5]
+      - typ: zahl
+        label: '3.1) optimales $x$'
+        loesung: "4"
+        einheit: cm
+      - typ: zahl
+        label: '3.1) maximales Volumen'
+        loesung: "4*16^2"
+        anzeige: '1024'
+        einheit: cm³
+      - typ: zahl
+        label: '3.2) Flächeninhalt'
+        loesung: "integral(\"x + 2 - x^2\", -1, 2)"
+        anzeige: '\tfrac92 = 4{,}5'
+      - typ: zahl
+        label: '3.3 a) $a$'
+        loesung: "3"
+      - typ: auswahl
+        label: '3.3 b) Ist $h$ bei $x = 1$ differenzierbar?'
+        optionen:
+          - 'Ja, $h''(1) = 2$'
+          - 'Ja, $h''(1) = 3$'
+          - 'Nein, die einseitigen Ableitungen sind $3$ und $2$'
+          - 'Nein, weil $h$ bei 1 nicht stetig ist'
+        richtig: [2]
+    hinweise:
+      - '3.1) Grundfläche $(24 - 2x)^2$, Höhe $x$. Es muss $0 < x < 12$ gelten. Beim Ableiten $(24-2x)$ herausheben.'
+      - '3.2) Schnittstellen aus $x^2 = x + 2$. Die Gerade liegt dazwischen oberhalb der Parabel.'
+      - '3.3) Stetigkeit: $\lim_{x\to1^-} h(x) = h(1)$. Einseitige Ableitungen: Ableitung des linken Terms bei 1 und des rechten Terms bei 1 (die Stetigkeit ist dafür Voraussetzung).'
+    loesung: |
+      **3.1)** $V(x) = x\,(24 - 2x)^2$, sinnvoll für $0 < x < 12$.
+      ---
+      $V'(x) = (24 - 2x)^2 + x\cdot 2(24 - 2x)(-2) = (24 - 2x)(24 - 2x - 4x) = (24 - 2x)(24 - 6x)$.
+      $V'(x) = 0 \Rightarrow x = 12$ (Rand, $V = 0$) oder $x = 4$.
+      ---
+      $V$ wechselt bei $x = 4$ von wachsend zu fallend ($V'(3) = 18\cdot 6 > 0$, $V'(5) = 14\cdot(-6) < 0$).
+      Maximum bei $x = 4$ cm: $V(4) = 4\cdot 16^2 = 1024\ \text{cm}^3$ (Grundfläche $16\times16$, Höhe 4).
+      ---
+      **3.2)** $x^2 = x + 2 \iff x^2 - x - 2 = 0 \iff x \in \{-1, 2\}$. Auf $[-1, 2]$ ist $g \ge f$ (z. B. $g(0) = 2 > 0 = f(0)$).
+      ---
+      $$A = \int_{-1}^{2} (x + 2 - x^2)\,\dd x = \Big[\tfrac{x^2}{2} + 2x - \tfrac{x^3}{3}\Big]_{-1}^{2} = \Big(2 + 4 - \tfrac83\Big) - \Big(\tfrac12 - 2 + \tfrac13\Big) = \tfrac{10}{3} + \tfrac76 = \tfrac92.$$
+      Skizze: Normalparabel und die Gerade $y = x + 2$, die sie in $(-1\mid 1)$ und $(2\mid 4)$ schneidet;
+      die Fläche liegt dazwischen.
+      ---
+      **3.3 a)** $\lim_{x\to1^-}(ax + 1) = a + 1$ und $h(1) = 1 + 3 = 4 = \lim_{x\to1^+}(x^2 + 3)$. Stetig genau
+      für $a + 1 = 4$, also $a = 3$. (Für $x \neq 1$ ist $h$ als Polynom ohnehin stetig.)
+      ---
+      **3.3 b)** Linksseitige Ableitung: $\lim_{x\to1^-}\frac{3x + 1 - 4}{x - 1} = 3$. Rechtsseitige:
+      $\lim_{x\to1^+}\frac{x^2 + 3 - 4}{x - 1} = \lim_{x\to1^+}(x + 1) = 2$. Da $3 \neq 2$, ist $h$ bei 1 **nicht**
+      differenzierbar (der Graph hat dort einen Knick), obwohl $h$ stetig ist.
+
+  - id: sim4-4
+    titel: Turmhöhe und ein medizinischer Test
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **4.1)** (5 P.) Um die Höhe eines Turms zu bestimmen, misst man von einem Punkt $A$ aus den
+      Höhenwinkel zur Turmspitze mit $32°$. Geht man 50 m auf dem ebenen Boden direkt auf den Turm zu
+      (Punkt $B$), misst man $47°$. Fertigen Sie eine Skizze an und berechnen Sie mit dem Sinussatz die
+      Höhe des Turms und die Entfernung von $B$ zum Fußpunkt des Turms.
+
+      **4.2)** (5 P.) Eine Krankheit tritt bei $2\,\%$ der Bevölkerung auf. Ein Schnelltest erkennt eine
+      erkrankte Person mit Wahrscheinlichkeit $95\,\%$ (positives Ergebnis). Bei einer gesunden Person
+      ist das Ergebnis mit Wahrscheinlichkeit $90\,\%$ negativ.
+
+      (a) Mit welcher Wahrscheinlichkeit ist das Testergebnis einer zufällig gewählten Person positiv?
+
+      (b) Eine Person wird positiv getestet. Mit welcher Wahrscheinlichkeit ist sie tatsächlich krank?
+
+      (c) Mit welcher Wahrscheinlichkeit ist eine negativ getestete Person tatsächlich gesund?
+
+      (d) Interpretieren Sie das Ergebnis von (b).
+    teile:
+      - typ: zahl
+        label: '4.1) Turmhöhe'
+        loesung: "50*sin(inRad(32))/sin(inRad(15))*sin(inRad(47))"
+        anzeige: '74{,}87'
+        einheit: m
+        toleranz: 0.1
+      - typ: zahl
+        label: '4.1) Entfernung $B$ – Fußpunkt'
+        loesung: "50*sin(inRad(32))/sin(inRad(15))*cos(inRad(47))"
+        anzeige: '69{,}82'
+        einheit: m
+        toleranz: 0.1
+      - typ: zahl
+        label: '4.2 a) $P(+)$'
+        loesung: "0.02*0.95 + 0.98*0.1"
+        anzeige: '0{,}117'
+        toleranz: 0.0005
+      - typ: zahl
+        label: '4.2 b) $P(K \mid +)$'
+        loesung: "0.02*0.95/(0.02*0.95 + 0.98*0.1)"
+        anzeige: '0{,}1624'
+        toleranz: 0.0005
+      - typ: zahl
+        label: '4.2 c) $P(\bar K \mid -)$'
+        loesung: "0.98*0.9/(0.98*0.9 + 0.02*0.05)"
+        anzeige: '0{,}9989'
+        toleranz: 0.0005
+      - typ: text
+        label: '4.2 d) Interpretation'
+        muster: |
+          Nur etwa 16 % der positiv Getesteten sind wirklich krank. Grund: Die Krankheit ist selten. Unter
+          1000 Personen sind 20 krank (19 davon positiv), aber 980 gesund, von denen 98 fälschlich positiv
+          sind. Die falsch Positiven überwiegen also. Ein positiver Schnelltest muss daher mit einem
+          genaueren Test bestätigt werden. Ein negatives Ergebnis ist dagegen sehr verlässlich (99,9 %).
+    hinweise:
+      - '4.1) Im Dreieck $A$, $B$, Spitze $S$ ist der Winkel bei $B$ gleich $180° - 47° = 133°$, also der Winkel bei $S$ gleich $47° - 32° = 15°$.'
+      - '4.1) Sinussatz: $\frac{\overline{BS}}{\sin 32°} = \frac{50}{\sin 15°}$. Dann im rechtwinkeligen Dreieck $h = \overline{BS}\sin 47°$.'
+      - '4.2) Baumdiagramm oder Vierfeldertafel mit 1000 Personen. Bayes: $P(K\mid +) = \frac{P(K)\,P(+\mid K)}{P(+)}$.'
+    loesung: |
+      **4.1)** Skizze: Boden waagrecht, $A$ links, $B$ 50 m weiter rechts, dann der Fußpunkt $F$ und
+      darüber die Spitze $S$. Im Dreieck $ABS$: Winkel bei $A$ $32°$, bei $B$ $180° - 47° = 133°$, bei $S$
+      $180° - 32° - 133° = 15°$.
+      ---
+      Sinussatz: $\overline{BS} = \frac{50\cdot\sin 32°}{\sin 15°} \approx \frac{50\cdot 0{,}5299}{0{,}2588} \approx 102{,}37$ m.
+      ---
+      Rechtwinkeliges Dreieck $BFS$: $h = \overline{BS}\cdot\sin 47° \approx 74{,}87$ m,
+      $\overline{BF} = \overline{BS}\cdot\cos 47° \approx 69{,}82$ m.
+      Probe: $\tan 32° \approx \frac{74{,}87}{119{,}82} \approx 0{,}6249$ ✓.
+      ---
+      **4.2)** Vierfeldertafel für 1000 Personen:
+
+      | | positiv | negativ | Summe |
+      |---|---|---|---|
+      | krank | 19 | 1 | 20 |
+      | gesund | 98 | 882 | 980 |
+      | Summe | 117 | 883 | 1000 |
+      ---
+      (a) $P(+) = 0{,}02\cdot 0{,}95 + 0{,}98\cdot 0{,}10 = 0{,}019 + 0{,}098 = 0{,}117$.
+      ---
+      (b) $P(K\mid +) = \frac{0{,}019}{0{,}117} \approx 0{,}1624$.
+      ---
+      (c) $P(\bar K\mid -) = \frac{0{,}882}{0{,}883} \approx 0{,}9989$.
+      ---
+      (d) Nur gut 16 % der positiv Getesteten sind krank, weil bei einer seltenen Krankheit die vielen
+      Gesunden mit 10 % Fehlalarm mehr positive Ergebnisse liefern (98) als die wenigen Kranken (19).

@@ -1,0 +1,227 @@
+id: physik1-muendlich
+titel: Mündliche Prüfung (Simulation eines Prüfungsgesprächs)
+art: simulation
+dauer_minuten: 30
+hinweis: |
+  So läuft ein mündlicher Teil typischerweise ab: Die Prüferin stellt eine offene Einstiegsfrage aus einem
+  Gebiet und vertieft dann mit Nachfragen („Warum?“, „Wovon hängt das ab?“, „Zeig das an einer Skizze“).
+  Antworte laut und in ganzen Sätzen, nenne die Formel, erkläre jede Größe mit Einheit und gib ein
+  Alltagsbeispiel. Vergleiche danach mit der Musterantwort und bewerte dich ehrlich. Plane etwa 3 Minuten
+  pro Frage. Die Fragen decken alle Stoffgebiete aus Anlage 1 ab.
+aufgaben:
+  - id: psm-1-inertialsystem
+    titel: Inertialsystem und Newtonsche Axiome
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Was ist ein Inertialsystem? Formuliere die drei Newtonschen Axiome und erkläre, was in einem bremsenden Bus mit
+      einem nicht angeschnallten Fahrgast passiert, einmal aus Sicht der Straße und einmal aus Sicht des Busses.
+    teile:
+      - typ: text
+        muster: |
+          Ein Inertialsystem ist ein Bezugssystem, in dem der Trägheitssatz gilt: Ein kräftefreier Körper bleibt in Ruhe
+          oder bewegt sich gleichförmig geradlinig. Axiome: (1) Trägheitssatz, (2) $\vec F = m\vec a$, (3) actio = reactio.
+          Von der Straße aus (Inertialsystem) bewegt sich der Fahrgast einfach mit konstanter Geschwindigkeit weiter, weil
+          keine Kraft ihn bremst; der Bus wird unter ihm langsamer. Im Bus (beschleunigtes System, kein Inertialsystem)
+          scheint eine Kraft ihn nach vorn zu stoßen: eine Scheinkraft (Trägheitskraft) $-m\vec a$.
+    hinweise:
+      - Erst Definition, dann Axiome, dann beide Perspektiven.
+    loesung: |
+      Definition Inertialsystem, die drei Axiome, und der Unterschied zwischen echter Kraft und Scheinkraft im beschleunigten System.
+
+  - id: psm-2-einfache-maschinen
+    titel: Einfache Maschinen
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Was ist die Goldene Regel der Mechanik? Erkläre sie an Hebel, Flaschenzug und schiefer Ebene. Warum kann keine
+      Maschine Arbeit sparen?
+    teile:
+      - typ: text
+        muster: |
+          Was man an Kraft spart, muss man an Weg zusetzen; das Produkt Kraft mal Weg (die Arbeit) bleibt gleich (ohne Reibung).
+          Hebel: $F_1 r_1 = F_2 r_2$, der längere Arm braucht weniger Kraft, bewegt sich aber weiter. Flaschenzug mit $n$
+          tragenden Seilen: Kraft $F_G/n$, Seilweg $n\cdot h$. Schiefe Ebene: Kraft $F_G\sin\alpha$ entlang des längeren
+          Weges $h/\sin\alpha$. Arbeit sparen ist unmöglich, weil das dem Energieerhaltungssatz widerspräche; Reibung
+          erhöht die nötige Arbeit sogar (Wirkungsgrad < 1).
+    hinweise:
+      - Arbeit = Kraft mal Weg und Energieerhaltung.
+    loesung: |
+      Kraft mal Weg bleibt konstant; drei Beispiele mit Formel; Begründung über Energieerhaltung; Wirkungsgrad.
+
+  - id: psm-3-resonanz
+    titel: Schwingung und Resonanz
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Wann entsteht eine harmonische Schwingung? Was beeinflusst die Schwingungsdauer beim Faden- und beim Federpendel?
+      Was ist Resonanz, und wo ist sie nützlich oder gefährlich?
+    teile:
+      - typ: text
+        muster: |
+          Wenn die Rückstellkraft proportional zur Auslenkung ist ($F = -Dx$), entsteht eine sinusförmige Schwingung.
+          Federpendel: $T = 2\pi\sqrt{m/D}$; Fadenpendel (kleine Auslenkung): $T = 2\pi\sqrt{l/g}$, unabhängig von Masse
+          und Amplitude. Resonanz: Wird ein schwingungsfähiges System periodisch mit seiner Eigenfrequenz angeregt, wächst
+          die Amplitude stark (begrenzt nur durch Dämpfung). Nützlich: Schaukel, Musikinstrumente, Radioempfang, Mikrowelle.
+          Gefährlich: Brücken (Tacoma Narrows), Maschinenfundamente, Gläser durch Schall.
+    hinweise:
+      - Lineares Kraftgesetz, zwei Pendelformeln, Eigenfrequenz.
+    loesung: |
+      Lineares Kraftgesetz, Formeln für $T$, Definition Resonanz, Beispiele.
+
+  - id: psm-4-schall
+    titel: Schall und Doppler-Effekt
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Was ist Schall physikalisch? Wodurch unterscheiden sich Tonhöhe und Lautstärke? Erkläre den Doppler-Effekt an
+      einem vorbeifahrenden Rettungsauto.
+    teile:
+      - typ: text
+        muster: |
+          Schall ist eine longitudinale mechanische Welle, also Druckschwankungen, die sich in einem Medium ausbreiten (in Luft
+          etwa 340 m/s, im Vakuum gar nicht). Die Tonhöhe hängt von der Frequenz ab (Hörbereich etwa 16 Hz bis 20 kHz), die
+          Lautstärke von der Amplitude bzw. Intensität; man misst den Schallpegel logarithmisch in dB (+10 dB = zehnfache
+          Intensität). Doppler: Fährt die Quelle auf mich zu, werden die Wellenfronten zusammengeschoben, ich höre eine
+          höhere Frequenz; beim Wegfahren eine tiefere. Deshalb springt die Tonhöhe beim Vorbeifahren nach unten.
+    hinweise:
+      - Wellentyp, Frequenz versus Amplitude, Wellenfronten zeichnen.
+    loesung: |
+      Longitudinale Druckwelle; Tonhöhe = Frequenz, Lautstärke = Amplitude/Intensität (dB); Doppler über gestauchte und gedehnte Wellenfronten.
+
+  - id: psm-5-hauptsaetze
+    titel: Hauptsätze der Wärmelehre
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Formuliere den ersten und zweiten Hauptsatz der Wärmelehre. Warum hat ein Automotor einen Wirkungsgrad deutlich unter
+      100 %? Was ist ein Perpetuum mobile erster und zweiter Art?
+    teile:
+      - typ: text
+        muster: |
+          1. Hauptsatz: Die Änderung der inneren Energie ist die Summe aus zugeführter Wärme und am System verrichteter Arbeit,
+          $\Delta U = Q + W$ (Energieerhaltung). 2. Hauptsatz: Wärme fließt von selbst nur vom wärmeren zum kälteren Körper;
+          es gibt keine periodisch arbeitende Maschine, die Wärme vollständig in Arbeit umwandelt. Eine Wärmekraftmaschine muss
+          Abwärme an ein kälteres Reservoir abgeben; der maximal mögliche Wirkungsgrad ist der Carnot-Wirkungsgrad
+          $\eta = 1 - T_k/T_w$. Dazu kommen Reibung und Wärmeverluste. Perpetuum mobile 1. Art: erzeugt Energie aus nichts
+          (verletzt den 1. HS); 2. Art: wandelt Wärme aus einem einzigen Reservoir vollständig in Arbeit um (verletzt den 2. HS).
+    hinweise:
+      - Formel des 1. Hauptsatzes mit Vorzeichen; Carnot.
+    loesung: |
+      $\Delta U = Q + W$; Richtung von Wärmeströmen und Unmöglichkeit vollständiger Umwandlung; Carnot-Grenze; zwei Arten Perpetuum mobile.
+
+  - id: psm-6-wetter
+    titel: Meteorologie
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Warum kühlt aufsteigende Luft ab, und wie entstehen dabei Wolken? Erkläre den Föhn.
+    teile:
+      - typ: text
+        muster: |
+          Mit der Höhe sinkt der Luftdruck; aufsteigende Luft dehnt sich aus und verrichtet dabei Arbeit gegen die Umgebung.
+          Weil der Vorgang so schnell ist, dass kaum Wärme ausgetauscht wird (adiabatisch), sinkt ihre innere Energie und damit
+          die Temperatur (trocken etwa 1 °C pro 100 m). Erreicht sie den Taupunkt, kondensiert der Wasserdampf zu Tröpfchen:
+          eine Wolke entsteht; dabei wird Kondensationswärme frei, und die Luft kühlt nur noch etwa 0,6 °C pro 100 m ab. Föhn:
+          Auf der Luvseite steigt feuchte Luft auf, regnet ab und kühlt nur feucht-adiabatisch ab. Auf der Leeseite sinkt die
+          nun trockene Luft und erwärmt sich trocken-adiabatisch mit 1 °C pro 100 m: Im Tal kommt sie wärmer und trockener an.
+    hinweise:
+      - Druck nimmt mit der Höhe ab, adiabatische Expansion, Taupunkt, Kondensationswärme.
+    loesung: |
+      Adiabatische Abkühlung, Taupunkt, Kondensationswärme, asymmetrische Temperaturgradienten beim Föhn.
+
+  - id: psm-7-induktion
+    titel: Induktion und Generator
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Was besagt das Induktionsgesetz? Erkläre, wie ein Generator Wechselspannung erzeugt und was die Lenzsche Regel bedeutet.
+    teile:
+      - typ: text
+        muster: |
+          Ändert sich der magnetische Fluss $\Phi = B\cdot A\cdot\cos\varphi$ durch eine Leiterschleife, wird eine Spannung
+          induziert, $U_{ind} = -N\,\dfrac{\Delta\Phi}{\Delta t}$. Im Generator dreht sich eine Spule im Magnetfeld; der Fluss
+          ändert sich periodisch, und es entsteht eine sinusförmige Wechselspannung. Lenzsche Regel: Der induzierte Strom ist so
+          gerichtet, dass er seiner Ursache entgegenwirkt (Minuszeichen). Deshalb muss man einen belasteten Generator mit Kraft
+          drehen: Die Energie stammt aus der mechanischen Arbeit (Energieerhaltung).
+    hinweise:
+      - Flussänderung, Formel, rotierende Spule, Energieerhaltung.
+    loesung: |
+      Flussänderung induziert Spannung; rotierende Spule ergibt Sinus; Lenz als Ausdruck der Energieerhaltung.
+
+  - id: psm-8-halbleiter
+    titel: Leiter und Halbleiter
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Wie unterscheiden sich Leiter, Halbleiter und Isolatoren? Was bewirkt Dotieren, und wie funktioniert eine Diode?
+    teile:
+      - typ: text
+        muster: |
+          In Metallen gibt es viele frei bewegliche Elektronen; ihr Widerstand steigt mit der Temperatur. Isolatoren haben praktisch
+          keine freien Ladungsträger. In Halbleitern (Silizium) sind bei tiefer Temperatur fast alle Elektronen gebunden; Wärme
+          oder Licht setzt Elektronen frei (Elektronen und Löcher), der Widerstand sinkt mit steigender Temperatur. Dotieren:
+          Fremdatome mit 5 Außenelektronen (n-Dotierung, z. B. Phosphor) liefern freie Elektronen, mit 3 (p-Dotierung, Bor)
+          Löcher. Am pn-Übergang entsteht eine ladungsträgerarme Sperrschicht. In Durchlassrichtung (+ an p) wird sie abgebaut,
+          Strom fließt ab etwa 0,7 V; in Sperrrichtung wird sie breiter, es fließt praktisch kein Strom: Gleichrichter.
+    hinweise:
+      - Freie Ladungsträger und ihre Temperaturabhängigkeit; Sperrschicht.
+    loesung: |
+      Ladungsträgerdichte, Temperaturverhalten, n- und p-Dotierung, Sperrschicht, Durchlass- und Sperrrichtung.
+
+  - id: psm-9-auge
+    titel: Auge und Sehfehler
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Wie entsteht im Auge ein scharfes Bild bei unterschiedlichen Entfernungen? Wie werden Kurz- und Weitsichtigkeit korrigiert?
+    teile:
+      - typ: text
+        muster: |
+          Hornhaut und Linse bilden ein Sammellinsensystem, das ein reelles, umgekehrtes, verkleinertes Bild auf der Netzhaut
+          erzeugt. Da die Bildweite fest ist, passt das Auge die Brennweite an (Akkommodation): Für nahe Gegenstände krümmt sich
+          die Linse stärker. Kurzsichtig: Augapfel zu lang bzw. Brechkraft zu groß, ferne Gegenstände werden vor der Netzhaut
+          abgebildet; Korrektur mit Zerstreuungslinse (negative Dioptrien). Weitsichtig: Bild hinter der Netzhaut, Korrektur mit
+          Sammellinse. Altersweitsichtigkeit: Die Linse wird starr, der Nahpunkt rückt hinaus; Lesebrille (Sammellinse).
+    hinweise:
+      - Feste Bildweite, variable Brennweite.
+    loesung: |
+      Abbildung auf der Netzhaut, Akkommodation, Ursachen und Korrektur der Sehfehler.
+
+  - id: psm-10-dualismus
+    titel: Welle und Teilchen
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Welche Experimente zeigen, dass Licht eine Welle ist, und welche, dass es aus Teilchen besteht? Gilt das auch für Elektronen?
+    teile:
+      - typ: text
+        muster: |
+          Wellencharakter: Interferenz und Beugung am Doppelspalt und Gitter, Polarisation. Teilchencharakter: Photoeffekt
+          (Energie $hf$ pro Photon, Grenzfrequenz, Unabhängigkeit der Elektronenenergie von der Intensität), Compton-Effekt.
+          Auch Elektronen zeigen beides: Sie sind Teilchen mit Masse und Ladung, erzeugen aber an Kristallgittern oder am
+          Doppelspalt Interferenzmuster mit der de-Broglie-Wellenlänge $\lambda = h/p$. Welcher Aspekt sich zeigt, hängt vom
+          Experiment ab (Dualismus); das Elektronenmikroskop nutzt die kleine Wellenlänge von Elektronen.
+    hinweise:
+      - Interferenz versus Photoeffekt; de Broglie.
+    loesung: |
+      Wellenexperimente, Teilchenexperimente, Materiewellen mit $\lambda = h/p$.
+
+  - id: psm-11-radioaktivitaet
+    titel: Radioaktivität
+    niveau: 3
+    punkte: 5
+    angabe: |
+      Welche Arten radioaktiver Strahlung gibt es, wie verändern sie den Kern, und wie schützt man sich?
+    teile:
+      - typ: text
+        muster: |
+          α-Strahlung: Heliumkerne; Massenzahl −4, Ordnungszahl −2; sehr kurze Reichweite, Papier oder Haut schirmt ab, innerlich
+          aber sehr gefährlich. β⁻-Strahlung: Elektronen (ein Neutron wandelt sich in ein Proton um); Ordnungszahl +1; einige Meter
+          in Luft, wenige mm Aluminium schirmen ab. γ-Strahlung: energiereiche Photonen, Kern bleibt gleich, nur angeregter Zustand
+          wird abgebaut; dicke Blei- oder Betonschichten schwächen sie. Zerfall ist zufällig, $N(t) = N_0\,(1/2)^{t/T_{1/2}}$.
+          Schutz: Abstand, Abschirmung, kurze Aufenthaltsdauer, keine Inkorporation (nicht essen, einatmen).
+    hinweise:
+      - Teilchenart, Kernänderung, Reichweite, Schutzregeln.
+    loesung: |
+      α, β, γ mit Kernänderung und Abschirmung; Zerfallsgesetz; die Schutzregeln Abstand, Abschirmung, Zeit.

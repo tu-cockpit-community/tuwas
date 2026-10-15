@@ -1,0 +1,333 @@
+id: simulation-5
+titel: 'Simulation 5: Medikament, Kugel, Kurvendiskussion, Chips'
+art: simulation
+dauer_minuten: 120
+hinweis: |
+  Selbst erstellte Prüfung im Stil von G. Schranz-Kirlinger (4 Beispiele zu je 10 Punkten, 120 Minuten).
+  Themen: exponentielle Abnahme und Halbwertszeit, quadratische Ungleichung, Umkehrfunktion, Kugel und
+  Ebene (Schnittkreis), Lage zweier Geraden im Raum, Schnitt und Winkel Gerade–Ebene, Kurvendiskussion
+  einer Exponentialfunktion mit Asymptote und uneigentlichem Integral (partielle Integration),
+  komplexe Zahlen in Polarform, Kombinatorik und hypergeometrische Verteilung.
+
+  **Erlaubt:** nicht programmierbarer, nicht grafikfähiger Taschenrechner. Hinweise und Lösungen
+  siehst du erst nach der Abgabe.
+aufgaben:
+  - id: sim8-1
+    titel: Medikamentenabbau, Ungleichung, Umkehrfunktion
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **1.1)** (5 P.) Ein Patient erhält 400 mg eines Medikaments. Der Körper baut pro Stunde $20\,\%$ der
+      jeweils noch vorhandenen Menge ab.
+
+      (a) Stellen Sie die Funktion $m(t)$ für die Menge (in mg) nach $t$ Stunden auf.
+
+      (b) Berechnen Sie die Halbwertszeit.
+
+      (c) Wie viel mg sind nach 6 Stunden noch vorhanden?
+
+      (d) Ab wann sind weniger als 50 mg im Körper?
+
+      **1.2)** (2 P.) Lösen Sie die Ungleichung $x^2 - 2x - 8 \le 0$ und geben Sie die Lösungsmenge als
+      Intervall an.
+
+      **1.3)** (3 P.) Gegeben ist $f\colon \R \to (1, \infty)$, $f(x) = 2e^x + 1$. Begründen Sie, dass $f$
+      umkehrbar ist, und bestimmen Sie die Umkehrfunktion $f^{-1}$ samt Definitionsmenge.
+    teile:
+      - typ: term
+        label: '1.1 a) $m(t)$'
+        variable: t
+        bereich: [0, 10]
+        loesung: "400*0.8^t"
+      - typ: zahl
+        label: '1.1 b) Halbwertszeit'
+        loesung: "ln(0.5)/ln(0.8)"
+        anzeige: '\frac{\ln 0{,}5}{\ln 0{,}8} \approx 3{,}11'
+        einheit: h
+        toleranz: 0.01
+      - typ: zahl
+        label: '1.1 c) $m(6)$'
+        loesung: "400*0.8^6"
+        anzeige: '104{,}86'
+        einheit: mg
+        toleranz: 0.05
+      - typ: zahl
+        label: '1.1 d) weniger als 50 mg ab'
+        loesung: "ln(1/8)/ln(0.8)"
+        anzeige: '9{,}32'
+        einheit: h
+        toleranz: 0.01
+      - typ: zahl
+        label: '1.2) linke Intervallgrenze'
+        loesung: "-2"
+      - typ: zahl
+        label: '1.2) rechte Intervallgrenze'
+        loesung: "4"
+      - typ: term
+        label: '1.3) $f^{-1}(x)$'
+        bereich: [1.5, 8]
+        loesung: "ln((x - 1)/2)"
+        anzeige: 'f^{-1}(x) = \ln\frac{x-1}{2}'
+      - typ: text
+        label: '1.3) Umkehrbarkeit und Definitionsmenge'
+        muster: |
+          $f'(x) = 2e^x > 0$, also ist $f$ streng monoton wachsend und damit injektiv. Wertemenge
+          $(1, \infty)$, da $e^x$ alle positiven Werte annimmt. Also ist $f\colon \R \to (1,\infty)$ bijektiv,
+          und $f^{-1}\colon (1, \infty) \to \R$, $f^{-1}(x) = \ln\frac{x - 1}{2}$.
+    hinweise:
+      - '1.1) Abnahme um $20\,\%$ heißt Faktor $0{,}8$ pro Stunde. Halbwertszeit aus $0{,}8^t = 0{,}5$.'
+      - '1.2) Nullstellen der Parabel bestimmen; sie ist nach oben geöffnet, also ist sie zwischen den Nullstellen $\le 0$.'
+      - '1.3) $y = 2e^x + 1$ nach $x$ auflösen, dann $x$ und $y$ tauschen.'
+    loesung: |
+      **1.1 a)** $m(t) = 400\cdot 0{,}8^t$ ($t$ in h).
+      ---
+      **1.1 b)** $0{,}8^t = 0{,}5 \Rightarrow t = \frac{\ln 0{,}5}{\ln 0{,}8} \approx 3{,}11$ h (beide Logarithmen negativ, Quotient positiv).
+      ---
+      **1.1 c)** $m(6) = 400\cdot 0{,}8^6 = 400\cdot 0{,}262144 \approx 104{,}86$ mg.
+      ---
+      **1.1 d)** $400\cdot 0{,}8^t < 50 \iff 0{,}8^t < \frac18 \iff t > \frac{\ln(1/8)}{\ln 0{,}8} \approx 9{,}32$ h.
+      (Beim Dividieren durch $\ln 0{,}8 < 0$ dreht sich das Ungleichheitszeichen um!)
+      Kontrolle: $\frac18 = (\frac12)^3$, also genau 3 Halbwertszeiten: $3\cdot 3{,}106 \approx 9{,}32$ ✓.
+      ---
+      **1.2)** $x^2 - 2x - 8 = (x - 4)(x + 2) = 0$ bei $x = -2$ und $x = 4$. Nach oben geöffnete Parabel, also
+      $\le 0$ zwischen den Nullstellen: $L = [-2, 4]$.
+      ---
+      **1.3)** $f'(x) = 2e^x > 0$: streng monoton wachsend, also injektiv; $f(\R) = (1, \infty)$.
+      $y = 2e^x + 1 \iff e^x = \frac{y-1}{2} \iff x = \ln\frac{y - 1}{2}$ (für $y > 1$).
+      $f^{-1}(x) = \ln\frac{x-1}{2}$, $D(f^{-1}) = (1, \infty)$. Probe: $f^{-1}(f(0)) = f^{-1}(3) = \ln 1 = 0$ ✓.
+
+  - id: sim8-2
+    titel: Kugel, Ebene und Geraden im Raum
+    niveau: 3
+    punkte: 10
+    angabe: |
+      Gegeben sind die Kugel $K$ mit Mittelpunkt $M(1\mid 2\mid 3)$ und Radius $r = 5$, die Ebene
+      $\varepsilon\colon 2x + y - 2z = 7$ sowie die Geraden
+      $$g\colon X = \begin{pmatrix} 1\\ 0\\ 2\end{pmatrix} + s\begin{pmatrix} 1\\ 1\\ 0\end{pmatrix}, \qquad h\colon X = \begin{pmatrix} 0\\ 1\\ 5\end{pmatrix} + t\begin{pmatrix} 2\\ -1\\ 1\end{pmatrix}.$$
+
+      (a) (5 P.) Zeigen Sie, dass $\varepsilon$ die Kugel in einem Kreis schneidet. Berechnen Sie den
+      Mittelpunkt $F$ und den Radius $\rho$ dieses Schnittkreises. Geben Sie auch die Gleichung von $K$ an.
+
+      (b) (3 P.) Untersuchen Sie die gegenseitige Lage der Geraden $g$ und $h$.
+
+      (c) (2 P.) Berechnen Sie den Schnittpunkt $S$ von $g$ mit $\varepsilon$ und den Schnittwinkel
+      zwischen $g$ und $\varepsilon$.
+    teile:
+      - typ: zahl
+        label: '(a) Abstand $d(M, \varepsilon)$'
+        loesung: "abs(2*1 + 2 - 2*3 - 7)/3"
+        anzeige: '3'
+      - typ: vektor
+        label: '(a) Mittelpunkt $F$ des Schnittkreises'
+        namen: ["x", "y", "z"]
+        loesung: ["3", "3", "1"]
+      - typ: zahl
+        label: '(a) Radius $\rho$'
+        loesung: "sqrt(25 - 9)"
+        anzeige: '4'
+      - typ: auswahl
+        label: '(b) Lage von $g$ und $h$'
+        optionen: [identisch, echt parallel, schneidend, windschief]
+        richtig: [3]
+      - typ: vektor
+        label: '(c) Schnittpunkt $S$'
+        namen: ["x", "y", "z"]
+        loesung: ["4", "3", "2"]
+      - typ: zahl
+        label: '(c) Schnittwinkel in Grad'
+        loesung: "inGrad(asin(3/(3*sqrt(2))))"
+        anzeige: '45'
+        einheit: °
+        toleranz: 0.05
+    hinweise:
+      - '(a) Hesse’sche Normalform: $|\vec n| = 3$. Ist $d < r$, entsteht ein Schnittkreis mit $\rho = \sqrt{r^2 - d^2}$. $F$ ist der Lotfußpunkt von $M$ auf $\varepsilon$.'
+      - '(b) Richtungsvektoren parallel? Wenn nicht: Gleichsetzen und prüfen, ob das System eine Lösung hat.'
+      - '(c) Den allgemeinen Punkt von $g$ in $\varepsilon$ einsetzen. Winkel Gerade–Ebene: $\sin\varphi = \frac{|\vec n\cdot\vec r|}{|\vec n|\,|\vec r|}$.'
+    loesung: |
+      **(a)** $K\colon (x - 1)^2 + (y - 2)^2 + (z - 3)^2 = 25$. $\vec n = (2, 1, -2)$, $|\vec n| = 3$.
+      $d(M, \varepsilon) = \frac{|2 + 2 - 6 - 7|}{3} = \frac{9}{3} = 3 < 5$: Schnittkreis.
+      ---
+      Lotgerade $X = M + \lambda\vec n$ in $\varepsilon$: $2(1 + 2\lambda) + (2 + \lambda) - 2(3 - 2\lambda) = 7 \iff -2 + 9\lambda = 7 \iff \lambda = 1$.
+      $F = (1 + 2 \mid 2 + 1 \mid 3 - 2) = (3\mid 3\mid 1)$. Kontrolle: $6 + 3 - 2 = 7$ ✓, $|MF| = |\vec n| = 3$ ✓.
+      ---
+      $\rho = \sqrt{r^2 - d^2} = \sqrt{25 - 9} = 4$ (Pythagoras im Dreieck $M$, $F$, Kreispunkt).
+      ---
+      **(b)** $(1, 1, 0)$ und $(2, -1, 1)$ sind keine Vielfachen: nicht parallel. Gleichsetzen:
+      $1 + s = 2t$, $s = 1 - t$, $2 = 5 + t$. Aus der dritten Gleichung $t = -3$, dann $s = 4$; in der ersten:
+      $1 + 4 = 5 \neq -6 = 2\cdot(-3)$. Widerspruch, kein Schnittpunkt: **windschief**.
+      ---
+      **(c)** $2(1 + s) + s - 2\cdot 2 = 7 \iff 3s - 2 = 7 \iff s = 3$, $S(4\mid 3\mid 2)$. Probe $8 + 3 - 4 = 7$ ✓.
+      $\sin\varphi = \frac{|2 + 1 + 0|}{3\cdot\sqrt2} = \frac{1}{\sqrt2} \Rightarrow \varphi = 45°$.
+
+  - id: sim8-3
+    titel: Kurvendiskussion von x mal e hoch minus x
+    niveau: 3
+    punkte: 10
+    angabe: |
+      Gegeben ist die Funktion $f(x) = x\,e^{-x}$, $x \in \R$.
+
+      (a) (2 P.) Bestimmen Sie die Nullstellen und das Verhalten von $f$ für $x \to \infty$ und $x \to -\infty$.
+      Hat der Graph eine Asymptote?
+
+      (b) (4 P.) Bestimmen Sie Extrem- und Wendepunkte (mit Nachweis) sowie die Monotonie- und
+      Krümmungsbereiche. Skizzieren Sie den Graphen für $-1 \le x \le 5$.
+
+      (c) (1 P.) Geben Sie die Gleichung der Tangente im Ursprung an.
+
+      (d) (3 P.) Berechnen Sie mit partieller Integration $\int_0^b x\,e^{-x}\,\dd x$ und daraus den Inhalt der
+      (ins Unendliche reichenden) Fläche zwischen dem Graphen und der positiven $x$-Achse.
+    teile:
+      - typ: menge
+        label: '(a) Nullstellen'
+        loesung: ["0"]
+      - typ: vektor
+        label: '(b) Hochpunkt $H$'
+        namen: ["x", "y"]
+        loesung: ["1", "1/e"]
+      - typ: vektor
+        label: '(b) Wendepunkt $W$'
+        namen: ["x", "y"]
+        loesung: ["2", "2/e^2"]
+      - typ: text
+        label: '(a, b) Verhalten, Asymptote, Monotonie, Krümmung, Skizze'
+        muster: |
+          $\lim_{x\to\infty} x e^{-x} = \lim \frac{x}{e^x} = 0$ (Exponentialfunktion wächst schneller), also
+          waagrechte Asymptote $y = 0$ für $x \to \infty$. $\lim_{x\to-\infty} x e^{-x} = -\infty$.
+          Monoton wachsend auf $(-\infty, 1]$, fallend auf $[1, \infty)$. Rechtsgekrümmt (konkav) auf
+          $(-\infty, 2)$, linksgekrümmt (konvex) auf $(2, \infty)$. Skizze: aus $-\infty$ kommend durch den
+          Ursprung, Hochpunkt bei $(1\mid 0{,}37)$, Wendepunkt bei $(2\mid 0{,}27)$, dann flach gegen 0.
+      - typ: term
+        label: '(c) Tangente $t(x)$'
+        loesung: "x"
+      - typ: term
+        label: '(d) $\int_0^b x e^{-x}\,\dd x$ als Term in $b$'
+        variable: b
+        bereich: [0, 5]
+        loesung: "1 - (b + 1)*e^(-b)"
+      - typ: zahl
+        label: '(d) Flächeninhalt für $b \to \infty$'
+        loesung: "1"
+    hinweise:
+      - '(a) $e^{-x} > 0$ für alle $x$. Für $x \to\infty$: $\frac{x}{e^x}$, de l''Hospital.'
+      - "(b) Produktregel: $f'(x) = (1 - x)e^{-x}$, $f''(x) = (x - 2)e^{-x}$."
+      - '(d) $u = x$, $v'' = e^{-x}$: $\int x e^{-x}\,\dd x = -x e^{-x} - \int(-e^{-x})\,\dd x$.'
+    loesung: |
+      **(a)** $x e^{-x} = 0 \iff x = 0$ (da $e^{-x} > 0$). Für $x\to\infty$: $\frac{x}{e^x} \to 0$ (de l'Hospital:
+      $\frac{1}{e^x} \to 0$); waagrechte Asymptote $y = 0$. Für $x \to -\infty$: $x \to -\infty$, $e^{-x} \to \infty$,
+      also $f(x) \to -\infty$.
+      ---
+      **(b)** $f'(x) = e^{-x} - x e^{-x} = (1 - x)e^{-x}$; $f'(x) = 0 \iff x = 1$.
+      $f''(x) = -e^{-x} - (1 - x)e^{-x} = (x - 2)e^{-x}$; $f''(1) = -e^{-1} < 0$: Hochpunkt $H(1\mid \frac1e) \approx (1\mid 0{,}368)$.
+      ---
+      Monotonie: $f' > 0$ für $x < 1$ (wachsend), $f' < 0$ für $x > 1$ (fallend).
+      ---
+      $f''(x) = 0 \iff x = 2$, Vorzeichenwechsel von $-$ nach $+$: Wendepunkt $W(2\mid \frac{2}{e^2}) \approx (2\mid 0{,}271)$.
+      Rechtsgekrümmt für $x < 2$, linksgekrümmt für $x > 2$.
+      ---
+      **(c)** $f(0) = 0$, $f'(0) = 1$: Tangente $y = x$.
+      ---
+      **(d)** Partielle Integration mit $u = x$, $v' = e^{-x}$ ($u' = 1$, $v = -e^{-x}$):
+      $$\int_0^b x e^{-x}\,\dd x = \Big[-x e^{-x}\Big]_0^b + \int_0^b e^{-x}\,\dd x = -b e^{-b} + \big(1 - e^{-b}\big) = 1 - (b + 1)e^{-b}.$$
+      ---
+      Für $b \to \infty$ gilt $(b + 1)e^{-b} \to 0$, also hat die unbeschränkte Fläche den endlichen Inhalt
+      $\int_0^\infty x e^{-x}\,\dd x = 1$.
+
+  - id: sim8-4
+    titel: Komplexe Zahlen und Speicherchips
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **4.1)** (5 P.) Gegeben sind $z_1 = 2\,(\cos 30° + i\sin 30°)$ und $z_2 = 1 + i$.
+
+      (a) Geben Sie $z_1$ in algebraischer Form und $z_2$ in Polarform an.
+
+      (b) Berechnen Sie $z_1\cdot z_2$ in Polarform und in algebraischer Form. Beschreiben Sie die
+      Multiplikation mit $z_2$ geometrisch.
+
+      (c) Folgern Sie durch Vergleich der beiden Darstellungen aus (b) einen exakten Wert für $\cos 75°$.
+
+      **4.2)** (5 P.)
+
+      (a) Ein Passwort besteht aus genau 8 Zeichen, jedes Zeichen ist ein Kleinbuchstabe (26) oder eine
+      Ziffer (10); Wiederholungen sind erlaubt. Wie viele Passwörter gibt es? Wie lange braucht ein
+      Angreifer, der $10^9$ Passwörter pro Sekunde testet, im schlimmsten Fall?
+
+      (b) Eine Lieferung von 20 Speicherchips enthält 4 defekte. Es werden 3 Chips zufällig (ohne
+      Zurücklegen) geprüft. Mit welcher Wahrscheinlichkeit ist genau einer defekt? Mit welcher
+      Wahrscheinlichkeit wird mindestens ein defekter Chip entdeckt?
+    teile:
+      - typ: komplex
+        label: '4.1 a) $z_1$ algebraisch'
+        loesung: "sqrt(3) + i"
+        anzeige: '\sqrt3 + i'
+      - typ: zahl
+        label: '4.1 a) $|z_2|$'
+        loesung: "sqrt(2)"
+        anzeige: '\sqrt2'
+      - typ: zahl
+        label: '4.1 a) $\arg z_2$ in Grad'
+        loesung: "45"
+        einheit: °
+      - typ: zahl
+        label: '4.1 b) $|z_1 z_2|$'
+        loesung: "2*sqrt(2)"
+        anzeige: '2\sqrt2 \approx 2{,}83'
+      - typ: zahl
+        label: '4.1 b) $\arg(z_1 z_2)$ in Grad'
+        loesung: "75"
+        einheit: °
+      - typ: komplex
+        label: '4.1 b) $z_1 z_2$ algebraisch'
+        loesung: "(sqrt(3) + i)*(1 + i)"
+        anzeige: '(\sqrt3 - 1) + (\sqrt3 + 1)i'
+      - typ: zahl
+        label: '4.1 c) $\cos 75°$ (exakt, z. B. als Wurzelausdruck)'
+        loesung: "(sqrt(3) - 1)/(2*sqrt(2))"
+        anzeige: '\frac{\sqrt3 - 1}{2\sqrt2} \approx 0{,}2588'
+        toleranz: 0.0002
+      - typ: zahl
+        label: '4.2 a) Anzahl der Passwörter'
+        loesung: "36^8"
+        anzeige: '2{,}82\cdot 10^{12}'
+      - typ: zahl
+        label: '4.2 a) maximale Dauer in Minuten'
+        loesung: "36^8/10^9/60"
+        anzeige: '47{,}0'
+        einheit: min
+        toleranz: 0.1
+      - typ: zahl
+        label: '4.2 b) $P(\text{genau ein defekter})$'
+        loesung: "binom(4,1)*binom(16,2)/binom(20,3)"
+        anzeige: '\tfrac{480}{1140} \approx 0{,}4211'
+        toleranz: 0.0005
+      - typ: zahl
+        label: '4.2 b) $P(\text{mindestens ein defekter})$'
+        loesung: "1 - binom(16,3)/binom(20,3)"
+        anzeige: '0{,}5088'
+        toleranz: 0.0005
+    hinweise:
+      - '4.1) Bei der Multiplikation in Polarform werden die Beträge multipliziert und die Argumente addiert.'
+      - '4.1 c) Realteil der Polarform: $2\sqrt2\cos 75°$. Mit dem Realteil der algebraischen Form gleichsetzen.'
+      - '4.2 a) Produktregel: 36 Möglichkeiten für jede der 8 Stellen.'
+      - '4.2 b) Hypergeometrische Verteilung: $P(X = k) = \frac{\binom{4}{k}\binom{16}{3-k}}{\binom{20}{3}}$. Für „mindestens einer“ das Gegenereignis „keiner“ verwenden.'
+    loesung: |
+      **4.1 a)** $z_1 = 2\left(\frac{\sqrt3}{2} + \frac12 i\right) = \sqrt3 + i$. $z_2 = 1 + i$: $|z_2| = \sqrt2$, Argument
+      $45°$ (1. Quadrant, $\tan\varphi = 1$), also $z_2 = \sqrt2\,(\cos 45° + i\sin 45°)$.
+      ---
+      **4.1 b)** Polarform: $z_1 z_2 = 2\sqrt2\,(\cos 75° + i\sin 75°)$. Geometrisch: Multiplikation mit $z_2$ ist
+      eine Drehung um $45°$ gegen den Uhrzeigersinn und eine Streckung um den Faktor $\sqrt2$.
+      ---
+      Algebraisch: $(\sqrt3 + i)(1 + i) = \sqrt3 + \sqrt3 i + i + i^2 = (\sqrt3 - 1) + (\sqrt3 + 1)i \approx 0{,}732 + 2{,}732i$.
+      ---
+      **4.1 c)** Realteile vergleichen: $2\sqrt2\cos 75° = \sqrt3 - 1 \Rightarrow \cos 75° = \frac{\sqrt3 - 1}{2\sqrt2} = \frac{\sqrt6 - \sqrt2}{4} \approx 0{,}2588$.
+      Kontrolle mit dem Taschenrechner: $\cos 75° \approx 0{,}2588$ ✓.
+      ---
+      **4.2 a)** $36^8 = 2\,821\,109\,907\,456 \approx 2{,}82\cdot 10^{12}$ Passwörter. Bei $10^9$ pro Sekunde:
+      $\approx 2821$ s $\approx 47$ Minuten. (Darum sind 8 Zeichen aus so wenigen Symbolen zu kurz.)
+      ---
+      **4.2 b)** $\binom{20}{3} = 1140$ gleich wahrscheinliche Auswahlen. Genau ein defekter:
+      $\frac{\binom41\binom{16}{2}}{1140} = \frac{4\cdot 120}{1140} = \frac{480}{1140} \approx 0{,}4211$.
+      ---
+      Keiner defekt: $\frac{\binom{16}{3}}{1140} = \frac{560}{1140} \approx 0{,}4912$, also mindestens einer:
+      $1 - 0{,}4912 \approx 0{,}5088$. Eine Stichprobe von 3 Chips entdeckt eine schlechte Lieferung also
+      nur in knapp der Hälfte der Fälle.

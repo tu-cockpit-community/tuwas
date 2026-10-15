@@ -1,0 +1,60 @@
+import { app, safeStorage } from 'electron'
+import { join } from 'node:path'
+import type { SecretKey, SecretsStatus } from '../shared/types'
+import { readJson, writeJson } from './jsonFile'
+
+// Tokens are encrypted with Electron's safeStorage; on GNOME the key lives in the GNOME keyring.
+// The file only ever holds ciphertext (base64), and decrypted values never leave the main process.
+type Store = Partial<Record<SecretKey, string>>
+
+const file = (userData = app.getPath('userData')): string => join(userData, 'secrets.json')
+
+function load(userData?: string): Store {
+  const data = readJson(file(userData))
+  return data && typeof data === 'object' ? (data as Store) : {}
+}
+
+export function secretsStatus(): SecretsStatus {
+  const store = load()
+  const backend = process.platform === 'linux' ? safeStorage.getSelectedStorageBackend() : 'os'
+  return {
+    tissToken: Boolean(store.tissToken),
+    tuwelToken: Boolean(store.tuwelToken),
+    backend,
+    secure: safeStorage.isEncryptionAvailable() && backend !== 'basic_text'
+  }
+}
+
+export function setSecret(key: SecretKey, value: string): void {
+  if (!safeStorage.isEncryptionAvailable()) {
+    throw new Error(
+      process.platform === 'linux'
+        ? 'Verschlüsselung ist nicht verfügbar – ist der Schlüsselbund (z. B. GNOME-Schlüsselbund) entsperrt?'
+        : 'Verschlüsselung ist auf diesem System gerade nicht verfügbar.'
+    )
+  }
+  const store = load()
+  store[key] = safeStorage.encryptString(value).toString('base64')
+  writeJson(file(), store, 0o600)
+}
+
+export function hasSecret(key: SecretKey): boolean {
+  return Boolean(load()[key])
+}
+
+/** `userData`: read another profile folder's secrets (the development dump tools use that). */
+export function getSecret(key: SecretKey, userData?: string): string | null {
+  const encrypted = load(userData)[key]
+  if (!encrypted) return null
+  try {
+    return safeStorage.decryptString(Buffer.from(encrypted, 'base64'))
+  } catch {
+    return null
+  }
+}
+
+export function clearSecret(key: SecretKey): void {
+  const store = load()
+  delete store[key]
+  writeJson(file(), store, 0o600)
+}

@@ -1,0 +1,405 @@
+id: schranz-kirlinger-2023
+titel: Prüfung 24. 2. 2023 (Schranz-Kirlinger)
+quelle: zulassung/sbp/mathematik-3/Musterpruefung_2.pdf
+art: original
+dauer_minuten: 120
+hinweis: |
+  Originalgetreuer Nachbau der Prüfung vom 24. 2. 2023 von G. Schranz-Kirlinger (Institut für Analysis
+  und Scientific Computing, TU Wien), der derzeitigen Prüferin. 4 Beispiele zu je 10 Punkten,
+  Arbeitszeit **120 Minuten**.
+
+  **Erlaubt:** ein- oder zweizeiliger, nicht programmierbarer, nicht grafikfähiger Taschenrechner.
+  Rechne auf Papier mit vollständigem Lösungsweg und trage nur die Ergebnisse ein. Begründungen,
+  Skizzen und Interpretationen bewertest du nach der Abgabe selbst anhand der Musterlösung.
+aufgaben:
+  - id: ps23-1
+    titel: Zahlen, Gleichungssystem, Formel, Wachstum
+    niveau: 3
+    quelle: Prüfung Schranz-Kirlinger 24. 2. 2023, Beispiel 1
+    punkte: 10
+    angabe: |
+      **1.1)** Gegeben ist die reelle Zahl $a \in \R$ mit $a \neq 0$. Welche der nachstehenden
+      Darstellungen entspricht der Zahl $a$?
+
+      (a) $\dfrac{(2a)^2}{2a}$ (b) $\sqrt{a^2}$ (c) $\dfrac{1}{\frac{1}{a}}$
+
+      (d) $\dfrac{\sqrt{16}\cdot a}{4}$ (e) $\dfrac{a-2}{2}$ (f) $\dfrac{1}{a^{-1}}$
+
+      **1.2)** Untersuchen Sie das Gleichungssystem
+      $$\begin{aligned} 2x - 4y + 6z &= 3\\ -x + 2y - 3z &= 4 \end{aligned}$$
+      auf Lösbarkeit. Wie kann das Gleichungssystem und dessen Lösung geometrisch interpretiert werden?
+
+      **1.3)** Ein Zugunternehmen verzeichnet jedes Jahr die Anzahl der Zugunglücke, die auf einen
+      Zugschaden zurückgehen. Folgende Informationen über drei aufeinanderfolgende Jahre liegen vor:
+
+      - Jahr 1: $a$ Zugunglücke, davon $p\,\%$ wegen Zugschaden
+      - Jahr 2: $b$ Zugunglücke, davon $q\,\%$ wegen Zugschaden
+      - Jahr 3: $c$ Zugunglücke, davon $r\,\%$ wegen Zugschaden
+
+      Stellen Sie eine Formel für die Gesamtzahl $n$ der Zugunglücke in diesen drei Jahren auf, die auf
+      einen Zugschaden zurückgehen.
+
+      **1.4)** Der Flächeninhalt $A(t)$ einer Bakterienkultur nimmt mit der Zeit $t$ (in Stunden)
+      exponentiell zu. Am Anfang beträgt er $4\ \text{cm}^2$ und vergrößert sich pro Stunde um $8{,}5\,\%$.
+
+      (a) Geben Sie das entsprechende Wachstumsgesetz an.
+
+      (b) Wann erreicht die Bakterienkultur eine Fläche von $80\ \text{cm}^2$?
+
+      (c) Berechnen Sie $A(48)$ und interpretieren Sie das Ergebnis im gegebenen Kontext.
+    teile:
+      - typ: auswahl
+        label: '1.1) Welche Darstellungen sind für **jedes** $a \neq 0$ gleich $a$?'
+        optionen:
+          - '(a) $\frac{(2a)^2}{2a}$'
+          - '(b) $\sqrt{a^2}$'
+          - '(c) $\frac{1}{1/a}$'
+          - '(d) $\frac{\sqrt{16}\cdot a}{4}$'
+          - '(e) $\frac{a-2}{2}$'
+          - '(f) $\frac{1}{a^{-1}}$'
+        richtig: [2, 3, 5]
+        mehrfach: true
+      - typ: auswahl
+        label: '1.2) Lösbarkeit des Gleichungssystems'
+        optionen:
+          - genau eine Lösung
+          - unendlich viele Lösungen (eine Gerade)
+          - unendlich viele Lösungen (eine Ebene)
+          - keine Lösung
+        richtig: [3]
+      - typ: text
+        label: '1.2) Geometrische Interpretation'
+        muster: |
+          Jede Gleichung beschreibt eine Ebene im $\R^3$. Die Normalvektoren $(2, -4, 6)$ und $(-1, 2, -3)$
+          sind parallel ($(2,-4,6) = -2\cdot(-1,2,-3)$), die Ebenen also parallel. Da
+          $-2\cdot 4 = -8 \neq 3$, sind sie nicht identisch: zwei parallele, verschiedene Ebenen ohne
+          gemeinsamen Punkt, die Lösungsmenge ist leer.
+      - typ: text
+        label: '1.3) Formel für $n$'
+        muster: |
+          $$n = \frac{p}{100}\,a + \frac{q}{100}\,b + \frac{r}{100}\,c = \frac{ap + bq + cr}{100}.$$
+      - typ: term
+        label: '1.4 a) Wachstumsgesetz $A(t)$ in cm²'
+        variable: t
+        bereich: [0, 20]
+        loesung: "4*1.085^t"
+        anzeige: 'A(t) = 4\cdot 1{,}085^t'
+      - typ: zahl
+        label: '1.4 b) Zeitpunkt, an dem $80\ \text{cm}^2$ erreicht werden'
+        loesung: "ln(20)/ln(1.085)"
+        anzeige: '\frac{\ln 20}{\ln 1{,}085} \approx 36{,}72'
+        einheit: h
+        toleranz: 0.05
+      - typ: zahl
+        label: '1.4 c) $A(48)$'
+        loesung: "4*1.085^48"
+        anzeige: '200{,}8'
+        einheit: cm²
+        toleranz: 0.5
+      - typ: text
+        label: '1.4 c) Interpretation'
+        muster: |
+          Nach 48 Stunden (2 Tagen) bedeckt die Kultur laut Modell etwa $200{,}8\ \text{cm}^2$, also rund das
+          50-Fache der Anfangsfläche. Das ist nur realistisch, solange Platz und Nährstoffe unbegrenzt sind;
+          in einer echten Petrischale (Durchmesser etwa 9 cm, Fläche etwa $64\ \text{cm}^2$) wäre das gar
+          nicht möglich. Das exponentielle Modell gilt also nur für einen begrenzten Zeitraum.
+    hinweise:
+      - '1.1) Prüfe jede Darstellung auch mit einer **negativen** Zahl, z. B. $a = -2$. Beachte $\sqrt{a^2} = |a|$.'
+      - '1.2) Multipliziere die zweite Gleichung mit $-2$ und vergleiche mit der ersten.'
+      - '1.3) $p\,\%$ von $a$ ist $\frac{p}{100}\cdot a$.'
+      - '1.4) Zunahme um $8{,}5\,\%$ pro Stunde heißt Wachstumsfaktor $1{,}085$. Für (b) $4\cdot 1{,}085^t = 80$ logarithmieren.'
+    loesung: |
+      **1.1)** (a) $\frac{4a^2}{2a} = 2a$ ✗. (b) $\sqrt{a^2} = |a|$, für $a < 0$ ist das $-a \ne a$ ✗.
+
+      (c) $\frac{1}{1/a} = a$ ✓. (d) $\frac{4a}{4} = a$ ✓. (e) $\frac{a-2}{2} = \frac a2 - 1$ ✗.
+      (f) $\frac{1}{a^{-1}} = \frac{1}{1/a} = a$ ✓. Richtig sind **(c), (d), (f)**.
+      ---
+      **1.2)** $(-2)\cdot\text{II}$: $2x - 4y + 6z = -8$. Die linke Seite stimmt mit $\text{I}$ überein, die
+      rechte nicht ($3 \ne -8$). Subtraktion liefert $0 = 11$, einen Widerspruch: **keine Lösung**.
+      ---
+      Geometrisch: zwei Ebenen mit parallelen Normalvektoren $(2,-4,6) = -2\cdot(-1,2,-3)$, aber
+      verschiedenen Konstanten, also zwei parallele, verschiedene Ebenen. Sie haben keinen gemeinsamen
+      Punkt, $L = \emptyset$.
+      ---
+      **1.3)** Im ersten Jahr gehen $\frac{p}{100}a$ Unglücke auf Zugschaden zurück, analog in den
+      anderen Jahren. Summe: $n = \dfrac{ap + bq + cr}{100}$.
+      ---
+      **1.4 a)** Anfangswert 4, Faktor $1 + 0{,}085 = 1{,}085$ pro Stunde: $A(t) = 4\cdot 1{,}085^t$
+      (gleichwertig $A(t) = 4\,e^{t\ln 1{,}085} \approx 4\,e^{0{,}0816\,t}$).
+      ---
+      **1.4 b)** $4\cdot 1{,}085^t = 80 \Rightarrow 1{,}085^t = 20 \Rightarrow t = \dfrac{\ln 20}{\ln 1{,}085} \approx 36{,}72$ h,
+      also nach rund 36 Stunden und 43 Minuten.
+      ---
+      **1.4 c)** $A(48) = 4\cdot 1{,}085^{48} \approx 200{,}8\ \text{cm}^2$. Interpretation: Laut Modell
+      wäre die Fläche nach zwei Tagen etwa 50-mal so groß wie am Anfang. Real begrenzen Platz und
+      Nährstoffe das Wachstum, das Modell gilt nur für einen beschränkten Zeitraum.
+
+  - id: ps23-2
+    titel: Vektoren, Geraden und eine Folge
+    niveau: 3
+    quelle: Prüfung Schranz-Kirlinger 24. 2. 2023, Beispiel 2
+    punkte: 10
+    angabe: |
+      **2.1)** Gegeben sind zwei Vektoren $\vec a, \vec b$ und zwei reelle Zahlen $r, s \in \R$. Welche
+      der folgenden Terme stellen ebenfalls Vektoren dar?
+
+      (a) $r\cdot(\vec a + \vec b)$ (b) $r\cdot\vec a + \vec b$ (c) $r\cdot(\vec a\cdot\vec b)$
+
+      (d) $(r\cdot\vec a)\cdot(-s\cdot\vec b)$ (e) $s\cdot(\vec a + r\cdot\vec b)$
+      (f) $(r\cdot\vec a - \vec b)\cdot(s\cdot\vec b - \vec a)$
+
+      **2.2)** Gegeben sind zwei Geraden $g$ und $h$ durch folgende Gleichungen
+      $$g: X = \begin{pmatrix} -2\\ 5\end{pmatrix} + t\cdot\vec r, \qquad h: 4x + 3y = -2.$$
+
+      (a) Bestimmen Sie einen Richtungsvektor $\vec r$, sodass $g$ und $h$ parallel sind.
+
+      (b) Bestimmen Sie einen Richtungsvektor $\vec r$, sodass $g$ und $h$ aufeinander normal stehen.
+      Normieren Sie den Vektor $\vec r$.
+
+      **2.3)** Gegeben sei die Folge $\{a_n\}_{n\in\N}$, definiert durch $a_n = \dfrac{2n-3}{2+3n}$.
+
+      (a) Geben Sie die ersten vier Glieder der Folge an.
+
+      (b) Stellen Sie eine Vermutung über die Monotonie auf und zeigen Sie diese.
+
+      (c) Ist die Folge nach oben bzw. nach unten beschränkt? Begründen Sie Ihre Antwort.
+
+      (d) Bestimmen Sie den Grenzwert der Folge.
+
+      (Die Folge beginnt bei $n = 1$.)
+    teile:
+      - typ: auswahl
+        label: '2.1) Welche Terme sind Vektoren?'
+        optionen:
+          - '(a) $r\cdot(\vec a + \vec b)$'
+          - '(b) $r\cdot\vec a + \vec b$'
+          - '(c) $r\cdot(\vec a\cdot\vec b)$'
+          - '(d) $(r\cdot\vec a)\cdot(-s\cdot\vec b)$'
+          - '(e) $s\cdot(\vec a + r\cdot\vec b)$'
+          - '(f) $(r\cdot\vec a - \vec b)\cdot(s\cdot\vec b - \vec a)$'
+        richtig: [0, 1, 4]
+        mehrfach: true
+      - typ: vektor
+        label: '2.2 a) Richtungsvektor $\vec r$ für $g \parallel h$'
+        namen: ["r1", "r2"]
+        loesung: ["3", "-4"]
+        vielfaches: true
+      - typ: vektor
+        label: '2.2 b) Normierter Richtungsvektor $\vec r_0$ für $g \perp h$ (mit positiver $x$-Komponente)'
+        namen: ["r1", "r2"]
+        loesung: ["4/5", "3/5"]
+      - typ: vektor
+        label: '2.3 a) $a_1, a_2, a_3, a_4$'
+        namen: ["a1", "a2", "a3", "a4"]
+        loesung: ["-1/5", "1/8", "3/11", "5/14"]
+      - typ: text
+        label: '2.3 b) Monotonie mit Beweis'
+        muster: |
+          Vermutung: streng monoton wachsend. Beweis über die Differenz:
+          $$a_{n+1} - a_n = \frac{2n-1}{3n+5} - \frac{2n-3}{3n+2} = \frac{(2n-1)(3n+2) - (2n-3)(3n+5)}{(3n+5)(3n+2)} = \frac{13}{(3n+5)(3n+2)} > 0$$
+          für alle $n \in \N$, da Zähler und Nenner positiv sind.
+      - typ: text
+        label: '2.3 c) Beschränktheit mit Begründung'
+        muster: |
+          Nach unten beschränkt: Die Folge wächst, also ist $a_n \ge a_1 = -\tfrac15$ für alle $n$.
+          Nach oben beschränkt: $a_n = \tfrac23 - \dfrac{13}{3(3n+2)} < \tfrac23$ für alle $n$.
+          Die Folge ist also beschränkt, z. B. $-\tfrac15 \le a_n < \tfrac23$.
+      - typ: zahl
+        label: '2.3 d) $\lim_{n\to\infty} a_n$'
+        loesung: "2/3"
+        anzeige: '\tfrac{2}{3}'
+    hinweise:
+      - '2.1) Das Skalarprodukt zweier Vektoren ist eine **Zahl**. Jeder Term, dessen äußerste Operation ein Skalarprodukt ist, ist ein Skalar.'
+      - '2.2) Aus $4x + 3y = -2$ liest du den Normalvektor $\vec n_h = (4, 3)$ ab. Ein Richtungsvektor von $h$ steht normal auf $\vec n_h$.'
+      - '2.3) Für die Monotonie $a_{n+1} - a_n$ auf einen Bruchstrich bringen. Für den Grenzwert Zähler und Nenner durch $n$ dividieren.'
+    loesung: |
+      **2.1)** Vektoren sind (a), (b), (e) (Linearkombinationen von Vektoren). (c), (d), (f) enthalten als
+      äußerste Operation ein Skalarprodukt und sind daher **Skalare**.
+      ---
+      **2.2 a)** $h$ hat den Normalvektor $\vec n_h = \begin{pmatrix} 4\\ 3\end{pmatrix}$, also den
+      Richtungsvektor $\begin{pmatrix} 3\\ -4\end{pmatrix}$ (Komponenten tauschen, ein Vorzeichen ändern).
+      $g \parallel h$ für $\vec r = \begin{pmatrix} 3\\ -4\end{pmatrix}$ (oder jedes Vielfache $\ne \vec 0$).
+      Da $4\cdot(-2) + 3\cdot 5 = 7 \ne -2$, liegt der Punkt $(-2\mid 5)$ nicht auf $h$; die Geraden sind
+      echt parallel.
+      ---
+      **2.2 b)** $g \perp h$, wenn $\vec r$ die Richtung des Normalvektors hat: $\vec r = \begin{pmatrix} 4\\ 3\end{pmatrix}$,
+      $|\vec r| = 5$, normiert $\vec r_0 = \tfrac15\begin{pmatrix} 4\\ 3\end{pmatrix} = \begin{pmatrix} 0{,}8\\ 0{,}6\end{pmatrix}$.
+      Probe: $(4, 3)\cdot(3, -4) = 0$ ✓.
+      ---
+      **2.3 a)** $a_1 = \frac{-1}{5}$, $a_2 = \frac{1}{8}$, $a_3 = \frac{3}{11}$, $a_4 = \frac{5}{14}$.
+      ---
+      **2.3 b)** Vermutung: streng monoton wachsend. $(2n-1)(3n+2) = 6n^2 + n - 2$ und
+      $(2n-3)(3n+5) = 6n^2 + n - 15$, also
+      $$a_{n+1} - a_n = \frac{13}{(3n+5)(3n+2)} > 0.$$
+      ---
+      **2.3 c)** Nach unten beschränkt durch $a_1 = -\tfrac15$ (wegen der Monotonie). Nach oben:
+      $\tfrac23 - a_n = \dfrac{2(3n+2) - 3(2n-3)}{3(3n+2)} = \dfrac{13}{3(3n+2)} > 0$, also $a_n < \tfrac23$.
+      ---
+      **2.3 d)** $a_n = \dfrac{2 - 3/n}{2/n + 3} \to \dfrac{2}{3}$ für $n \to \infty$, da $\frac1n \to 0$.
+      (Konsistent mit (b) und (c): monoton wachsend und durch $\tfrac23$ beschränkt.)
+
+  - id: ps23-3
+    titel: Kurvendiskussion und Integral mit gesuchter Grenze
+    niveau: 3
+    quelle: Prüfung Schranz-Kirlinger 24. 2. 2023, Beispiel 3
+    punkte: 10
+    angabe: |
+      **3.1)** Geben Sie den Definitionsbereich der Polynomfunktion
+      $$f(x) = 3 + 2x^2 - x^4$$
+      an und untersuchen Sie die Funktion in Hinblick auf Nullstellen, Monotonie, lokale und globale
+      Extremstellen sowie Wendestellen. Geben Sie vorhandene Hoch-, Tief- und Wendepunkte an.
+      *Hinweis:* Setzen Sie für die Berechnung der Nullstellen $u = x^2$.
+
+      **3.2)** Gegeben ist die Funktion $f: [0, 3] \to \R$ mit $f(x) = x^2$. Bestimmen Sie $c \in [0, 3]$,
+      sodass gilt
+      $$\int_0^c f(x)\,\dd x = \int_c^3 f(x)\,\dd x.$$
+    teile:
+      - typ: menge
+        label: '3.1) Nullstellen von $f$'
+        loesung: ["-sqrt(3)", "sqrt(3)"]
+        anzeige: '\{-\sqrt3;\ \sqrt3\}'
+      - typ: menge
+        label: '3.1) $x$-Koordinaten der Hochpunkte'
+        loesung: ["-1", "1"]
+      - typ: vektor
+        label: '3.1) Tiefpunkt $T$'
+        namen: ["x", "y"]
+        loesung: ["0", "3"]
+      - typ: zahl
+        label: '3.1) $y$-Wert der Hochpunkte'
+        loesung: "3 + 2 - 1"
+        anzeige: '4'
+      - typ: menge
+        label: '3.1) Wendestellen'
+        loesung: ["-1/sqrt(3)", "1/sqrt(3)"]
+        anzeige: '\{-\tfrac{1}{\sqrt3};\ \tfrac{1}{\sqrt3}\}'
+      - typ: zahl
+        label: '3.1) $y$-Wert der Wendepunkte'
+        loesung: "3 + 2/3 - 1/9"
+        anzeige: '\tfrac{32}{9} \approx 3{,}56'
+      - typ: text
+        label: '3.1) Definitionsbereich, Monotonie, globale Extrema'
+        muster: |
+          $D = \R$. Streng monoton wachsend auf $(-\infty, -1]$ und $[0, 1]$, streng monoton fallend auf
+          $[-1, 0]$ und $[1, \infty)$. Die Hochpunkte $H_{1,2}(\pm 1 \mid 4)$ sind auch globale Maxima, da
+          $f(x) \to -\infty$ für $x \to \pm\infty$ und sonst kein größerer Wert vorkommt. Ein globales
+          Minimum gibt es nicht; $T(0\mid 3)$ ist nur lokal.
+      - typ: zahl
+        label: '3.2) $c$'
+        loesung: "nthRoot(13.5, 3)"
+        anzeige: '\sqrt[3]{13{,}5} \approx 2{,}381'
+    hinweise:
+      - '3.1) Mit $u = x^2$: $-u^2 + 2u + 3 = 0$. Nur nichtnegative $u$ liefern reelle $x$.'
+      - '3.1) $f''(x) = 4x - 4x^3 = 4x(1 - x^2)$, $f''''(x) = 4 - 12x^2$.'
+      - '3.2) Beide Integrale mit der Stammfunktion $\frac{x^3}{3}$ ausrechnen und gleichsetzen.'
+    loesung: |
+      **Definitionsbereich:** Polynom, also $D = \R$. Die Funktion ist gerade ($f(-x) = f(x)$), der Graph
+      symmetrisch zur $y$-Achse.
+      ---
+      **Nullstellen:** $u = x^2$: $3 + 2u - u^2 = 0 \iff u^2 - 2u - 3 = 0 \iff (u-3)(u+1) = 0$.
+      $u = -1$ liefert kein reelles $x$; $u = 3$ liefert $x = \pm\sqrt3 \approx \pm 1{,}732$.
+      ---
+      **Ableitungen:** $f'(x) = 4x - 4x^3 = 4x(1-x)(1+x)$, $f''(x) = 4 - 12x^2$.
+      $f'(x) = 0 \iff x \in \{-1, 0, 1\}$.
+      ---
+      **Extrema:** $f''(0) = 4 > 0$: Tiefpunkt $T(0\mid 3)$. $f''(\pm1) = -8 < 0$: Hochpunkte
+      $H_1(-1\mid 4)$, $H_2(1\mid 4)$.
+      ---
+      **Monotonie** (Vorzeichen von $f'$): $f' > 0$ auf $(-\infty,-1)$ und $(0,1)$, $f' < 0$ auf $(-1,0)$
+      und $(1,\infty)$. Also wachsend, fallend, wachsend, fallend.
+      ---
+      **Global:** $f(x) \to -\infty$ für $x \to \pm\infty$. Daher gibt es kein globales Minimum, die
+      Hochpunkte sind globale Maxima mit Wert 4.
+      ---
+      **Wendestellen:** $f''(x) = 0 \iff x^2 = \tfrac13 \iff x = \pm\tfrac{1}{\sqrt3} \approx \pm 0{,}577$.
+      $f''$ wechselt dort das Vorzeichen (bzw. $f'''(x) = -24x \neq 0$). $f(\pm\tfrac1{\sqrt3}) = 3 + \tfrac23 - \tfrac19 = \tfrac{32}{9}$.
+      Wendepunkte $W_{1,2}\big(\pm\tfrac{1}{\sqrt3} \mid \tfrac{32}{9}\big)$.
+      ---
+      **3.2)** $\int_0^c x^2\,\dd x = \frac{c^3}{3}$ und $\int_c^3 x^2\,\dd x = 9 - \frac{c^3}{3}$.
+      Gleichsetzen: $\frac{2c^3}{3} = 9 \Rightarrow c^3 = 13{,}5 \Rightarrow c = \sqrt[3]{13{,}5} \approx 2{,}381 \in [0, 3]$ ✓.
+      ---
+      Deutung: Die Fläche unter $x^2$ auf $[0, 3]$ (insgesamt 9) wird bei $c \approx 2{,}38$ halbiert.
+      $c$ liegt weit rechts von $1{,}5$, weil die Parabel rechts viel höher ist.
+
+  - id: ps23-4
+    titel: Trigonometrie, Kombinatorik und Würfel
+    niveau: 3
+    quelle: Prüfung Schranz-Kirlinger 24. 2. 2023, Beispiel 4
+    punkte: 10
+    angabe: |
+      **4.1)** (a) Geben Sie alle Winkel $\alpha$ an, für die gilt $\sin(\alpha) = 0{,}5$.
+
+      (b) Eine Straße weist $7\,\%$ Steigung auf. Ermitteln Sie, unter welchem Winkel die Straße
+      ansteigt. Berechnen Sie den Höhenunterschied zweier Aussichtspunkte, die an dieser geradlinig
+      verlaufenden Straße liegen und entlang der Straße 2506 m entfernt sind.
+
+      **4.2)** (a) Bei einer Prüfung werden aus einer Liste von 50 Fragen sieben Fragen ausgewählt. Auf
+      wie viele Arten ist dies möglich?
+
+      (b) Ein Würfel wird zehnmal geworfen. Wie groß ist die Wahrscheinlichkeit, dass die Augenzahl 5
+
+      (i) genau einmal, (ii) höchstens neunmal, (iii) mindestens zweimal und höchstens neunmal kommt?
+    teile:
+      - typ: menge
+        label: '4.1 a) Alle Lösungen in $[0°, 360°)$, in Grad'
+        loesung: ["30", "150"]
+      - typ: text
+        label: '4.1 a) Alle Lösungen in $\R$'
+        muster: |
+          $\alpha = 30° + k\cdot 360°$ oder $\alpha = 150° + k\cdot 360°$, $k \in \Z$; im Bogenmaß
+          $\alpha = \frac{\pi}{6} + 2k\pi$ oder $\alpha = \frac{5\pi}{6} + 2k\pi$.
+      - typ: zahl
+        label: '4.1 b) Steigungswinkel in Grad'
+        loesung: "inGrad(atan(0.07))"
+        anzeige: '4{,}00'
+        einheit: °
+        toleranz: 0.01
+      - typ: zahl
+        label: '4.1 b) Höhenunterschied'
+        loesung: "2506*sin(atan(0.07))"
+        anzeige: '175{,}0'
+        einheit: m
+        toleranz: 0.2
+      - typ: zahl
+        label: '4.2 a) Anzahl der Auswahlen'
+        loesung: "binom(50, 7)"
+        anzeige: '99\,884\,400'
+      - typ: zahl
+        label: '4.2 b) (i) genau einmal'
+        loesung: "binompdf(10, 1/6, 1)"
+        anzeige: '0{,}3230'
+        toleranz: 0.0005
+      - typ: zahl
+        label: '4.2 b) (ii) höchstens neunmal'
+        loesung: "1 - (1/6)^10"
+        anzeige: '0{,}99999998'
+        toleranz: 0.0000001
+      - typ: zahl
+        label: '4.2 b) (iii) mindestens zweimal und höchstens neunmal'
+        loesung: "1 - binompdf(10, 1/6, 0) - binompdf(10, 1/6, 1) - (1/6)^10"
+        anzeige: '0{,}5155'
+        toleranz: 0.0005
+    hinweise:
+      - '4.1 a) Der Sinus ist im 1. und 2. Quadranten positiv: $\sin(180° - \alpha) = \sin\alpha$. Periode $360°$.'
+      - '4.1 b) $7\,\%$ Steigung heißt $\tan\alpha = 0{,}07$ (Höhe durch **waagrechte** Strecke). Die 2506 m entlang der Straße sind die **Hypotenuse**.'
+      - '4.2) Auswahl ohne Reihenfolge: $\binom{50}{7}$. Würfel: $X \sim B(10; \tfrac16)$, (ii) und (iii) über Gegenereignisse.'
+    loesung: |
+      **4.1 a)** $\sin 30° = 0{,}5$. Zweite Lösung im 2. Quadranten: $180° - 30° = 150°$. Alle Lösungen:
+      $\alpha = 30° + k\cdot 360°$ oder $\alpha = 150° + k\cdot 360°$, $k \in \Z$.
+      ---
+      **4.1 b)** $\tan\alpha = 0{,}07 \Rightarrow \alpha = \arctan 0{,}07 \approx 4{,}00°$ (Taschenrechner im
+      Gradmodus!).
+      ---
+      Höhenunterschied: Die Straße ist die Hypotenuse, $h = 2506 \cdot \sin\alpha \approx 2506 \cdot 0{,}06983 \approx 175{,}0$ m.
+      (Mit $\tan$ statt $\sin$ käme $175{,}4$ m heraus, ein typischer Fehler.)
+      ---
+      **4.2 a)** Reihenfolge egal, ohne Wiederholung: $\binom{50}{7} = \dfrac{50\cdot 49\cdots 44}{7!} = 99\,884\,400$.
+      ---
+      **4.2 b)** $X$ = Anzahl der Fünfer, $X \sim B(10; \tfrac16)$.
+
+      (i) $P(X = 1) = 10\cdot\tfrac16\cdot\left(\tfrac56\right)^9 \approx 0{,}3230$.
+      ---
+      (ii) $P(X \le 9) = 1 - P(X = 10) = 1 - \left(\tfrac16\right)^{10} \approx 1 - 1{,}65\cdot 10^{-8} \approx 0{,}99999998$.
+      ---
+      (iii) $P(2 \le X \le 9) = 1 - P(X=0) - P(X=1) - P(X=10)$ mit $P(X = 0) = \left(\tfrac56\right)^{10} \approx 0{,}1615$:
+      $1 - 0{,}1615 - 0{,}3230 - 0{,}00000002 \approx 0{,}5155$.

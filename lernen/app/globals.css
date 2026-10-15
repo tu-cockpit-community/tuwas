@@ -1,0 +1,260 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  /* TUWAS-Marke: TU-Blau #006699, Tinte #0E1A24, Papier #E9E7E2 (docs/logo). */
+
+  /* Flaechen */
+  --app-surface: #e9e7e2;
+  --app-surface-raised: #ffffff;
+  --app-surface-sunken: #f3f2ee;
+
+  /* Linien */
+  --app-line: #e4e2dc;
+  --app-line-strong: #cfcbc2;
+
+  /* Text. ink-muted/ink-faint sind WCAG-AA-geprueft (mind. 4.5:1 auf surface, -raised und -sunken);
+     ink-subtle ist NICHT AA-konform und nur fuer dekorative Glyphen erlaubt (Trennzeichen wie "/"
+     oder "·"), nie fuer Text, den jemand lesen muss. */
+  --app-ink: #0e1a24;
+  --app-ink-soft: #2b3945;
+  --app-ink-muted: #46535d;
+  --app-ink-faint: #5b6670;
+  --app-ink-subtle: #c9c6be;
+
+  /* Akzent (TU-Blau) */
+  --app-accent: #006699;
+  --app-accent-hover: #00547d;
+  --app-accent-soft: #dce9f0;
+  --app-accent-line: #a9d3e6;
+
+  /* Logo: Markenblock bleibt in beiden Themes blau, die Wortmarke wechselt (Vorlage 3a/3e) */
+  --app-brand: #006699;
+  --app-logo-was: #006699;
+
+  /* Status: Erfolg */
+  --app-success: #046a4e;
+  --app-success-soft: #ecfdf5;
+  --app-success-line: #a7f3d0;
+
+  /* Status: Warnung */
+  --app-warning: #92400e;
+  --app-warning-soft: #fffbeb;
+  --app-warning-line: #fde68a;
+
+  /* Status: Fehler */
+  --app-danger: #b91c1c;
+  --app-danger-soft: #fef2f2;
+  --app-danger-line: #fecaca;
+
+  /* Status: Info (tiefes Markenblau, damit es sich vom Akzent absetzt) */
+  --app-info: #0b3a52;
+  --app-info-soft: #e3edf3;
+  --app-info-line: #b7cfdd;
+
+  /* Code (bleibt in beiden Themes dunkel) */
+  --app-code-bg: #0e1a24;
+  --app-code-ink: #e9e7e2;
+  --app-code-header-bg: #16252f;
+  --app-code-line: #223441;
+}
+
+:root[data-theme="dark"] {
+  --app-surface: #0e1a24;
+  --app-surface-raised: #14232f;
+  --app-surface-sunken: #101f2b;
+
+  --app-line: #22323f;
+  --app-line-strong: #34495a;
+
+  --app-ink: #e9e7e2;
+  --app-ink-soft: #cbd0d4;
+  --app-ink-muted: #9aa6b0;
+  --app-ink-faint: #9aa6b0;
+  --app-ink-subtle: #475866;
+
+  --app-accent: #5db4e6;
+  --app-accent-hover: #8ccbee;
+  --app-accent-soft: rgba(0, 102, 153, 0.28);
+  --app-accent-line: #1f5c7e;
+
+  --app-logo-was: #ffffff;
+
+  --app-success: #6ee7b7;
+  --app-success-soft: rgba(2, 44, 34, 0.4);
+  --app-success-line: #065f46;
+
+  --app-warning: #fcd34d;
+  --app-warning-soft: rgba(69, 26, 3, 0.4);
+  --app-warning-line: #92400e;
+
+  --app-danger: #fca5a5;
+  --app-danger-soft: rgba(69, 10, 10, 0.4);
+  --app-danger-line: #991b1b;
+
+  --app-info: #9ccbe6;
+  --app-info-soft: rgba(0, 102, 153, 0.22);
+  --app-info-line: #1f5c7e;
+
+  --app-code-bg: #0a141c;
+  --app-code-ink: #e9e7e2;
+  --app-code-header-bg: #111e29;
+  --app-code-line: #1c2c39;
+}
+
+@theme inline {
+  --color-surface: var(--app-surface);
+  --color-surface-raised: var(--app-surface-raised);
+  --color-surface-sunken: var(--app-surface-sunken);
+
+  --color-line: var(--app-line);
+  --color-line-strong: var(--app-line-strong);
+
+  --color-ink: var(--app-ink);
+  --color-ink-soft: var(--app-ink-soft);
+  --color-ink-muted: var(--app-ink-muted);
+  --color-ink-faint: var(--app-ink-faint);
+  --color-ink-subtle: var(--app-ink-subtle);
+
+  --color-accent: var(--app-accent);
+  --color-accent-hover: var(--app-accent-hover);
+  --color-accent-soft: var(--app-accent-soft);
+  --color-accent-line: var(--app-accent-line);
+
+  --color-success: var(--app-success);
+  --color-success-soft: var(--app-success-soft);
+  --color-success-line: var(--app-success-line);
+
+  --color-warning: var(--app-warning);
+  --color-warning-soft: var(--app-warning-soft);
+  --color-warning-line: var(--app-warning-line);
+
+  --color-danger: var(--app-danger);
+  --color-danger-soft: var(--app-danger-soft);
+  --color-danger-line: var(--app-danger-line);
+
+  --color-info: var(--app-info);
+  --color-info-soft: var(--app-info-soft);
+  --color-info-line: var(--app-info-line);
+
+  --color-brand: var(--app-brand);
+  --color-logo-was: var(--app-logo-was);
+
+  --color-code-bg: var(--app-code-bg);
+  --color-code-ink: var(--app-code-ink);
+  --color-code-header-bg: var(--app-code-header-bg);
+  --color-code-line: var(--app-code-line);
+
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /* Weiche Rundungen wie im Lernbereich und in sout, aber ohne Schatten */
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
+  --radius-3xl: 22px;
+  --shadow-2xs: 0 0 #0000;
+  --shadow-xs: 0 0 #0000;
+  --shadow-sm: 0 0 #0000;
+  --shadow-md: 0 0 #0000;
+  --shadow-lg: 0 0 #0000;
+}
+
+html {
+  color-scheme: light;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+*,
+*::before,
+*::after {
+  border-color: var(--color-line);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-faint);
+}
+
+/* @shikijs/rehype setzt die Hintergrundfarbe als Inline-Style -- ueberschrieben, damit
+   Codebloecke exakt den code-bg-Token treffen (Header-Leiste in CodePre nutzt denselben Ton). */
+.shiki {
+  background-color: var(--color-code-bg) !important;
+}
+
+/* @tailwindcss/typography generiert fuer die prose-pre- und prose-code-Modifier Regeln mit
+   derselben Spezifitaet wie CodePre's eigene Utilities (p-4 etc.) -- welche gewinnt, haengt von der
+   Tailwind-internen Quellreihenfolge ab und war hier falsch (Padding landete bei 0, und die
+   Inline-Code-Chip-Optik von prose-code leckte in den Codeblock hinein und quetschte den Text).
+   Echte Selektor-Spezifitaet erzwingt das gewuenschte Verhalten zuverlaessig. */
+.prose pre {
+  padding: 1rem !important;
+}
+.prose pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+  border-radius: 0 !important;
+  color: inherit !important;
+}
+
+/* @tailwindcss/typography setzt table-layout:auto -- der Browser darf dann jede Spalte so breit
+   ziehen, wie ihr laengster Zellinhalt will, statt sie in ihrer Breite umbrechen zu lassen. Bei
+   Tabellen mit viel Fließtext pro Zelle (Symbol-Lexikon etc.) fuehrte das dazu, dass Text am
+   Kartenrand abgeschnitten wirkte statt normal umzubrechen. table-layout:fixed erzwingt gleich
+   breite Spalten, die IMMER innerhalb ihrer Breite umbrechen -- kein Abschneiden mehr moeglich. */
+.prose table {
+  table-layout: fixed !important;
+}
+.prose th,
+.prose td {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* @tailwindcss/typography nullt padding-inline-start/-end an :first-child/:last-child, weil es
+   davon ausgeht, die Tabelle sitzt buendig im Fliesstext. ResponsiveTabelle packt Tabellen aber
+   in eine umrandete Karte -- dadurch klebte die erste Spalte links und die letzte Spalte rechts
+   direkt an der Kartenkante. Einheitliches Padding auf allen Zellen, auch an den Raendern. */
+.prose thead th,
+.prose tbody td {
+  padding-inline-start: 0.75em !important;
+  padding-inline-end: 0.75em !important;
+}
+
+/* Eingebettet in sout: dieselben Flaechen wie die Hostapp, damit Rahmen und Inhalt wie eine Oberflaeche wirken. */
+html[data-embed="1"]:not([data-theme="dark"]) {
+  --app-surface: #eef4f8;
+  --app-surface-sunken: #e6eef4;
+  --app-line: #d6e2ea;
+  --app-line-strong: #bccfdb;
+}
+
+/* Eingebettet (siehe layout.tsx): das Logo steht in der Hostapp, die Seitenleiste beginnt gleich mit der Navigation. */
+html[data-embed="1"] .marke-kopf {
+  display: none;
+}
+

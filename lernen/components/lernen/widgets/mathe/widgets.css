@@ -1,0 +1,269 @@
+/* Mathe-Widgets. Nur App-/Lern-Tokens (hell + :root[data-theme="dark"] kommen ueber die Tokens). */
+
+.mw-umschalter {
+  border: 0;
+  margin: 0;
+  padding: 0.5rem 0.4rem 0.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+.mw-umschalter legend {
+  float: left;
+  margin-right: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+}
+
+.mw-kennwerte {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.4rem;
+  margin: 0;
+  padding: 0.5rem 0.4rem 0.2rem;
+  font-size: 0.875rem;
+}
+.mw-kennwert {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+.mw-kennwert dt {
+  color: var(--color-ink-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.mw-kennwert dd {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.mw-marke {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 2px;
+}
+
+.mw-legende {
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem 0.4rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.1rem;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
+.mw-legende li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.mw-strich {
+  display: inline-block;
+  width: 1.4rem;
+  border-top: 2.5px solid;
+}
+.mw-strich-gestrichelt {
+  border-top-style: dashed;
+}
+
+.mw-formel {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2rem 0.4rem;
+  color: var(--color-ink);
+}
+.mw-hinweis {
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+  padding: 0.3rem 0.4rem 0;
+  margin: 0;
+}
+.mw-warnung {
+  color: var(--color-warning);
+}
+.mw-ok {
+  color: var(--color-success);
+  font-weight: 600;
+}
+.mw-nein {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+/* zwei Grafiken nebeneinander ab mittlerer Breite */
+.mw-zwei {
+  display: grid;
+  gap: 0.6rem;
+}
+@media (min-width: 46rem) {
+  .mw-zwei {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* Ziehpunkte: sichtbarer Fokus nur per Tastatur */
+.mw-ziehpunkt {
+  cursor: grab;
+  outline: none;
+}
+.mw-ziehpunkt:active {
+  cursor: grabbing;
+}
+.mw-fokusring {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 2.5;
+}
+.mw-ziehpunkt:focus-visible .mw-fokusring {
+  stroke: var(--color-accent);
+}
+
+/* eigene SVGs (Boxplot, Zahlenstrahl) */
+.mw-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: var(--plot-achse);
+  font-family: var(--font-sans);
+}
+.mw-svg .tick {
+  font-size: 11px;
+  fill: var(--color-ink-faint);
+}
+.mw-svg .mw-svg-text {
+  font-size: 12px;
+  fill: var(--color-ink-muted);
+}
+
+/* Gauss */
+.mw-matrix-eingabe {
+  display: grid;
+  gap: 0.3rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.4rem;
+}
+.mw-matrix-zeile {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.mw-matrix-zeile .feld {
+  flex: none;
+  width: 4.5rem;
+  max-width: none;
+  padding: 0.35rem 0.4rem;
+  text-align: center;
+}
+.mw-matrix-zeile .feld[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+.mw-zeilen-nr {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-ink-muted);
+  width: 2rem;
+}
+.mw-trenner {
+  align-self: stretch;
+  border-left: 1.5px solid var(--color-line-strong);
+  margin: 0 0.15rem;
+}
+.mw-aktionen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.4rem;
+}
+.mw-schritt {
+  margin: 0.3rem 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--color-accent-line);
+  background: var(--color-surface-sunken);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+}
+.mw-schritt strong {
+  font-family: var(--font-mono);
+  color: var(--color-ink);
+}
+.mw-ergebnis {
+  margin: 0.4rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--color-success-line);
+  background: var(--color-success-soft);
+  border-radius: 8px;
+  color: var(--color-ink);
+  font-size: 0.9rem;
+}
+.mw-ergebnis-nein {
+  border-color: var(--color-danger-line);
+  background: var(--color-danger-soft);
+}
+
+/* Statistik */
+.mw-textfeld {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.5rem 0.4rem;
+  font-size: 0.875rem;
+  color: var(--color-ink-soft);
+}
+.mw-textfeld .feld {
+  max-width: none;
+  width: 100%;
+  resize: vertical;
+}
+
+.mw-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.mw-matrix-huelle {
+  margin: 0.3rem 0.4rem;
+}
+.tabelle-huelle .mw-matrix th,
+.tabelle-huelle .mw-matrix td {
+  text-align: center;
+  padding: 0.35rem 0.6rem;
+  font-variant-numeric: tabular-nums;
+}
+.tabelle-huelle .mw-matrix th[scope="row"] {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-ink-muted);
+  background: transparent;
+}
+.tabelle-huelle .mw-matrix .mw-rs {
+  border-left: 1.5px solid var(--color-line-strong);
+}
+.tabelle-huelle .mw-matrix .mw-op {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+.mw-matrix tr.mw-markiert td,
+.mw-matrix tr.mw-markiert th {
+  background: var(--color-accent-soft);
+}
+.mw-matrix-zelle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}

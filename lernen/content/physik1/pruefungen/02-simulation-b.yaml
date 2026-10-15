@@ -1,0 +1,301 @@
+id: physik1-simulation-b
+titel: Prüfungssimulation B (gemischt)
+art: simulation
+dauer_minuten: 180
+hinweis: |
+  Selbst erstellte Simulation im Niveau der AHS-Schulbücher. Hilfsmittel: einfacher wissenschaftlicher
+  Taschenrechner, **keine** Formelsammlung. Konstanten: $g = 9{,}81\,\text{m/s}^2$,
+  $\varepsilon_0 = 8{,}854\cdot 10^{-12}\,\text{F/m}$, $h = 6{,}626\cdot 10^{-34}\,\text{J s}$,
+  $c = 3{,}00\cdot 10^{8}\,\text{m/s}$, $e = 1{,}602\cdot 10^{-19}\,\text{C}$, $\rho_{\text{Wasser}} = 1000\,\text{kg/m}^3$.
+aufgaben:
+  - id: psb-1-waagrechter-wurf
+    titel: Ball vom Balkon
+    niveau: 3
+    punkte: 8
+    angabe: |
+      Ein Ball wird aus $1{,}80\,\text{m}$ Höhe waagrecht mit $12\,\text{m/s}$ abgeworfen (Luftwiderstand vernachlässigen).
+
+      a) Wie lange fliegt der Ball?
+
+      b) Wie weit fliegt er?
+
+      c) Mit welcher Geschwindigkeit trifft er auf?
+    teile:
+      - typ: zahl
+        label: a) Flugzeit
+        loesung: "sqrt(2*1.80/9.81)"
+        einheit: s
+        anzeige: '0{,}606'
+      - typ: zahl
+        label: b) Weite
+        loesung: "12*sqrt(2*1.80/9.81)"
+        einheit: m
+        anzeige: '7{,}27'
+      - typ: zahl
+        label: c) Auftreffgeschwindigkeit
+        loesung: "sqrt(12^2 + 2*9.81*1.80)"
+        einheit: m/s
+        anzeige: '13{,}4'
+    hinweise:
+      - 'Waagrecht gleichförmig, senkrecht freier Fall (Superpositionsprinzip).'
+      - 'Für c): $v_y = g t$ bzw. $v_y^2 = 2gh$, dann Pythagoras.'
+    loesung: |
+      **a)** $h = \tfrac12 g t^2 \Rightarrow t = \sqrt{2h/g} = \sqrt{3{,}6/9{,}81}\,\text{s} = 0{,}606\,\text{s}$
+      ---
+      **b)** $x = v_0 t = 12\cdot 0{,}606\,\text{m} = 7{,}27\,\text{m}$
+      ---
+      **c)** $v_y = \sqrt{2gh} = 5{,}94\,\text{m/s}$, $v = \sqrt{12^2 + 5{,}94^2}\,\text{m/s} = 13{,}4\,\text{m/s}$ (Probe über Energieerhaltung: $v^2 = v_0^2 + 2gh$ ✓)
+
+  - id: psb-2-schiefe-ebene
+    titel: Kiste auf der schiefen Ebene
+    niveau: 3
+    punkte: 10
+    angabe: |
+      Eine Kiste ($m = 20\,\text{kg}$) liegt auf einer um $25^\circ$ geneigten Rampe. Die Gleitreibungszahl ist $\mu = 0{,}20$.
+
+      a) Berechne Hangabtriebskraft und Normalkraft.
+
+      b) Wie groß ist die Gleitreibungskraft?
+
+      c) Mit welcher Beschleunigung rutscht die Kiste die Rampe hinunter?
+
+      d) Zeichne ein Freikörperbild und erkläre, warum die Masse für c) keine Rolle spielt.
+    teile:
+      - typ: zahl
+        label: a) Hangabtriebskraft
+        loesung: "20*9.81*sin(inRad(25))"
+        einheit: N
+        anzeige: '82{,}9'
+      - typ: zahl
+        label: a) Normalkraft
+        loesung: "20*9.81*cos(inRad(25))"
+        einheit: N
+        anzeige: '178'
+      - typ: zahl
+        label: b) Reibungskraft
+        loesung: "0.20*20*9.81*cos(inRad(25))"
+        einheit: N
+        anzeige: '35{,}6'
+      - typ: zahl
+        label: c) Beschleunigung
+        loesung: "9.81*(sin(inRad(25)) - 0.20*cos(inRad(25)))"
+        einheit: m/s²
+        anzeige: '2{,}37'
+      - typ: text
+        label: d)
+        muster: |
+          Gewichtskraft senkrecht nach unten, Normalkraft senkrecht zur Rampe, Reibung hangaufwärts. Alle beschleunigenden
+          Kräfte sind proportional zu $m$ ($mg\sin\alpha$ und $\mu mg\cos\alpha$), deshalb kürzt sich $m$ in $a = F/m$.
+    hinweise:
+      - '$F_H = mg\sin\alpha$, $F_N = mg\cos\alpha$, $F_R = \mu F_N$.'
+      - '$a = (F_H - F_R)/m$.'
+    loesung: |
+      **a)** $F_G = 196{,}2\,\text{N}$; $F_H = F_G\sin 25^\circ = 82{,}9\,\text{N}$; $F_N = F_G\cos 25^\circ = 178\,\text{N}$
+      ---
+      **b)** $F_R = 0{,}20\cdot 178\,\text{N} = 35{,}6\,\text{N}$
+      ---
+      **c)** $a = \dfrac{82{,}9 - 35{,}6}{20}\,\text{m/s}^2 = 2{,}37\,\text{m/s}^2$
+      ---
+      **d)** $a = g(\sin\alpha - \mu\cos\alpha)$ enthält kein $m$.
+
+  - id: psb-3-stoss
+    titel: Zusammenstoß zweier Wagen
+    niveau: 3
+    punkte: 7
+    angabe: |
+      Ein Wagen ($2{,}0\,\text{kg}$, $3{,}0\,\text{m/s}$) stößt auf einen ruhenden Wagen ($1{,}0\,\text{kg}$). Die Wagen
+      kuppeln dabei aneinander.
+
+      a) Mit welcher Geschwindigkeit fahren sie gemeinsam weiter?
+
+      b) Wie viel kinetische Energie geht verloren?
+
+      c) Welche Erhaltungssätze gelten bei diesem Stoß, welche nicht?
+    teile:
+      - typ: zahl
+        label: a) Geschwindigkeit
+        loesung: "2.0*3.0/3.0"
+        einheit: m/s
+        anzeige: '2{,}0'
+      - typ: zahl
+        label: b) Energieverlust
+        loesung: "0.5*2*3^2 - 0.5*3*2^2"
+        einheit: J
+        anzeige: '3{,}0'
+      - typ: text
+        label: c)
+        muster: |
+          Der Impuls bleibt erhalten (keine äußeren Kräfte in Stoßrichtung). Die kinetische Energie bleibt nicht erhalten,
+          ein Drittel wird in Verformung und Wärme umgewandelt; die Gesamtenergie bleibt natürlich erhalten.
+    hinweise:
+      - 'Vollkommen unelastisch: $m_1 v_1 = (m_1 + m_2)\,u$ mit der gemeinsamen Geschwindigkeit $u$.'
+    loesung: |
+      **a)** $u = \dfrac{m_1 v_1}{m_1 + m_2} = \dfrac{6{,}0}{3{,}0}\,\text{m/s} = 2{,}0\,\text{m/s}$
+      ---
+      **b)** vorher $9{,}0\,\text{J}$, nachher $\tfrac12\cdot 3\cdot 4 = 6{,}0\,\text{J}$, Verlust $3{,}0\,\text{J}$
+      ---
+      **c)** Impulserhaltung ja, Erhaltung der kinetischen Energie nein.
+
+  - id: psb-4-holzklotz
+    titel: Schwimmender Holzklotz
+    niveau: 3
+    punkte: 7
+    angabe: |
+      Ein Holzquader ($80\,\text{cm}\times 50\,\text{cm}\times 20\,\text{cm}$, Dichte $600\,\text{kg/m}^3$) schwimmt flach
+      (große Fläche unten) im Wasser.
+
+      a) Wie tief taucht er ein?
+
+      b) Welche Masse kann man auflegen, bis er gerade ganz untertaucht?
+
+      c) Erkläre mit dem Prinzip des Archimedes, warum ein Stahlschiff schwimmt.
+    teile:
+      - typ: zahl
+        label: a) Eintauchtiefe in cm
+        loesung: "600/1000*20"
+        einheit: cm
+        anzeige: '12'
+      - typ: zahl
+        label: b) Zusatzmasse
+        loesung: "(1000-600)*0.8*0.5*0.2"
+        einheit: kg
+        anzeige: '32'
+      - typ: text
+        label: c)
+        muster: |
+          Die Auftriebskraft ist gleich der Gewichtskraft der verdrängten Flüssigkeit. Ein Schiff verdrängt durch seinen
+          hohlen Rumpf so viel Wasser, dass dessen Gewicht dem Gewicht des Schiffes entspricht; seine mittlere Dichte
+          (Stahl plus Luft) ist kleiner als die von Wasser.
+    hinweise:
+      - 'Schwimmen: Auftrieb = Gewicht, also $\rho_W A t g = \rho_H A h g$.'
+    loesung: |
+      **a)** $\rho_W\,A\,t = \rho_H\,A\,h \Rightarrow t = \dfrac{600}{1000}\cdot 20\,\text{cm} = 12\,\text{cm}$
+      ---
+      **b)** Ganz eingetaucht: Auftrieb $\rho_W V g$ mit $V = 0{,}08\,\text{m}^3$, also 80 kg Wasser; Holz wiegt 48 kg. Zusatz $32\,\text{kg}$.
+      ---
+      **c)** Archimedes: Auftrieb = Gewicht der verdrängten Flüssigkeit; mittlere Dichte des Schiffs < Dichte des Wassers.
+
+  - id: psb-5-kondensator
+    titel: Plattenkondensator
+    niveau: 3
+    punkte: 8
+    angabe: |
+      Ein Plattenkondensator hat die Plattenfläche $A = 200\,\text{cm}^2$ und den Plattenabstand $d = 1{,}0\,\text{mm}$
+      (Luft). Er wird an $U = 100\,\text{V}$ angeschlossen.
+
+      a) Berechne die Kapazität in pF.
+
+      b) Berechne die Ladung in nC und die Feldstärke im Inneren.
+
+      c) Wie viel Energie ist gespeichert (in µJ)?
+    teile:
+      - typ: zahl
+        label: a) C in pF
+        loesung: "8.854e-12*0.02/1e-3*1e12"
+        einheit: pF
+        anzeige: '177'
+      - typ: zahl
+        label: b) Q in nC
+        loesung: "8.854e-12*0.02/1e-3*100*1e9"
+        einheit: nC
+        anzeige: '17{,}7'
+      - typ: zahl
+        label: b) E in V/m
+        loesung: "100/1e-3"
+        einheit: V/m
+        anzeige: '1\cdot 10^{5}'
+      - typ: zahl
+        label: c) W in µJ
+        loesung: "0.5*8.854e-12*0.02/1e-3*100^2*1e6"
+        einheit: µJ
+        anzeige: '0{,}885'
+    hinweise:
+      - '$C = \varepsilon_0 A/d$ mit $A = 0{,}02\,\text{m}^2$.'
+      - '$Q = CU$, $E = U/d$, $W = \tfrac12 C U^2$.'
+    loesung: |
+      **a)** $C = \dfrac{8{,}854\cdot 10^{-12}\cdot 0{,}02}{10^{-3}}\,\text{F} = 1{,}77\cdot 10^{-10}\,\text{F} = 177\,\text{pF}$
+      ---
+      **b)** $Q = CU = 1{,}77\cdot 10^{-8}\,\text{C} = 17{,}7\,\text{nC}$; $E = U/d = 10^{5}\,\text{V/m}$
+      ---
+      **c)** $W = \tfrac12 C U^2 = 8{,}85\cdot 10^{-7}\,\text{J} = 0{,}885\,\mu\text{J}$
+
+  - id: psb-6-gitarre
+    titel: Gitarrensaite
+    niveau: 3
+    punkte: 6
+    angabe: |
+      Die G-Saite einer Gitarre ist zwischen den Auflagepunkten $65\,\text{cm}$ lang und schwingt im Grundton mit $196\,\text{Hz}$.
+
+      a) Wie groß ist die Wellenlänge der stehenden Welle auf der Saite, und wie schnell laufen die Wellen auf der Saite?
+
+      b) Wie groß ist die Wellenlänge des abgestrahlten Schalls in Luft ($c = 340\,\text{m/s}$)?
+
+      c) Wo muss man die Saite greifen, damit sie eine Oktave höher klingt?
+    teile:
+      - typ: zahl
+        label: a) Wellenlänge auf der Saite
+        loesung: "2*0.65"
+        einheit: m
+        anzeige: '1{,}3'
+      - typ: zahl
+        label: a) Wellengeschwindigkeit
+        loesung: "2*0.65*196"
+        einheit: m/s
+        anzeige: '255'
+      - typ: zahl
+        label: b) Wellenlänge in Luft
+        loesung: "340/196"
+        einheit: m
+        anzeige: '1{,}73'
+      - typ: text
+        label: c)
+        muster: |
+          In der Mitte (12. Bund): Die halbe Länge halbiert die Wellenlänge, bei gleicher Wellengeschwindigkeit verdoppelt sich die Frequenz.
+    hinweise:
+      - 'Grundschwingung: Knoten an beiden Enden, $L = \lambda/2$.'
+      - 'Die Frequenz bleibt beim Übergang in die Luft gleich, die Wellenlänge ändert sich.'
+    loesung: |
+      **a)** $\lambda = 2L = 1{,}30\,\text{m}$, $c = \lambda f = 1{,}30\cdot 196\,\text{m/s} = 255\,\text{m/s}$
+      ---
+      **b)** $\lambda_L = c_L/f = 340/196\,\text{m} = 1{,}73\,\text{m}$
+      ---
+      **c)** Halbe Saitenlänge, also bei $32{,}5\,\text{cm}$.
+
+  - id: psb-7-photoeffekt
+    titel: Photoeffekt an Cäsium
+    niveau: 3
+    punkte: 7
+    angabe: |
+      Violettes Licht ($\lambda = 400\,\text{nm}$) fällt auf eine Cäsiumschicht (Austrittsarbeit $2{,}14\,\text{eV}$).
+
+      a) Welche Energie (in eV) hat ein Photon?
+
+      b) Welche maximale kinetische Energie (in eV) haben die herausgelösten Elektronen?
+
+      c) Warum löst rotes Licht ($700\,\text{nm}$) auch bei großer Intensität keine Elektronen aus? Was sagt das über die Natur des Lichts?
+    teile:
+      - typ: zahl
+        label: a) Photonenenergie in eV
+        loesung: "6.626e-34*3.00e8/400e-9/1.602e-19"
+        einheit: eV
+        anzeige: '3{,}10'
+      - typ: zahl
+        label: b) E_kin in eV
+        loesung: "6.626e-34*3.00e8/400e-9/1.602e-19 - 2.14"
+        einheit: eV
+        anzeige: '0{,}96'
+      - typ: text
+        label: c)
+        muster: |
+          Ein rotes Photon hat nur $hc/\lambda = 1{,}77\,\text{eV} < 2{,}14\,\text{eV}$. Ein Elektron nimmt immer die Energie genau
+          eines Photons auf; mehr Intensität bedeutet nur mehr Photonen, nicht energiereichere. Licht besteht also aus
+          Energiequanten (Teilchenaspekt), was das Wellenmodell nicht erklären kann.
+    hinweise:
+      - '$E = hf = hc/\lambda$, durch $e$ dividieren für eV.'
+      - 'Einstein: $E_{\text{kin}} = hf - W_A$.'
+    loesung: |
+      **a)** $E = \dfrac{hc}{\lambda} = \dfrac{6{,}626\cdot 10^{-34}\cdot 3\cdot 10^{8}}{400\cdot 10^{-9}}\,\text{J} = 4{,}97\cdot 10^{-19}\,\text{J} = 3{,}10\,\text{eV}$
+      ---
+      **b)** $E_{\text{kin}} = 3{,}10 - 2{,}14 = 0{,}96\,\text{eV}$
+      ---
+      **c)** Grenzfrequenz: Pro Elektron zählt die Energie eines einzelnen Photons, nicht die Intensität.

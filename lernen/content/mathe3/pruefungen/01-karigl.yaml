@@ -1,0 +1,307 @@
+id: karigl-muster
+titel: Musterprüfung Karigl
+quelle: zulassung/sbp/mathematik-3/Musterpruefung_1.pdf
+art: original
+dauer_minuten: 120
+hinweis: |
+  Originalgetreuer Nachbau der Musterprüfung von Prof. Karigl (6 Aufgaben, die Aufgaben 5 und 6
+  gehören nur zu Mathematik 3). Die Punkte stehen nicht im Original, sie sind eine Schätzung
+  (gesamt 40 Punkte, bestanden etwa ab der Hälfte).
+
+  **Erlaubt:** nicht programmierbarer, nicht grafikfähiger Taschenrechner und Schulformelsammlung.
+  Arbeite auf Papier mit vollständigem Rechenweg und trage nur die Ergebnisse ein. Skizzen und
+  Begründungen bewertest du nach der Abgabe selbst anhand der Musterlösung.
+aufgaben:
+  - id: pk-1
+    titel: Drei Gleichungen in drei Variablen
+    niveau: 2
+    quelle: Musterprüfung Karigl, Aufgabe 1
+    punkte: 7
+    angabe: |
+      Gegeben seien drei lineare Gleichungen in drei Variablen:
+      $$\begin{aligned} x - 3y + z &= -2\\ x + 7y - z &= 12\\ -6x + 6y + 5z &= 21 \end{aligned}$$
+      Finden Sie ein Tripel $(x, y, z)$, welches
+
+      (a) alle drei Gleichungen erfüllt, bzw.
+
+      (b) nur die erste, nicht aber die zweite und dritte Gleichung erfüllt.
+
+      (c) Wie können diese beiden Fälle geometrisch interpretiert werden?
+    teile:
+      - typ: vektor
+        label: '(a) Lösung $(x, y, z)$ des ganzen Systems'
+        namen: ["x", "y", "z"]
+        loesung: ["1", "2", "3"]
+      - typ: text
+        label: '(b) Ein Tripel, das nur die erste Gleichung erfüllt (mit Nachweis)'
+        muster: |
+          Man wählt zwei Variablen frei und berechnet die dritte aus der ersten Gleichung, z. B.
+          $y = 0$, $z = 0$ ⇒ $x = -2$. Das Tripel $(-2, 0, 0)$ erfüllt Gleichung 1: $-2 - 0 + 0 = -2$ ✓.
+          Gleichung 2: $-2 + 0 - 0 = -2 \neq 12$ ✗. Gleichung 3: $12 + 0 + 0 = 12 \neq 21$ ✗.
+          (Viele andere Tripel sind ebenso richtig, solange der Nachweis für alle drei Gleichungen dasteht.)
+      - typ: text
+        label: '(c) Geometrische Interpretation'
+        muster: |
+          Jede Gleichung beschreibt eine Ebene im $\R^3$. (a) Die drei Ebenen schneiden einander in genau
+          einem Punkt $S(1 \mid 2 \mid 3)$; das System ist eindeutig lösbar. (b) Das Tripel ist ein Punkt,
+          der auf der ersten Ebene liegt, aber weder auf der zweiten noch auf der dritten.
+    hinweise:
+      - 'Addiere die ersten beiden Gleichungen: $z$ fällt weg.'
+      - 'Eliminiere $x$ aus der dritten Gleichung mit $6\cdot$(Gleichung 1). Du erhältst dann zwei Gleichungen in $y$ und $z$.'
+      - Für (b) genügt es, zwei Variablen frei zu wählen und die dritte aus Gleichung 1 zu berechnen. Danach prüfen, dass Gleichung 2 und 3 verletzt sind.
+    loesung: |
+      **(a) Gauß-Elimination.** $\text{I} + \text{II}$: $2x + 4y = 10$, also $x + 2y = 5$.
+      ---
+      $6\cdot\text{I} + \text{III}$: $6x - 18y + 6z - 6x + 6y + 5z = -12 + 21$, also $-12y + 11z = 9$.
+      ---
+      $\text{II} - \text{I}$: $10y - 2z = 14$, also $z = 5y - 7$. Einsetzen in $-12y + 11z = 9$:
+      $-12y + 55y - 77 = 9 \Rightarrow 43y = 86 \Rightarrow y = 2$. Dann $z = 3$ und $x = 5 - 2y = 1$.
+      ---
+      Probe: $1 - 6 + 3 = -2$ ✓, $1 + 14 - 3 = 12$ ✓, $-6 + 12 + 15 = 21$ ✓. Also $(x, y, z) = (1, 2, 3)$.
+      ---
+      **(b)** Zum Beispiel $(-2, 0, 0)$: erfüllt $\text{I}$ ($-2 = -2$), aber $\text{II}$ ergibt $-2 \ne 12$
+      und $\text{III}$ ergibt $12 \ne 21$.
+      ---
+      **(c)** Jede lineare Gleichung in $x, y, z$ ist eine Ebene im Raum. Fall (a): der gemeinsame
+      Schnittpunkt $S(1\mid 2\mid 3)$ aller drei Ebenen. Fall (b): ein Punkt, der nur in der ersten Ebene
+      liegt.
+
+  - id: pk-2
+    titel: Parallelogramm ABCD
+    niveau: 2
+    quelle: Musterprüfung Karigl, Aufgabe 2
+    punkte: 7
+    angabe: |
+      Von einem Parallelogramm $ABCD$ in der Ebene kennt man die Eckpunkte $A(1\mid 5)$, $B(13\mid 0)$
+      und $C(13\mid 14)$. Man bestimme den vierten Eckpunkt $D$, den Schnittpunkt $M$ der beiden
+      Diagonalen und berechne die Längen aller Seiten und Diagonalen.
+    teile:
+      - typ: vektor
+        label: 'Eckpunkt $D$'
+        namen: ["x", "y"]
+        loesung: ["1", "19"]
+      - typ: vektor
+        label: 'Diagonalenschnittpunkt $M$'
+        namen: ["x", "y"]
+        loesung: ["7", "9.5"]
+      - typ: zahl
+        label: 'Seitenlänge $\overline{AB} = \overline{CD}$'
+        loesung: "sqrt(12^2 + 5^2)"
+        anzeige: '13'
+      - typ: zahl
+        label: 'Seitenlänge $\overline{BC} = \overline{DA}$'
+        loesung: "14"
+      - typ: zahl
+        label: 'Diagonale $\overline{AC}$'
+        loesung: "sqrt(12^2 + 9^2)"
+        anzeige: '15'
+      - typ: zahl
+        label: 'Diagonale $\overline{BD}$'
+        loesung: "sqrt(12^2 + 19^2)"
+        anzeige: '\sqrt{505} \approx 22{,}47'
+    hinweise:
+      - Im Parallelogramm gilt $\overrightarrow{AD} = \overrightarrow{BC}$. Achte auf die Reihenfolge der Ecken (gegen den Uhrzeigersinn $A, B, C, D$).
+      - Die Diagonalen halbieren einander. $M$ ist also der Mittelpunkt von $AC$.
+      - 'Länge eines Vektors $\begin{pmatrix} a\\ b\end{pmatrix}$: $\sqrt{a^2 + b^2}$.'
+    loesung: |
+      Skizze: $A$ links unten, $B$ rechts unten, $C$ rechts oben, also liegt $D$ links oben.
+      ---
+      $\overrightarrow{BC} = C - B = \begin{pmatrix} 0\\ 14 \end{pmatrix}$.
+      $D = A + \overrightarrow{BC} = \begin{pmatrix} 1\\ 5 \end{pmatrix} + \begin{pmatrix} 0\\ 14 \end{pmatrix} = \begin{pmatrix} 1\\ 19 \end{pmatrix}$.
+      ---
+      $M = \tfrac12 (A + C) = \tfrac12 \begin{pmatrix} 14\\ 19 \end{pmatrix} = \begin{pmatrix} 7\\ 9{,}5 \end{pmatrix}$.
+      Kontrolle: $\tfrac12(B + D) = \tfrac12 \begin{pmatrix} 14\\ 19 \end{pmatrix}$ ✓.
+      ---
+      Seiten: $\overrightarrow{AB} = \begin{pmatrix} 12\\ -5 \end{pmatrix}$, $|\overrightarrow{AB}| = \sqrt{144 + 25} = 13 = \overline{CD}$.
+      $|\overrightarrow{BC}| = 14 = \overline{DA}$.
+      ---
+      Diagonalen: $\overrightarrow{AC} = \begin{pmatrix} 12\\ 9 \end{pmatrix}$, $|\overrightarrow{AC}| = \sqrt{225} = 15$.
+      $\overrightarrow{BD} = \begin{pmatrix} -12\\ 19 \end{pmatrix}$, $|\overrightarrow{BD}| = \sqrt{505} \approx 22{,}47$.
+
+  - id: pk-3
+    titel: Heuschreckenpopulation
+    niveau: 2
+    quelle: Musterprüfung Karigl, Aufgabe 3
+    punkte: 6
+    angabe: |
+      Eine Heuschreckenpopulation wächst gemäß dem Wachstumsgesetz
+      $$N(t) = N_0\, e^{0{,}055 t}$$
+      ($N$ Anzahl der Heuschrecken, $t$ Zeit in Wochen). Man berechne die wöchentliche prozentuelle
+      Zunahme der Heuschreckenzahl. Nach welcher Zeit hat sich die Zahl der Heuschrecken verdoppelt,
+      wann hat sie sich verzehnfacht?
+    teile:
+      - typ: zahl
+        label: 'Wöchentliche Zunahme in Prozent'
+        loesung: "(exp(0.055) - 1)*100"
+        anzeige: '5{,}65'
+        einheit: '%'
+        toleranz: 0.01
+      - typ: zahl
+        label: 'Verdopplungszeit'
+        loesung: "ln(2)/0.055"
+        anzeige: '\frac{\ln 2}{0{,}055} \approx 12{,}60'
+        einheit: Wochen
+        toleranz: 0.02
+      - typ: zahl
+        label: 'Verzehnfachungszeit'
+        loesung: "ln(10)/0.055"
+        anzeige: '\frac{\ln 10}{0{,}055} \approx 41{,}87'
+        einheit: Wochen
+        toleranz: 0.02
+    hinweise:
+      - 'Vergleiche $N(t+1)$ mit $N(t)$: Der Quotient ist der wöchentliche Wachstumsfaktor.'
+      - 'Für die Verdopplung $N_0 e^{0{,}055 t} = 2 N_0$ setzen, durch $N_0$ kürzen und logarithmieren.'
+    loesung: |
+      Wachstumsfaktor pro Woche: $\dfrac{N(t+1)}{N(t)} = e^{0{,}055} \approx 1{,}05654$.
+      Die Zahl wächst also um etwa $5{,}65\,\%$ pro Woche (nicht um $5{,}5\,\%$!).
+      ---
+      Verdopplung: $e^{0{,}055 t} = 2 \Rightarrow 0{,}055\, t = \ln 2 \Rightarrow t = \dfrac{\ln 2}{0{,}055} \approx 12{,}60$ Wochen.
+      ---
+      Verzehnfachung: $e^{0{,}055 t} = 10 \Rightarrow t = \dfrac{\ln 10}{0{,}055} \approx 41{,}87$ Wochen.
+      ---
+      Interpretation: Nach rund 12,6 Wochen doppelt so viele, nach knapp 42 Wochen zehnmal so viele
+      Heuschrecken, unabhängig von $N_0$.
+
+  - id: pk-4
+    titel: Vollbremsung
+    niveau: 2
+    quelle: Musterprüfung Karigl, Aufgabe 4
+    punkte: 8
+    angabe: |
+      Ein Auto fährt mit einer Geschwindigkeit von 90 km/h und führt eine Vollbremsung durch. Die
+      Geschwindigkeit $t$ Sekunden nach Beginn des Bremsvorganges sei gegeben durch $v(t) = c - t^2$.
+
+      (a) Bestimmen Sie die Konstante $c$ und skizzieren Sie die Geschwindigkeits-Zeit-Funktion. Wie
+      lange dauert der Bremsvorgang? (Achten Sie auf die verschiedenen Einheiten!)
+
+      (b) Berechnen Sie den Bremsweg $s$ als Integral $s = \int_a^b v(t)\,\dd t$ mit passenden
+      Integrationsgrenzen $a$ und $b$.
+    teile:
+      - typ: zahl
+        label: '(a) Konstante $c$'
+        loesung: "90/3.6"
+        anzeige: '25'
+        einheit: m/s
+      - typ: zahl
+        label: '(a) Dauer des Bremsvorgangs'
+        loesung: "sqrt(25)"
+        anzeige: '5'
+        einheit: s
+      - typ: text
+        label: '(a) Skizze von $v(t)$'
+        muster: |
+          Nach unten geöffnete Parabel, nur für $0 \le t \le 5$ relevant: Start bei $(0 \mid 25)$
+          mit waagrechter Tangente, fällt immer steiler und erreicht bei $t = 5$ die $t$-Achse.
+          Achsen beschriften: $t$ in s, $v$ in m/s.
+      - typ: zahl
+        label: '(b) Bremsweg $s$'
+        loesung: "integral(\"25 - x^2\", 0, 5)"
+        anzeige: '\tfrac{250}{3} \approx 83{,}33'
+        einheit: m
+    hinweise:
+      - 'Umrechnung: $1\ \text{m/s} = 3{,}6\ \text{km/h}$. Bei $t = 0$ ist $v(0) = c$.'
+      - 'Das Auto steht, wenn $v(t) = 0$.'
+      - 'Der Weg ist die Fläche unter der Geschwindigkeitskurve von $t = 0$ bis zum Stillstand.'
+    loesung: |
+      $90\ \text{km/h} = \dfrac{90}{3{,}6}\ \text{m/s} = 25\ \text{m/s}$. Da $v(0) = c$, ist $c = 25$ (in m/s).
+      ---
+      Stillstand: $25 - t^2 = 0 \Rightarrow t = 5$ s (die negative Lösung ist physikalisch sinnlos).
+      ---
+      Skizze: Parabelbogen von $(0\mid 25)$ bis $(5\mid 0)$, nach unten geöffnet.
+      ---
+      $$s = \int_0^5 (25 - t^2)\,\dd t = \Big[25t - \tfrac{t^3}{3}\Big]_0^5 = 125 - \tfrac{125}{3} = \tfrac{250}{3} \approx 83{,}3\ \text{m}.$$
+      ---
+      Plausibilität: Mit konstant 25 m/s wären es in 5 s genau 125 m; da das Auto langsamer wird, muss
+      der Bremsweg kleiner sein.
+
+  - id: pk-5
+    titel: Raten beim Multiple-Choice-Test
+    niveau: 2
+    quelle: Musterprüfung Karigl, Aufgabe 5 (nur M3)
+    punkte: 6
+    angabe: |
+      Ein Schüler muss in einem Test zu 12 Fragen die Antworten durch Ankreuzen von einer aus vier
+      Auswahlmöglichkeiten angeben. Er hat aber keine Ahnung und kreuzt zufällig an. Wie groß ist die
+      Wahrscheinlichkeit, dass er auf diese Weise
+
+      (a) keine einzige Frage, (b) mindestens 3 Fragen, (c) mehr als 10 Fragen
+
+      richtig beantwortet? (Hinweis: Rechnen Sie mit der Binomialverteilung.) Gib die
+      Wahrscheinlichkeiten als Dezimalzahlen an.
+    teile:
+      - typ: zahl
+        label: '(a) $P(X = 0)$'
+        loesung: "0.75^12"
+        anzeige: '0{,}0317'
+        toleranz: 0.0005
+      - typ: zahl
+        label: '(b) $P(X \ge 3)$'
+        loesung: "1 - binomcdf(12, 0.25, 2)"
+        anzeige: '0{,}6093'
+        toleranz: 0.0005
+      - typ: zahl
+        label: '(c) $P(X > 10)$'
+        loesung: "binompdf(12, 0.25, 11) + binompdf(12, 0.25, 12)"
+        anzeige: '0{,}0000022'
+        toleranz: 0.0000002
+    hinweise:
+      - '$X$ = Anzahl richtiger Antworten ist binomialverteilt mit $n = 12$ und $p = \tfrac14$.'
+      - '"Mindestens 3" über das Gegenereignis: $1 - P(X \le 2)$.'
+      - '"Mehr als 10" heißt $X = 11$ oder $X = 12$.'
+    loesung: |
+      $X \sim B(12;\ 0{,}25)$, $P(X = k) = \binom{12}{k}\, 0{,}25^k\, 0{,}75^{12-k}$.
+      ---
+      (a) $P(X = 0) = 0{,}75^{12} \approx 0{,}0317$.
+      ---
+      (b) $P(X = 1) = 12 \cdot 0{,}25 \cdot 0{,}75^{11} \approx 0{,}1267$, $P(X = 2) = 66 \cdot 0{,}25^2 \cdot 0{,}75^{10} \approx 0{,}2323$.
+      $P(X \ge 3) = 1 - (0{,}0317 + 0{,}1267 + 0{,}2323) \approx 0{,}6093$.
+      ---
+      (c) $P(X > 10) = 12 \cdot 0{,}25^{11} \cdot 0{,}75 + 0{,}25^{12} \approx 2{,}15\cdot 10^{-6} + 6\cdot 10^{-8} \approx 2{,}2 \cdot 10^{-6}$.
+      ---
+      Interpretation: Durch reines Raten besteht man praktisch nie mit mehr als 10 richtigen Antworten;
+      mindestens 3 Treffer hat man aber in rund 61 % der Fälle.
+
+  - id: pk-6
+    titel: Komplexe Zahlen in der Gauß’schen Ebene
+    niveau: 1
+    quelle: Musterprüfung Karigl, Aufgabe 6 (nur M3)
+    punkte: 6
+    angabe: |
+      Stellen Sie die komplexen Zahlen $z_1 = 5 + 2i$ und $z_2 = 6 - 8i$ als Vektoren in der
+      Gauß’schen Zahlenebene dar und berechnen Sie $z_1 + 2z_2$, $z_1 - z_2$, $z_1 z_2$ und $z_1 / z_2$.
+    teile:
+      - typ: text
+        label: 'Darstellung in der Gauß’schen Zahlenebene'
+        muster: |
+          Waagrechte Achse: Realteil, senkrechte Achse: Imaginärteil. $z_1$ ist der Pfeil vom Ursprung
+          zum Punkt $(5\mid 2)$, $z_2$ der Pfeil zum Punkt $(6\mid -8)$ (vierter Quadrant).
+      - typ: komplex
+        label: '$z_1 + 2z_2$'
+        loesung: "(5+2i) + 2*(6-8i)"
+        anzeige: '17 - 14i'
+      - typ: komplex
+        label: '$z_1 - z_2$'
+        loesung: "(5+2i) - (6-8i)"
+        anzeige: '-1 + 10i'
+      - typ: komplex
+        label: '$z_1 z_2$'
+        loesung: "(5+2i)*(6-8i)"
+        anzeige: '46 - 28i'
+      - typ: komplex
+        label: '$z_1 / z_2$'
+        loesung: "(5+2i)/(6-8i)"
+        anzeige: '0{,}14 + 0{,}52i'
+    hinweise:
+      - 'Addieren und Subtrahieren geht komponentenweise (wie bei Vektoren).'
+      - 'Bei der Division mit der Konjugierten $\bar z_2 = 6 + 8i$ erweitern; der Nenner wird $36 + 64 = 100$.'
+    loesung: |
+      Darstellung: Pfeile vom Ursprung zu $(5\mid 2)$ und $(6\mid -8)$.
+      ---
+      $z_1 + 2z_2 = 5 + 2i + 12 - 16i = 17 - 14i$.
+      ---
+      $z_1 - z_2 = 5 + 2i - 6 + 8i = -1 + 10i$.
+      ---
+      $z_1 z_2 = 30 - 40i + 12i - 16i^2 = 30 - 28i + 16 = 46 - 28i$.
+      ---
+      $$\frac{z_1}{z_2} = \frac{(5 + 2i)(6 + 8i)}{(6 - 8i)(6 + 8i)} = \frac{30 + 40i + 12i - 16}{100} = \frac{14 + 52i}{100} = 0{,}14 + 0{,}52i.$$
+      Probe: $(0{,}14 + 0{,}52i)(6 - 8i) = 0{,}84 - 1{,}12i + 3{,}12i + 4{,}16 = 5 + 2i$ ✓

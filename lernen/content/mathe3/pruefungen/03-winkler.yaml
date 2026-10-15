@@ -1,0 +1,407 @@
+id: winkler-muster
+titel: Musterprüfung Winkler
+quelle: zulassung/sbp/mathematik-3/Musterpruefung_3.pdf
+art: original
+dauer_minuten: 120
+hinweis: |
+  Originalgetreuer Nachbau des Prüfungsbeispiels von Prof. Winkler. Aufgabe 4 war im Original „nur für
+  Mathematik 2“ gedacht; ihr Stoff (Ebenen im Raum, Abstand) gehört aber auch zu Mathematik 3 und ist
+  deshalb enthalten. Aufgabe 5 ist „nur für Mathematik 3“. Die Punkte stehen nicht im Original, sie sind
+  eine Schätzung (5 × 8 = 40 Punkte).
+
+  Typisch für diese Prüfung: lange, erklärende Angaben, die dich Schritt für Schritt führen. Lies sie
+  genau, sie enthalten oft schon die halbe Lösung. Begründungen bewertest du nach der Abgabe selbst.
+
+  **Erlaubt:** nicht programmierbarer, nicht grafikfähiger Taschenrechner.
+aufgaben:
+  - id: pw-1
+    titel: Zahlenmengen
+    niveau: 2
+    quelle: Musterprüfung Winkler, Aufgabe 1
+    punkte: 8
+    angabe: |
+      Zunächst zur Wiederholung: Die Menge $\N$ der natürlichen Zahlen besteht aus den Zahlen
+      $0, 1, 2, \ldots$ Die Menge $\Z$ der ganzen Zahlen ist die Menge aller Differenzen $m - n$ von
+      natürlichen Zahlen $m$ und $n$. Die Menge $\Q$ der rationalen Zahlen ist die Menge aller Quotienten
+      (Brüche) $\frac{a}{b}$ von ganzen Zahlen $a$ und $b$ mit $b \neq 0$. Die Menge $\R$ der reellen
+      Zahlen enthält neben den rationalen Zahlen auch noch die sogenannten irrationalen Zahlen, die sich
+      nicht als Quotient ganzer Zahlen schreiben lassen. Es gilt $\N \subset \Z \subset \Q \subset \R$.
+
+      (a) Innerhalb welcher der Zahlenmengen $\N$, $\Z$, $\Q$ und $\R$ lassen sich die vier
+      Grundrechnungsarten Addition, Subtraktion, Multiplikation und Division (außer durch 0)
+      uneingeschränkt ausführen, wo nicht? (16 Antworten, gern als $4\times 4$-Tabelle.)
+
+      (b) Geben Sie eine natürliche Zahl $n$ an, für die es keine natürliche Zahl $m$ mit $m^2 = n$ gibt.
+
+      (c) Angenommen, $m$ und $n$ sind natürliche Zahlen. Dann liegt die Zahl $r = \dfrac{m}{n^2 + 1}$ in
+      jedem Fall in $\R$. Muss $r$ auch in $\Z$ liegen? Wenn ja, begründen Sie dies; wenn nein, geben
+      Sie ein Beispiel für $m$ und $n$ an, sodass $r$ keine ganze Zahl ist.
+
+      (d) Wie (c), nur mit $\Q$ statt mit $\Z$.
+
+      (e) Die reelle Zahl $\sqrt2$ ist irrational, aber Lösung der Gleichung $x^2 - 2 = 0$. Seit dem
+      19. Jahrhundert ist bekannt, dass $\pi$ NICHT Lösung einer solchen Gleichung ist: Die einzigen
+      ganzen Zahlen $a, b, c$, für die $\pi$ Lösung von $ax^2 + bx + c = 0$ ist, sind $a = b = c = 0$.
+      In welchen der Zahlenmengen $\N$, $\Z$, $\Q$ und $\R$ liegt $\pi$, in welchen nicht?
+    teile:
+      - typ: auswahl
+        label: '(a) In $\N$ uneingeschränkt ausführbar:'
+        optionen: [Addition, Subtraktion, Multiplikation, Division]
+        richtig: [0, 2]
+        mehrfach: true
+      - typ: auswahl
+        label: '(a) In $\Z$ uneingeschränkt ausführbar:'
+        optionen: [Addition, Subtraktion, Multiplikation, Division]
+        richtig: [0, 1, 2]
+        mehrfach: true
+      - typ: auswahl
+        label: '(a) In $\Q$ uneingeschränkt ausführbar:'
+        optionen: [Addition, Subtraktion, Multiplikation, Division]
+        richtig: [0, 1, 2, 3]
+        mehrfach: true
+      - typ: auswahl
+        label: '(a) In $\R$ uneingeschränkt ausführbar:'
+        optionen: [Addition, Subtraktion, Multiplikation, Division]
+        richtig: [0, 1, 2, 3]
+        mehrfach: true
+      - typ: text
+        label: '(b) Beispiel für $n$'
+        muster: |
+          Zum Beispiel $n = 2$: $1^2 = 1 < 2 < 4 = 2^2$, und für $m \ge 2$ ist $m^2 \ge 4$. Also gibt es kein
+          $m \in \N$ mit $m^2 = 2$. (Ebenso jede Nicht-Quadratzahl wie 3, 5, 6, 7, 8, 10, …)
+      - typ: text
+        label: '(c) Muss $r \in \Z$ gelten?'
+        muster: |
+          Nein. Beispiel: $m = 1$, $n = 1$ ergibt $r = \frac{1}{2} \notin \Z$. Grund: Die Division ist in
+          $\Z$ nicht uneingeschränkt ausführbar (siehe (a)).
+      - typ: text
+        label: '(d) Muss $r \in \Q$ gelten?'
+        muster: |
+          Ja. $m$ und $n^2 + 1$ sind natürliche, also ganze Zahlen ($\N$ ist abgeschlossen unter
+          Multiplikation und Addition). Außerdem ist $n^2 + 1 \ge 1$, also $\neq 0$. Damit ist
+          $r = \frac{m}{n^2+1}$ ein Quotient ganzer Zahlen mit Nenner $\neq 0$, also nach Definition in $\Q$.
+      - typ: auswahl
+        label: '(e) $\pi$ liegt in:'
+        optionen: ['$\N$', '$\Z$', '$\Q$', '$\R$']
+        richtig: [3]
+      - typ: text
+        label: '(e) Begründung, warum $\pi \notin \Q$'
+        muster: |
+          Wäre $\pi = \frac{p}{q}$ mit $p, q \in \Z$, $q \neq 0$, dann wäre $\pi$ Lösung der Gleichung
+          $q x - p = 0$, also von $ax^2 + bx + c = 0$ mit $a = 0$, $b = q \neq 0$, $c = -p$. Das widerspricht
+          der Angabe (nur $a = b = c = 0$ ist möglich). Also $\pi \notin \Q$, damit auch
+          $\pi \notin \Z$ und $\pi \notin \N$. Aber $\pi \in \R$.
+    hinweise:
+      - '(a) Suche zu jeder Operation ein Gegenbeispiel: z. B. $2 - 5$ in $\N$ oder $1 : 2$ in $\Z$.'
+      - '(d) Erinnere dich an die Definition von $\Q$ in der Angabe: Quotient ganzer Zahlen mit Nenner ungleich 0.'
+      - '(e) Ein Bruch $\frac{p}{q}$ ist Lösung einer **linearen** Gleichung mit ganzen Koeffizienten. Lineare Gleichungen sind Spezialfälle von $ax^2 + bx + c = 0$ mit $a = 0$.'
+    loesung: |
+      **(a)** Tabelle (✓ uneingeschränkt ausführbar, ✗ nicht):
+
+      | | $+$ | $-$ | $\cdot$ | $:$ |
+      |---|---|---|---|---|
+      | $\N$ | ✓ | ✗ ($2 - 5$) | ✓ | ✗ ($1 : 2$) |
+      | $\Z$ | ✓ | ✓ | ✓ | ✗ ($1 : 2$) |
+      | $\Q$ | ✓ | ✓ | ✓ | ✓ |
+      | $\R$ | ✓ | ✓ | ✓ | ✓ |
+      ---
+      **(b)** $n = 2$: Es gibt kein $m \in \N$ mit $m^2 = 2$, da $1^2 = 1$ zu klein und $2^2 = 4$ schon zu groß ist.
+      ---
+      **(c)** Nein: $m = 1$, $n = 1$ ergibt $r = \frac12 \notin \Z$.
+      ---
+      **(d)** Ja: Zähler $m \in \Z$ und Nenner $n^2 + 1 \in \Z$ mit $n^2 + 1 \ge 1 > 0$. Ein Quotient ganzer
+      Zahlen mit Nenner $\neq 0$ ist rational.
+      ---
+      **(e)** $\pi \in \R$, aber $\pi \notin \Q$ (also auch nicht in $\Z$ und $\N$). Begründung: Aus
+      $\pi = \frac pq$ folgte $q\pi - p = 0$, eine Gleichung der Form $a\pi^2 + b\pi + c = 0$ mit
+      $a = 0$, $b = q \ne 0$, $c = -p$. Das widerspricht der Angabe.
+
+  - id: pw-2
+    titel: Das Dreieck mit den Seiten 6, 8, 10
+    niveau: 1
+    quelle: Musterprüfung Winkler, Aufgabe 2
+    punkte: 8
+    angabe: |
+      Gegeben ist ein Dreieck $\Delta$ mit den Eckpunkten $A$, $B$ und $C$. Wie üblich seien die diesen
+      Punkten gegenüberliegenden Seitenlängen mit $a$, $b$ bzw. $c$ bezeichnet, die Winkel bei diesen
+      Eckpunkten mit $\alpha$, $\beta$ und $\gamma$. Im Folgenden sei $a = 6$, $b = 8$ und $c = 10$.
+
+      (a) Zeichnen Sie das Dreieck (freihändige Skizze mit eingetragener Längeneinheit) und beschriften
+      Sie es mit den vorgegebenen Bezeichnungen.
+
+      (b) Wie kann man rein rechnerisch überprüfen, dass $\Delta$ im Eckpunkt $C$ einen rechten Winkel hat?
+
+      (c) Stellen Sie $\sin\alpha$, $\cos\alpha$ und $\tan\alpha$ jeweils als Bruch zweier Seitenlängen dar.
+
+      (d) Geben Sie die Werte $\sin\gamma$ und $\cos\gamma$ an.
+
+      (e) Welche Probleme treten bei $\tan\gamma$ auf? (Argumentation über eine geometrische oder
+      algebraische Definition des Tangens mit Hilfe von Sinus und Cosinus.)
+    teile:
+      - typ: text
+        label: '(a) Skizze'
+        muster: |
+          Rechtwinkeliges Dreieck mit dem rechten Winkel bei $C$. Zum Beispiel $C(0\mid 0)$, $A(8\mid 0)$
+          und $B(0\mid 6)$: Dann ist $b = \overline{CA} = 8$, $a = \overline{CB} = 6$ und die Hypotenuse
+          $c = \overline{AB} = 10$. Winkel $\alpha$ bei $A$, $\beta$ bei $B$, $\gamma = 90°$ bei $C$.
+          Längeneinheit, z. B. 1 Kästchen = 1 cm, eintragen.
+      - typ: text
+        label: '(b) Rechnerischer Nachweis'
+        muster: |
+          Mit der Umkehrung des Satzes von Pythagoras: $a^2 + b^2 = 36 + 64 = 100 = c^2$. Also ist der
+          Winkel gegenüber von $c$, das ist $\gamma$ bei $C$, ein rechter Winkel. (Alternativ Kosinussatz:
+          $\cos\gamma = \frac{a^2 + b^2 - c^2}{2ab} = 0$.)
+      - typ: zahl
+        label: '(c) $\sin\alpha$'
+        loesung: "6/10"
+        anzeige: '\tfrac{a}{c} = \tfrac{6}{10} = 0{,}6'
+      - typ: zahl
+        label: '(c) $\cos\alpha$'
+        loesung: "8/10"
+        anzeige: '\tfrac{b}{c} = \tfrac{8}{10} = 0{,}8'
+      - typ: zahl
+        label: '(c) $\tan\alpha$'
+        loesung: "6/8"
+        anzeige: '\tfrac{a}{b} = \tfrac{6}{8} = 0{,}75'
+      - typ: zahl
+        label: '(d) $\sin\gamma$'
+        loesung: "sin(pi/2)"
+        anzeige: '1'
+      - typ: zahl
+        label: '(d) $\cos\gamma$'
+        loesung: "0"
+      - typ: text
+        label: '(e) Problem bei $\tan\gamma$'
+        muster: |
+          $\tan\gamma = \frac{\sin\gamma}{\cos\gamma} = \frac{1}{0}$ ist nicht definiert, weil man nicht durch 0
+          dividieren darf. Geometrisch: Im rechtwinkeligen Dreieck ist der Tangens „Gegenkathete durch
+          Ankathete“; für den rechten Winkel selbst gibt es keine Ankathete. Am Einheitskreis wird die
+          Tangente bei $x = 1$ von der Geraden unter $90°$ nie geschnitten (die Gerade ist parallel), und
+          $\tan\alpha \to \infty$ für $\alpha \to 90°$ von links.
+    hinweise:
+      - '(b) Pythagoras gilt **genau dann**, wenn das Dreieck rechtwinkelig ist (Umkehrung!). Der rechte Winkel liegt gegenüber der längsten Seite.'
+      - '(c) $\sin = \frac{\text{Gegenkathete}}{\text{Hypotenuse}}$, $\cos = \frac{\text{Ankathete}}{\text{Hypotenuse}}$, $\tan = \frac{\text{Gegenkathete}}{\text{Ankathete}}$. Gegenüber von $\alpha$ liegt $a$.'
+    loesung: |
+      **(a)** Rechter Winkel bei $C$, Katheten $a = 6$ (von $C$ nach $B$) und $b = 8$ (von $C$ nach $A$),
+      Hypotenuse $c = 10$ von $A$ nach $B$. Etwa $C(0\mid 0)$, $A(8\mid 0)$, $B(0\mid 6)$.
+      ---
+      **(b)** $a^2 + b^2 = 36 + 64 = 100 = c^2$. Nach der Umkehrung des Satzes von Pythagoras ist der
+      Winkel gegenüber $c$, also $\gamma$, ein rechter.
+      ---
+      **(c)** Für $\alpha$ ist $a$ die Gegenkathete, $b$ die Ankathete, $c$ die Hypotenuse:
+      $\sin\alpha = \frac ac = \frac{6}{10}$, $\cos\alpha = \frac bc = \frac{8}{10}$, $\tan\alpha = \frac ab = \frac68$.
+      Kontrolle: $0{,}6^2 + 0{,}8^2 = 1$ ✓.
+      ---
+      **(d)** $\gamma = 90°$: $\sin\gamma = 1$, $\cos\gamma = 0$.
+      ---
+      **(e)** $\tan\gamma = \frac{\sin\gamma}{\cos\gamma} = \frac10$: nicht definiert. Der Tangens hat bei
+      $90°$ eine Polstelle.
+
+  - id: pw-3
+    titel: Die Funktion 2 hoch x durch 4
+    niveau: 2
+    quelle: Musterprüfung Winkler, Aufgabe 3
+    punkte: 8
+    angabe: |
+      Gegeben ist die reelle Funktion $f(x) = \dfrac{2^x}{4}$, die offensichtlich nur positive Werte annimmt.
+
+      (a) Berechnen Sie die Funktionswerte von $f$ an den Stellen $x = -1, 0, 1, 2, 3, 4$.
+
+      (b) Aufgrund der Rechenregel $2^{a+b} = 2^a\cdot 2^b$ gilt für $c = 2^{1/2}$ die Gleichung
+      $c^2 = 2^{1/2}\cdot 2^{1/2} = 2^1 = 2$. Wegen $c > 0$ folgt $c = \sqrt2$. Berechnen Sie damit
+      $f\!\left(\tfrac12\right)^2$.
+
+      (c) Geben Sie den Wert $f\!\left(\tfrac52\right)$ auf eine Nachkommastelle gerundet an.
+
+      (d) Im Hinblick auf die Differentialrechnung kann es wünschenswert sein, die Basis 2 durch die
+      Basis $e$ zu ersetzen. Es gilt $2 = e^{\ln 2}$. Damit kann man $f$ umschreiben zu
+      $f(x) = \alpha\, e^{\lambda x}$. Welche Werte haben $\alpha$ und $\lambda$?
+
+      (e) Wie lautet die Ableitung $f'$ der Funktion $f$? (Hinweis: (d) und Kettenregel.)
+    teile:
+      - typ: vektor
+        label: '(a) $f(-1), f(0), f(1), f(2), f(3), f(4)$'
+        loesung: ["1/8", "1/4", "1/2", "1", "2", "4"]
+      - typ: zahl
+        label: '(b) $f(\tfrac12)^2$'
+        loesung: "(sqrt(2)/4)^2"
+        anzeige: '\tfrac{1}{8}'
+      - typ: zahl
+        label: '(c) $f(\tfrac52)$, auf eine Nachkommastelle'
+        loesung: "2^2.5/4"
+        anzeige: '\sqrt2 \approx 1{,}4'
+        toleranz: 0.05
+      - typ: zahl
+        label: '(d) $\alpha$'
+        loesung: "1/4"
+        anzeige: '\tfrac14'
+      - typ: zahl
+        label: '(d) $\lambda$'
+        loesung: "ln(2)"
+        anzeige: '\ln 2 \approx 0{,}6931'
+      - typ: term
+        label: "(e) $f'(x)$"
+        loesung: "ln(2)/4 * 2^x"
+        anzeige: '\tfrac{\ln 2}{4}\, 2^x'
+    hinweise:
+      - '(b) $f(\tfrac12) = \frac{2^{1/2}}{4} = \frac{\sqrt2}{4}$. Dann quadrieren.'
+      - '(c) $2^{5/2} = 2^2\cdot 2^{1/2}$.'
+      - '(d) $2^x = (e^{\ln 2})^x = e^{x\ln 2}$.'
+    loesung: |
+      **(a)** $f(-1) = \frac{1/2}{4} = \frac18$, $f(0) = \frac14$, $f(1) = \frac12$, $f(2) = 1$, $f(3) = 2$, $f(4) = 4$.
+      (Jeder Schritt um 1 nach rechts verdoppelt den Wert.)
+      ---
+      **(b)** $f(\tfrac12) = \frac{\sqrt2}{4}$, also $f(\tfrac12)^2 = \frac{2}{16} = \frac18$.
+      ---
+      **(c)** $f(\tfrac52) = \frac{2^2\cdot 2^{1/2}}{4} = \sqrt2 \approx 1{,}4$.
+      ---
+      **(d)** $f(x) = \frac14\,(e^{\ln 2})^x = \frac14\, e^{(\ln 2)\,x}$, also $\alpha = \frac14$ und $\lambda = \ln 2 \approx 0{,}693$.
+      ---
+      **(e)** Kettenregel: $f'(x) = \frac14\cdot\ln 2\cdot e^{(\ln 2)x} = \frac{\ln 2}{4}\, 2^x = \ln 2\cdot f(x)$.
+
+  - id: pw-4
+    titel: Mengen im Raum, Ebenen und Abstand
+    niveau: 2
+    quelle: Musterprüfung Winkler, Aufgabe 4 (im Original nur Mathematik 2)
+    punkte: 8
+    angabe: |
+      Wir betrachten Mengen $M$ von Punkten $(x, y, z) \in \R^3$, die durch gewisse Eigenschaften gegeben
+      sind, und fragen nach ihrer geometrischen Gestalt.
+
+      (a) Die Gleichung $G\colon x^2 + y^2 = 1$ beschreibt in der Ebene den Einheitskreis. Lesen wir $G$ als
+      Gleichung in drei Variablen $x, y, z$, so hängt ihre Gültigkeit nicht von $z$ ab. Welche
+      geometrische Gestalt hat die Lösungsmenge $M$ als Teilmenge des $\R^3$, wenn wir $z$ auf
+      $-1 \le z \le 1$ beschränken?
+
+      (b) Die Gleichung $G_1\colon x + y + z = 1$ beschreibt eine Ebene $\varepsilon$, welche die Punkte
+      $A(1, 0, 0)$ und $B(0, 1, 0)$ enthält. Geben Sie eine weitere Ebenengleichung $G_2$ an, sodass nur
+      die Punkte auf der Geraden durch $A$ und $B$ sowohl $G_1$ als auch $G_2$ erfüllen.
+
+      (c) Geben Sie die Gleichung $G_3$ einer Ebene an, sodass kein Punkt sowohl $G_1$ als auch $G_3$ erfüllt.
+
+      (d) Einem Punkt $P$ ist unter allen Punkten einer Ebene derjenige Punkt $X$ am nächsten, für den die
+      Verbindung zu $P$ normal auf die Ebene steht. Welcher Punkt $X$ ist das für $\varepsilon$, wenn $P$
+      der Ursprung $(0, 0, 0)$ ist?
+
+      (e) Berechnen Sie den Abstand zwischen $X$ und $P$. Hinweis: Die Normale auf $\varepsilon$ durch $P$
+      besteht aus allen Punkten der Form $(t, t, t)$, $t \in \R$.
+    teile:
+      - typ: auswahl
+        label: '(a) Gestalt von $M$'
+        optionen:
+          - Kreisscheibe in der Ebene $z = 0$
+          - Mantelfläche eines Zylinders mit Radius 1 und Höhe 2 (ohne Deckel und Boden)
+          - Vollzylinder mit Radius 1 und Höhe 2
+          - Kugeloberfläche mit Radius 1
+        richtig: [1]
+      - typ: text
+        label: '(b) Eine Gleichung $G_2$'
+        muster: |
+          Zum Beispiel $G_2\colon z = 0$. Sie enthält $A$ und $B$ und ist nicht parallel zu $\varepsilon$.
+          Schnitt: $z = 0$ und $x + y = 1$, das ist genau die Gerade durch $A$ und $B$. (Jede andere Ebene
+          durch $A$ und $B$, die nicht gleich $\varepsilon$ ist, z. B. $x + y = 1$, ist ebenso richtig.)
+      - typ: text
+        label: '(c) Eine Gleichung $G_3$'
+        muster: |
+          Eine zu $\varepsilon$ parallele, verschiedene Ebene, z. B. $G_3\colon x + y + z = 2$. Dann
+          müsste für einen gemeinsamen Punkt $1 = 2$ gelten, Widerspruch.
+      - typ: vektor
+        label: '(d) Lotfußpunkt $X$'
+        namen: ["x", "y", "z"]
+        loesung: ["1/3", "1/3", "1/3"]
+      - typ: zahl
+        label: '(e) Abstand $\overline{PX}$'
+        loesung: "sqrt(3*(1/3)^2)"
+        anzeige: '\tfrac{1}{\sqrt3} \approx 0{,}577'
+    hinweise:
+      - '(a) Für jede Höhe $z$ zwischen $-1$ und $1$ erhältst du einen Einheitskreis. Was entsteht, wenn du diese Kreise übereinanderstapelst?'
+      - '(b) Zwei verschiedene, nicht parallele Ebenen schneiden einander in einer Geraden. Wähle eine einfache Ebene, die $A$ und $B$ enthält.'
+      - '(d) Setze $(t, t, t)$ in $x + y + z = 1$ ein.'
+    loesung: |
+      **(a)** Für jedes $z \in [-1, 1]$ liegt ein Einheitskreis in der Höhe $z$. Zusammen ergibt das die
+      **Mantelfläche eines Zylinders** mit Radius 1, Achse = $z$-Achse und Höhe 2 (nur die Fläche, kein
+      Vollkörper, weil $x^2 + y^2 = 1$ und nicht $\le 1$).
+      ---
+      **(b)** $G_2\colon z = 0$: $A$ und $B$ erfüllen sie, und $G_1 \cap G_2 = \{(x, y, 0) : x + y = 1\}$ ist die
+      Gerade $AB$.
+      ---
+      **(c)** $G_3\colon x + y + z = 2$: gleicher Normalvektor $(1,1,1)$, andere Konstante. Ein
+      gemeinsamer Punkt müsste $1 = 2$ erfüllen.
+      ---
+      **(d)** Normale durch $P$: $(t, t, t)$. Einsetzen in $G_1$: $3t = 1 \Rightarrow t = \frac13$, also
+      $X\left(\tfrac13, \tfrac13, \tfrac13\right)$.
+      ---
+      **(e)** $\overline{PX} = \sqrt{3\cdot\tfrac19} = \tfrac{1}{\sqrt3} = \tfrac{\sqrt3}{3} \approx 0{,}577$.
+      Kontrolle mit der Abstandsformel: $d = \frac{|0 + 0 + 0 - 1|}{\sqrt{1 + 1 + 1}} = \frac{1}{\sqrt3}$ ✓.
+
+  - id: pw-5
+    titel: Stückweise definierte Funktionen
+    niveau: 3
+    quelle: Musterprüfung Winkler, Aufgabe 5 (nur Mathematik 3)
+    punkte: 8
+    angabe: |
+      Manchmal werden Funktionen durch mehrere Funktionsterme definiert, die auf unterschiedlichen
+      Bereichen gelten. Hier wird $f$ definiert durch zwei Funktionen $f_+$ und $f_-$ mit
+      $f(x) = f_-(x)$ für $x < 0$ und $f(x) = f_+(x)$ für $x > 0$; der Wert $f(0)$ wird eigens angegeben.
+
+      (a) Die Betragsfunktion $f(x) = |x|$ lässt sich so definieren mit $f_+(x) = x$, $f_-(x) = -x$ und
+      $f(0) = 0$. Die Ableitungen von $f_+$ und $f_-$ sind konstante Funktionen. Mit welchen Werten?
+
+      (b) Weil diese Werte verschieden sind, kann die Betragsfunktion bei $x = 0$ keine Ableitung haben.
+      Illustrieren Sie anhand einer Skizze des Graphen, wie das anschaulich zum Ausdruck kommt.
+
+      (c) Die Betragsfunktion ist überall stetig. Geben Sie Funktionen $g_+$ und $g_-$ an, sodass $g$ an
+      der Stelle 0 nicht stetig sein kann, egal wie man $g(0)$ definiert.
+
+      (d) Für eine weitere Funktion $h$ dieser Bauart sei $h_-(x) = 1 - x^2$ und $h_+(x) = \cos x$. Es ist
+      möglich, $h(0)$ so zu wählen, dass $h$ bei 0 stetig ist. Wie?
+
+      (e) Ist $h$ aus (d) stetig, dann sogar differenzierbar. Welchen Wert hat dann $h'(0)$?
+    teile:
+      - typ: zahl
+        label: "(a) $f_+'(x)$"
+        loesung: "1"
+      - typ: zahl
+        label: "(a) $f_-'(x)$"
+        loesung: "-1"
+      - typ: text
+        label: '(b) Skizze und Deutung'
+        muster: |
+          Der Graph von $|x|$ ist ein „V“ mit der Spitze im Ursprung: links die Gerade $y = -x$ mit Steigung
+          $-1$, rechts $y = x$ mit Steigung $+1$. Im Ursprung hat der Graph einen **Knick**. Die
+          Sekantensteigungen von rechts sind alle $+1$, von links alle $-1$; es gibt keine eindeutige
+          Tangente. Formal: $\lim_{h\to0^+}\frac{|h|}{h} = 1 \ne -1 = \lim_{h\to0^-}\frac{|h|}{h}$.
+      - typ: text
+        label: '(c) Funktionen $g_+$, $g_-$'
+        muster: |
+          Zum Beispiel $g_-(x) = 0$ und $g_+(x) = 1$ (Sprungfunktion). Dann ist
+          $\lim_{x\to0^-} g(x) = 0 \ne 1 = \lim_{x\to0^+} g(x)$; der Grenzwert $\lim_{x\to0} g(x)$ existiert
+          nicht, also kann kein Wert $g(0)$ die Funktion stetig machen.
+      - typ: zahl
+        label: '(d) $h(0)$'
+        loesung: "cos(0)"
+        anzeige: '1'
+      - typ: zahl
+        label: "(e) $h'(0)$"
+        loesung: "0"
+    hinweise:
+      - '(c) Stetigkeit bei 0 verlangt, dass linksseitiger und rechtsseitiger Grenzwert existieren und gleich $g(0)$ sind. Sorge dafür, dass die einseitigen Grenzwerte verschieden sind.'
+      - '(d) Berechne $\lim_{x\to0^-}(1 - x^2)$ und $\lim_{x\to0^+}\cos x$.'
+      - '(e) Vergleiche die einseitigen Ableitungen: $h_-''(0) = -2\cdot 0$ und $h_+''(0) = -\sin 0$.'
+    loesung: |
+      **(a)** $f_+'(x) = 1$, $f_-'(x) = -1$.
+      ---
+      **(b)** Graph von $|x|$: „V“ mit Knick im Ursprung. Links Steigung $-1$, rechts $+1$, also gibt es bei 0
+      keine eindeutige Tangente. Der Differenzenquotient $\frac{|h| - 0}{h}$ ist $+1$ für $h > 0$ und $-1$
+      für $h < 0$; sein Grenzwert für $h \to 0$ existiert nicht.
+      ---
+      **(c)** $g_-(x) = 0$, $g_+(x) = 1$: einseitige Grenzwerte $0$ und $1$ sind verschieden (Sprungstelle).
+      Egal welcher Wert $g(0)$: mindestens ein einseitiger Grenzwert weicht ab.
+      ---
+      **(d)** $\lim_{x\to0^-}(1 - x^2) = 1$ und $\lim_{x\to0^+}\cos x = \cos 0 = 1$. Beide gleich, also mit
+      $h(0) := 1$ stetig.
+      ---
+      **(e)** Linksseitig: $\lim_{x\to0^-}\frac{h(x) - h(0)}{x} = \lim_{x\to0^-}\frac{-x^2}{x} = \lim(-x) = 0$.
+      Rechtsseitig: $\lim_{x\to0^+}\frac{\cos x - 1}{x} = 0$ (Ableitung von $\cos$ bei 0 ist $-\sin 0 = 0$).
+      Beide einseitigen Ableitungen sind 0, also $h'(0) = 0$. Der Graph geht ohne Knick mit waagrechter
+      Tangente von der Parabel in die Kosinuskurve über.
