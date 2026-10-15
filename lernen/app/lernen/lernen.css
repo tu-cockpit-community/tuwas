@@ -33,7 +33,8 @@
   --kasten-achtung: #b91c1c;
   --kasten-pruefung: #c2410c;
 
-  --lese-breite: 42rem;
+  /* Lernseiten nutzen die ganze Breite, linksbuendig (mehr Platz, keine schmalen Spalten mit Umbruchproblemen) */
+  --lese-breite: none;
 
   --lern-hero: #006699;
   --lern-hero-text: #ffffff;
@@ -87,11 +88,6 @@
 /* Eingebettet in TUWAS: dieselbe Flaeche wie die Hostapp (helles Blauweiss statt Papier). */
 html[data-embed="1"]:not([data-theme="dark"]) .lernen {
   --lern-flaeche: #eef4f8;
-}
-
-/* Fokusmodus: Kopfleiste ausblenden (gesetzt von FokusKnopf) */
-html[data-fokus="an"] body > header {
-  display: none;
 }
 
 .sr-only {
@@ -1126,39 +1122,18 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
 .gliederung-schublade a:focus-visible,
 .gliederung-schublade summary:focus-visible,
 .gliederung-schublade button:focus-visible,
-.gliederung-oeffnen:focus-visible,
-.fokus-knopf:focus-visible {
+.gliederung-oeffnen:focus-visible {
   outline: 3px solid var(--color-accent);
   outline-offset: 2px;
 }
-.fokus-knopf {
-  min-height: 2.4rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: 8px;
-  border: 1px solid var(--color-line-strong);
-  background: var(--lern-papier);
-  color: var(--lern-text-leise);
-  font-weight: 600;
-  cursor: pointer;
-}
-.fokus-knopf[aria-pressed="true"] {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-@media (max-width: 1023px) {
-  .fokus-knopf {
-    display: none;
-  }
-}
-
 .kurs-seite,
 .kapitel-seite,
 .lern-seite {
   padding: clamp(1.25rem, 3vw, 2.75rem) clamp(1rem, 3vw, 2.75rem) 5rem;
-  max-width: 80rem;
+  max-width: none;
 }
 .lern-seite-schmal {
-  max-width: 54rem;
+  max-width: none;
 }
 /* Seiten ohne Kursnavigation (Hub): Platz fuer den fixen Menueknopf der App (top 0.75rem, 2.25rem hoch) */
 @media (max-width: 1023px) {
@@ -1194,7 +1169,7 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
 }
 .seiten-kopf p {
   color: var(--lern-text);
-  max-width: 44rem;
+  max-width: none;
   font-size: 1.08rem;
   line-height: 1.65;
 }
@@ -1356,6 +1331,13 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   font-size: 0.88rem;
   color: var(--lern-text-leise);
   max-width: 32rem;
+}
+.kapitel-voraus {
+  margin-top: 1.1rem;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--lern-text-leise);
 }
 .kapitel-kopf-stand .fortschritt {
   flex: 1;
@@ -1617,7 +1599,7 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
 }
 .hub-abschnitt {
   margin-top: 3rem;
-  max-width: 60rem;
+  max-width: none;
 }
 .hub-abschnitt > h2 {
   font-family: var(--font-archivo), system-ui, sans-serif;
@@ -2078,7 +2060,6 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   .lektion-leiste,
   .kurs-gliederung,
   .gliederung-schublade-leiste,
-  .fokus-knopf,
   button {
     display: none !important;
   }
@@ -2844,12 +2825,45 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   display: none;
   font-family: var(--font-sans);
 }
+.gliederung-griff {
+  display: none;
+}
 @media (min-width: 1100px) {
   .kurs-rahmen[data-gliederung="auf"],
   .kurs-rahmen[data-gliederung="zu"] {
     display: grid;
-    grid-template-columns: 17.5rem minmax(0, 1fr);
+    grid-template-columns: var(--gliederung-breite, 17.5rem) minmax(0, 1fr);
     align-items: start;
+  }
+  .kurs-rahmen[data-gliederung="auf"] {
+    position: relative;
+  }
+  .kurs-rahmen[data-gliederung="auf"] .kurs-gliederung {
+    border-right: 0;
+  }
+  /* Griff zum Verstellen der Breite, ueber die ganze Hoehe des Rahmens (wie in TUWAS) */
+  .gliederung-griff {
+    display: block;
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    bottom: 0;
+    left: var(--gliederung-breite, 17.5rem);
+    width: 1px;
+    background: var(--color-line);
+    cursor: col-resize;
+    touch-action: none;
+  }
+  .gliederung-griff::before {
+    content: "";
+    position: absolute;
+    inset: 0 -4px;
+  }
+  .gliederung-griff:hover,
+  .gliederung-griff:focus-visible {
+    outline: none;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
   }
   .kurs-rahmen[data-gliederung="zu"] {
     grid-template-columns: 3.25rem minmax(0, 1fr);
@@ -2866,6 +2880,11 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   .gliederung-schublade-leiste {
     display: none;
   }
+}
+body.gliederung-zieht,
+body.gliederung-zieht * {
+  cursor: col-resize !important;
+  user-select: none;
 }
 .gliederung-kopf {
   display: flex;
@@ -3022,15 +3041,6 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   min-height: 100%;
   padding: 1rem 0.75rem 2rem;
 }
-/* Fokusmodus: nur die Lektion */
-html[data-fokus="an"] .kurs-gliederung,
-html[data-fokus="an"] .gliederung-schublade-leiste {
-  display: none;
-}
-html[data-fokus="an"] .kurs-rahmen {
-  display: block;
-}
-
 /* Kopf: dunkles Panel mit Titel und Kennzahlen; die Heute-Karten ragen darueber */
 .kurs-hero {
   display: grid;
@@ -3281,7 +3291,12 @@ html[data-fokus="an"] .kurs-rahmen {
 /* Seitenleiste: Infos einklappbar */
 .kurs-seitenleiste {
   display: grid;
+  /* minmax(0, 1fr): ein langes Wort darf die Spalte nicht ueber ihre 21rem hinaus aufdruecken */
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
+}
+.kurs-werkzeuge-pfad code {
+  overflow-wrap: anywhere;
 }
 .seitenbox,
 .kurs-werkzeuge {

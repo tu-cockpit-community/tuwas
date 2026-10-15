@@ -5,7 +5,7 @@
   "description": "Studium an der TU Wien organisieren: TISS-Kalender, TUWEL-Abgaben, Notizen pro Fach",
   "private": true,
   "license": "MIT",
-  "homepage": "https://github.com/hulrap/tuwas",
+  "homepage": "https://github.com/tu-cockpit-community/tuwas",
   "main": "./out/main/index.js",
   "desktopName": "tuwas.desktop",
   "scripts": {

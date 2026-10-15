@@ -5,7 +5,8 @@ import type { LernenStatus } from '../../../shared/types'
  * The Lernen tab: the separate Lernen app (courses, subjects, review) in a frame. The main process starts its
  * local server on demand. `?embed=1` tells it to leave out its own logo, since TUWAS already shows one.
  */
-export default function LernenView() {
+/** `home` counts the clicks on "Lernen" in the menu: each one reloads the overview. */
+export default function LernenView({ home }: { home: number }) {
   const [status, setStatus] = useState<LernenStatus | null>(null)
   const [attempt, setAttempt] = useState(0)
   const [frameKey, setFrameKey] = useState(0)
@@ -51,5 +52,5 @@ export default function LernenView() {
       </div>
     )
   }
-  return <iframe key={frameKey} className="lernen-frame" title="Lernen" src={`${status.url}/lernen?embed=1`} />
+  return <iframe key={`${frameKey}-${home}`} className="lernen-frame" title="Lernen" src={`${status.url}/lernen?embed=1`} />
 }

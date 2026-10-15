@@ -40,10 +40,18 @@ import { applyTheme, broadcast, createMiniWindow, miniTakesOver, notifyRunningIn
 // product name "TUWAS". Set before anything reads it; the smoke test redirects it again for its own data.
 app.setPath('userData', join(app.getPath('appData'), 'tuwas'))
 
+// Where tokens are kept (safeStorage): Chromium picks the store from the desktop environment and falls back to plain
+// "basic_text" when it doesn't recognise one. Under WSL or a bare window manager XDG_CURRENT_DESKTOP is empty, so the
+// GNOME keyring was never asked and saving the TUWEL login failed – depending only on how TUWAS was started. Then use
+// the Secret Service (GNOME keyring, KeePassXC …) explicitly; a --password-store given on the command line still wins.
+if (process.platform === 'linux' && !process.env['XDG_CURRENT_DESKTOP'] && !app.commandLine.hasSwitch('password-store')) {
+  app.commandLine.appendSwitch('password-store', 'gnome-libsecret')
+}
+
 /** `tuwas --mini` toggles the mini window – meant for a GNOME keyboard shortcut. */
 const MINI_ARG = '--mini'
 /** Also in electron-builder.yml (appId). */
-const APP_ID = 'io.github.hulrap.tuwas'
+const APP_ID = 'io.github.tu-cockpit-community.tuwas'
 
 // Display backend and language have to come from the command line (see startupArgs). Setting them
 // here with app.commandLine.appendSwitch would only reach the child processes – for the display
@@ -119,6 +127,7 @@ async function start(): Promise<void> {
     syncCourseFolders()
     // A new course: read its exam dates. A new entry in the calendar may be an exam registration.
     void syncExams()
+    syncLernenCourses()
     refreshUrgent()
   })
   startExamSync(() => {
@@ -127,6 +136,7 @@ async function start(): Promise<void> {
   })
   startTasksSync(() => {
     broadcast(IPC.tasksChanged)
+    syncLernenCourses()
     refreshUrgent()
   })
   startStudies(() => {

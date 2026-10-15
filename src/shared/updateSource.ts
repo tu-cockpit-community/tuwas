@@ -1,5 +1,5 @@
 /** Where new versions come from: a GitHub repository, set in the settings as a link (Einstellungen → Info → Updates). */
-export const DEFAULT_UPDATE_REPO = 'https://github.com/hulrap/tuwas'
+export const DEFAULT_UPDATE_REPO = 'https://github.com/tu-cockpit-community/tuwas'
 
 export interface GithubRepo {
   owner: string
