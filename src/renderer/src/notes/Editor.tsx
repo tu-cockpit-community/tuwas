@@ -1,15 +1,15 @@
 import { useEffect, useRef, type MutableRefObject } from 'react'
-import { minimalSetup } from 'codemirror'
-import { indentWithTab } from '@codemirror/commands'
+import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { autocompletion, type CompletionContext, type CompletionResult } from '@codemirror/autocomplete'
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
-import { HighlightStyle, syntaxHighlighting } from '@codemirror/language'
+import { HighlightStyle } from '@codemirror/language'
 import { languages } from '@codemirror/language-data'
 import { searchKeymap } from '@codemirror/search'
 import { Compartment, EditorSelection, EditorState } from '@codemirror/state'
-import { Decoration, EditorView, keymap, MatchDecorator, placeholder, ViewPlugin, type DecorationSet, type ViewUpdate } from '@codemirror/view'
+import { Decoration, drawSelection, EditorView, highlightSpecialChars, keymap, MatchDecorator, placeholder, ViewPlugin, type DecorationSet, type ViewUpdate } from '@codemirror/view'
 import { tags as t } from '@lezer/highlight'
 import { livePreview } from './livePreview'
+import { viewportHighlighting } from './viewportHighlighting'
 
 // The Markdown editor (CodeMirror 6). Colours come from the app's CSS variables, so it follows
 // GNOME's light/dark setting like the rest of TUWAS.
@@ -201,10 +201,14 @@ const shortcuts = keymap.of([
 ])
 
 const baseExtensions = [
-  minimalSetup,
+  // CodeMirror's minimalSetup without its fallback highlighting, which would run next to viewportHighlighting.
+  highlightSpecialChars(),
+  history(),
+  drawSelection(),
+  keymap.of([...defaultKeymap, ...historyKeymap]),
   markdown({ base: markdownLanguage, codeLanguages: languages }),
   EditorView.lineWrapping,
-  syntaxHighlighting(highlight),
+  viewportHighlighting(highlight),
   mathHighlight,
   shortcuts,
   phrases,

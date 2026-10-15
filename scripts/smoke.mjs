@@ -345,6 +345,11 @@ const problems = []
 if (report.error) problems.push(`Fehler: ${report.error}`)
 for (const [check, ok] of Object.entries(report.notes?.editing ?? {})) if (!ok) problems.push(`Notizen: ${check} fehlgeschlagen`)
 for (const [check, ok] of Object.entries(report.notes?.folders ?? {})) if (!ok) problems.push(`Notizordner: ${check} fehlgeschlagen`)
+// A 2 MB note stays live: formulas, tables and checkboxes are drawn at its end, and the live preview adds little to
+// what the editor costs without it (parsing and highlighting such a note take their time either way).
+const large = report.liveLarge ?? {}
+const liveQuick = large.msPerMove < 10 && large.msPerEdit < 2 * large.plainMsPerEdit + 5
+if (!(liveQuick && large.math > 0 && large.tables > 0 && large.tasks > 0)) problems.push(`Lange Notiz im Live-Editor: ${JSON.stringify(large)}`)
 if (report.lernen !== 'skipped' && !(report.lernen?.heading === 'Fächer' && report.lernen?.embed === '1' && report.lernen?.ep1 === true && report.lernen?.skelett === true && report.lernen?.sbp === false && report.lernenSbp === true)) problems.push(`Lernen-Tab: ${JSON.stringify(report.lernen)}`)
 // The window is scaled up when it is large (zoom), so the page is measured against what is left of the scaled width:
 // the sidebar (224 px) and the side margins (4 vw, at most 72 px each) – or the page's maximum of 1320 px.

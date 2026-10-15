@@ -199,6 +199,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const [problem, setProblem] = useState<string | null>(null)
   const [pdf, setPdf] = useState<string | null>(null)
   const [mode, setMode] = useState<Mode>(() => prefs.get('mode', 'edit'))
+  const showPreview = doc !== null && (mode === 'preview' || (mode === 'split' && !pdf))
   /** Live preview in the editor; off shows the plain Markdown. */
   const [live, setLive] = useState(() => prefs.get('live', true))
   const [treeHidden, setTreeHidden] = useState(() => prefs.get('treeHidden', false))
@@ -265,10 +266,12 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     return queue.current
   }, [])
 
+  // The preview needs the text in React state; without one, typing re-renders nothing here (long notes stay quick).
+  const previewShown = useRef(false)
   const onChange = useCallback(
     (value: string) => {
       text.current = value
-      setContent(value)
+      if (previewShown.current) setContent(value)
       dirty.current = true
       if (blocked.current) return
       setSaveState('dirty')
@@ -517,6 +520,12 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     else if (result.value) setExported(result.value)
   }
 
+  // The preview appears: it gets what was typed without it.
+  useEffect(() => {
+    previewShown.current = showPreview
+    if (showPreview) setContent(text.current)
+  }, [showPreview])
+
   // Cursor placement and the like, once the editor shows the new note.
   useEffect(() => {
     if (viewRef.current && afterOpen.current) {
@@ -707,7 +716,6 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   }
 
   const showEditor = doc !== null && mode !== 'preview'
-  const showPreview = doc !== null && (mode === 'preview' || (mode === 'split' && !pdf))
   const panes = Number(showEditor) + Number(showPreview) + Number(pdf !== null)
   // Two panes side by side: the left one gets its share, the right one the rest.
   const split = pdf ? splitPdf : splitPreview
