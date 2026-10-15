@@ -11,7 +11,7 @@ import { Decoration, EditorView, keymap, MatchDecorator, placeholder, ViewPlugin
 import { tags as t } from '@lezer/highlight'
 
 // The Markdown editor (CodeMirror 6). Colours come from the app's CSS variables, so it follows
-// GNOME's light/dark setting like the rest of sout.
+// GNOME's light/dark setting like the rest of TUWAS.
 
 const MONO = "ui-monospace, 'Adwaita Mono', 'Source Code Pro', monospace"
 

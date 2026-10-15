@@ -3,7 +3,7 @@ import type { LernenStatus } from '../../../shared/types'
 
 /**
  * The Lernen tab: the separate Lernen app (courses, subjects, review) in a frame. The main process starts its
- * local server on demand. `?embed=1` tells it to leave out its own logo, since sout already shows one.
+ * local server on demand. `?embed=1` tells it to leave out its own logo, since TUWAS already shows one.
  */
 export default function LernenView() {
   const [status, setStatus] = useState<LernenStatus | null>(null)
@@ -13,7 +13,7 @@ export default function LernenView() {
   useEffect(() => {
     let cancelled = false
     setStatus(null)
-    void window.sout.startLernen().then((next) => {
+    void window.tuwas.startLernen().then((next) => {
       if (!cancelled) setStatus(next)
     })
     return () => {
@@ -25,12 +25,12 @@ export default function LernenView() {
   useEffect(() => {
     let sbp: boolean | null = null
     const check = (): void =>
-      void window.sout.getSettings().then((settings) => {
+      void window.tuwas.getSettings().then((settings) => {
         if (sbp !== null && sbp !== settings.lernenSbp) setFrameKey((n) => n + 1)
         sbp = settings.lernenSbp
       })
     check()
-    return window.sout.onStateChanged(check)
+    return window.tuwas.onStateChanged(check)
   }, [])
 
   if (!status) {

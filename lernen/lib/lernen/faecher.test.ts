@@ -17,8 +17,8 @@ const inhalte = [
 ];
 const basis = { kurse, pruefungen, inhalte, hatLernpfad: (id: string) => id === "180766" };
 
-test("Faecher mit sout: nur angemeldete LVAs, nach Modul, Inhaltskurs ueber die LVA-Nummer", () => {
-  const a = baueFaecher({ ...basis, sout: { lvas: new Set(["185A91", "194020"]), sbp: false } });
+test("Faecher mit TUWAS: nur angemeldete LVAs, nach Modul, Inhaltskurs ueber die LVA-Nummer", () => {
+  const a = baueFaecher({ ...basis, tuwas: { lvas: new Set(["185A91", "194020"]), sbp: false } });
   assert.deepEqual(a.gruppen.map((m) => [m.titel, m.zeilen.map((z) => z.kurs.id)]), [["StEOP", ["185A91"]], ["Enge Wahl", ["194020"]]]);
   assert.equal(a.gruppen[0].zeilen[0].inhaltId, "ep1");
   assert.equal(a.sbp, null);
@@ -26,14 +26,14 @@ test("Faecher mit sout: nur angemeldete LVAs, nach Modul, Inhaltskurs ueber die 
 });
 
 test("Faecher: die SBP verbindet Pruefung und Inhaltskurs ueber die sbp-Id, das Wahlfach ueber die Datenbank", () => {
-  const a = baueFaecher({ ...basis, sout: { lvas: new Set(), sbp: true } });
+  const a = baueFaecher({ ...basis, tuwas: { lvas: new Set(), sbp: true } });
   assert.equal(a.sbp?.[1].inhaltId, "mathe3");
   assert.equal(a.sbp?.[0].wahlfach?.id, "180766");
   assert.equal(a.sbp?.[1].wahlfach, undefined);
 });
 
-test("Faecher ohne sout: alles mit Lernpfad oder Inhalt, und die SBP", () => {
-  const a = baueFaecher({ ...basis, sout: null });
+test("Faecher ohne TUWAS: alles mit Lernpfad oder Inhalt, und die SBP", () => {
+  const a = baueFaecher({ ...basis, tuwas: null });
   assert.deepEqual(a.gruppen.flatMap((m) => m.zeilen.map((z) => z.kurs.id)), ["185A91", "180766"]);
   assert.ok(a.sbp);
 });

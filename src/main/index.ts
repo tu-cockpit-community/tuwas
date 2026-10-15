@@ -1,4 +1,5 @@
 import { app, Menu, type MenuItemConstructorOptions } from 'electron'
+import { join } from 'node:path'
 import { IPC } from '../shared/types'
 import { refreshAutostart, startedByAutostart } from './autostart'
 import { startChanges } from './changes'
@@ -35,15 +36,19 @@ import { startUpdates } from './updater'
 import { createTray, ensureTray } from './tray'
 import { applyTheme, broadcast, createMiniWindow, miniTakesOver, notifyRunningInBackground, setOnMainClosed, showMain, syncDock, toggleMini } from './windows'
 
-/** `sout --mini` toggles the mini window – meant for a GNOME keyboard shortcut. */
+// Data folder: lower-case "tuwas" on every system (~/.config/tuwas, %APPDATA%\tuwas, …). Electron would take the
+// product name "TUWAS". Set before anything reads it; the smoke test redirects it again for its own data.
+app.setPath('userData', join(app.getPath('appData'), 'tuwas'))
+
+/** `tuwas --mini` toggles the mini window – meant for a GNOME keyboard shortcut. */
 const MINI_ARG = '--mini'
 /** Also in electron-builder.yml (appId). */
-const APP_ID = 'io.github.mentordergrosse.sout'
+const APP_ID = 'io.github.hulrap.tuwas'
 
 // Display backend and language have to come from the command line (see startupArgs). Setting them
 // here with app.commandLine.appendSwitch would only reach the child processes – for the display
 // backend that means windows on Wayland, a GPU process drawing for X11, and nothing shows up.
-// So if sout was started without them, start it again with them. `npm run dev` passes them itself.
+// So if TUWAS was started without them, start it again with them. `npm run dev` passes them itself.
 const missingArgs = process.env['ELECTRON_RENDERER_URL'] ? [] : missingStartupArgs(process.argv)
 
 fixCursorSize()
@@ -152,15 +157,15 @@ async function start(): Promise<void> {
  */
 const MAC_MENU: MenuItemConstructorOptions[] = [
   {
-    label: 'sout',
+    label: 'TUWAS',
     submenu: [
-      { role: 'about', label: 'Über sout' },
+      { role: 'about', label: 'Über TUWAS' },
       { type: 'separator' },
-      { role: 'hide', label: 'sout ausblenden' },
+      { role: 'hide', label: 'TUWAS ausblenden' },
       { role: 'hideOthers', label: 'Andere ausblenden' },
       { role: 'unhide', label: 'Alle einblenden' },
       { type: 'separator' },
-      { role: 'quit', label: 'sout beenden' }
+      { role: 'quit', label: 'TUWAS beenden' }
     ]
   },
   {

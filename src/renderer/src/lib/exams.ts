@@ -8,10 +8,10 @@ import { dueText, remainingText } from './tasks'
 export function useExams(): ExamsData | null {
   const [data, setData] = useState<ExamsData | null>(null)
   useEffect(() => {
-    const load = (): void => void window.sout.getExams().then(setData)
+    const load = (): void => void window.tuwas.getExams().then(setData)
     load()
-    const offExams = window.sout.onExamsChanged(load)
-    const offCalendar = window.sout.onCalendarChanged(load)
+    const offExams = window.tuwas.onExamsChanged(load)
+    const offCalendar = window.tuwas.onCalendarChanged(load)
     return () => {
       offExams()
       offCalendar()

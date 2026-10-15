@@ -17,17 +17,17 @@ export function useAppState(): { state: AppState | null; reload: () => Promise<v
 
   const reload = useCallback(async () => {
     const [info, settings, autostart, secrets] = await Promise.all([
-      window.sout.getInfo(),
-      window.sout.getSettings(),
-      window.sout.getAutostart(),
-      window.sout.getSecretsStatus()
+      window.tuwas.getInfo(),
+      window.tuwas.getSettings(),
+      window.tuwas.getAutostart(),
+      window.tuwas.getSecretsStatus()
     ])
     setState({ info, settings, autostart, secrets })
   }, [])
 
   useEffect(() => {
     void reload()
-    const unsubscribe = window.sout.onStateChanged(() => void reload())
+    const unsubscribe = window.tuwas.onStateChanged(() => void reload())
     const onFocus = (): void => void reload()
     window.addEventListener('focus', onFocus)
     return () => {

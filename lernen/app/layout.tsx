@@ -45,7 +45,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: ANTI_FLACKER_SKRIPT }} />
       </head>
       <body className="flex h-screen flex-col overflow-hidden bg-surface text-ink antialiased">
-        {/* In sout eingebettet (?embed=1) steht die Marke in der Hostapp und die Kopfleiste entfaellt. */}
+        {/* In TUWAS eingebettet (?embed=1) steht die Marke in der Hostapp und die Kopfleiste entfaellt. */}
         <header className="marke-kopf flex shrink-0 items-center justify-between gap-3 border-b border-line bg-surface-raised px-5 py-3">
           <div className="flex items-center gap-3">
             <Logo hoehe={26} />

@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, webUtils, type IpcRendererEvent } from 'electron'
-import { IPC, type SoutApi, type View } from '../shared/types'
+import { IPC, type TuwasApi, type View } from '../shared/types'
 
 // The only bridge between the UI and the main process. The UI has no Node.js access.
 
@@ -11,7 +11,7 @@ function subscribe<Args extends unknown[]>(channel: string, listener: (...args: 
   }
 }
 
-const api: SoutApi = {
+const api: TuwasApi = {
   getInfo: () => ipcRenderer.invoke(IPC.getInfo),
   getSettings: () => ipcRenderer.invoke(IPC.getSettings),
   updateSettings: (patch) => ipcRenderer.invoke(IPC.updateSettings, patch),
@@ -84,4 +84,4 @@ const api: SoutApi = {
   onStateChanged: (listener) => subscribe(IPC.stateChanged, listener)
 }
 
-contextBridge.exposeInMainWorld('sout', api)
+contextBridge.exposeInMainWorld('tuwas', api)

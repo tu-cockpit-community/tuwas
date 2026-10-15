@@ -7,8 +7,8 @@ import { isCoursePage } from './examParser'
 // The public TISS page of a course: exams, registration windows, ECTS. Read by the exam sync and
 // when a course is added to the grade overview by hand.
 
-/** Development: course pages from files, <SOUT_TISS_PAGES>/<LVA number without dot>.html. */
-export const devPagesDir = (): string | undefined => (app.isPackaged ? undefined : process.env['SOUT_TISS_PAGES'])
+/** Development: course pages from files, <TUWAS_TISS_PAGES>/<LVA number without dot>.html. */
+export const devPagesDir = (): string | undefined => (app.isPackaged ? undefined : process.env['TUWAS_TISS_PAGES'])
 
 /** The public TISS page of a course (German). */
 export async function readCoursePage(courseKey: string, semester: string): Promise<string> {

@@ -2,7 +2,7 @@ import { useDeferredValue, useMemo, type MouseEvent, type RefObject } from 'reac
 import { renderMarkdown } from '../lib/markdown'
 import { isPdf, isTextNote, resolveRelative } from '../lib/notes'
 
-/** The rendered note. Checkboxes tick the line in the note; links to notes and PDFs open them in sout. */
+/** The rendered note. Checkboxes tick the line in the note; links to notes and PDFs open them in TUWAS. */
 export function Preview(props: {
   content: string
   /** Folder of the note: relative links and images start there. */

@@ -61,7 +61,7 @@ export default function ExamsView({ onNavigate }: { onNavigate: (view: View) => 
         </div>
         {data.courses > 0 && (
           <div className="header-actions">
-            <button type="button" className="button secondary" disabled={data.syncing} onClick={() => void window.sout.syncExams()}>
+            <button type="button" className="button secondary" disabled={data.syncing} onClick={() => void window.tuwas.syncExams()}>
               <RefreshCw size={14} className={data.syncing ? 'spin' : undefined} /> Aktualisieren
             </button>
           </div>
@@ -70,7 +70,7 @@ export default function ExamsView({ onNavigate }: { onNavigate: (view: View) => 
 
       {data.courses === 0 && (
         <Callout kind="info" title="Noch keine LVAs.">
-          <p>Verbinde in den Einstellungen deinen TISS-Kalender. sout liest dann auf den TISS-Seiten deiner LVAs die Prüfungstermine und Anmeldefristen.</p>
+          <p>Verbinde in den Einstellungen deinen TISS-Kalender. TUWAS liest dann auf den TISS-Seiten deiner LVAs die Prüfungstermine und Anmeldefristen.</p>
           <button type="button" className="button small" onClick={() => onNavigate('settings')}>
             Zu den Einstellungen
           </button>
@@ -79,7 +79,7 @@ export default function ExamsView({ onNavigate }: { onNavigate: (view: View) => 
       {data.failed.length > 0 && (
         <Callout kind="warn" title={`${data.failed.length === 1 ? 'Eine LVA-Seite' : `${data.failed.length} LVA-Seiten`} konnte TISS gerade nicht liefern.`}>
           <p>
-            {data.failed.map(({ courseKey, error }) => `${courseName(courseKey, calendar)}: ${error}`).join(' · ')} – sout zeigt, was beim letzten Mal dort stand,
+            {data.failed.map(({ courseKey, error }) => `${courseName(courseKey, calendar)}: ${error}`).join(' · ')} – TUWAS zeigt, was beim letzten Mal dort stand,
             und versucht es bald wieder.
           </p>
         </Callout>
@@ -89,7 +89,7 @@ export default function ExamsView({ onNavigate }: { onNavigate: (view: View) => 
         <section className="card">
           <div className="empty">
             <strong>Keine kommenden Prüfungen</strong>
-            <span>{data.syncedAt ? 'TISS listet für deine LVAs gerade keine Prüfungstermine.' : 'sout hat die TISS-Seiten deiner LVAs noch nicht gelesen.'}</span>
+            <span>{data.syncedAt ? 'TISS listet für deine LVAs gerade keine Prüfungstermine.' : 'TUWAS hat die TISS-Seiten deiner LVAs noch nicht gelesen.'}</span>
           </div>
         </section>
       )}
@@ -130,8 +130,8 @@ export default function ExamsView({ onNavigate }: { onNavigate: (view: View) => 
 
       {data.courses > 0 && (
         <p className="section-hint exams-note">
-          Die Prüfungen deiner LVAs aus dem TISS-Kalender ({data.courses}) – ausgeblendete Fächer fehlen. sout liest die TISS-Seiten alle paar Stunden; angemeldet
-          bist du, sobald die Prüfung in deinem TISS-Kalender steht. Gruppenanmeldungen zeigt sout nur bei LVAs, in denen du noch in keiner Gruppe bist.
+          Die Prüfungen deiner LVAs aus dem TISS-Kalender ({data.courses}) – ausgeblendete Fächer fehlen. TUWAS liest die TISS-Seiten alle paar Stunden; angemeldet
+          bist du, sobald die Prüfung in deinem TISS-Kalender steht. Gruppenanmeldungen zeigt TUWAS nur bei LVAs, in denen du noch in keiner Gruppe bist.
         </p>
       )}
     </>
@@ -231,7 +231,7 @@ function DeadlineCard(props: { deadline: CourseDeadline; calendar: CalendarData 
             >
               <ExternalLink size={13} /> {group ? 'Gruppen in TISS' : 'LVA in TISS'}
             </a>
-            <button type="button" className="button small secondary" onClick={() => void window.sout.dismissExam(deadline.id, !deadline.dismissed)}>
+            <button type="button" className="button small secondary" onClick={() => void window.tuwas.dismissExam(deadline.id, !deadline.dismissed)}>
               {deadline.dismissed ? <Eye size={13} /> : <EyeOff size={13} />} {deadline.dismissed ? 'Wieder einblenden' : 'Brauche ich nicht'}
             </button>
           </div>

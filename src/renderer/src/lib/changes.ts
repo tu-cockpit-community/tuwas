@@ -5,9 +5,9 @@ import type { Change } from '../../../shared/types'
 export function useChanges(): Change[] {
   const [changes, setChanges] = useState<Change[]>([])
   useEffect(() => {
-    const load = (): void => void window.sout.getChanges().then(setChanges)
+    const load = (): void => void window.tuwas.getChanges().then(setChanges)
     load()
-    return window.sout.onChangesChanged(load)
+    return window.tuwas.onChangesChanged(load)
   }, [])
   return changes
 }

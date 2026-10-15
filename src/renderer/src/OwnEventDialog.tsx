@@ -102,7 +102,7 @@ export function OwnEventDialog(props: { courses: Course[]; initial: OwnEventDraf
     event.preventDefault()
     setBusy(true)
     const input = inputOf(draft)
-    const result = props.editingId ? await window.sout.updateOwnEvent(props.editingId, input) : await window.sout.addOwnEvent(input)
+    const result = props.editingId ? await window.tuwas.updateOwnEvent(props.editingId, input) : await window.tuwas.addOwnEvent(input)
     setBusy(false)
     if (result.ok) props.onClose()
     else setError(result.error)

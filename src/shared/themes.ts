@@ -1,4 +1,4 @@
-// Colour schemes for sout: light or dark (or as the system says), and for each a palette.
+// Colour schemes for TUWAS: light or dark (or as the system says), and for each a palette.
 // The colours themselves are CSS variables in styles.css; here are the names and what the main
 // process needs before a page has loaded.
 

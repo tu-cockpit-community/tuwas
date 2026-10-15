@@ -6,9 +6,9 @@ import { currentSemester, roomName, tissCourseUrl as courseUrl } from '../../../
 export function useCalendar(): CalendarData | null {
   const [data, setData] = useState<CalendarData | null>(null)
   useEffect(() => {
-    const load = (): void => void window.sout.getCalendar().then(setData)
+    const load = (): void => void window.tuwas.getCalendar().then(setData)
     load()
-    return window.sout.onCalendarChanged(load)
+    return window.tuwas.onCalendarChanged(load)
   }, [])
   return data
 }

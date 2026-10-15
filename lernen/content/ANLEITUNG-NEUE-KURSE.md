@@ -19,8 +19,8 @@ gründlich geprüft sind wie die drei fertigen Kurse (Mathematik 3, Physik 1, Ei
 > `zulassung/…` oder `recherche/…` betreffen nur Mathematik 3 und liegen **nicht** im Repository.
 > Dieses Dokument ersetzt die drei anderen **nicht**, es sagt dir, wie du sie einsetzt.
 >
-> **Arbeitsverzeichnis:** Die Lernplattform ist der Ordner **`lernen/`** im sout-Repository (eine eigene Next.js-App
-> mit eigener `package.json`; sout zeigt sie im Tab „Lernen“). Früher lag sie in einem eigenen Repository als `lernen/` bzw.
+> **Arbeitsverzeichnis:** Die Lernplattform ist der Ordner **`lernen/`** im TUWAS-Repository (eine eigene Next.js-App
+> mit eigener `package.json`; TUWAS zeigt sie im Tab „Lernen“). Früher lag sie in einem eigenen Repository als `lernen/` bzw.
 > unter `docs/web`; ältere Notizen, Pläne und Pfade können noch diese Namen tragen. Alle Befehle in diesem Dokument laufen
 > in `lernen/`, alle Pfade wie `content/…` sind relativ dazu.
 
@@ -82,8 +82,8 @@ gründlich geprüft sind wie die drei fertigen Kurse (Mathematik 3, Physik 1, Ei
 
 ### 1.1 Was Lernende sehen
 
-Die Plattform ist eine Next.js-16-App im Ordner `lernen/` des sout-Repositorys. sout startet sie als lokalen Server
-(`src/main/lernen.ts`) und zeigt sie im Tab „Lernen“; ohne sout läuft sie mit `npm run dev` im Browser. Kurse sind
+Die Plattform ist eine Next.js-16-App im Ordner `lernen/` des TUWAS-Repositorys. TUWAS startet sie als lokalen Server
+(`src/main/lernen.ts`) und zeigt sie im Tab „Lernen“; ohne TUWAS läuft sie mit `npm run dev` im Browser. Kurse sind
 **Dateien** unter `lernen/content/<kurs>/` (Markdown mit eingebetteten YAML-Blöcken). Erreichbar ist ein Kurs immer unter
 `/lernen/<kurs>`; auf der Übersichtsseite „Fächer“ (`/lernen`) erscheint er erst, wenn er einer Lehrveranstaltung
 zugeordnet ist (Abschnitt 5, P7). Lernende bekommen:
@@ -98,7 +98,7 @@ zugeordnet ist (Abschnitt 5, P7). Lernende bekommen:
 - **Training** (unbegrenzt viele Zufallsaufgaben aus Generatoren), **Prüfungssimulation** mit Timer,
   **mündliche Prüfung** (Karten mit Selbstabgleich), Formelsammlung, Glossar, Suche, Fokusmodus, eine Kursgliederung
   neben jeder Lektion und eine Brotkrumenleiste mit Kapitelwechsel.
-- Der Lernfortschritt liegt in **einer** Datei außerhalb des Projekts (`~/.local/share/sout/lernen/lernstand.jsonl`, ein
+- Der Lernfortschritt liegt in **einer** Datei außerhalb des Projekts (`~/.local/share/tuwas/lernen/lernstand.jsonl`, ein
   Protokoll, an das nur angehängt wird; Details in `lernen/README.md`, Abschnitt „Daten“). Jeder Eintrag verweist auf eine
   **ID** (Aufgabe, Karte, Lektion). Eine umbenannte ID verliert deshalb den Fortschritt aller Lernenden (Regel 9).
 
@@ -253,7 +253,7 @@ Du brauchst: Git, **Node.js 22**, npm, **python3** (zum Nachrechnen), bei Java-K
 (`javac`, `java`), optional `pdftotext` (Poppler) für PDFs.
 
 ```bash
-git clone <REPO-URL-VON-SOUT>            # das sout-Repository; die Lernplattform ist der Ordner lernen/
+git clone <REPO-URL-VON-TUWAS>            # das TUWAS-Repository; die Lernplattform ist der Ordner lernen/
 cd <repo>/lernen                            # der Ordner mit package.json und content/ (siehe Kopf dieses Dokuments)
 npm install                              # native Pakete (better-sqlite3) brauchen eine C/C++-Toolchain
 npm run lernen:test                      # Unit-Tests, erwartet: alle bestehen
@@ -268,7 +268,7 @@ npm run lernen:pruefen -- mathe3 09      # Probelauf des Validators an einem fer
   `npm run dev` löscht beim Start den Ordner `.next` und führt automatisch `npm run lernen:index` aus (ebenso
   `npm run build`); Schreib-Agents starten ihn deshalb nicht (Abschnitt 5, P4).
 - **Lernstand beim Ausprobieren:** Wer im Dev-Server Aufgaben löst, schreibt in das echte Lernstand-Protokoll des
-  Rechners (`~/.local/share/sout/lernen/lernstand.jsonl`). Für Tests deshalb immer ein Wegwerf-Protokoll setzen:
+  Rechners (`~/.local/share/tuwas/lernen/lernstand.jsonl`). Für Tests deshalb immer ein Wegwerf-Protokoll setzen:
   `LERNEN_JOURNAL=/tmp/test-lernstand.jsonl npm run dev`.
 - Diese Next.js-Version (16) hat Änderungen gegenüber dem Trainingswissen vieler Modelle. Du schreibst Inhalte, kein
   Next.js. Fasse den App-Code nicht an (Ausnahme: die Einträge beim Einhängen, P7).
@@ -425,9 +425,9 @@ Dann den Kurs **einhängen**. Ohne diese Schritte existiert er nur unter `/lerne
    die beim Einhängen geändert werden dürfen (Abschnitt 6.9); bei mehreren Beteiligten macht es der Maintainer.
 3. Optional: in `scripts/dev.ts` die Seite `/lernen/<kurs>` in `SEITEN` aufnehmen (wird beim Start von `npm run dev`
    vorab kompiliert).
-4. **In sout sichtbar machen:** sout zeigt die **gebaute** App. `npm run build` in `lernen/`, dann sout ganz beenden
+4. **In TUWAS sichtbar machen:** TUWAS zeigt die **gebaute** App. `npm run build` in `lernen/`, dann TUWAS ganz beenden
    (Strg+Q) und neu starten. Im Tab erscheint der Kurs auf der Fächer-Seite nur, wenn man in TISS bei dieser LVA
-   angemeldet ist (sout übergibt die eigenen LVAs); `sbp:`-Kurse nur mit eingeschalteter Studienberechtigung
+   angemeldet ist (TUWAS übergibt die eigenen LVAs); `sbp:`-Kurse nur mit eingeschalteter Studienberechtigung
    (Einstellungen → Lernen).
 5. `npx tsc --noEmit` und `npm run lint` in `lernen/` (wegen der Zeile in `Trainer.tsx`).
 
@@ -589,7 +589,7 @@ Aufgaben-IDs mit eigenem Präfix je Simulation (`sim4-1`, `pk-1`).
 | `content/AUTHORING.md`, `QUALITAET.md`, `SPRACHE.md`, `WIDGETS.md`, dieses Dokument, andere Kurse | nein (Vorschläge als Pull-Request-Kommentar) |
 | `components/lernen/Trainer.tsx` (eine Zeile in `LADER`), `scripts/dev.ts` (`SEITEN`) | nur beim Einhängen (P7) |
 | `app/`, sonst `components/`, `lib/`, `scripts/`, `db/`, `package.json`, `next.config.ts` | nein (Wünsche in `content/<kurs>/WUENSCHE.md`) |
-| `README.md`, alles außerhalb von `lernen/` (sout selbst) | nein (Kursübersichten pflegt der Maintainer) |
+| `README.md`, alles außerhalb von `lernen/` (TUWAS selbst) | nein (Kursübersichten pflegt der Maintainer) |
 
 ---
 
@@ -1408,7 +1408,7 @@ aufgaben:
 **Eingehängt (P7)**
 - [ ] `kurs.yaml` hat `lva:` (oder `sbp:`), und die LVA steht in der Kursliste (`db/lernen.db`)
 - [ ] `LADER`-Zeile in `components/lernen/Trainer.tsx`; `/lernen/<kurs>/training` zeigt Aufgaben
-- [ ] `npm run build` erfolgreich; nach Neustart von sout erscheint der Kurs im Tab „Lernen“ (bei angemeldeter LVA)
+- [ ] `npm run build` erfolgreich; nach Neustart von TUWAS erscheint der Kurs im Tab „Lernen“ (bei angemeldeter LVA)
 
 **Inhalt (Review, nicht automatisiert)**
 - [ ] Jedes Kapitel wurde von einer **anderen Instanz/Person** gegengelesen (Prompt R) und alle Funde sind behoben

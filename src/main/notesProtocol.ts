@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url'
 import { NOTE_FILE_SCHEME } from '../shared/types'
 import { resolveNote } from './notes'
 
-// sout-file://notes/<path> serves files from the notes folder to the UI: PDFs for Chromium's
+// tuwas-file://notes/<path> serves files from the notes folder to the UI: PDFs for Chromium's
 // built-in viewer (next to a note) and images inside notes. Nothing outside the notes folder.
 
 /** Has to run before the app is ready. */

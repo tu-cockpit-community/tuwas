@@ -166,13 +166,13 @@ export function readNote(path: string): NoteDoc {
 /** Temp file and rename: a crash never leaves half a note behind. Returns the new mtime. */
 function writeAtomic(abs: string, content: string): number {
   mkdirSync(dirname(abs), { recursive: true })
-  const temp = join(dirname(abs), `.${basename(abs)}.sout-tmp`)
+  const temp = join(dirname(abs), `.${basename(abs)}.tuwas-tmp`)
   writeFileSync(temp, content)
   renameSync(temp, abs)
   return statSync(abs).mtimeMs
 }
 
-/** Changed on disk since sout read it – and not just touched. */
+/** Changed on disk since TUWAS read it – and not just touched. */
 function changedSince(abs: string, baseModified: number, content: string): boolean {
   const stat = statOrNull(abs)
   if (!stat || stat.mtimeMs === baseModified) return false
@@ -184,7 +184,7 @@ export function writeNote(path: string, content: string, baseModified: number | 
     const abs = resolveNote(path)
     if (!isTextNote(abs)) throw new Error('Nur Notizen (.md, .txt) können hier gespeichert werden.')
     if (baseModified !== null && changedSince(abs, baseModified, content)) {
-      return { ok: false, conflict: true, error: 'Die Datei wurde außerhalb von sout geändert.' }
+      return { ok: false, conflict: true, error: 'Die Datei wurde außerhalb von TUWAS geändert.' }
     }
     return { ok: true, modified: writeAtomic(abs, content) }
   } catch (error) {
@@ -218,7 +218,7 @@ const IMAGE_DIR = 'Bilder'
 export function saveNoteImage(path: string, data: Uint8Array, type: string): string {
   const note = resolveNote(path)
   const ext = IMAGE_TYPES[type]
-  if (!ext) throw new Error('Dieses Bildformat kann sout nicht speichern (PNG, JPEG, GIF und WebP gehen).')
+  if (!ext) throw new Error('Dieses Bildformat kann TUWAS nicht speichern (PNG, JPEG, GIF und WebP gehen).')
   if (data.byteLength > MAX_IMAGE_BYTES) throw new Error('Das Bild ist zu groß (höchstens 20 MB).')
   // "Bild-2026-10-09-013045.png" – the time keeps names apart and in order.
   const stamp = new Date().toISOString().slice(0, 19).replace('T', '-').replace(/:/g, '')
@@ -241,7 +241,7 @@ export function noteFileExists(path: string): boolean {
 export function writeNoteFile(path: string, data: Uint8Array): { path: string; mtime: number } {
   const abs = resolveNote(path)
   mkdirSync(dirname(abs), { recursive: true })
-  const temp = join(dirname(abs), `.${basename(abs)}.sout-tmp`)
+  const temp = join(dirname(abs), `.${basename(abs)}.tuwas-tmp`)
   writeFileSync(temp, data)
   renameSync(temp, abs)
   notesChanged()
@@ -442,9 +442,9 @@ export function notesChanged(): void {
 }
 
 /**
- * Follows changes made outside of sout too: file manager, other editors, sync tools. One watcher
+ * Follows changes made outside of TUWAS too: file manager, other editors, sync tools. One watcher
  * per folder – fs.watch's recursive mode loses track of files on Linux once they are saved via a
- * temporary file and rename, which is how sout and most editors save.
+ * temporary file and rename, which is how TUWAS and most editors save.
  */
 export function watchNotes(): void {
   const root = notesRoot()

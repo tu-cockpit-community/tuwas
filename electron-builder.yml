@@ -1,8 +1,8 @@
 # Installers and packages: npm run dist (see README).
 # Linux: AppImage + RPM · Windows: installer (NSIS) · macOS: .dmg + .zip – each built on its own system.
-appId: io.github.mentordergrosse.sout # also in src/main/index.ts (APP_ID)
-productName: sout
-copyright: Copyright © 2026 MentorDerGrosse
+appId: io.github.hulrap.tuwas # also in src/main/index.ts (APP_ID)
+productName: TUWAS
+copyright: Copyright © 2026 MentorDerGrosse, hulrap
 
 directories:
   output: dist
@@ -21,21 +21,21 @@ artifactName: ${productName}-${version}-${arch}.${ext}
 # New versions: GitHub releases (.github/workflows/release.yml); Windows and the AppImage update themselves.
 publish:
   provider: github
-  owner: MentorDerGrosse
-  repo: sout
+  owner: hulrap
+  repo: tuwas
 
 linux:
   target: [AppImage, rpm]
   # The RPM needs a maintainer; without it electron-builder wants an author e-mail – the name is enough.
   maintainer: MentorDerGrosse
   category: Education
-  executableName: sout
-  # Started from the app menu: XWayland and German straight away (otherwise sout restarts itself with them).
+  executableName: tuwas
+  # Started from the app menu: XWayland and German straight away (otherwise TUWAS restarts itself with them).
   executableArgs: ['--ozone-platform=x11', '--lang=de-AT']
   desktop:
     entry:
       Comment: Studium organisieren – TISS, TUWEL, Notizen
-      StartupWMClass: sout
+      StartupWMClass: TUWAS
 
 win:
   target: [nsis]

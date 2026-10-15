@@ -57,7 +57,7 @@ function menu(): Menu {
   return Menu.buildFromTemplate([
     // Ticked while the mini view is open; unticking closes it.
     { label: 'Mini-Ansicht', type: 'checkbox', checked: isMiniVisible(), click: () => toggleMini() },
-    { label: 'sout öffnen', click: () => showMain() },
+    { label: 'TUWAS öffnen', click: () => showMain() },
     { label: 'Einstellungen', click: () => showMain('settings') },
     { type: 'separator' },
     {
@@ -91,5 +91,5 @@ function showStatus(): void {
   if (!tray) return
   tray.setImage(trayImage())
   if (process.platform === 'darwin') tray.setTitle(urgent > 0 ? String(urgent) : '')
-  tray.setToolTip(urgent > 0 ? `sout – ${urgent} ${urgent === 1 ? 'Frist endet' : 'Fristen enden'} in den nächsten 24 Stunden` : 'sout')
+  tray.setToolTip(urgent > 0 ? `TUWAS – ${urgent} ${urgent === 1 ? 'Frist endet' : 'Fristen enden'} in den nächsten 24 Stunden` : 'TUWAS')
 }

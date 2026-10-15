@@ -7,13 +7,13 @@ import { isoDate } from './calendar'
 export type NoteDirNode = Extract<NoteNode, { kind: 'dir' }>
 export type NoteFileNode = Extract<NoteNode, { modified: number }>
 
-/** The notes folder; updates when files change (also outside of sout) and when the window gets focus. */
+/** The notes folder; updates when files change (also outside of TUWAS) and when the window gets focus. */
 export function useNotes(): { notes: NotesData | null; reload: () => Promise<void> } {
   const [notes, setNotes] = useState<NotesData | null>(null)
-  const reload = useCallback(async () => setNotes(await window.sout.getNotes()), [])
+  const reload = useCallback(async () => setNotes(await window.tuwas.getNotes()), [])
   useEffect(() => {
     void reload()
-    const unsubscribe = window.sout.onNotesChanged(() => void reload())
+    const unsubscribe = window.tuwas.onNotesChanged(() => void reload())
     const onFocus = (): void => void reload()
     window.addEventListener('focus', onFocus)
     return () => {

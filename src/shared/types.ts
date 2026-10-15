@@ -1,4 +1,4 @@
-// Contract between the main process and the UI. The preload script exposes SoutApi as window.sout.
+// Contract between the main process and the UI. The preload script exposes TuwasApi as window.tuwas.
 
 import type { ThemeMode } from './themes'
 
@@ -13,7 +13,7 @@ export function isView(value: unknown): value is View {
   return typeof value === 'string' && VIEWS.includes(value)
 }
 
-/** Stored in ~/.config/sout/settings.json. Autostart is not in here: its .desktop file is the source of truth. */
+/** Stored in ~/.config/tuwas/settings.json. Autostart is not in here: its .desktop file is the source of truth. */
 export interface Settings {
   /** When started by the session autostart, stay in the tray instead of opening the main window. */
   startHiddenOnAutostart: boolean
@@ -46,6 +46,8 @@ export interface Settings {
   /** Colour scheme in light and in dark mode (ids from shared/themes.ts). */
   lightPalette: string
   darkPalette: string
+  /** GitHub repository that new versions come from, as a link (shared/updateSource.ts). */
+  updateRepo: string
 }
 
 /** Reminder times offered in the settings: minutes before a deadline → label. */
@@ -82,7 +84,7 @@ export interface AppInfo {
   userDataDir: string
   /** Linux: the autostart .desktop file; null where the system keeps login items (Windows, macOS). */
   autostartFile: string | null
-  /** Command that starts sout (for a keyboard shortcut with --mini); null if there is none to offer. */
+  /** Command that starts TUWAS (for a keyboard shortcut with --mini); null if there is none to offer. */
   launcher: string | null
 }
 
@@ -210,7 +212,7 @@ export interface ExamDate {
    * course at the same time or another date of the same exam, or you took that exam already.
    */
   covered: string | null
-  /** Marked as not needed in sout: no reminders, not on "Heute" or in the calendar. */
+  /** Marked as not needed in TUWAS: no reminders, not on "Heute" or in the calendar. */
   dismissed: boolean
 }
 
@@ -227,7 +229,7 @@ export interface CourseDeadline {
   groups: string[]
   opens: string | null
   closes: string | null
-  /** Marked as not needed in sout. */
+  /** Marked as not needed in TUWAS. */
   dismissed: boolean
 }
 
@@ -238,7 +240,7 @@ export interface ExamsData {
   deadlines: CourseDeadline[]
   /** Course pages that couldn't be read the last time. */
   failed: { courseKey: string; error: string }[]
-  /** How many course pages sout looks at. */
+  /** How many course pages TUWAS looks at. */
   courses: number
   syncedAt: string | null
   syncing: boolean
@@ -387,18 +389,18 @@ export type Result<T> = { ok: true; value: T } | { ok: false; error: string }
 /** Something that changed since the last sync, shown on "Heute" until dismissed. */
 export interface Change {
   id: string
-  /** When sout noticed it (ISO). */
+  /** When TUWAS noticed it (ISO). */
   at: string
   kind: 'room' | 'time' | 'cancelled' | 'added' | 'exam' | 'task' | 'grade' | 'announcement' | 'material'
   title: string
   detail: string
-  /** Where a click leads: a view of sout, or a TUWEL page. */
+  /** Where a click leads: a view of TUWAS, or a TUWEL page. */
   view: View | null
   url: string | null
 }
 
-/** Files in the notes folder are served to the UI as sout-file://notes/<path> (PDF viewer, images). */
-export const NOTE_FILE_SCHEME = 'sout-file'
+/** Files in the notes folder are served to the UI as tuwas-file://notes/<path> (PDF viewer, images). */
+export const NOTE_FILE_SCHEME = 'tuwas-file'
 
 /** A file or folder in the notes folder. Paths are relative to it, separated by '/'. */
 export type NoteNode =
@@ -421,7 +423,7 @@ export interface NotesData {
 export interface NoteDoc {
   path: string
   content: string
-  /** mtime when read; saving checks it to not overwrite changes made outside of sout. */
+  /** mtime when read; saving checks it to not overwrite changes made outside of TUWAS. */
   modified: number
 }
 
@@ -459,7 +461,7 @@ export interface UpdateState {
   error: string | null
 }
 
-export interface SoutApi {
+export interface TuwasApi {
   getInfo(): Promise<AppInfo>
   getSettings(): Promise<Settings>
   updateSettings(patch: Partial<Settings>): Promise<Settings>
@@ -522,7 +524,7 @@ export interface SoutApi {
   /** Folder picker; returns the chosen folder without using it yet. */
   chooseNotesDir(): Promise<string | null>
   readNote(path: string): Promise<Result<NoteDoc>>
-  /** `baseModified` from readNote/writeNote: refuses to overwrite changes made outside of sout. */
+  /** `baseModified` from readNote/writeNote: refuses to overwrite changes made outside of TUWAS. */
   writeNote(path: string, content: string, baseModified: number | null): Promise<SaveResult>
   /** Last save when the window closes – synchronous, so it finishes before the page is gone. */
   flushNote(path: string, content: string, baseModified: number | null): boolean
@@ -562,73 +564,73 @@ export interface SoutApi {
 }
 
 export const IPC = {
-  getInfo: 'sout:get-info',
-  getSettings: 'sout:get-settings',
-  updateSettings: 'sout:update-settings',
-  getAutostart: 'sout:get-autostart',
-  setAutostart: 'sout:set-autostart',
-  getSecretsStatus: 'sout:get-secrets-status',
-  saveTissToken: 'sout:save-tiss-token',
-  testTiss: 'sout:test-tiss',
-  clearSecret: 'sout:clear-secret',
-  getCalendar: 'sout:get-calendar',
-  syncCalendar: 'sout:sync-calendar',
-  updateCourse: 'sout:update-course',
-  addOwnEvent: 'sout:add-own-event',
-  updateOwnEvent: 'sout:update-own-event',
-  deleteOwnEvent: 'sout:delete-own-event',
-  calendarChanged: 'sout:calendar-changed',
-  getTasks: 'sout:get-tasks',
-  syncTasks: 'sout:sync-tasks',
-  loginTuwel: 'sout:login-tuwel',
-  logoutTuwel: 'sout:logout-tuwel',
-  addTodo: 'sout:add-todo',
-  setTaskDone: 'sout:set-task-done',
-  deleteTodo: 'sout:delete-todo',
-  tasksChanged: 'sout:tasks-changed',
-  getChanges: 'sout:get-changes',
-  dismissChange: 'sout:dismiss-change',
-  changesChanged: 'sout:changes-changed',
-  getStudies: 'sout:get-studies',
-  updateStudyCourse: 'sout:update-study-course',
-  addStudyCourse: 'sout:add-study-course',
-  removeStudyCourse: 'sout:remove-study-course',
-  studiesChanged: 'sout:studies-changed',
-  startLernen: 'sout:start-lernen',
-  getUpdateState: 'sout:get-update-state',
-  checkForUpdates: 'sout:check-for-updates',
-  installUpdate: 'sout:install-update',
-  openUpdateHelp: 'sout:open-update-help',
-  updateChanged: 'sout:update-changed',
-  getTuwelExtras: 'sout:get-tuwel-extras',
-  tuwelExtrasChanged: 'sout:tuwel-extras-changed',
-  getExams: 'sout:get-exams',
-  syncExams: 'sout:sync-exams',
-  dismissExam: 'sout:dismiss-exam',
-  examsChanged: 'sout:exams-changed',
-  getNotes: 'sout:get-notes',
-  setupNotes: 'sout:setup-notes',
-  chooseNotesDir: 'sout:choose-notes-dir',
-  readNote: 'sout:read-note',
-  writeNote: 'sout:write-note',
-  flushNote: 'sout:flush-note',
-  createNote: 'sout:create-note',
-  noteForEvent: 'sout:note-for-event',
-  noteForTask: 'sout:note-for-task',
-  quickNote: 'sout:quick-note',
-  saveNoteImage: 'sout:save-note-image',
-  createLinkedNote: 'sout:create-linked-note',
-  exportNotePdf: 'sout:export-note-pdf',
-  printReady: 'sout:print-ready',
-  renameNote: 'sout:rename-note',
-  moveNote: 'sout:move-note',
-  trashNote: 'sout:trash-note',
-  importPdfs: 'sout:import-pdfs',
-  showNoteInFolder: 'sout:show-note-in-folder',
-  searchNotes: 'sout:search-notes',
-  notesChanged: 'sout:notes-changed',
-  openMain: 'sout:open-main',
-  hideMini: 'sout:hide-mini',
-  navigate: 'sout:navigate',
-  stateChanged: 'sout:state-changed'
+  getInfo: 'tuwas:get-info',
+  getSettings: 'tuwas:get-settings',
+  updateSettings: 'tuwas:update-settings',
+  getAutostart: 'tuwas:get-autostart',
+  setAutostart: 'tuwas:set-autostart',
+  getSecretsStatus: 'tuwas:get-secrets-status',
+  saveTissToken: 'tuwas:save-tiss-token',
+  testTiss: 'tuwas:test-tiss',
+  clearSecret: 'tuwas:clear-secret',
+  getCalendar: 'tuwas:get-calendar',
+  syncCalendar: 'tuwas:sync-calendar',
+  updateCourse: 'tuwas:update-course',
+  addOwnEvent: 'tuwas:add-own-event',
+  updateOwnEvent: 'tuwas:update-own-event',
+  deleteOwnEvent: 'tuwas:delete-own-event',
+  calendarChanged: 'tuwas:calendar-changed',
+  getTasks: 'tuwas:get-tasks',
+  syncTasks: 'tuwas:sync-tasks',
+  loginTuwel: 'tuwas:login-tuwel',
+  logoutTuwel: 'tuwas:logout-tuwel',
+  addTodo: 'tuwas:add-todo',
+  setTaskDone: 'tuwas:set-task-done',
+  deleteTodo: 'tuwas:delete-todo',
+  tasksChanged: 'tuwas:tasks-changed',
+  getChanges: 'tuwas:get-changes',
+  dismissChange: 'tuwas:dismiss-change',
+  changesChanged: 'tuwas:changes-changed',
+  getStudies: 'tuwas:get-studies',
+  updateStudyCourse: 'tuwas:update-study-course',
+  addStudyCourse: 'tuwas:add-study-course',
+  removeStudyCourse: 'tuwas:remove-study-course',
+  studiesChanged: 'tuwas:studies-changed',
+  startLernen: 'tuwas:start-lernen',
+  getUpdateState: 'tuwas:get-update-state',
+  checkForUpdates: 'tuwas:check-for-updates',
+  installUpdate: 'tuwas:install-update',
+  openUpdateHelp: 'tuwas:open-update-help',
+  updateChanged: 'tuwas:update-changed',
+  getTuwelExtras: 'tuwas:get-tuwel-extras',
+  tuwelExtrasChanged: 'tuwas:tuwel-extras-changed',
+  getExams: 'tuwas:get-exams',
+  syncExams: 'tuwas:sync-exams',
+  dismissExam: 'tuwas:dismiss-exam',
+  examsChanged: 'tuwas:exams-changed',
+  getNotes: 'tuwas:get-notes',
+  setupNotes: 'tuwas:setup-notes',
+  chooseNotesDir: 'tuwas:choose-notes-dir',
+  readNote: 'tuwas:read-note',
+  writeNote: 'tuwas:write-note',
+  flushNote: 'tuwas:flush-note',
+  createNote: 'tuwas:create-note',
+  noteForEvent: 'tuwas:note-for-event',
+  noteForTask: 'tuwas:note-for-task',
+  quickNote: 'tuwas:quick-note',
+  saveNoteImage: 'tuwas:save-note-image',
+  createLinkedNote: 'tuwas:create-linked-note',
+  exportNotePdf: 'tuwas:export-note-pdf',
+  printReady: 'tuwas:print-ready',
+  renameNote: 'tuwas:rename-note',
+  moveNote: 'tuwas:move-note',
+  trashNote: 'tuwas:trash-note',
+  importPdfs: 'tuwas:import-pdfs',
+  showNoteInFolder: 'tuwas:show-note-in-folder',
+  searchNotes: 'tuwas:search-notes',
+  notesChanged: 'tuwas:notes-changed',
+  openMain: 'tuwas:open-main',
+  hideMini: 'tuwas:hide-mini',
+  navigate: 'tuwas:navigate',
+  stateChanged: 'tuwas:state-changed'
 } as const

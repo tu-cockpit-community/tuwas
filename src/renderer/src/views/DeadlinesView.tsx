@@ -35,7 +35,7 @@ export default function DeadlinesView({ onOpenNote, onNavigate }: { onOpenNote: 
         </div>
         <div className="header-actions">
           {data.connected && (
-            <button type="button" className="button secondary" disabled={data.syncing} onClick={() => void window.sout.syncTasks()}>
+            <button type="button" className="button secondary" disabled={data.syncing} onClick={() => void window.tuwas.syncTasks()}>
               <RefreshCw size={14} className={data.syncing ? 'spin' : undefined} /> Aktualisieren
             </button>
           )}
@@ -130,7 +130,7 @@ function ConnectCard() {
   const [error, setError] = useState<string | null>(null)
   const login = async (): Promise<void> => {
     setBusy(true)
-    const result = await window.sout.loginTuwel()
+    const result = await window.tuwas.loginTuwel()
     setBusy(false)
     setError(result.ok ? null : result.error)
   }
@@ -139,8 +139,8 @@ function ConnectCard() {
       <div className="empty">
         <strong>Mit TUWEL verbinden</strong>
         <span>
-          Du meldest dich einmal über den TU-Wien-Login an, wie bei der Moodle-App. sout bekommt dann einen Zugangsschlüssel von
-          TUWEL – dein Passwort sieht und speichert sout nie.
+          Du meldest dich einmal über den TU-Wien-Login an, wie bei der Moodle-App. TUWAS bekommt dann einen Zugangsschlüssel von
+          TUWEL – dein Passwort sieht und speichert TUWAS nie.
         </span>
         <button type="button" className="button" disabled={busy} onClick={() => void login()}>
           <LogIn size={14} /> {busy ? 'Anmeldung läuft …' : 'Bei TUWEL anmelden'}
@@ -155,7 +155,7 @@ function ReloginCallout() {
   return (
     <Callout kind="warn" title="Die TUWEL-Anmeldung ist abgelaufen.">
       <p>Die Liste zeigt den letzten bekannten Stand.</p>
-      <button type="button" className="button small" onClick={() => void window.sout.loginTuwel()}>
+      <button type="button" className="button small" onClick={() => void window.tuwas.loginTuwel()}>
         <LogIn size={13} /> Neu anmelden
       </button>
     </Callout>
@@ -171,7 +171,7 @@ function TodoForm({ calendar, onDone }: { calendar: CalendarData | null; onDone:
   const submit = async (event: FormEvent): Promise<void> => {
     event.preventDefault()
     // datetime-local is local time; the main process stores ISO (UTC).
-    const result = await window.sout.addTodo({ title, due: due ? new Date(due).toISOString() : null, courseKey: courseKey || null })
+    const result = await window.tuwas.addTodo({ title, due: due ? new Date(due).toISOString() : null, courseKey: courseKey || null })
     if (result.ok) onDone()
     else setError(result.error)
   }
@@ -269,7 +269,7 @@ function TaskCard(props: {
     // Without a notes folder the notes page explains how to set it up.
     if (!props.notes?.root) return props.onNavigate('notes')
     if (notePath) return props.onOpenNote(notePath)
-    const result = await window.sout.noteForTask(task.id)
+    const result = await window.tuwas.noteForTask(task.id)
     if (result.ok) props.onOpenNote(result.value, true)
     else setNoteError(result.error)
   }
@@ -288,8 +288,8 @@ function TaskCard(props: {
         className="task-check"
         checked={done}
         aria-label={done ? 'Wieder offen' : 'Erledigt'}
-        title={task.source === 'tuwel' ? 'Als erledigt markieren (nur in sout)' : 'Erledigt'}
-        onChange={(event) => void window.sout.setTaskDone(task.id, event.target.checked)}
+        title={task.source === 'tuwel' ? 'Als erledigt markieren (nur in TUWAS)' : 'Erledigt'}
+        onChange={(event) => void window.tuwas.setTaskDone(task.id, event.target.checked)}
       />
       <button type="button" className="task-body" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
         <span className="task-head">
@@ -392,7 +392,7 @@ function TaskCard(props: {
               <NotebookPen size={13} /> {notePath ? 'Notizen öffnen' : 'Notizen anlegen'}
             </button>
             {task.source === 'own' && (
-              <button type="button" className="button small danger" onClick={() => void window.sout.deleteTodo(task.id)}>
+              <button type="button" className="button small danger" onClick={() => void window.tuwas.deleteTodo(task.id)}>
                 <Trash2 size={13} /> Löschen
               </button>
             )}

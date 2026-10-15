@@ -1,4 +1,4 @@
-// Runs sout's smoke test with made-up data: two TISS syncs (the second with a room change, a moved,
+// Runs TUWAS's smoke test with made-up data: two TISS syncs (the second with a room change, a moved,
 // a dropped appointment and a new exam date), TISS course pages with exam dates and registration
 // windows (the second time with one more) and two TUWEL syncs (the second with a new assignment).
 // Usage: npm run build && npm run smoke [-- <folder>]     (default folder: ./smoke)
@@ -80,7 +80,7 @@ const icalTime = (date) => {
 }
 
 function ical(events) {
-  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//sout smoke//DE']
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//TUWAS smoke//DE']
   for (const event of events) {
     const end = new Date(event.start.getTime() + event.minutes * 60_000)
     // Local wall-clock time of this machine, given as Vienna time – fine for a test.
@@ -102,7 +102,7 @@ const ROOMS = {
   hs3: { name: courses[2][3], code: 'BSP03' }
 }
 
-/** Per course; the comment says what sout should make of it (smoke checks it). */
+/** Per course; the comment says what TUWAS should make of it (smoke checks it). */
 function exams(second) {
   const closesSoon = new Date(now.getTime() + 20 * 60 * 60_000)
   return {
@@ -325,12 +325,12 @@ const run = spawnSync(electron, args, {
   stdio: 'inherit',
   env: {
     ...process.env,
-    SOUT_TISS_FILE: join(data, 'tiss.ics'),
-    SOUT_TUWEL_FILE: join(data, 'tuwel.json'),
-    SOUT_SMOKE_SECOND_TISS: join(data, 'tiss-changed.ics'),
-    SOUT_SMOKE_SECOND_TUWEL: join(data, 'tuwel-new.json'),
-    SOUT_TISS_PAGES: join(data, 'pages'),
-    SOUT_SMOKE_SECOND_PAGES: join(data, 'pages-second')
+    TUWAS_TISS_FILE: join(data, 'tiss.ics'),
+    TUWAS_TUWEL_FILE: join(data, 'tuwel.json'),
+    TUWAS_SMOKE_SECOND_TISS: join(data, 'tiss-changed.ics'),
+    TUWAS_SMOKE_SECOND_TUWEL: join(data, 'tuwel-new.json'),
+    TUWAS_TISS_PAGES: join(data, 'pages'),
+    TUWAS_SMOKE_SECOND_PAGES: join(data, 'pages-second')
   }
 })
 
@@ -338,7 +338,7 @@ let report
 try {
   report = JSON.parse(readFileSync(join(dir, 'report.json'), 'utf8'))
 } catch {
-  console.error(`Kein report.json – sout ist nicht durchgelaufen (Exit-Code ${run.status}).`)
+  console.error(`Kein report.json – TUWAS ist nicht durchgelaufen (Exit-Code ${run.status}).`)
   process.exit(1)
 }
 const problems = []
@@ -354,7 +354,7 @@ if (!(report.wide?.page >= Math.min(1320, wideLeft) - 4)) problems.push(`Große 
 if (!report.history) problems.push('Navigationsverlauf nicht geprüft')
 for (const [check, ok] of Object.entries(report.history ?? {})) if (!ok) problems.push(`Navigationsverlauf: ${check} fehlgeschlagen`)
 if ((report.changes ?? []).length < 6) problems.push(`Nur ${(report.changes ?? []).length} von 6 erwarteten Änderungen erkannt`)
-// What sout should make of the exam dates on the course pages (see exams() above).
+// What TUWAS should make of the exam dates on the course pages (see exams() above).
 const expectedExams = {
   first: {
     '123.456 Prüfung': 'open',
@@ -404,7 +404,7 @@ const noteExtras = report.notes?.extras
 if (!noteExtras?.imageExists) problems.push(`Bild einfügen: ${JSON.stringify(noteExtras?.image)}`)
 if (JSON.stringify(noteExtras?.missingLinks) !== '["Zusammenfassung"]') problems.push(`[[Links]]: ${JSON.stringify(noteExtras?.missingLinks)} statt nur „Zusammenfassung“ als fehlend`)
 if (!(noteExtras?.pdfPages >= 1)) problems.push(`PDF-Export: ${noteExtras?.pdfPages} Seiten`)
-if (report.notes?.protocol?.pdf !== 200 || report.notes?.protocol?.outside !== 404) problems.push(`sout-file: ${JSON.stringify(report.notes?.protocol)}`)
+if (report.notes?.protocol?.pdf !== 200 || report.notes?.protocol?.outside !== 404) problems.push(`tuwas-file: ${JSON.stringify(report.notes?.protocol)}`)
 // Linux with a tray host (GNOME): the mini view opens with the tray menu and closes from it.
 if (report.trayMenu && typeof report.trayMenu === 'object') {
   for (const [check, ok] of Object.entries(report.trayMenu)) if (!ok) problems.push(`Tray-Menü: ${check} fehlgeschlagen`)

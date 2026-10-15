@@ -31,7 +31,7 @@ const FOLDERS = NOTE_FOLDERS
 const TEMPLATE_FOLDERS: Record<NoteTemplate, string> = { lecture: FOLDERS.lecture, exercise: FOLDERS.exercise, summary: FOLDERS.exam, blank: '' }
 const TEMPLATES = Object.keys(TEMPLATE_FOLDERS) as NoteTemplate[]
 
-/** Which course folders sout has created already – so a folder the user deleted stays deleted. */
+/** Which course folders TUWAS has created already – so a folder the user deleted stays deleted. */
 interface State {
   root: string
   created: string[]

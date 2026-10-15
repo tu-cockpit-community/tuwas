@@ -1,6 +1,6 @@
-# A new version of sout: raise "version" in package.json, commit, then push a tag with that version:
+# A new version of TUWAS: raise "version" in package.json, commit, then push a tag with that version:
 #   git tag v0.2.0 && git push origin v0.2.0
-# GitHub builds sout on Linux, Windows and macOS, runs the smoke test there and publishes a release
+# GitHub builds TUWAS on Linux, Windows and macOS, runs the smoke test there and publishes a release
 # with the installers – and the files Windows and the AppImage use to update themselves
 # (latest*.yml, *.blockmap). See src/main/updater.ts.
 name: Version veröffentlichen
@@ -63,7 +63,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: sout-${{ runner.os }}
+          name: tuwas-${{ runner.os }}
           path: |
             dist/*.AppImage
             dist/*.rpm
@@ -89,5 +89,5 @@ jobs:
         run: |
           gh release create "$GITHUB_REF_NAME" dist/* \
             --repo "$GITHUB_REPOSITORY" \
-            --title "sout ${GITHUB_REF_NAME#v}" \
-            --notes "Installieren und Aktualisieren: siehe [README](https://github.com/$GITHUB_REPOSITORY#installieren). Windows: sout-…-x64.exe · macOS: sout-…-mac-arm64.dmg (Apple-Chip) oder …-mac-x64.dmg (Intel) · Linux: sout-…-x86_64.AppImage (aktualisiert sich selbst) oder .rpm"
+            --title "TUWAS ${GITHUB_REF_NAME#v}" \
+            --notes "Installieren und Aktualisieren: siehe [README](https://github.com/$GITHUB_REPOSITORY#installieren). Windows: TUWAS-…-x64.exe · macOS: TUWAS-…-mac-arm64.dmg (Apple-Chip) oder …-mac-x64.dmg (Intel) · Linux: TUWAS-…-x86_64.AppImage (aktualisiert sich selbst) oder .rpm"

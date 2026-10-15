@@ -104,7 +104,7 @@ export function ExamInfo(props: { exam: ExamDate; calendar: CalendarData | null;
           <ExternalLink size={13} /> LVA in TISS
         </a>
         {!signedUp && (
-          <button type="button" className="button small secondary" onClick={() => void window.sout.dismissExam(exam.id, !exam.dismissed)}>
+          <button type="button" className="button small secondary" onClick={() => void window.tuwas.dismissExam(exam.id, !exam.dismissed)}>
             {exam.dismissed ? <Eye size={13} /> : <EyeOff size={13} />} {exam.dismissed ? 'Wieder einblenden' : 'Brauche ich nicht'}
           </button>
         )}

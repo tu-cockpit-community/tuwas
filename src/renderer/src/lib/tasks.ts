@@ -6,9 +6,9 @@ import { HOLIDAY_COLOR, isoDate } from './calendar'
 export function useTasks(): TasksData | null {
   const [data, setData] = useState<TasksData | null>(null)
   useEffect(() => {
-    const load = (): void => void window.sout.getTasks().then(setData)
+    const load = (): void => void window.tuwas.getTasks().then(setData)
     load()
-    return window.sout.onTasksChanged(load)
+    return window.tuwas.onTasksChanged(load)
   }, [])
   return data
 }

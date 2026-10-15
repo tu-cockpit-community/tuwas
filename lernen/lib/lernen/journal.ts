@@ -15,7 +15,7 @@ import { z } from "zod";
  * Anhaengen moeglich; `chattr -a` hebt es auf).
  *
  * Ort: LERNEN_JOURNAL, sonst der Datenordner des Nutzers (Linux $XDG_DATA_HOME bzw. ~/.local/share, Windows %APPDATA%,
- * macOS ~/Library/Application Support), jeweils sout/lernen/lernstand.jsonl.
+ * macOS ~/Library/Application Support), jeweils tuwas/lernen/lernstand.jsonl.
  */
 
 export const EreignisSchema = z.object({
@@ -41,7 +41,7 @@ export function journalPfad(): string {
       : process.platform === "darwin"
         ? path.join(home, "Library", "Application Support")
         : process.env.XDG_DATA_HOME || path.join(home, ".local", "share");
-  return path.join(basis, "sout", "lernen", "lernstand.jsonl");
+  return path.join(basis, "tuwas", "lernen", "lernstand.jsonl");
 }
 
 export function neueId(): string {

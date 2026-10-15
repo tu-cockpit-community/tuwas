@@ -5,9 +5,9 @@ import type { CourseGrade, StudiesData, StudyCourse } from '../../../shared/type
 export function useStudies(): StudiesData | null {
   const [data, setData] = useState<StudiesData | null>(null)
   useEffect(() => {
-    const load = (): void => void window.sout.getStudies().then(setData)
+    const load = (): void => void window.tuwas.getStudies().then(setData)
     load()
-    return window.sout.onStudiesChanged(load)
+    return window.tuwas.onStudiesChanged(load)
   }, [])
   return data
 }

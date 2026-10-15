@@ -7,7 +7,7 @@ export type ExamStatus =
   | 'registered'
   /** Registered for an alternative, or taken already. */
   | 'covered'
-  /** Marked as not needed in sout. */
+  /** Marked as not needed in TUWAS. */
   | 'dismissed'
   /** The registration window is open now. */
   | 'open'

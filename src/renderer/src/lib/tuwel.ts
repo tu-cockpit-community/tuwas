@@ -5,9 +5,9 @@ import type { CheckmarkSheet, Task, TuwelExtras } from '../../../shared/types'
 export function useTuwelExtras(): TuwelExtras | null {
   const [data, setData] = useState<TuwelExtras | null>(null)
   useEffect(() => {
-    const load = (): void => void window.sout.getTuwelExtras().then(setData)
+    const load = (): void => void window.tuwas.getTuwelExtras().then(setData)
     load()
-    return window.sout.onTuwelExtrasChanged(load)
+    return window.tuwas.onTuwelExtrasChanged(load)
   }, [])
   return data
 }

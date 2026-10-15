@@ -66,11 +66,11 @@ export function calendarChanged(): void {
   onChange()
 }
 
-/** Reads TISS (or, in development, the file in SOUT_TISS_FILE) and replaces the cached events. */
+/** Reads TISS (or, in development, the file in TUWAS_TISS_FILE) and replaces the cached events. */
 export function syncCalendar(): Promise<void> {
   syncing ??= (async () => {
     onChange()
-    const devFile = app.isPackaged ? undefined : process.env['SOUT_TISS_FILE']
+    const devFile = app.isPackaged ? undefined : process.env['TUWAS_TISS_FILE']
     const token = getSecret('tissToken')
     try {
       if (!devFile && !token) return
