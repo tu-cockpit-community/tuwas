@@ -543,10 +543,19 @@ export interface TuwasApi {
   printReady(): void
   /** Saves a quick note into the Inbox. */
   quickNote(text: string): Promise<Result<string>>
+  /** Renames a file or folder (course folders keep their LVA number). */
   renameNote(path: string, name: string): Promise<Result<string>>
   /** Into a course folder, or with null into the Inbox. */
   moveNote(path: string, courseKey: string | null): Promise<Result<string>>
   trashNote(path: string): Promise<Result<null>>
+  /** New folder `name` inside `parent` ('' is the notes folder itself); returns its path. */
+  createFolder(parent: string, name: string): Promise<Result<string>>
+  /** New empty note `name` in folder `dir`; returns its path. */
+  createNoteIn(dir: string, name: string): Promise<Result<string>>
+  /** A file or folder into another folder of the notes; returns the new path. */
+  moveEntry(path: string, dir: string): Promise<Result<string>>
+  /** Copies files and folders from outside into `dir`; without files a picker opens. Returns the new paths. */
+  importFiles(dir: string, files?: string[]): Promise<Result<string[]>>
   /** Copies PDFs into the course's Folien folder (Inbox without course); without files a picker opens. */
   importPdfs(courseKey: string | null, files?: string[]): Promise<Result<string[]>>
   /** Shows the file (or with null the notes folder) in the file manager. */
@@ -626,6 +635,10 @@ export const IPC = {
   moveNote: 'tuwas:move-note',
   trashNote: 'tuwas:trash-note',
   importPdfs: 'tuwas:import-pdfs',
+  createFolder: 'tuwas:create-folder',
+  createNoteIn: 'tuwas:create-note-in',
+  moveEntry: 'tuwas:move-entry',
+  importFiles: 'tuwas:import-files',
   showNoteInFolder: 'tuwas:show-note-in-folder',
   searchNotes: 'tuwas:search-notes',
   notesChanged: 'tuwas:notes-changed',

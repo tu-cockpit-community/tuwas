@@ -6,7 +6,9 @@ import {
   Columns2,
   Eye,
   FileDown,
+  FolderInput,
   FolderOpen,
+  Hash,
   Heading2,
   Italic,
   ListChecks,
@@ -23,7 +25,7 @@ import {
   X
 } from 'lucide-react'
 import { INBOX } from '../../../shared/notes'
-import type { CalendarData, Course, NoteDoc, NotesData, SearchHit, View } from '../../../shared/types'
+import type { CalendarData, Course, NoteDoc, NoteNode, NotesData, SearchHit, View } from '../../../shared/types'
 import { Callout, ResizeHandle } from '../components'
 import { noteKey } from '../lib/markdown'
 import { courseMap, eventLabel, useCalendar } from '../lib/calendar'
@@ -37,6 +39,9 @@ import {
   eventNotePath,
   fileName,
   filesIn,
+  isPdf,
+  isTextNote,
+  resolveRelative,
   findNode,
   noteFileUrl,
   useNotes,
@@ -48,6 +53,9 @@ import { clamp, remember, remembered, useRemembered } from '../lib/storage'
 import { focusFirstSection, goToLine, insertMathBlock, MarkdownEditor, toggleChecklist, toggleHeading, toggleTask, wrap } from '../notes/Editor'
 import { NewNoteDialog, type NewNoteDefaults } from '../notes/NewNoteDialog'
 import { NoteTree } from '../notes/NoteTree'
+import { folderLabel, MoveDialog, NameDialog, TrashDialog, type Dropped, type EntryAction } from '../notes/EntryActions'
+import { FolderView } from '../notes/FolderView'
+import { NotesHome } from '../notes/NotesHome'
 import { Preview } from '../notes/Preview'
 
 /** Open a note: from the calendar, the deadlines, the mini window. `fresh`: just created, cursor into the first section. */
@@ -190,7 +198,9 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const [saveState, setSaveState] = useState<SaveState>('saved')
   const [problem, setProblem] = useState<string | null>(null)
   const [pdf, setPdf] = useState<string | null>(null)
-  const [mode, setMode] = useState<Mode>(() => prefs.get('mode', 'split'))
+  const [mode, setMode] = useState<Mode>(() => prefs.get('mode', 'edit'))
+  /** Live preview in the editor; off shows the plain Markdown. */
+  const [live, setLive] = useState(() => prefs.get('live', true))
   const [treeHidden, setTreeHidden] = useState(() => prefs.get('treeHidden', false))
   const [expanded, setExpanded] = useState(() => new Set(prefs.get<string[]>('expanded', [])))
   const [query, setQuery] = useState('')
@@ -201,6 +211,9 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [exported, setExported] = useState<string | null>(null)
   const [exporting, setExporting] = useState(false)
+  /** The folder shown when no note is open; null shows the course cards. */
+  const [place, setPlace] = useState<string | null>(null)
+  const [dialog, setDialog] = useState<EntryDialog | null>(null)
 
   // What saving needs lives in refs, so editor callbacks and timers always see the latest state.
   const current = useRef<{ path: string; base: number | null } | null>(null)
@@ -213,6 +226,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
   const afterOpen = useRef<((view: EditorView) => void) | null>(null)
 
   useEffect(() => prefs.set('mode', mode), [mode])
+  useEffect(() => prefs.set('live', live), [live])
   useEffect(() => prefs.set('treeHidden', treeHidden), [treeHidden])
   useEffect(() => prefs.set('expanded', [...expanded]), [expanded])
 
@@ -279,6 +293,8 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
       setConfirmDelete(false)
       prefs.set('open', loaded.path)
       expandTo(loaded.path)
+      // Closing the note goes back to its folder.
+      setPlace(dirOf(loaded.path))
     },
     [expandTo]
   )
@@ -315,6 +331,147 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     },
     [expandTo]
   )
+
+  /** Shows a folder (null: the course cards) instead of the open note, which is saved first. */
+  const openFolder = useCallback(
+    async (path: string | null) => {
+      if (!(await save())) return
+      close()
+      setPdf(null)
+      setPlace(path)
+      if (path) expandTo(`${path}/`)
+    },
+    [save, close, expandTo]
+  )
+
+  /** After a rename or move: the open note, the PDF and the folder shown follow from `from` to `to`. */
+  const relocate = useCallback(
+    (from: string, to: string) => {
+      const swap = (path: string): string | null => (path === from ? to : path.startsWith(`${from}/`) ? `${to}${path.slice(from.length)}` : null)
+      const note = current.current
+      const moved = note ? swap(note.path) : null
+      if (note && moved) {
+        note.path = moved
+        setDoc((open) => (open ? { ...open, path: moved } : open))
+        prefs.set('open', moved)
+      }
+      setPdf((path) => (path === null ? path : (swap(path) ?? path)))
+      setPlace((path) => (path === null ? path : (swap(path) ?? path)))
+      expandTo(to)
+    },
+    [expandTo]
+  )
+
+  /** True if the open note is that entry or inside it: it has to be saved before it moves. */
+  const touchesOpenNote = (path: string): boolean => {
+    const open = current.current?.path
+    return Boolean(open && (open === path || open.startsWith(`${path}/`)))
+  }
+
+  const onAction = (node: NoteNode, action: EntryAction): void => {
+    const where = node.path ? folderLabel(node, courses) : 'Notizordner'
+    switch (action) {
+      case 'newNote':
+        setDialog({
+          kind: 'name',
+          title: 'Neue Notiz',
+          label: 'Name',
+          hint: `Kommt in „${where}“ als Markdown-Datei.`,
+          submitLabel: 'Anlegen',
+          run: async (name) => {
+            const result = await window.tuwas.createNoteIn(node.path, name)
+            if (!result.ok) return result.error
+            setDialog(null)
+            void openNote(result.value, (view) => view.dispatch({ selection: { anchor: view.state.doc.length } }))
+            return null
+          }
+        })
+        return
+      case 'newFolder':
+        setDialog({
+          kind: 'name',
+          title: 'Neuer Ordner',
+          label: 'Name',
+          hint: `Kommt in „${where}“.`,
+          submitLabel: 'Anlegen',
+          run: async (name) => {
+            const result = await window.tuwas.createFolder(node.path, name)
+            if (!result.ok) return result.error
+            setDialog(null)
+            void openFolder(result.value)
+            return null
+          }
+        })
+        return
+      case 'import':
+        void window.tuwas.importFiles(node.path).then((result) => {
+          if (!result.ok) setProblem(result.error)
+          else if (result.value.length > 0) expandTo(`${node.path}/`)
+        })
+        return
+      case 'rename': {
+        const course = node.kind === 'dir' ? courseKeyOf(node.name) : null
+        setDialog({
+          kind: 'name',
+          title: 'Umbenennen',
+          label: 'Neuer Name',
+          initial: node.kind === 'dir' ? (course ? node.name.replace(/\s*\([^)]*\)$/, '') : node.name) : displayNameForRename(node.path),
+          hint: course ? `Die LVA-Nummer (${course}) bleibt im Ordnernamen – über sie findet TUWAS das Fach.` : undefined,
+          submitLabel: 'Umbenennen',
+          run: async (name) => {
+            if (touchesOpenNote(node.path) && !(await save())) return 'Die offene Notiz ließ sich nicht speichern.'
+            const result = await window.tuwas.renameNote(node.path, name)
+            if (!result.ok) return result.error
+            setDialog(null)
+            relocate(node.path, result.value)
+            return null
+          }
+        })
+        return
+      }
+      case 'move':
+        setDialog({ kind: 'move', node })
+        return
+      case 'trash':
+        setDialog({ kind: 'trash', node })
+        return
+      case 'show':
+        window.tuwas.showNoteInFolder(node.path || null)
+    }
+  }
+
+  const moveEntry = async (path: string, dir: string): Promise<string | null> => {
+    if (touchesOpenNote(path) && !(await save())) return 'Die offene Notiz ließ sich nicht speichern.'
+    const result = await window.tuwas.moveEntry(path, dir)
+    if (!result.ok) return result.error
+    relocate(path, result.value)
+    return null
+  }
+
+  const trashEntry = async (node: NoteNode): Promise<string | null> => {
+    if (touchesOpenNote(node.path)) {
+      window.clearTimeout(timer.current)
+      dirty.current = false
+    }
+    const result = await window.tuwas.trashNote(node.path)
+    if (!result.ok) return result.error
+    if (touchesOpenNote(node.path)) close()
+    setPlace((path) => (path !== null && (path === node.path || path.startsWith(`${node.path}/`)) ? dirOf(node.path) || null : path))
+    return null
+  }
+
+  /** Something dropped onto a folder: entries of the notes are moved, files from outside copied in. */
+  const onDropInto = (dir: string, what: Dropped): void => {
+    if (what.kind === 'entry') {
+      if (what.path === dir || dirOf(what.path) === dir) return
+      void moveEntry(what.path, dir).then((problem) => problem && setProblem(problem))
+      return
+    }
+    void window.tuwas.importFiles(dir, what.files).then((result) => {
+      if (!result.ok) setProblem(result.error)
+      else expandTo(`${dir}/`)
+    })
+  }
 
   // All notes, for [[links]]: what exists, and what "[[" offers.
   const allNotes = useMemo(() => filesIn(notes.tree).filter((node) => node.kind === 'note'), [notes])
@@ -430,10 +587,10 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
 
   const startNewNote = useCallback(() => {
     setNewNote({
-      courseKey: lecture?.courseKey ?? courseKey ?? null,
+      courseKey: lecture?.courseKey ?? courseKey ?? (place ? courseKeyOf(place) : null),
       template: lecture?.kind === 'course' ? 'lecture' : 'blank'
     })
-  }, [lecture, courseKey])
+  }, [lecture, courseKey, place])
 
   // Strg+N (Cmd+N on a Mac): new note, Strg+Umschalt+F: search all notes.
   useEffect(() => {
@@ -527,11 +684,17 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     else if (result.value[0]) openPdf(result.value[0])
   }
 
+  // Files dropped onto the main area: next to an open note PDFs become its course's slides and everything else
+  // goes into the note's folder; otherwise into the folder shown (the Inbox on the course cards).
+  const dropDir = doc ? dirOf(doc.path) : (place ?? INBOX)
   const onDrop = (event: DragEvent): void => {
     event.preventDefault()
     setDropping(false)
     const files = [...event.dataTransfer.files].map((file) => window.tuwas.filePath(file)).filter(Boolean)
-    if (files.length > 0) void importSlides(files)
+    const pdfs = doc ? files.filter((file) => /\.pdf$/i.test(file)) : []
+    const rest = files.filter((file) => !pdfs.includes(file))
+    if (pdfs.length > 0) void importSlides(pdfs)
+    if (rest.length > 0) onDropInto(dropDir, { kind: 'files', files: rest })
   }
 
   // Slides of the note's course (or of its folder) for "Folien daneben".
@@ -567,19 +730,11 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
       onReset={() => setSplit(0.5)}
     />
   )
-  const dropTarget = courseKey ? `Folien von ${courseLabel(courseDirOf(doc!.path)!.split('/').pop()!, courses)}` : 'die Inbox'
+  const dropFolder = dropDir === INBOX ? 'die Inbox' : `„${folderLabel({ name: fileName(dropDir), path: dropDir }, courses)}“`
+  const dropTarget = doc && courseKey ? `PDFs zu den Folien von ${courseLabel(courseDirOf(doc.path)!.split('/').pop()!, courses)}, andere Dateien nach ${dropFolder}` : dropFolder
 
   return (
-    <div
-      ref={notesRef}
-      className="notes"
-      onDragOver={(event) => {
-        if (event.dataTransfer.types.includes('Files')) {
-          event.preventDefault()
-          setDropping(true)
-        }
-      }}
-    >
+    <div ref={notesRef} className="notes">
       {!treeHidden && (
         <aside className="notes-sidebar" style={{ width: treeWidth }}>
           <div className="notes-sidebar-head">
@@ -627,6 +782,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
                   notes={notes}
                   courses={courses}
                   activePaths={[doc?.path, pdf].filter((path): path is string => Boolean(path))}
+                  activeFolder={!doc && !pdf ? place : null}
                   expanded={expanded}
                   onToggle={(path) =>
                     setExpanded((previous) => {
@@ -636,6 +792,9 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
                     })
                   }
                   onOpen={onOpenNode}
+                  onOpenFolder={(path) => void openFolder(path)}
+                  onAction={onAction}
+                  onDrop={onDropInto}
                 />
                 {notes.tags.length > 0 && (
                   <div className="tag-cloud">
@@ -661,7 +820,15 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
         />
       )}
 
-      <section className="notes-main">
+      <section
+        className="notes-main"
+        onDragOver={(event) => {
+          if (event.dataTransfer.types.includes('Files')) {
+            event.preventDefault()
+            setDropping(true)
+          }
+        }}
+      >
         <header className="note-header">
           <button
             type="button"
@@ -674,7 +841,14 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
           </button>
           {doc ? (
             <>
-              <Breadcrumb path={doc.path} courses={courses} renaming={renaming} onRename={(name) => void rename(name)} onStartRename={() => setRenaming(true)} />
+              <Breadcrumb
+                path={doc.path}
+                courses={courses}
+                renaming={renaming}
+                onRename={(name) => void rename(name)}
+                onStartRename={() => setRenaming(true)}
+                onOpenFolder={(path) => void openFolder(path)}
+              />
               <span className={`save-state ${saveState}`}>{SAVE_LABELS[saveState]}</span>
               <div className="note-actions">
                 {(dirOf(doc.path) === INBOX || !courseKey) && courses.length > 0 && (
@@ -709,7 +883,7 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
               </div>
             </>
           ) : (
-            <span className="note-header-empty">{pdf ? displayName(fileName(pdf)) : 'Notizen'}</span>
+            <span className="note-header-empty">{pdf ? displayName(fileName(pdf)) : ''}</span>
           )}
         </header>
 
@@ -723,6 +897,18 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
               <FormatButton label={`Formel als eigener Block (${MOD}+Umschalt+M)`} icon={SquareSigma} disabled={!showEditor} run={insertMathBlock} view={viewRef} />
               <FormatButton label={`Checkliste (${MOD}+Umschalt+L)`} icon={ListChecks} disabled={!showEditor} run={toggleChecklist} view={viewRef} />
               <FormatButton label={`Code (${MOD}+E)`} icon={Code} disabled={!showEditor} run={(view) => wrap(view, '`')} view={viewRef} />
+              <span className="toolbar-sep" aria-hidden="true" />
+              <button
+                type="button"
+                className={`icon-button${live ? '' : ' pressed'}`}
+                aria-pressed={!live}
+                title={live ? 'Markdown-Zeichen überall zeigen' : 'Formatierung live anzeigen'}
+                aria-label="Markdown-Zeichen zeigen"
+                disabled={!showEditor}
+                onClick={() => setLive(!live)}
+              >
+                <Hash size={16} />
+              </button>
             </div>
             <div className="toolbar-right">
               <label className="slides-select" title="Folien neben der Notiz anzeigen">
@@ -803,6 +989,19 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
                 viewRef={viewRef}
                 noteNames={linkNames}
                 onPasteImage={pasteImage}
+                live={live}
+                dir={dirOf(doc.path)}
+                onWikiLink={(target) => void followLink(target)}
+                onLink={(href) => {
+                  // Web addresses go to the browser (the main process opens them), files in the notes open here.
+                  if (/^(https?|mailto):/i.test(href)) window.open(href)
+                  else if (!href.startsWith('#')) {
+                    const path = resolveRelative(dirOf(doc.path), href.split('#')[0]!)
+                    if (isPdf(path)) openPdf(path)
+                    else if (isTextNote(path)) void openNote(path)
+                    else window.tuwas.showNoteInFolder(path)
+                  }
+                }}
               />
             </div>
           )}
@@ -836,21 +1035,78 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
               <iframe key={pdf} src={noteFileUrl(pdf)} title={fileName(pdf)} />
             </div>
           )}
-          {!doc && !pdf && <EmptyNotes notes={notes} onNew={startNewNote} />}
+          {!doc && !pdf && place !== null && (
+            <FolderView
+              notes={notes}
+              courses={courses}
+              path={place}
+              onOpenFolder={(path) => void openFolder(path)}
+              onOpenFile={onOpenNode}
+              onAction={onAction}
+              onDrop={onDropInto}
+            />
+          )}
+          {!doc && !pdf && place === null && (
+            <NotesHome
+              notes={notes}
+              courses={courses}
+              now={now}
+              onOpenFolder={(path) => void openFolder(path)}
+              onOpenNote={(path) => void openNote(path)}
+              onAction={onAction}
+              onDrop={onDropInto}
+              onNewNote={startNewNote}
+            />
+          )}
         </div>
-
+        {dropping && (
+          <div className="drop-overlay" onDragOver={(event) => event.preventDefault()} onDragLeave={() => setDropping(false)} onDrop={onDrop}>
+            <div>
+              <FolderInput size={28} />
+              <strong>Hier ablegen</strong>
+              <span>Kommt {dropTarget.startsWith('PDFs') ? '' : 'nach '}{dropTarget} (kopiert)</span>
+            </div>
+          </div>
+        )}
       </section>
 
-      {dropping && (
-        <div className="drop-overlay" onDragOver={(event) => event.preventDefault()} onDragLeave={() => setDropping(false)} onDrop={onDrop}>
-          <div>
-            <Presentation size={28} />
-            <strong>PDF hier ablegen</strong>
-            <span>Kommt in {dropTarget}</span>
-          </div>
-        </div>
-      )}
 
+      {dialog?.kind === 'name' && (
+        <NameDialog
+          title={dialog.title}
+          label={dialog.label}
+          initial={dialog.initial}
+          hint={dialog.hint}
+          submitLabel={dialog.submitLabel}
+          onSubmit={dialog.run}
+          onClose={() => setDialog(null)}
+        />
+      )}
+      {dialog?.kind === 'move' && (
+        <MoveDialog
+          notes={notes}
+          courses={courses}
+          node={dialog.node}
+          onMove={async (dir) => {
+            const problem = await moveEntry(dialog.node.path, dir)
+            if (!problem) setDialog(null)
+            return problem
+          }}
+          onClose={() => setDialog(null)}
+        />
+      )}
+      {dialog?.kind === 'trash' && (
+        <TrashDialog
+          node={dialog.node}
+          courses={courses}
+          onTrash={async () => {
+            const problem = await trashEntry(dialog.node)
+            if (!problem) setDialog(null)
+            return problem
+          }}
+          onClose={() => setDialog(null)}
+        />
+      )}
       {newNote && (
         <NewNoteDialog
           courses={courses.filter((course) => !course.hidden)}
@@ -865,6 +1121,12 @@ function Workspace(props: { notes: NotesData; calendar: CalendarData | null; req
     </div>
   )
 }
+
+/** The small dialogs of the entry menu. */
+type EntryDialog =
+  | { kind: 'name'; title: string; label: string; initial?: string; hint?: string; submitLabel: string; run: (name: string) => Promise<string | null> }
+  | { kind: 'move'; node: NoteNode }
+  | { kind: 'trash'; node: NoteNode }
 
 const SAVE_LABELS: Record<SaveState, string> = {
   saved: 'Gespeichert',
@@ -895,17 +1157,33 @@ function FormatButton(props: { label: string; icon: typeof Bold; disabled: boole
 }
 
 /** "Analysis › Vorlesung › Mi., 7. Okt." – the last part is the file name, click to rename. */
-function Breadcrumb(props: { path: string; courses: Course[]; renaming: boolean; onRename: (name: string) => void; onStartRename: () => void }) {
+function Breadcrumb(props: {
+  path: string
+  courses: Course[]
+  renaming: boolean
+  onRename: (name: string) => void
+  onStartRename: () => void
+  onOpenFolder: (path: string | null) => void
+}) {
   const cancelled = useRef(false)
   const parts = props.path.split('/')
   const name = parts.pop()!
+  // From the course folder on (the semester is implied); without one, every folder.
   const courseIndex = parts.findIndex((part) => courseKeyOf(part))
-  const crumbs = courseIndex === -1 ? parts : [courseLabel(parts[courseIndex]!, props.courses), ...parts.slice(courseIndex + 1)]
+  const crumbs = parts.map((part, index) => ({ path: parts.slice(0, index + 1).join('/'), part })).slice(Math.max(0, courseIndex))
   return (
-    <div className="breadcrumb">
-      {crumbs.map((crumb, index) => (
-        <span key={index} className="crumb">
-          {crumb}
+    <nav className="breadcrumb" aria-label="Ordnerpfad">
+      <span className="crumb">
+        <button type="button" className="crumb-link" onClick={() => props.onOpenFolder(null)}>
+          Notizen
+        </button>
+        <span className="crumb-sep">›</span>
+      </span>
+      {crumbs.map((crumb) => (
+        <span key={crumb.path} className="crumb">
+          <button type="button" className="crumb-link" onClick={() => props.onOpenFolder(crumb.path)}>
+            {folderLabel({ name: crumb.part, path: crumb.path }, props.courses)}
+          </button>
           <span className="crumb-sep">›</span>
         </span>
       ))}
@@ -931,7 +1209,7 @@ function Breadcrumb(props: { path: string; courses: Course[]; renaming: boolean;
           {displayName(name)}
         </button>
       )}
-    </div>
+    </nav>
   )
 }
 
@@ -960,18 +1238,4 @@ function highlight(snippet: string, terms: string[]): ReactNode[] {
   if (terms.length === 0) return [snippet]
   const pattern = new RegExp(`(${terms.map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi')
   return snippet.split(pattern).map((part, index) => (index % 2 === 1 ? <mark key={index}>{part}</mark> : part))
-}
-
-function EmptyNotes(props: { notes: NotesData; onNew: () => void }) {
-  const hasNotes = filesIn(props.notes.tree).some((node) => node.kind === 'note')
-  return (
-    <div className="notes-empty">
-      <NotebookPen size={28} />
-      <strong>{hasNotes ? 'Wähle links eine Notiz' : 'Noch keine Notizen'}</strong>
-      <span>Oder leg eine neue an – für eine Vorlesung, ein Übungsblatt oder zur Prüfungsvorbereitung. PDFs kannst du einfach hierher ziehen.</span>
-      <button type="button" className="button" onClick={props.onNew}>
-        <Plus size={14} /> Neue Notiz
-      </button>
-    </div>
-  )
 }

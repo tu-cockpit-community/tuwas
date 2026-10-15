@@ -9,7 +9,7 @@ import { calendarChanged, calendarData, startCalendarSync, syncCalendar } from '
 import { changes, startChanges } from './changes'
 import { createLinkedNote, importPdfs, noteForEvent, noteForTask, quickNote, setupNotes } from './courseNotes'
 import { examsData, startExamSync, syncExams } from './exams'
-import { notesData, saveNoteImage, searchNotes, startNotesWatch, writeNote } from './notes'
+import { createFolder, createNoteIn, importIntoNotes, moveEntry, notesData, renameEntry, saveNoteImage, searchNotes, startNotesWatch, trashNote, writeNote } from './notes'
 import { stopLernen, syncLernenCourses } from './lernen'
 import { handleNotesScheme } from './notesProtocol'
 import { addOwnEvent } from './ownEvents'
@@ -669,6 +669,18 @@ async function smokeNotes(main: BrowserWindow, mini: BrowserWindow, dir: string,
     }
   }
 
+  // Without an open note: the course cards, then a course's folder with the menu of an entry.
+  await delay(1500)
+  shots['notes-home'] = await screenshot(main, dir, 'notes-home')
+  await js(`document.querySelector('.course-card-open')?.click()`)
+  await delay(1000)
+  shots['notes-folder'] = await screenshot(main, dir, 'notes-folder')
+  await js(`document.querySelector('.folder-row .entry-menu-button')?.click()`)
+  await delay(500)
+  shots['notes-menu'] = await screenshot(main, dir, 'notes-menu')
+  report['notesFolderView'] = await js(`({ cards: document.querySelectorAll('.course-card').length, rows: document.querySelectorAll('.folder-row').length, menu: document.querySelectorAll('.entry-menu-list [role=menuitem]').length })`)
+  await js(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))`)
+
   main.webContents.send(IPC.navigate, 'notes', openPath)
   await delay(2000)
   shots['notes'] = await screenshot(main, dir, 'notes')
@@ -702,7 +714,52 @@ async function smokeNotes(main: BrowserWindow, mini: BrowserWindow, dir: string,
   shots['deadlines-note'] = await screenshot(main, dir, 'deadlines-note')
   ;(report['notes'] as Record<string, unknown>)['extras'] = await smokeNoteExtras(main, dir, openPath, shots)
   ;(report['notes'] as Record<string, unknown>)['editing'] = await smokeEditing(main, join(setup.root!, openPath), openPath)
+  ;(report['notes'] as Record<string, unknown>)['folders'] = await smokeFolders(setup.root!, dir)
   return shots
+}
+
+/** Folders in the notes: create, new note in it, rename (course folders keep their LVA), move, import, protected folders. */
+async function smokeFolders(root: string, dir: string): Promise<Record<string, boolean>> {
+  const throws = async (action: () => unknown): Promise<boolean> => {
+    try {
+      await action()
+      return false
+    } catch {
+      return true
+    }
+  }
+  const semester = notesData().semester
+  const course = readdirSync(join(root, semester)).find((name) => /\(\d{3}\.[0-9A-Z]{3}\)$/.test(name))
+  const checks: Record<string, boolean> = { courseFolder: Boolean(course) }
+  if (!course) return checks
+  const courseDir = `${semester}/${course}`
+  const folder = createFolder(courseDir, 'Tutorium')
+  checks['createFolder'] = existsSync(join(root, folder)) && folder === `${courseDir}/Tutorium`
+  checks['createFolderTwice'] = await throws(() => createFolder(courseDir, 'Tutorium'))
+  const note = createNoteIn(folder, 'Blatt 1')
+  checks['createNoteIn'] = note === `${folder}/Blatt 1.md` && readFileSync(join(root, note), 'utf8').startsWith('# Blatt 1')
+  const renamed = renameEntry(courseDir, 'Umbenanntes Fach')
+  checks['courseKeepsKey'] = renamed.endsWith(course.slice(course.lastIndexOf('('))) && existsSync(join(root, renamed, 'Tutorium', 'Blatt 1.md'))
+  renameEntry(renamed, course.slice(0, course.lastIndexOf(' (')))
+  checks['renameBack'] = existsSync(join(root, courseDir))
+  const moved = moveEntry(note, 'Inbox')
+  checks['moveFile'] = moved === 'Inbox/Blatt 1.md' && existsSync(join(root, moved))
+  const movedFolder = moveEntry(folder, 'Inbox')
+  checks['moveFolder'] = movedFolder === 'Inbox/Tutorium' && !existsSync(join(root, folder))
+  checks['folderIntoItself'] = await throws(() => moveEntry(movedFolder, movedFolder))
+  checks['protectedInbox'] = await throws(() => renameEntry('Inbox', 'Eingang'))
+  checks['protectedSemester'] = await throws(() => trashNote(semester))
+  checks['outside'] = await throws(() => createFolder('..', 'Ausbruch'))
+  // From outside: a Markdown file and a whole folder are copied in, the originals stay.
+  const outside = join(dir, 'Extern')
+  mkdirSync(join(outside, 'Altes Semester'), { recursive: true })
+  writeFileSync(join(outside, 'Mitschrift.md'), '# Mitschrift\n\nvon woanders\n')
+  writeFileSync(join(outside, 'Altes Semester', 'Analysis.md'), '# Analysis\n')
+  const imported = importIntoNotes([join(outside, 'Mitschrift.md'), join(outside, 'Altes Semester')], courseDir)
+  checks['importFile'] = imported.includes(`${courseDir}/Mitschrift.md`) && existsSync(join(outside, 'Mitschrift.md'))
+  checks['importFolder'] = imported.includes(`${courseDir}/Altes Semester`) && existsSync(join(root, courseDir, 'Altes Semester', 'Analysis.md'))
+  checks['importIntoItself'] = await throws(() => importIntoNotes([root], courseDir))
+  return checks
 }
 
 /** A pasted picture, [[links]] (one leads to a new note), the note as PDF. */
@@ -750,6 +807,14 @@ async function smokeEditing(main: BrowserWindow, file: string, path: string): Pr
   const result: Record<string, boolean> = {}
   main.webContents.send(IPC.navigate, 'notes', path)
   await delay(1000)
+
+  // Live preview: formulas, checkboxes and the table look rendered; a click on a checkbox ticks it in the file.
+  result['liveMath'] = ((await js(`document.querySelectorAll('.cm-lp-math .katex').length`)) as number) >= 2
+  result['liveTable'] = ((await js(`document.querySelectorAll('.cm-lp-table table').length`)) as number) === 1
+  result['liveTasks'] = ((await js(`document.querySelectorAll('.cm-lp-task').length`)) as number) === 2
+  await js(`[...document.querySelectorAll('.cm-lp-task')].find((box) => !box.checked)?.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }))`)
+  await delay(1500)
+  result['liveTaskTicked'] = onDisk().includes('- [x] Beispiel 3 nachrechnen')
 
   await type(' Autosave-Test')
   await delay(1500)

@@ -4,15 +4,21 @@ import { COURSE_OVERVIEW, courseKeyOfFolder, INBOX } from '../../../shared/notes
 import type { Course, NoteNode, NotesData } from '../../../shared/types'
 import { semesterLabel } from '../../../shared/tu'
 import { courseLabel, displayName, filesIn, sortForDisplay, type NoteDirNode, type NoteFileNode } from '../lib/notes'
+import { draggable, EntryMenu, useDropTarget, type Dropped, type EntryAction } from './EntryActions'
 
 interface TreeProps {
   notes: NotesData
   courses: Course[]
   /** The open note and the PDF next to it, highlighted. */
   activePaths: string[]
+  /** The folder shown in the folder view, highlighted. */
+  activeFolder: string | null
   expanded: Set<string>
   onToggle: (path: string) => void
   onOpen: (node: NoteFileNode) => void
+  onOpenFolder: (path: string) => void
+  onAction: (node: NoteNode, action: EntryAction) => void
+  onDrop: (dir: string, what: Dropped) => void
 }
 
 /**
@@ -66,49 +72,85 @@ function fileIcon(node: NoteFileNode): ReactNode {
   return <File size={15} />
 }
 
-function TreeRow(props: TreeProps & { node: NoteNode; depth: number; icon?: ReactNode; label?: string; title?: string; course?: boolean }) {
-  const { node, depth } = props
-  const indent = { paddingLeft: `${8 + depth * 16}px` }
+type RowProps = TreeProps & { node: NoteNode; depth: number; icon?: ReactNode; label?: string; title?: string; course?: boolean }
 
-  if (node.kind !== 'dir') {
-    const active = props.activePaths.includes(node.path)
-    return (
+const indent = (depth: number): { paddingLeft: string } => ({ paddingLeft: `${4 + depth * 16}px` })
+
+function TreeRow(props: RowProps) {
+  return props.node.kind === 'dir' ? <TreeDir {...props} node={props.node} /> : <TreeFile {...props} node={props.node} />
+}
+
+function TreeFile(props: RowProps & { node: NoteFileNode }) {
+  const { node } = props
+  const active = props.activePaths.includes(node.path)
+  const label = props.label ?? displayName(node.name)
+  return (
+    <div className={`tree-item${active ? ' active' : ''}`} style={indent(props.depth)} role="none">
+      <span className="tree-toggle" aria-hidden="true" />
       <button
         type="button"
         role="treeitem"
         className={`tree-row${active ? ' active' : ''}${node.kind === 'file' ? ' other' : ''}`}
-        style={indent}
         title={node.name}
         aria-current={active ? 'true' : undefined}
+        {...draggable(node)}
         onClick={() => props.onOpen(node)}
       >
-        <span className="tree-chevron" />
         {props.icon ?? fileIcon(node)}
-        <span className="tree-label">{props.label ?? displayName(node.name)}</span>
+        <span className="tree-label">{label}</span>
       </button>
-    )
-  }
+      <EntryMenu node={node} label={label} onAction={props.onAction} />
+    </div>
+  )
+}
 
+function TreeDir(props: RowProps & { node: NoteDirNode }) {
+  const { node, depth } = props
   const open = props.expanded.has(node.path)
   const count = filesIn(node.children).length
+  const label = props.label ?? node.name
+  const active = props.activeFolder === node.path
+  const drop = useDropTarget(node.path, props.onDrop)
   return (
     <>
-      <button
-        type="button"
-        role="treeitem"
-        className={`tree-row dir${props.course ? ' course' : ''}`}
-        style={indent}
-        title={props.title ?? node.name}
-        aria-expanded={open}
-        onClick={() => props.onToggle(node.path)}
-      >
-        <ChevronRight size={14} className={`tree-chevron${open ? ' open' : ''}`} />
-        {props.icon ?? <Folder size={15} />}
-        <span className="tree-label">{props.label ?? node.name}</span>
-        {!props.course && count > 0 && <span className="tree-count">{count}</span>}
-      </button>
+      <div className={`tree-item${active ? ' active' : ''}${drop.over ? ' drop-over' : ''}`} style={indent(depth)} role="none" {...drop.props}>
+        <button
+          type="button"
+          className="tree-toggle"
+          aria-label={open ? `${label} zuklappen` : `${label} aufklappen`}
+          tabIndex={-1}
+          onClick={() => props.onToggle(node.path)}
+        >
+          <ChevronRight size={14} className={`tree-chevron${open ? ' open' : ''}`} />
+        </button>
+        <button
+          type="button"
+          role="treeitem"
+          className={`tree-row dir${props.course ? ' course' : ''}${active ? ' active' : ''}`}
+          title={props.title ?? node.name}
+          aria-expanded={open}
+          aria-current={active ? 'true' : undefined}
+          {...draggable(node)}
+          onClick={() => {
+            // Opens the folder on the right and shows what's in it here.
+            props.onOpenFolder(node.path)
+            if (!open) props.onToggle(node.path)
+          }}
+          onKeyDown={(event) => {
+            if ((event.key === 'ArrowRight' && !open) || (event.key === 'ArrowLeft' && open)) {
+              event.preventDefault()
+              props.onToggle(node.path)
+            }
+          }}
+        >
+          {props.icon ?? <Folder size={15} />}
+          <span className="tree-label">{label}</span>
+          {!props.course && count > 0 && <span className="tree-count">{count}</span>}
+        </button>
+        <EntryMenu node={node} label={label} onAction={props.onAction} />
+      </div>
       {open && node.children.length === 0 && (
-        <div className="tree-empty" style={{ paddingLeft: `${8 + (depth + 1) * 16 + 18}px` }}>
+        <div className="tree-empty" style={{ paddingLeft: `${4 + (depth + 1) * 16 + 22}px` }}>
           leer
         </div>
       )}
@@ -119,9 +161,13 @@ function TreeRow(props: TreeProps & { node: NoteNode; depth: number; icon?: Reac
             notes={props.notes}
             courses={props.courses}
             activePaths={props.activePaths}
+            activeFolder={props.activeFolder}
             expanded={props.expanded}
             onToggle={props.onToggle}
             onOpen={props.onOpen}
+            onOpenFolder={props.onOpenFolder}
+            onAction={props.onAction}
+            onDrop={props.onDrop}
             node={child}
             depth={depth + 1}
           />

@@ -1,9 +1,9 @@
 import { shell } from 'electron'
-import { constants, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync, watch, writeFileSync, type Dirent, type FSWatcher, type Stats } from 'node:fs'
+import { constants, copyFileSync, cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync, watch, writeFileSync, type Dirent, type FSWatcher, type Stats } from 'node:fs'
 import { homedir } from 'node:os'
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 import type { NoteDoc, NoteNode, NotesData, SaveResult, SearchHit } from '../shared/types'
-import { courseKeyOfFolder, isSemesterFolder, safeFileName } from '../shared/notes'
+import { courseKeyOfFolder, INBOX, isSemesterFolder, safeFileName } from '../shared/notes'
 import { currentSemester } from '../shared/tu'
 import { getSettings } from './settings'
 
@@ -283,9 +283,115 @@ export function moveNoteTo(path: string, dir: string): string {
   return toRel(target)
 }
 
+// ---------- Folders: create, rename, move ----------
+
+/** The Inbox and the semester folders right in the notes folder: TUWAS finds courses and quick notes by them. */
+function isProtected(abs: string): boolean {
+  const rel = toRel(abs)
+  return !rel.includes('/') && (rel === INBOX || isSemesterFolder(rel))
+}
+
+const PROTECTED = 'Die Inbox und die Semesterordner bleiben, wie sie sind – TUWAS findet Fächer und Schnellnotizen über sie.'
+
+/** "Ordner", or "Ordner 2" if that exists already (no extension handling: "Analysis (123.456)" has none). */
+function uniqueDir(parent: string, name: string): string {
+  let candidate = join(parent, name)
+  for (let n = 2; existsSync(candidate); n++) candidate = join(parent, `${name} ${n}`)
+  return candidate
+}
+
+function requireDir(abs: string): void {
+  if (!statOrNull(abs)?.isDirectory()) throw new Error('Diesen Ordner gibt es im Notizordner nicht (mehr).')
+}
+
+export function createFolder(parent: string, name: string): string {
+  const parentAbs = resolveNote(parent)
+  requireDir(parentAbs)
+  const clean = safeFileName(name, 80)
+  if (!clean) throw new Error('Bitte einen Namen eingeben.')
+  const target = join(parentAbs, clean)
+  if (existsSync(target)) throw new Error(`„${clean}“ gibt es in diesem Ordner schon.`)
+  mkdirSync(target)
+  notesChanged()
+  return toRel(target)
+}
+
+/** An empty note in any folder, titled after its name. */
+export function createNoteIn(dir: string, name: string): string {
+  requireDir(resolveNote(dir))
+  const clean = safeFileName(name.replace(/\.(md|markdown|txt)$/i, ''), 120) || 'Notiz'
+  return createNoteFile(dir, `${clean}.md`, `# ${clean}\n\n`)
+}
+
+/** Files keep their extension; course folders keep their LVA number, which links them to the course. */
+export function renameEntry(path: string, name: string): string {
+  const abs = resolveNote(path)
+  const stat = statOrNull(abs)
+  if (!stat) throw new Error(`„${basename(abs)}“ gibt es im Notizordner nicht (mehr).`)
+  if (stat.isFile()) return renameNote(path, name)
+  if (abs === requireRoot() || isProtected(abs)) throw new Error(PROTECTED)
+  let clean = safeFileName(name, 80)
+  if (!clean) throw new Error('Bitte einen Namen eingeben.')
+  const key = courseKeyOfFolder(basename(abs))
+  if (key && courseKeyOfFolder(clean) !== key) clean = `${clean.replace(/\s*\([^)]*\)$/, '')} (${key})`
+  const target = join(dirname(abs), clean)
+  if (target === abs) return toRel(abs)
+  if (existsSync(target)) throw new Error(`„${clean}“ gibt es in diesem Ordner schon.`)
+  renameSync(abs, target)
+  notesChanged()
+  return toRel(target)
+}
+
+/** A file or folder into another folder of the notes. */
+export function moveEntry(path: string, dir: string): string {
+  const abs = resolveNote(path)
+  const stat = statOrNull(abs)
+  if (!stat) throw new Error(`„${basename(abs)}“ gibt es im Notizordner nicht (mehr).`)
+  const dirAbs = resolveNote(dir)
+  requireDir(dirAbs)
+  if (stat.isFile()) return moveNoteTo(path, dir)
+  if (abs === requireRoot() || isProtected(abs)) throw new Error(PROTECTED)
+  if (dirAbs === abs || dirAbs.startsWith(`${abs}${sep}`)) throw new Error('Ein Ordner lässt sich nicht in sich selbst verschieben.')
+  if (dirname(abs) === dirAbs) return toRel(abs)
+  const target = join(dirAbs, basename(abs))
+  if (existsSync(target)) throw new Error(`„${basename(abs)}“ gibt es im Zielordner schon.`)
+  renameSync(abs, target)
+  notesChanged()
+  return toRel(target)
+}
+
+/**
+ * Copies files and folders from outside (dragged in or picked) into a folder of the notes. The originals stay
+ * where they are. The same file dropped twice is not copied again.
+ */
+export function importIntoNotes(sources: string[], dir: string): string[] {
+  const dirAbs = resolveNote(dir)
+  requireDir(dirAbs)
+  const root = requireRoot()
+  const result: string[] = []
+  const files: string[] = []
+  for (const source of sources) {
+    const stat = typeof source === 'string' && isAbsolute(source) ? statOrNull(source) : null
+    if (!stat) continue
+    // Not the notes folder (or a part of it) into itself.
+    if (resolve(source) === root || dirAbs.startsWith(`${resolve(source)}${sep}`) || dirAbs === resolve(source)) continue
+    if (stat.isFile()) files.push(source)
+    else if (stat.isDirectory()) {
+      const target = uniqueDir(dirAbs, basename(source))
+      cpSync(source, target, { recursive: true, errorOnExist: true, force: false })
+      result.push(toRel(target))
+    }
+  }
+  if (files.length > 0) result.push(...copyIntoNotes(files, dir))
+  else if (result.length > 0) notesChanged()
+  if (result.length === 0) throw new Error('Nichts zum Übernehmen gefunden.')
+  return result
+}
+
 export async function trashNote(path: string): Promise<void> {
   const abs = resolveNote(path)
   if (abs === requireRoot()) throw new Error('Der Notizordner selbst bleibt.')
+  if (isProtected(abs)) throw new Error(PROTECTED)
   await shell.trashItem(abs)
   notesChanged()
 }

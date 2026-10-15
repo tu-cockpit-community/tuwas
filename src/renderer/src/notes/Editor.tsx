@@ -6,9 +6,10 @@ import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 import { HighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { languages } from '@codemirror/language-data'
 import { searchKeymap } from '@codemirror/search'
-import { EditorSelection, EditorState } from '@codemirror/state'
+import { Compartment, EditorSelection, EditorState } from '@codemirror/state'
 import { Decoration, EditorView, keymap, MatchDecorator, placeholder, ViewPlugin, type DecorationSet, type ViewUpdate } from '@codemirror/view'
 import { tags as t } from '@lezer/highlight'
+import { livePreview } from './livePreview'
 
 // The Markdown editor (CodeMirror 6). Colours come from the app's CSS variables, so it follows
 // GNOME's light/dark setting like the rest of TUWAS.
@@ -234,7 +235,17 @@ export interface EditorProps {
   noteNames: string[]
   /** A picture from the clipboard: saved, returns the path for the Markdown (or null). */
   onPasteImage: (file: File) => Promise<string | null>
+  /** Live preview: formatting shown rendered, Markdown marks only where the cursor is. Off: plain Markdown. */
+  live: boolean
+  /** The note's folder (pictures are loaded from there). */
+  dir: string
+  /** Strg/Cmd+click on [[Notiz]] or on a link. */
+  onWikiLink: (target: string) => void
+  onLink: (href: string) => void
 }
+
+/** Live preview on or off without a new document (undo history and cursor stay). */
+const live = new Compartment()
 
 export function MarkdownEditor(props: EditorProps) {
   const host = useRef<HTMLDivElement>(null)
@@ -242,6 +253,12 @@ export function MarkdownEditor(props: EditorProps) {
   const latest = useRef(props)
   latest.current = props
   const { viewRef } = props
+  const liveExtension = (): ReturnType<typeof livePreview> =>
+    livePreview({
+      dir: () => latest.current.dir,
+      onWikiLink: (target) => latest.current.onWikiLink(target),
+      onLink: (href) => latest.current.onLink(href)
+    })
 
   useEffect(() => {
     const view = new EditorView({ parent: host.current! })
@@ -265,6 +282,7 @@ export function MarkdownEditor(props: EditorProps) {
         doc: latest.current.content,
         extensions: [
           baseExtensions,
+          live.of(latest.current.live ? liveExtension() : []),
           keymap.of([{ key: 'Mod-s', run: () => (latest.current.onSave(), true) }]),
           // "[[" offers the other notes.
           autocompletion({ override: [(context) => noteCompletions(context, latest.current.noteNames)], icons: false }),
@@ -291,5 +309,9 @@ export function MarkdownEditor(props: EditorProps) {
     )
   }, [props.docKey, viewRef])
 
-  return <div ref={host} className="note-editor" />
+  useEffect(() => {
+    viewRef.current?.dispatch({ effects: live.reconfigure(props.live ? liveExtension() : []) })
+  }, [props.live, viewRef])
+
+  return <div ref={host} className={`note-editor${props.live ? ' live' : ''}`} />
 }
