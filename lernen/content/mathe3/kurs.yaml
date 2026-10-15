@@ -1,0 +1,26 @@
+id: mathe3
+titel: Mathematik 3
+untertitel: Studienberechtigungsprüfung TU Wien
+sbp: sbp-mathe3
+teile:
+  A: Grundlagen (Stoff Mathematik 2)
+  B: Erweiterung Mathematik 3
+  C: Prüfungstraining
+pruefung:
+  form: schriftlich, danach mündlich (binnen 2 Wochen); bewertet wird die Gesamtleistung
+  dauer_minuten: 120
+  datum: "2027-02-26"
+  hilfsmittel: Schulformelsammlung und ein- oder zweizeiliger Taschenrechner, nicht programmierbar und nicht grafikfähig
+  pruefer: "ao.Univ.Prof. Gabriela Schranz-Kirlinger (Institut für Analysis und Scientific Computing). Nächster Termin: Fr 26.02.2027, 10–12 Uhr, Anmeldung bis ca. 12.02.2027"
+beschreibung: |
+  Mathematik 3 umfasst laut Verordnung den gesamten Stoff von **Mathematik 2**:
+  Zahlenmengen, Gleichungen und Ungleichungen, elementare Funktionen, Vektoren, Matrizen,
+  Determinanten, endliche Folgen und Reihen, Grundbegriffe der Differential- und Integralrechnung,
+  Trigonometrie und vektorielle analytische Geometrie (Geraden, Ebenen, Kreis, Kugel).
+  **Zusätzlich** kommen Wahrscheinlichkeitsrechnung und Statistik, komplexe Zahlen sowie die exakte
+  Infinitesimalrechnung dazu: Grenzwerte von Folgen und Funktionen, Stetigkeit, Differenzierbarkeit
+  und Integrierbarkeit.
+
+  Die schriftliche Prüfung besteht aus 4 bis 6 Aufgaben mit Teilaufgaben, meist mit Anwendungsbezug
+  (Wachstum, Bremsweg, Würfel, Steigung). Danach folgt eine mündliche Prüfung, in der Begriffe,
+  Definitionen und Begründungen gefragt sind.

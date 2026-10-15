@@ -1,0 +1,284 @@
+id: simulation-4
+titel: 'Simulation 4: Matrizen, Dreieck, Riemann-Summen, Riesenrad'
+art: simulation
+dauer_minuten: 120
+hinweis: |
+  Selbst erstellte Prüfung im Stil von G. Schranz-Kirlinger (4 Beispiele zu je 10 Punkten, 120 Minuten).
+  Themen: Matrizenmultiplikation, Determinante (Sarrus), Mischungsaufgabe mit LGS, Vektorrechnung im
+  Dreieck (Winkel, Fläche, Höhe, Schwerpunkt, Teilungspunkt), Ober- und Untersumme, Rotationskörper,
+  uneigentliches Integral, Substitution, allgemeine Sinusfunktion, Binomialverteilung mit
+  $\sigma$-Umgebung.
+
+  **Erlaubt:** nicht programmierbarer, nicht grafikfähiger Taschenrechner. Hinweise und Lösungen
+  siehst du erst nach der Abgabe.
+aufgaben:
+  - id: sim7-1
+    titel: Matrizen und eine Kaffeemischung
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **1.1)** (3 P.) Gegeben sind $A = \begin{pmatrix} 1 & 2\\ 3 & 4\end{pmatrix}$ und
+      $B = \begin{pmatrix} 2 & 0\\ 1 & -1\end{pmatrix}$. Berechnen Sie $A\cdot B$ und $B\cdot A$. Was
+      fällt auf?
+
+      **1.2)** (2 P.) Berechnen Sie die Determinante von
+      $M = \begin{pmatrix} 2 & 1 & 3\\ 0 & -1 & 4\\ 1 & 2 & 0\end{pmatrix}$. Ist $M$ invertierbar?
+
+      **1.3)** (5 P.) Eine Rösterei mischt drei Kaffeesorten $A$, $B$, $C$ zu 8, 12 und 16 Euro pro kg.
+      Es sollen 10 kg einer Mischung entstehen, die 12,80 Euro pro kg kostet. Von Sorte $C$ soll doppelt so
+      viel verwendet werden wie von Sorte $A$. Stellen Sie ein lineares Gleichungssystem auf und lösen Sie
+      es.
+    teile:
+      - typ: vektor
+        label: '1.1) $A\cdot B$ zeilenweise $(c_{11}, c_{12}, c_{21}, c_{22})$'
+        loesung: ["4", "-2", "10", "-4"]
+      - typ: vektor
+        label: '1.1) $B\cdot A$ zeilenweise'
+        loesung: ["2", "4", "-2", "-2"]
+      - typ: zahl
+        label: '1.2) $\det M$'
+        loesung: "det([[2,1,3],[0,-1,4],[1,2,0]])"
+        anzeige: '-9'
+      - typ: vektor
+        label: '1.3) Mengen von $A$, $B$, $C$ in kg'
+        namen: ["A", "B", "C"]
+        loesung: ["2", "4", "4"]
+    hinweise:
+      - '1.1) Eintrag $c_{ij}$ = Zeile $i$ der linken Matrix mal Spalte $j$ der rechten Matrix.'
+      - '1.2) Regel von Sarrus: drei Hauptdiagonalprodukte minus drei Nebendiagonalprodukte.'
+      - '1.3) Drei Gleichungen: Gesamtmasse, Gesamtpreis ($10\cdot 12{,}80 = 128$ Euro), Verhältnis $c = 2a$.'
+    loesung: |
+      **1.1)** $A B = \begin{pmatrix} 1\cdot 2 + 2\cdot 1 & 1\cdot 0 + 2\cdot(-1)\\ 3\cdot 2 + 4\cdot 1 & 3\cdot 0 + 4\cdot(-1)\end{pmatrix} = \begin{pmatrix} 4 & -2\\ 10 & -4\end{pmatrix}$.
+      ---
+      $B A = \begin{pmatrix} 2 & 4\\ 1 - 3 & 2 - 4\end{pmatrix} = \begin{pmatrix} 2 & 4\\ -2 & -2\end{pmatrix}$.
+      $AB \neq BA$: Die Matrizenmultiplikation ist **nicht kommutativ**.
+      ---
+      **1.2)** Sarrus: $2\cdot(-1)\cdot 0 + 1\cdot 4\cdot 1 + 3\cdot 0\cdot 2 - \big(3\cdot(-1)\cdot 1 + 2\cdot 4\cdot 2 + 1\cdot 0\cdot 0\big) = 4 - (-3 + 16) = -9$.
+      Da $\det M \neq 0$, ist $M$ invertierbar.
+      ---
+      **1.3)** Mit $a, b, c$ (kg):
+      $$\begin{aligned} a + b + c &= 10\\ 8a + 12b + 16c &= 128\\ c &= 2a \end{aligned}$$
+      ---
+      $c = 2a$ einsetzen: $3a + b = 10 \Rightarrow b = 10 - 3a$. Zweite Gleichung: $8a + 12(10 - 3a) + 32a = 128 \iff 4a + 120 = 128 \iff a = 2$.
+      Dann $b = 4$, $c = 4$.
+      ---
+      Probe: $2 + 4 + 4 = 10$ kg ✓, $16 + 48 + 64 = 128$ Euro ✓, $4 = 2\cdot 2$ ✓.
+      Also 2 kg von $A$, 4 kg von $B$ und 4 kg von $C$.
+
+  - id: sim7-2
+    titel: Vektorrechnung im Dreieck
+    niveau: 3
+    punkte: 10
+    angabe: |
+      Gegeben ist das Dreieck mit den Eckpunkten $A(-2\mid 1)$, $B(6\mid -3)$ und $C(4\mid 5)$.
+
+      (a) (2 P.) Berechnen Sie den Innenwinkel $\alpha$ bei $A$.
+
+      (b) (2 P.) Berechnen Sie den Flächeninhalt des Dreiecks.
+
+      (c) (2 P.) Berechnen Sie den Fußpunkt $H$ der Höhe von $C$ auf die Seite $AB$ und die Länge $h_c$
+      dieser Höhe.
+
+      (d) (2 P.) Berechnen Sie den Schwerpunkt $S$ des Dreiecks.
+
+      (e) (2 P.) Der Punkt $T$ teilt die Strecke $AB$ im Verhältnis $\overline{AT} : \overline{TB} = 3 : 1$.
+      Berechnen Sie $T$.
+    teile:
+      - typ: zahl
+        label: '(a) $\alpha$ in Grad'
+        loesung: "inGrad(acos(32/(sqrt(80)*sqrt(52))))"
+        anzeige: '60{,}26'
+        einheit: °
+        toleranz: 0.05
+      - typ: zahl
+        label: '(b) Flächeninhalt'
+        loesung: "abs(8*4 - (-4)*6)/2"
+        anzeige: '28'
+      - typ: vektor
+        label: '(c) Höhenfußpunkt $H$'
+        namen: ["x", "y"]
+        loesung: ["1.2", "-0.6"]
+      - typ: zahl
+        label: '(c) $h_c$'
+        loesung: "56/sqrt(80)"
+        anzeige: '6{,}261'
+      - typ: vektor
+        label: '(d) Schwerpunkt $S$'
+        namen: ["x", "y"]
+        loesung: ["8/3", "1"]
+      - typ: vektor
+        label: '(e) Teilungspunkt $T$'
+        namen: ["x", "y"]
+        loesung: ["4", "-2"]
+    hinweise:
+      - '(a) $\cos\alpha = \frac{\overrightarrow{AB}\cdot\overrightarrow{AC}}{|\overrightarrow{AB}|\,|\overrightarrow{AC}|}$.'
+      - '(b) In der Ebene: $F = \tfrac12\,|a_1 b_2 - a_2 b_1|$ für $\vec a = \overrightarrow{AB}$, $\vec b = \overrightarrow{AC}$.'
+      - '(c) $H = A + t\cdot\overrightarrow{AB}$ mit $t = \frac{\overrightarrow{AC}\cdot\overrightarrow{AB}}{|\overrightarrow{AB}|^2}$ (Projektion). Kontrolle: $h_c = \frac{2F}{|\overrightarrow{AB}|}$.'
+      - '(e) $T = A + \tfrac34\,\overrightarrow{AB}$.'
+    loesung: |
+      $\overrightarrow{AB} = (8, -4)$, $\overrightarrow{AC} = (6, 4)$, $|\overrightarrow{AB}| = \sqrt{80}$, $|\overrightarrow{AC}| = \sqrt{52}$.
+      ---
+      **(a)** $\overrightarrow{AB}\cdot\overrightarrow{AC} = 48 - 16 = 32$, $\cos\alpha = \frac{32}{\sqrt{80}\sqrt{52}} = \frac{32}{\sqrt{4160}} \approx 0{,}4961$,
+      $\alpha \approx 60{,}26°$.
+      ---
+      **(b)** $F = \tfrac12\,|8\cdot 4 - (-4)\cdot 6| = \tfrac12\cdot 56 = 28$ Flächeneinheiten.
+      ---
+      **(c)** $t = \frac{32}{80} = 0{,}4$, $H = (-2 + 3{,}2 \mid 1 - 1{,}6) = (1{,}2 \mid -0{,}6)$.
+      $\overrightarrow{HC} = (2{,}8;\ 5{,}6)$, Kontrolle $\overrightarrow{HC}\cdot\overrightarrow{AB} = 22{,}4 - 22{,}4 = 0$ ✓.
+      $h_c = |\overrightarrow{HC}| = \sqrt{39{,}2} \approx 6{,}261 = \frac{2\cdot 28}{\sqrt{80}}$ ✓.
+      ---
+      **(d)** $S = \tfrac13(A + B + C) = \left(\tfrac{-2 + 6 + 4}{3} \mid \tfrac{1 - 3 + 5}{3}\right) = \left(\tfrac83 \mid 1\right)$.
+      ---
+      **(e)** $T = A + \tfrac34\overrightarrow{AB} = (-2 + 6 \mid 1 - 3) = (4\mid -2)$.
+      Kontrolle: $\overrightarrow{AT} = (6, -3)$, $\overrightarrow{TB} = (2, -1)$, also $\overrightarrow{AT} = 3\,\overrightarrow{TB}$ ✓.
+
+  - id: sim7-3
+    titel: Ober- und Untersumme, Rotationskörper, uneigentliche Integrale
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **3.1)** (4 P.) Gegeben ist $f(x) = x^2$ auf $[0, 1]$. Zerlegen Sie das Intervall in 4 gleich lange
+      Teilintervalle und berechnen Sie die Untersumme $U_4$ und die Obersumme $O_4$. Vergleichen Sie mit
+      dem exakten Wert von $\int_0^1 x^2\,\dd x$. Begründen Sie, warum $f$ auf $[0, 1]$ integrierbar ist.
+
+      **3.2)** (3 P.) Eine Schale entsteht durch Rotation des Graphen von $y = \sqrt x$, $0 \le x \le 4$
+      (Einheiten in cm), um die $x$-Achse. Berechnen Sie das Volumen des Rotationskörpers.
+
+      **3.3)** (3 P.) Berechnen Sie
+      $$\text{(a)}\ \int_1^\infty \frac{1}{x^2}\,\dd x, \qquad \text{(b)}\ \int_0^1 2x\,e^{x^2}\,\dd x.$$
+    teile:
+      - typ: zahl
+        label: '3.1) $U_4$'
+        loesung: "(0^2 + 0.25^2 + 0.5^2 + 0.75^2)*0.25"
+        anzeige: '\tfrac{7}{32} = 0{,}21875'
+      - typ: zahl
+        label: '3.1) $O_4$'
+        loesung: "(0.25^2 + 0.5^2 + 0.75^2 + 1^2)*0.25"
+        anzeige: '\tfrac{15}{32} = 0{,}46875'
+      - typ: text
+        label: '3.1) Vergleich und Integrierbarkeit'
+        muster: |
+          Exakt ist $\int_0^1 x^2\,\dd x = \frac13 \approx 0{,}333$, und $U_4 \le \frac13 \le O_4$. Allgemein gilt
+          $O_n - U_n = \frac1n\,(f(1) - f(0)) = \frac1n \to 0$, d. h. Ober- und Untersummen haben denselben
+          Grenzwert. Deshalb ist $f$ integrierbar (allgemeiner: jede stetige oder monotone Funktion auf einem
+          abgeschlossenen Intervall ist integrierbar).
+      - typ: zahl
+        label: '3.2) Volumen'
+        loesung: "pi*integral(\"x\", 0, 4)"
+        anzeige: '8\pi \approx 25{,}13'
+        einheit: cm³
+      - typ: zahl
+        label: '3.3 a)'
+        loesung: "1"
+      - typ: zahl
+        label: '3.3 b)'
+        loesung: "e - 1"
+        anzeige: 'e - 1 \approx 1{,}718'
+    hinweise:
+      - '3.1) Teilpunkte $0;\ 0{,}25;\ 0{,}5;\ 0{,}75;\ 1$. Da $f$ wachsend ist, liegt das Minimum jedes Teilintervalls am linken, das Maximum am rechten Rand.'
+      - '3.2) $V = \pi\int_a^b f(x)^2\,\dd x$.'
+      - '3.3 a) Erst bis $b$ integrieren, dann $b \to \infty$. (b) Substitution $u = x^2$, $\dd u = 2x\,\dd x$.'
+    loesung: |
+      **3.1)** Breite $\Delta x = \frac14$. Untersumme mit linken Rändern:
+      $U_4 = \frac14\left(0 + \frac1{16} + \frac4{16} + \frac9{16}\right) = \frac{14}{64} = \frac{7}{32} = 0{,}21875$.
+      ---
+      Obersumme mit rechten Rändern: $O_4 = \frac14\cdot\frac{1 + 4 + 9 + 16}{16} = \frac{30}{64} = \frac{15}{32} = 0{,}46875$.
+      ---
+      Exakt: $\int_0^1 x^2\,\dd x = \frac13$; es gilt $0{,}219 < 0{,}333 < 0{,}469$. Für $n$ Teile ist
+      $O_n - U_n = \frac1n\big(f(1) - f(0)\big) = \frac1n \to 0$ (Teleskopeffekt bei monotonen Funktionen),
+      also ist $f$ integrierbar.
+      ---
+      **3.2)** $V = \pi\int_0^4 (\sqrt x)^2\,\dd x = \pi\int_0^4 x\,\dd x = \pi\Big[\tfrac{x^2}{2}\Big]_0^4 = 8\pi \approx 25{,}13\ \text{cm}^3$.
+      ---
+      **3.3 a)** $\int_1^b x^{-2}\,\dd x = \Big[-\tfrac1x\Big]_1^b = 1 - \tfrac1b \to 1$ für $b\to\infty$. Das uneigentliche
+      Integral konvergiert und hat den Wert 1 (dagegen divergiert $\int_1^\infty \frac1x\,\dd x$).
+      ---
+      **3.3 b)** $u = x^2$, $\dd u = 2x\,\dd x$, Grenzen $0 \mapsto 0$, $1 \mapsto 1$:
+      $\int_0^1 e^u\,\dd u = e - 1 \approx 1{,}718$.
+
+  - id: sim7-4
+    titel: Riesenrad und Chip-Qualitätskontrolle
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **4.1)** (5 P.) Ein Riesenrad hat 40 m Durchmesser, seine Achse liegt 22 m über dem Boden. Eine
+      Umdrehung dauert 12 Minuten. Eine Gondel startet zum Zeitpunkt $t = 0$ im tiefsten Punkt.
+
+      (a) Begründen Sie, dass die Höhe der Gondel (in m) nach $t$ Minuten durch
+      $h(t) = 22 - 20\cos\!\left(\frac{\pi}{6}t\right)$ beschrieben wird. Geben Sie Amplitude und Periode an
+      und skizzieren Sie $h$ für $0 \le t \le 12$.
+
+      (b) Wie hoch ist die Gondel nach 2 Minuten?
+
+      (c) Wann erreicht die Gondel erstmals 32 m Höhe? Wie lange pro Umdrehung ist sie höher als 32 m?
+
+      **4.2)** (5 P.) Bei der Produktion von Speicherchips sind erfahrungsgemäß $10\,\%$ fehlerhaft. Es
+      werden 100 Chips zufällig entnommen; $X$ sei die Anzahl fehlerhafter Chips.
+
+      (a) Begründen Sie, warum $X$ (näherungsweise) binomialverteilt ist, und berechnen Sie $\mu$ und $\sigma$.
+
+      (b) Berechnen Sie $P(X \le 5)$.
+
+      (c) Berechnen Sie die Wahrscheinlichkeit, dass $X$ in der $\sigma$-Umgebung $[\mu - \sigma, \mu + \sigma]$ liegt.
+    teile:
+      - typ: text
+        label: '4.1 a) Begründung, Amplitude, Periode, Skizze'
+        muster: |
+          Radius 20 m, Mittelhöhe 22 m. Zur Zeit 0 ist die Gondel unten: $h(0) = 22 - 20 = 2$ m. Nach einer
+          halben Umdrehung (6 min) oben: $h(6) = 22 + 20 = 42$ m. $-\cos$ startet im Minimum, Periode
+          $\frac{2\pi}{\pi/6} = 12$ min. Amplitude 20 m. Skizze: um die Mittellinie $h = 22$ schwingende
+          Kurve von $(0\mid 2)$ über $(6\mid 42)$ nach $(12\mid 2)$.
+      - typ: zahl
+        label: '4.1 b) $h(2)$'
+        loesung: "22 - 20*cos(pi/6*2)"
+        anzeige: '12'
+        einheit: m
+      - typ: zahl
+        label: '4.1 c) erstmals 32 m nach'
+        loesung: "4"
+        einheit: min
+      - typ: zahl
+        label: '4.1 c) Dauer über 32 m pro Umdrehung'
+        loesung: "8 - 4"
+        anzeige: '4'
+        einheit: min
+      - typ: zahl
+        label: '4.2 a) $\mu$'
+        loesung: "100*0.1"
+        anzeige: '10'
+      - typ: zahl
+        label: '4.2 a) $\sigma$'
+        loesung: "sqrt(100*0.1*0.9)"
+        anzeige: '3'
+      - typ: zahl
+        label: '4.2 b) $P(X \le 5)$'
+        loesung: "binomcdf(100, 0.1, 5)"
+        anzeige: '0{,}0576'
+        toleranz: 0.001
+      - typ: zahl
+        label: '4.2 c) $P(7 \le X \le 13)$'
+        loesung: "binomcdf(100, 0.1, 13) - binomcdf(100, 0.1, 6)"
+        anzeige: '0{,}7590'
+        toleranz: 0.002
+    hinweise:
+      - '4.1) $h(t) = 32 \iff \cos(\frac\pi6 t) = -\frac12$. Im ersten Umlauf: $\frac\pi6 t = \frac{2\pi}{3}$ oder $\frac{4\pi}{3}$.'
+      - '4.2) $\mu = np$, $\sigma = \sqrt{np(1-p)}$. Für (b) und (c) die Binomialverteilung (Summe bzw. Tabelle/Rechner) verwenden.'
+    loesung: |
+      **4.1 a)** Mittelhöhe 22 m, Radius 20 m (= Amplitude). Start im tiefsten Punkt: $h(0) = 2$ m, daher
+      $-\cos$. Kreisfrequenz $\frac{2\pi}{12} = \frac\pi6$, Periode 12 min. Höchster Punkt $h(6) = 42$ m.
+      ---
+      **4.1 b)** $h(2) = 22 - 20\cos\frac{\pi}{3} = 22 - 10 = 12$ m.
+      ---
+      **4.1 c)** $22 - 20\cos(\frac\pi6 t) = 32 \iff \cos(\frac\pi6 t) = -\frac12 \iff \frac\pi6 t \in \{\frac{2\pi}{3}, \frac{4\pi}{3}\}$
+      (erste Umdrehung), also $t = 4$ oder $t = 8$ min. Erstmals nach 4 min; über 32 m von $t = 4$ bis $t = 8$,
+      also 4 Minuten pro Umdrehung (ein Drittel der Zeit).
+      ---
+      **4.2 a)** Bei einer großen Produktion ändert die Entnahme von 100 Chips die Fehlerquote praktisch nicht;
+      die Chips sind unabhängig voneinander mit $p = 0{,}1$ fehlerhaft. $X \sim B(100;\ 0{,}1)$,
+      $\mu = 10$, $\sigma = \sqrt{100\cdot 0{,}1\cdot 0{,}9} = 3$.
+      ---
+      **4.2 b)** $P(X \le 5) = \sum_{k=0}^{5}\binom{100}{k}0{,}1^k\,0{,}9^{100-k} \approx 0{,}0576$.
+      ---
+      **4.2 c)** $[\mu - \sigma, \mu + \sigma] = [7, 13]$: $P(7 \le X \le 13) = P(X \le 13) - P(X \le 6) \approx 0{,}8761 - 0{,}1172 \approx 0{,}7590$.
+      (Faustregel für die $1\sigma$-Umgebung: etwa $68\,\%$; hier mehr, weil die Grenzen ganzzahlig
+      eingeschlossen werden.)

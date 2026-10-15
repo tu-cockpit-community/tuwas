@@ -1,0 +1,33 @@
+id: ep1
+titel: Einführung in die Programmierung 1 (185.A91)
+untertitel: TU Wien · Wintersemester 2026/27 · Kompetenzstufe K1
+lva: "185.A91"
+teile:
+  grundlagen: Grundlagen (Ausdrücke, Verzweigungen, Schleifen, Grafik)
+  methoden: Methoden, Eingabe und Codequalität
+  rekursion: Rekursion
+  arrays: Arrays
+  projekt: Abschlussprojekt
+  algorithmen: Algorithmen (Komplexität, Suchen, Sortieren)
+  training: Prüfungstraining
+pruefung:
+  form: prüfungsimmanent. Kompetenzstufe K1 = 2 Übungen ohne Blatt (6 P) + 4 Aufgabenblätter mit Feedbackgespräch (24 P) + 4 Quiz (40 P) + 1 Test (30 P, mindestens 50 % nötig). Noten ab 92 / 83 / 74 / 65 Punkten.
+  dauer_minuten: 75
+  datum: "2027-01-27"
+  hilfsmittel: Vorlesungsfolien und Java-API (laut TISS 2026W). Format von Quiz und Test 2026W ist nicht veröffentlicht; die Simulationen folgen den TUWEL-Tests und Programmiertests 2020–2023.
+  pruefer: "Podlipnig (Leitung). Test Mi 27.01.2027 (Anmeldung 14.–26.01.), Zweittermin Mo 08.02.2027"
+beschreibung: |
+  Dieser Kurs bringt dir **Programmieren in Java von Null** bei. Du brauchst keine Vorkenntnisse.
+  Jeder Begriff wird erklärt, bevor er benutzt wird, und jedes Programm wird Zeile für Zeile
+  durchgegangen.
+
+  Er folgt dem Aufbau von **EP1 an der TU Wien**: Ausdrücke und Datentypen, Verzweigungen, Schleifen,
+  Methoden, Rekursion, Arrays (eindimensional und zweidimensional), dazu Suchen, Sortieren und die
+  Grundidee der Komplexität (O-Notation). Die Aufgaben sind den **Aufgabenblättern 1–6**, den
+  **TUWEL-Quiz** und den **Programmiertests** der letzten Jahre nachgebaut. Alles Prüfbare wird mit
+  echtem Java ausgeführt: Du schreibst Methoden und siehst sofort, welche Tests bestehen.
+
+  Bewertet wird in EP1 nicht in einer einzelnen Prüfung, sondern über vier Teile: **Quiz** (40 Punkte,
+  vier Stück), **Test** (30 Punkte, Programmieren am Rechner), **Aufgabenblätter** (24 Punkte, mit
+  Feedbackgespräch) und zwei Übungen (6 Punkte). Die Kapitel sagen jeweils, welchen Teil sie
+  vorbereiten.

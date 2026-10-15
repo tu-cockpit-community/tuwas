@@ -1,0 +1,31 @@
+id: physik1
+titel: Physik 1
+untertitel: Studienberechtigungsprüfung TU Wien
+sbp: sbp-physik1
+teile:
+  grundlagen: Grundlagen und Mechanik
+  wellen: Schwingungen, Wellen, Akustik
+  waerme: Wärmelehre, Hydro- und Aeromechanik, Meteorologie
+  elektrizitaet: Elektrizitätslehre
+  optik: Optik, Atom- und Kernphysik
+  training: Prüfungstraining
+pruefung:
+  form: schriftlich und mündlich (schriftlich zuerst, beide binnen zwei Wochen)
+  dauer_minuten: 180
+  hilfsmittel: an der TU nicht veröffentlicht; beim Prüfer erfragen. Der Kurs trainiert mit einfachem wissenschaftlichem Taschenrechner und ohne Formelsammlung.
+  pruefer: wird im Zulassungsbescheid bekanntgegeben (Fakultätsreferent Physik ao.Univ.Prof. Herwig Michor)
+beschreibung: |
+  Physik 1 umfasst laut Verordnung (Anlage 1) den Stoff der AHS-Oberstufe: **Grundlagen** (Arbeitsweisen
+  der Physik, Grund- und abgeleitete Größen, Längen- und Zeitmessung), **Mechanik** (Inertialsystem,
+  Massenpunkt, Grundgesetze, einfache Maschinen), **Schwingungen und Wellen** (harmonische Schwingung
+  und Welle, Überlagerung, Akustik), **Wärmelehre** (Temperatur, innere Energie, Arbeit und Wärme,
+  Hauptsätze, Gasgesetze, Wärmekraftmaschinen, Hydro- und Aeromechanik, Meteorologie),
+  **Elektrizitätslehre** (Elektrostatik, Strom, Ohm und Kirchhoff, Felder, Wechselstrom, Maschinen,
+  Messgeräte, Leiter und Halbleiter), **Atom- und Kernphysik, Radioaktivität** sowie **Optik**
+  (geometrische Optik, Wellenoptik, Welle-Teilchen-Dualismus, optische Geräte, physiologische Optik).
+
+  Die Prüfung ist schriftlich und mündlich. Für die TU gibt es keine öffentlichen Altprüfungen und keine
+  offizielle Angabe zu Dauer und Hilfsmitteln (eine Sekundärquelle nennt 3 Stunden schriftlich). Die
+  Prüfungssimulationen dieses Kurses sind daher selbst erstellt, im Niveau der AHS-Schulbücher
+  (Sexl, Big Bang), an denen sich auch andere SBP-Prüfer orientieren. In der mündlichen Prüfung
+  zählt vor allem, Begriffe und Zusammenhänge in eigenen Worten zu erklären.

@@ -1,0 +1,275 @@
+id: simulation-3
+titel: 'Simulation 3: Kreis, Grenzwerte, Würfelspiel'
+art: simulation
+dauer_minuten: 120
+hinweis: |
+  Selbst erstellte Prüfung im Stil von G. Schranz-Kirlinger (4 Beispiele zu je 10 Punkten, 120 Minuten).
+  Themen: Prozentrechnung, biquadratische, quadratische (Parameter), Bruch- und
+  Logarithmusgleichungen, Kreisgleichung, Tangente, Schnitt Kreis–Gerade, Grenzwerte von Funktionen
+  (de l'Hospital), Differenzierbarkeit über den Differentialquotienten, Mittelwertsatz,
+  trigonometrische Gleichung, Erwartungswert und Varianz einer Zufallsvariable.
+
+  **Erlaubt:** nicht programmierbarer, nicht grafikfähiger Taschenrechner. Hinweise und Lösungen
+  siehst du erst nach der Abgabe.
+aufgaben:
+  - id: sim6-1
+    titel: Prozent und fünf Gleichungen
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **1.1)** (2 P.) Ein Laptop kostet 250 Euro. Der Preis wird zuerst um $20\,\%$ erhöht und danach um
+      $20\,\%$ gesenkt. Wie viel kostet der Laptop danach, und um wie viel Prozent hat sich der Preis
+      insgesamt verändert?
+
+      **1.2)** (2 P.) Lösen Sie $x^4 - 5x^2 + 4 = 0$ über $\R$.
+
+      **1.3)** (2 P.) Für welche Werte von $p \in \R$ hat die Gleichung $x^2 + px + 9 = 0$ genau eine reelle
+      Lösung?
+
+      **1.4)** (2 P.) Geben Sie die Definitionsmenge an und lösen Sie
+      $$\frac{2}{x - 1} + \frac{3}{x + 1} = \frac{4}{x^2 - 1}.$$
+
+      **1.5)** (2 P.) Lösen Sie $\log_2 x + \log_2 (x - 2) = 3$.
+    teile:
+      - typ: zahl
+        label: '1.1) Endpreis'
+        loesung: "250*1.2*0.8"
+        anzeige: '240'
+        einheit: Euro
+      - typ: zahl
+        label: '1.1) Gesamtänderung in Prozent (Abnahme negativ)'
+        loesung: "(1.2*0.8 - 1)*100"
+        anzeige: '-4'
+        einheit: '%'
+      - typ: menge
+        label: '1.2) Lösungsmenge'
+        loesung: ["-2", "-1", "1", "2"]
+      - typ: menge
+        label: '1.3) alle $p$'
+        loesung: ["-6", "6"]
+      - typ: menge
+        label: '1.4) Lösungsmenge (leer: „leer“ eingeben)'
+        loesung: []
+      - typ: menge
+        label: '1.5) Lösungsmenge'
+        loesung: ["4"]
+    hinweise:
+      - '1.1) Prozentänderungen werden multipliziert, nicht addiert: Faktor $1{,}2\cdot 0{,}8$.'
+      - '1.2) Substitution $u = x^2$.'
+      - '1.3) Genau eine Lösung heißt Diskriminante $= 0$.'
+      - '1.4) Hauptnenner $x^2 - 1 = (x - 1)(x + 1)$. Am Ende mit der Definitionsmenge vergleichen!'
+      - '1.5) Logarithmenregel $\log_2 x + \log_2 y = \log_2(xy)$; Definitionsmenge beachten.'
+    loesung: |
+      **1.1)** $250\cdot 1{,}2 = 300$, dann $300\cdot 0{,}8 = 240$ Euro. Gesamtfaktor $1{,}2\cdot 0{,}8 = 0{,}96$:
+      Der Preis sinkt insgesamt um $4\,\%$ (nicht $0\,\%$!), weil die $20\,\%$ Abschlag von einem größeren
+      Grundwert berechnet werden.
+      ---
+      **1.2)** $u = x^2$: $u^2 - 5u + 4 = 0 \iff (u - 1)(u - 4) = 0$. $x^2 = 1 \Rightarrow x = \pm1$,
+      $x^2 = 4 \Rightarrow x = \pm 2$. $L = \{-2, -1, 1, 2\}$.
+      ---
+      **1.3)** $D = p^2 - 4\cdot 9 = p^2 - 36 = 0 \iff p = \pm 6$. Dann $x^2 \pm 6x + 9 = (x \pm 3)^2$, doppelte
+      Lösung $x = \mp 3$.
+      ---
+      **1.4)** $D = \R\setminus\{-1, 1\}$. Multiplikation mit $(x-1)(x+1)$: $2(x + 1) + 3(x - 1) = 4 \iff 5x - 1 = 4 \iff x = 1$.
+      Aber $1 \notin D$! Also $L = \emptyset$.
+      ---
+      **1.5)** $D$: $x > 0$ und $x > 2$, also $x > 2$. $\log_2\big(x(x-2)\big) = 3 \iff x^2 - 2x = 8 \iff (x - 4)(x + 2) = 0$.
+      $x = -2 \notin D$, $x = 4$: Probe $\log_2 4 + \log_2 2 = 2 + 1 = 3$ ✓. $L = \{4\}$.
+
+  - id: sim6-2
+    titel: Ein Kreis, eine Tangente und eine Sehne
+    niveau: 3
+    punkte: 10
+    angabe: |
+      Gegeben ist der Kreis $k\colon x^2 + y^2 - 6x + 4y - 12 = 0$.
+
+      (a) (3 P.) Bestimmen Sie Mittelpunkt $M$ und Radius $r$ von $k$ und fertigen Sie eine Skizze an.
+
+      (b) (3 P.) Zeigen Sie, dass $P(6\mid 2)$ auf $k$ liegt, und bestimmen Sie die Gleichung der Tangente
+      $t$ an $k$ im Punkt $P$ in der Form $ax + by = c$.
+
+      (c) (4 P.) Die Gerade $g\colon y = -x$ schneidet den Kreis. Berechnen Sie die Schnittpunkte, die Länge
+      der Sehne und den Abstand der Geraden $g$ vom Mittelpunkt $M$.
+    teile:
+      - typ: vektor
+        label: '(a) Mittelpunkt $M$'
+        namen: ["x", "y"]
+        loesung: ["3", "-2"]
+      - typ: zahl
+        label: '(a) Radius $r$'
+        loesung: "sqrt(9 + 4 + 12)"
+        anzeige: '5'
+      - typ: vektor
+        label: '(b) Normalvektor der Tangente $(a, b)$'
+        namen: ["a", "b"]
+        loesung: ["3", "4"]
+        vielfaches: true
+      - typ: text
+        label: '(b) Tangentengleichung'
+        muster: '$t\colon 3x + 4y = 26$'
+      - typ: menge
+        label: '(c) $x$-Koordinaten der Schnittpunkte'
+        loesung: ["-1", "6"]
+      - typ: zahl
+        label: '(c) Sehnenlänge'
+        loesung: "sqrt(7^2 + 7^2)"
+        anzeige: '7\sqrt2 \approx 9{,}90'
+      - typ: zahl
+        label: '(c) Abstand $d(M, g)$'
+        loesung: "abs(3 - 2)/sqrt(2)"
+        anzeige: '\tfrac{1}{\sqrt2} \approx 0{,}707'
+    hinweise:
+      - '(a) Quadratisch ergänzen: $x^2 - 6x = (x - 3)^2 - 9$, $y^2 + 4y = (y + 2)^2 - 4$.'
+      - '(b) Die Tangente steht normal auf den Radius $\overrightarrow{MP}$. Also ist $\overrightarrow{MP}$ ein Normalvektor der Tangente.'
+      - '(c) $y = -x$ in die Kreisgleichung einsetzen. Abstand: $g$ in der Form $x + y = 0$ schreiben und die Hesse’sche Normalform verwenden.'
+    loesung: |
+      **(a)** $(x - 3)^2 - 9 + (y + 2)^2 - 4 - 12 = 0 \iff (x - 3)^2 + (y + 2)^2 = 25$. Also $M(3\mid -2)$,
+      $r = 5$. Skizze: Kreis um $(3\mid -2)$, der die $y$-Achse bei $y = -2 \pm 4$ schneidet.
+      ---
+      **(b)** $(6 - 3)^2 + (2 + 2)^2 = 9 + 16 = 25$ ✓, $P \in k$.
+      $\overrightarrow{MP} = (3, 4)$ ist Normalvektor der Tangente: $3x + 4y = 3\cdot 6 + 4\cdot 2 = 26$.
+      ---
+      **(c)** $y = -x$ einsetzen: $x^2 + x^2 - 6x - 4x - 12 = 0 \iff 2x^2 - 10x - 12 = 0 \iff x^2 - 5x - 6 = 0 \iff (x - 6)(x + 1) = 0$.
+      Schnittpunkte $S_1(-1\mid 1)$, $S_2(6\mid -6)$.
+      ---
+      Sehne: $\overrightarrow{S_1S_2} = (7, -7)$, Länge $7\sqrt2 \approx 9{,}90$.
+      ---
+      Abstand: $g\colon x + y = 0$, $d = \frac{|3 + (-2)|}{\sqrt{1^2 + 1^2}} = \frac{1}{\sqrt2} \approx 0{,}707 < 5$ ✓.
+      Kontrolle mit Pythagoras: halbe Sehne $\sqrt{r^2 - d^2} = \sqrt{25 - 0{,}5} = \sqrt{24{,}5}$, Sehne
+      $2\sqrt{24{,}5} = \sqrt{98} = 7\sqrt2$ ✓.
+
+  - id: sim6-3
+    titel: Grenzwerte, Differentialquotient, Mittelwertsatz
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **3.1)** (4 P.) Berechnen Sie die Grenzwerte und geben Sie an, welche Sätze Sie verwenden:
+      $$\text{(a)}\ \lim_{x\to 0}\frac{\sin(3x)}{x}, \qquad \text{(b)}\ \lim_{x\to 0}\frac{e^x - 1 - x}{x^2}.$$
+
+      **3.2)** (3 P.) Gegeben ist $f(x) = x\cdot|x|$. Untersuchen Sie mit Hilfe des Differentialquotienten
+      (Grenzwert des Differenzenquotienten), ob $f$ an der Stelle $x_0 = 0$ differenzierbar ist, und geben
+      Sie gegebenenfalls $f'(0)$ an.
+
+      **3.3)** (3 P.) Gegeben ist $g(x) = x^3 - 3x$ auf $[0, 3]$. Begründen Sie, dass der Mittelwertsatz der
+      Differentialrechnung anwendbar ist, und bestimmen Sie alle Zwischenstellen $\xi \in (0, 3)$ aus
+      dem Satz. Deuten Sie das Ergebnis geometrisch.
+    teile:
+      - typ: zahl
+        label: '3.1 a)'
+        loesung: "3"
+      - typ: zahl
+        label: '3.1 b)'
+        loesung: "1/2"
+        anzeige: '\tfrac12'
+      - typ: zahl
+        label: "3.2) $f'(0)$"
+        loesung: "0"
+      - typ: text
+        label: '3.2) Begründung'
+        muster: |
+          Differenzenquotient: $\frac{f(0 + h) - f(0)}{h} = \frac{h\,|h|}{h} = |h|$ für $h \neq 0$. Es gilt
+          $\lim_{h\to 0}|h| = 0$ (von beiden Seiten). Der Grenzwert existiert, also ist $f$ bei 0
+          differenzierbar mit $f'(0) = 0$. (Anders als $|x|$ selbst!)
+      - typ: menge
+        label: '3.3) alle Zwischenstellen $\xi$'
+        loesung: ["sqrt(3)"]
+        anzeige: '\{\sqrt3\}'
+      - typ: text
+        label: '3.3) Voraussetzungen und Deutung'
+        muster: |
+          $g$ ist ein Polynom, also auf $[0, 3]$ stetig und auf $(0, 3)$ differenzierbar; damit ist der
+          Mittelwertsatz anwendbar. Die mittlere Steigung ist $\frac{g(3) - g(0)}{3} = \frac{18}{3} = 6$.
+          Geometrisch: In $\xi = \sqrt3$ ist die Tangente an den Graphen parallel zur Sekante durch
+          $(0\mid 0)$ und $(3\mid 18)$.
+    hinweise:
+      - '3.1 a) Standardgrenzwert $\lim_{u\to0}\frac{\sin u}{u} = 1$ mit $u = 3x$; oder de l''Hospital.'
+      - '3.1 b) Typ $\frac00$: de l''Hospital, eventuell zweimal. Vor jedem Schritt prüfen, ob wieder $\frac00$ vorliegt.'
+      - '3.2) Bei $x_0 = 0$ ist $f(0) = 0$. Der Differenzenquotient vereinfacht sich stark.'
+      - "3.3) Löse $g'(\\xi) = \\frac{g(3) - g(0)}{3 - 0}$."
+    loesung: |
+      **3.1 a)** $\frac{\sin 3x}{x} = 3\cdot\frac{\sin 3x}{3x} \to 3\cdot 1 = 3$ (Standardgrenzwert mit $u = 3x \to 0$).
+      Alternativ de l'Hospital: $\lim\frac{3\cos 3x}{1} = 3$.
+      ---
+      **3.1 b)** Typ $\frac00$. De l'Hospital: $\lim_{x\to0}\frac{e^x - 1}{2x}$, wieder $\frac00$.
+      Nochmals: $\lim_{x\to0}\frac{e^x}{2} = \frac12$.
+      (Voraussetzungen: Zähler und Nenner differenzierbar, Nenner-Ableitung $\neq 0$ nahe 0, Grenzwert des
+      Quotienten der Ableitungen existiert.)
+      ---
+      **3.2)** $\frac{f(h) - f(0)}{h} = \frac{h|h|}{h} = |h| \to 0$ für $h\to 0$. Rechts- und linksseitiger
+      Grenzwert sind beide 0, also existiert der Differentialquotient: $f'(0) = 0$.
+      Zum Vergleich: Für $x > 0$ ist $f(x) = x^2$, für $x < 0$ ist $f(x) = -x^2$; der Graph geht glatt durch
+      den Ursprung (waagrechte Tangente).
+      ---
+      **3.3)** Voraussetzungen: $g$ stetig auf $[0,3]$, differenzierbar auf $(0,3)$ (Polynom) ✓.
+      $g(0) = 0$, $g(3) = 27 - 9 = 18$, mittlere Steigung $\frac{18}{3} = 6$.
+      ---
+      $g'(\xi) = 3\xi^2 - 3 = 6 \iff \xi^2 = 3 \iff \xi = \pm\sqrt3$. Nur $\xi = \sqrt3 \approx 1{,}732$ liegt in $(0, 3)$.
+      ---
+      Deutung: An der Stelle $\sqrt3$ hat der Graph dieselbe Steigung wie die Sekante durch $(0\mid 0)$
+      und $(3\mid 18)$; die Tangente dort ist parallel zur Sekante.
+
+  - id: sim6-4
+    titel: Trigonometrische Gleichung und ein Würfelspiel
+    niveau: 3
+    punkte: 10
+    angabe: |
+      **4.1)** (4 P.) Bestimmen Sie alle Lösungen der Gleichung $2\sin^2 x - \sin x - 1 = 0$ im Intervall
+      $[0, 2\pi)$ (im Bogenmaß).
+
+      **4.2)** (6 P.) Bei einem Spiel auf einem Schulfest wirft man zwei faire Würfel; der Einsatz beträgt
+      1 Euro. Bei Augensumme 12 erhält man 10 Euro ausbezahlt, bei einem anderen Pasch (zwei gleiche
+      Augenzahlen) 3 Euro, sonst nichts. $G$ sei der Reingewinn (Auszahlung minus Einsatz) eines Spielers.
+
+      (a) Geben Sie die Wahrscheinlichkeitsverteilung von $G$ an.
+
+      (b) Berechnen Sie den Erwartungswert $E(G)$ und interpretieren Sie ihn.
+
+      (c) Berechnen Sie die Standardabweichung von $G$.
+
+      (d) Wie hoch müsste die Auszahlung bei Augensumme 12 sein, damit das Spiel fair ist (die anderen
+      Auszahlungen bleiben gleich)?
+    teile:
+      - typ: menge
+        label: '4.1) Lösungen in $[0, 2\pi)$'
+        loesung: ["pi/2", "7*pi/6", "11*pi/6"]
+        anzeige: '\{\tfrac{\pi}{2};\ \tfrac{7\pi}{6};\ \tfrac{11\pi}{6}\}'
+      - typ: vektor
+        label: '4.2 a) $P(G = 9)$, $P(G = 2)$, $P(G = -1)$'
+        loesung: ["1/36", "5/36", "30/36"]
+      - typ: zahl
+        label: '4.2 b) $E(G)$'
+        loesung: "9/36 + 2*5/36 - 30/36"
+        anzeige: '-\tfrac{11}{36} \approx -0{,}306'
+        einheit: Euro
+      - typ: zahl
+        label: '4.2 c) $\sigma(G)$'
+        loesung: "sqrt(131/36 - (11/36)^2)"
+        anzeige: '1{,}883'
+        einheit: Euro
+        toleranz: 0.005
+      - typ: zahl
+        label: '4.2 d) faire Auszahlung bei Augensumme 12'
+        loesung: "21"
+        einheit: Euro
+    hinweise:
+      - '4.1) Substitution $u = \sin x$ ergibt eine quadratische Gleichung. Danach am Einheitskreis alle Winkel suchen.'
+      - '4.2) Von den 36 gleich wahrscheinlichen Ergebnissen sind 6 Pasche, einer davon ist (6, 6).'
+      - '4.2) $\operatorname{Var}(G) = E(G^2) - E(G)^2$.'
+    loesung: |
+      **4.1)** $u = \sin x$: $2u^2 - u - 1 = 0 \iff u = \frac{1 \pm \sqrt{1 + 8}}{4} = \frac{1 \pm 3}{4}$, also $u = 1$ oder $u = -\tfrac12$.
+      ---
+      $\sin x = 1 \Rightarrow x = \frac\pi2$. $\sin x = -\frac12$: Bezugswinkel $\frac\pi6$, Sinus negativ im 3. und
+      4. Quadranten: $x = \pi + \frac\pi6 = \frac{7\pi}{6}$ und $x = 2\pi - \frac\pi6 = \frac{11\pi}{6}$.
+      $L = \{\frac\pi2, \frac{7\pi}{6}, \frac{11\pi}{6}\}$.
+      ---
+      **4.2 a)** $G = 10 - 1 = 9$ mit $P = \frac{1}{36}$ (nur (6,6)); $G = 3 - 1 = 2$ mit $P = \frac{5}{36}$ (andere Pasche);
+      $G = -1$ mit $P = \frac{30}{36}$. Summe $= 1$ ✓.
+      ---
+      **4.2 b)** $E(G) = 9\cdot\frac1{36} + 2\cdot\frac{5}{36} - 1\cdot\frac{30}{36} = \frac{9 + 10 - 30}{36} = -\frac{11}{36} \approx -0{,}31$ Euro.
+      Auf lange Sicht verliert ein Spieler im Mittel etwa 31 Cent pro Spiel (das Schulfest gewinnt).
+      ---
+      **4.2 c)** $E(G^2) = 81\cdot\frac{1}{36} + 4\cdot\frac{5}{36} + 1\cdot\frac{30}{36} = \frac{131}{36}$.
+      $\operatorname{Var}(G) = \frac{131}{36} - \left(\frac{11}{36}\right)^2 = \frac{4595}{1296} \approx 3{,}546$,
+      $\sigma \approx 1{,}883$ Euro.
+      ---
+      **4.2 d)** Auszahlung $a$: $E(G) = \frac{(a - 1) + 10 - 30}{36} = 0 \iff a = 21$ Euro.
