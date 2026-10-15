@@ -990,12 +990,172 @@ body.resizing iframe {
 .event-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 18px;
   margin-bottom: 12px;
+  container-type: inline-size;
+}
+
+/* A day: the date as a small column on the left, its appointments one line each on the right. */
+.event-day {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  column-gap: 16px;
+  padding: 12px 0;
+}
+
+.event-day + .event-day {
+  border-top: 1px solid var(--border);
+}
+
+.event-day:first-child {
+  padding-top: 2px;
+}
+
+.event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 3px;
+  line-height: 1.1;
+}
+
+.event-date-weekday {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.event-date-weekday.near {
+  color: var(--accent);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.event-date-day {
+  margin-top: 2px;
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.event-date-month {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.event-day-rows {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.event-row {
+  display: grid;
+  /* time · title · room · badge: fixed time column so all titles start at the same x */
+  grid-template-columns: 96px minmax(0, 1fr) minmax(0, max-content) auto;
+  align-items: baseline;
+  column-gap: 14px;
+  padding: 5px 0;
+}
+
+.event-time {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.event-time-end {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.event-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  font-weight: 500;
+}
+
+/* Course colour: a small rounded square in front of the name, like in a paper diary's colour code. */
+.event-swatch {
+  flex: none;
+  align-self: center;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.event-title-text,
+.event-room-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-title .cal-clash {
+  align-self: center;
+}
+
+.event-room {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+.event-room svg {
+  flex: none;
+}
+
+.event-soon {
+  padding: 1px 8px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.event-soon.now {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+
+/* Narrow card: the room moves under the title. */
+@container (max-width: 520px) {
+  .event-row {
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    row-gap: 1px;
+  }
+  .event-room {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .event-soon {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+/* Mini window: day as a heading line, start time only. */
+.event-list.compact {
+  gap: 14px;
+}
+
+.event-list.compact .event-day {
+  display: block;
+  padding: 0;
+  border-top: 0;
 }
 
 .event-day-label {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   padding-bottom: 6px;
   border-bottom: 1px solid var(--border);
   color: var(--text-muted);
@@ -1006,76 +1166,22 @@ body.resizing iframe {
   text-transform: uppercase;
 }
 
-.event-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px 0;
-}
-
-.event-bar {
-  flex: none;
-  align-self: stretch;
-  width: 3px;
-  border-radius: 2px;
-}
-
-.event-time {
-  flex: none;
-  /* A fixed column, so the titles of all rows start at the same x. */
-  min-width: 92px;
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
-}
-
-.event-time-end {
-  color: var(--text-muted);
-  font-weight: 400;
-}
-
-.event-main {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.event-title,
-.event-room {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.event-room {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  color: var(--text-muted);
-  font-size: 12px;
-}
-
-.event-soon {
-  flex: none;
-  padding: 1px 8px;
-  border-radius: 6px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.event-soon.now {
-  background: var(--ok-soft);
-  color: var(--ok);
-}
-
 .event-list.compact .event-row {
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  column-gap: 10px;
+  row-gap: 1px;
   padding: 4px 0;
 }
 
-.event-list.compact .event-time {
-  min-width: 38px;
+.event-list.compact .event-room {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 12px;
+}
+
+.event-list.compact .event-soon {
+  grid-column: 3;
+  grid-row: 1;
 }
 
 .holiday-note {
@@ -1367,6 +1473,127 @@ body.resizing iframe {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* The appointment card in the calendar: icon column on the left, one fact per row. */
+.event-details.event-card {
+  gap: 16px;
+  width: 380px;
+  padding: 18px 20px 20px;
+  border-top-width: 1px;
+}
+
+.event-card .event-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.event-card-heading {
+  display: grid;
+  gap: 4px;
+}
+
+.event-card h2 {
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.event-course-key {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.event-facts {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  font-size: 13.5px;
+}
+
+.event-fact {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  column-gap: 12px;
+}
+
+/* Icon centred on the first line of its row. */
+.event-fact dt {
+  display: flex;
+  align-items: center;
+  height: 1lh;
+  color: var(--text-muted);
+}
+
+.event-fact dd {
+  margin: 0;
+  min-width: 0;
+  user-select: text;
+}
+
+.event-fact-main {
+  display: block;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.event-details.event-card a.event-fact-main {
+  display: inline;
+  color: var(--accent);
+}
+
+.event-fact-sub {
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+.event-details.event-card .event-fact-sub a {
+  display: inline;
+}
+
+.event-fact.clash dt,
+.event-fact.clash .event-fact-main {
+  color: var(--warn);
+}
+
+.event-card-actions {
+  display: grid;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.event-details.event-card .event-card-actions > .button {
+  align-self: stretch;
+  width: 100%;
+  height: 34px;
+}
+
+.event-card-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.event-details.event-card .event-card-links .button {
+  width: 100%;
+}
+
+.event-card-links .button svg {
+  color: var(--text-muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ---------- Settings: courses ---------- */

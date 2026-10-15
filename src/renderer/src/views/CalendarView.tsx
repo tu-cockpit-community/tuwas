@@ -6,7 +6,7 @@ import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import deLocale from '@fullcalendar/core/locales/de'
 import type { EventChangeArg, EventContentArg, EventInput } from '@fullcalendar/core'
-import { ExternalLink, MapPin, NotebookPen, Pencil, Plus, RefreshCw, Repeat, Trash2, TriangleAlert, Video, X } from 'lucide-react'
+import { Clock, ExternalLink, Info, MapPin, NotebookPen, Pencil, Plus, RefreshCw, Repeat, Trash2, TriangleAlert, UserRound, Video, X } from 'lucide-react'
 import { EVENT_NOTE_FOLDERS } from '../../../shared/notes'
 import type { CalendarData, CalendarEvent, EventKind, ExamDate, OwnEvent, View } from '../../../shared/types'
 import { ExamInfo } from '../ExamInfo'
@@ -429,100 +429,146 @@ function EventDetails(props: {
   const { data, event, onClose } = props
   const course = event.courseKey ? courseMap(data).get(event.courseKey) : undefined
   const start = new Date(event.start)
+  const color = course?.color ?? HOLIDAY_COLOR
+  const room = event.location ? data.rooms[event.location] : undefined
   return (
-    <aside className="event-details" style={{ borderTopColor: course?.color ?? HOLIDAY_COLOR }}>
+    <aside className="event-details event-card" aria-labelledby="event-card-title">
       <div className="event-details-head">
-        <span className="event-kind">{KIND_LABELS[event.kind]}</span>
+        <span className="event-kind">
+          <span className="event-swatch" style={{ background: color }} aria-hidden="true" />
+          {KIND_LABELS[event.kind]}
+        </span>
         <button type="button" className="icon-button" aria-label="Schließen" onClick={onClose}>
           <X size={16} />
         </button>
       </div>
-      <h2>{eventLabel(event, course)}</h2>
-      {course && (
-        <p className="event-course">
-          {course.key} {course.type} {course.title}
-        </p>
-      )}
-      <dl className="info-list">
-        <dt>Wann</dt>
-        <dd>
-          {event.allDay ? longDay.format(start) : `${longDay.format(start)}, ${formatTime(event.start)}–${formatTime(event.end)}`}
-        </dd>
+      <div className="event-card-heading">
+        <h2 id="event-card-title">{eventLabel(event, course)}</h2>
+        {course && (
+          <p className="event-course">
+            <span className="event-course-key">{course.key}</span> {course.type} {course.title}
+          </p>
+        )}
+      </div>
+      <dl className="event-facts">
+        <div className="event-fact">
+          <dt>
+            <Clock size={16} aria-hidden="true" />
+            <span className="sr-only">Wann</span>
+          </dt>
+          <dd>
+            <div className="event-fact-main">{longDay.format(start)}</div>
+            {!event.allDay && (
+              <div className="event-fact-sub">
+                {formatTime(event.start)}–{formatTime(event.end)} · {duration(event.start, event.end)}
+              </div>
+            )}
+          </dd>
+        </div>
         {event.location && (
-          <>
-            <dt>Wo</dt>
+          <div className="event-fact">
+            <dt>
+              <MapPin size={16} aria-hidden="true" />
+              <span className="sr-only">Wo</span>
+            </dt>
             <dd>
-              <a href={mapsUrl(data, event.location)} target="_blank" rel="noreferrer">
-                <MapPin size={13} /> {roomName(event.location)}
+              <a className="event-fact-main" href={mapsUrl(data, event.location)} target="_blank" rel="noreferrer">
+                {roomName(event.location)}
               </a>
-              {data.rooms[event.location] && <div className="room-address">{data.rooms[event.location]!.address}</div>}
-              {data.rooms[event.location]?.lectureTube && (
-                <div className="room-stream">
-                  <a href={data.rooms[event.location]!.lectureTube!} target="_blank" rel="noreferrer">
-                    <Video size={13} /> LectureTube (Livestream des Hörsaals)
-                  </a>
-                </div>
-              )}
-              {event.otherLocations.map((room) => (
-                <div key={room} className="other-room">
+              {room && <div className="event-fact-sub">{room.address}</div>}
+              {event.otherLocations.map((other) => (
+                <div key={other} className="event-fact-sub">
                   auch in{' '}
-                  <a href={mapsUrl(data, room)} target="_blank" rel="noreferrer">
-                    {roomName(room)}
+                  <a href={mapsUrl(data, other)} target="_blank" rel="noreferrer">
+                    {roomName(other)}
                   </a>{' '}
                   (Ausweichraum/Übertragung)
                 </div>
               ))}
             </dd>
-          </>
+          </div>
+        )}
+        {room?.lectureTube && (
+          <div className="event-fact">
+            <dt>
+              <Video size={16} aria-hidden="true" />
+              <span className="sr-only">Livestream</span>
+            </dt>
+            <dd>
+              <a className="event-fact-main" href={room.lectureTube} target="_blank" rel="noreferrer">
+                LectureTube
+              </a>
+              <div className="event-fact-sub">Livestream des Hörsaals</div>
+            </dd>
+          </div>
         )}
         {event.detail && (
-          <>
-            <dt>Was</dt>
-            <dd>{event.detail}</dd>
-          </>
+          <div className="event-fact">
+            <dt>
+              <Info size={16} aria-hidden="true" />
+              <span className="sr-only">Was</span>
+            </dt>
+            <dd className="event-fact-main">{event.detail}</dd>
+          </div>
         )}
         {event.with && (
-          <>
-            <dt>Mit</dt>
-            <dd>{event.with}</dd>
-          </>
+          <div className="event-fact">
+            <dt>
+              <UserRound size={16} aria-hidden="true" />
+              <span className="sr-only">Mit</span>
+            </dt>
+            <dd className="event-fact-main">{event.with}</dd>
+          </div>
         )}
         {props.clashes.length > 0 && (
-          <>
-            <dt className="clash-label">
-              <TriangleAlert size={13} />
+          <div className="event-fact clash">
+            <dt>
+              <TriangleAlert size={16} aria-hidden="true" />
+              <span className="sr-only">Überschneidung</span>
             </dt>
-            <dd className="clash-list">
-              Gleichzeitig:{' '}
-              {props.clashes
-                .map((other) => `${eventLabel(other, other.courseKey ? courseMap(data).get(other.courseKey) : undefined)} (${formatTime(other.start)}–${formatTime(other.end)})`)
-                .join(', ')}
+            <dd>
+              <div className="event-fact-main">Gleichzeitig</div>
+              {props.clashes.map((other) => (
+                <div key={other.id} className="event-fact-sub">
+                  {eventLabel(other, other.courseKey ? courseMap(data).get(other.courseKey) : undefined)} ({formatTime(other.start)}–{formatTime(other.end)})
+                </div>
+              ))}
             </dd>
-          </>
+          </div>
         )}
       </dl>
       {course && (
-        <div className="event-actions">
+        <div className="event-card-actions">
           <NoteButton event={event} onNavigate={props.onNavigate} onOpenNote={props.onOpenNote} />
-          <a className="button secondary small" href={tissCourseUrl(course.key, start)} target="_blank" rel="noreferrer">
-            <ExternalLink size={13} /> LVA in TISS
-          </a>
-          {event.url ? (
-            <a className="button secondary small" href={event.url} target="_blank" rel="noreferrer">
-              <ExternalLink size={13} /> In TUWEL öffnen
+          <div className="event-card-links">
+            <a className="button secondary small" href={tissCourseUrl(course.key, start)} target="_blank" rel="noreferrer">
+              LVA in TISS <ExternalLink size={13} aria-hidden="true" />
             </a>
-          ) : (
-            course.tuwelUrl && (
-              <a className="button secondary small" href={course.tuwelUrl} target="_blank" rel="noreferrer">
-                <ExternalLink size={13} /> Kurs in TUWEL
+            {event.url ? (
+              <a className="button secondary small" href={event.url} target="_blank" rel="noreferrer">
+                In TUWEL <ExternalLink size={13} aria-hidden="true" />
               </a>
-            )
-          )}
+            ) : (
+              course.tuwelUrl && (
+                <a className="button secondary small" href={course.tuwelUrl} target="_blank" rel="noreferrer">
+                  Kurs in TUWEL <ExternalLink size={13} aria-hidden="true" />
+                </a>
+              )
+            )}
+          </div>
         </div>
       )}
       {!course && event.kind !== 'holiday' && <Callout kind="info" title={event.title} />}
     </aside>
   )
+}
+
+/** "2 h", "90 min", "1 h 30 min". */
+function duration(startIso: string, endIso: string): string {
+  const minutes = Math.round((new Date(endIso).getTime() - new Date(startIso).getTime()) / 60_000)
+  if (minutes < 60) return `${minutes} min`
+  const hours = Math.floor(minutes / 60)
+  return minutes % 60 === 0 ? `${hours} h` : `${hours} h ${minutes % 60} min`
 }
 
 /** Lecture notes for this appointment: opens them, or creates them from the template. */
