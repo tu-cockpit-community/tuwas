@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ladeBereiche, ladeKurs, ladeUebersicht } from "@/lib/lernen/kurs";
-import { FortschrittSichern, KursHeute } from "@/components/lernen/KursHeute";
+import { KursHeute, LernstandGesichert } from "@/components/lernen/KursHeute";
+import { journalPfad } from "@/lib/lernen/journal";
 import { Md } from "@/components/lernen/Md";
 import { AufgabenFortschritt, KursZahlen } from "@/components/lernen/Fortschritt";
 
@@ -145,7 +146,7 @@ export default async function KursSeite({ params }: Props) {
               </dl>
             </details>
           ) : null}
-          <FortschrittSichern kurs={fach} />
+          <LernstandGesichert pfad={journalPfad()} />
           {kurs.beschreibung ? (
             <details className="seitenbox kurs-beschreibung">
               <summary>Stoff laut Verordnung</summary>

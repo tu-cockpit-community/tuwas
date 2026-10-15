@@ -3,9 +3,12 @@ import { spawn, type ChildProcess } from 'node:child_process'
 import { existsSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { createServer } from 'node:net'
 import { join } from 'node:path'
+import { mergeLernenCourses, lvaKey, type CourseSource, type LernenVorgabe } from '../shared/lernenKurse'
 import type { LernenStatus } from '../shared/types'
+import { calendarData } from './calendar'
 import { getSettings } from './settings'
 import { studiesData } from './studies'
+import { tasksData } from './tasks'
 
 // The Lernen tab shows the separate Lernen project (a Next.js app) inside TUWAS. TUWAS starts it on demand as a
 // local server on 127.0.0.1 and stops it on quit. TUWAS_LERNEN_URL points at an already running one instead.
@@ -27,16 +30,42 @@ function enrolledFile(): string {
   return join(app.getPath('userData'), 'lernen-angemeldet.json')
 }
 
+/** One source of courses; a failing source counts as empty so that the others still get through. */
+function safely(read: () => CourseSource[]): CourseSource[] {
+  try {
+    return read()
+  } catch {
+    return []
+  }
+}
+
+/**
+ * Every course TUWAS knows for the user, best source first: the TISS calendar, the grade overview (earlier semesters
+ * and courses added by hand), then TUWEL (courses it lists deadlines for). Courses hidden in the calendar stay hidden.
+ */
+function knownCourses(): CourseSource[][] {
+  const hidden = new Set(safely(() => calendarData().courses.filter((course) => course.hidden).map((course) => ({ lva: course.key }))).map((c) => lvaKey(c.lva)))
+  const visible = (source: CourseSource[]): CourseSource[] => source.filter((course) => !hidden.has(lvaKey(course.lva)))
+  return [
+    visible(safely(() => calendarData().courses.map((course) => ({ lva: course.key, titel: course.title, typ: course.type, ects: course.ects })))),
+    visible(safely(() => studiesData().courses.map((course) => ({ lva: course.key, titel: course.title, typ: course.type, ects: course.ects, semester: course.semester })))),
+    visible(safely(() => tasksData().tasks.flatMap((task) => (task.courseKey ? [{ lva: task.courseKey, titel: task.courseName ?? undefined }] : []))))
+  ]
+}
+
 /** Keeps the Lernen tab in step with the user's courses and settings. Called at start and whenever they change. */
 export function syncLernenCourses(): void {
   try {
-    const lvas = [...new Set(studiesData().courses.map((course) => course.key))]
+    const kurse = mergeLernenCourses(knownCourses())
+    const vorgabe: LernenVorgabe = { version: 2, lvas: kurse.map((kurs) => kurs.lva), kurse, sbp: getSettings().lernenSbp }
+    const text = JSON.stringify(vorgabe)
+    if (existsSync(enrolledFile()) && readFileSync(enrolledFile(), 'utf8') === text) return
     // Write and rename, so the server, which reads the file on every request, never sees it half-written.
     const temp = `${enrolledFile()}.tmp`
-    writeFileSync(temp, JSON.stringify({ lvas, sbp: getSettings().lernenSbp }))
+    writeFileSync(temp, text)
     renameSync(temp, enrolledFile())
   } catch {
-    // The tab then shows everything with content instead of the registered courses.
+    // The Lernen app keeps the last file it read; without any, it shows everything with content.
   }
 }
 

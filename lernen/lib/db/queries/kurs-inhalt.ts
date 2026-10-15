@@ -1,5 +1,5 @@
 import "server-only";
-import { asc, eq } from "drizzle-orm";
+import { asc, count, eq } from "drizzle-orm";
 import { cache } from "react";
 import { db } from "../client";
 import { kursZustand } from "./kurs-journal";
@@ -21,6 +21,9 @@ export const hatLernpfad = cache((kursId: string): boolean => {
   const row = db.select({ id: lektionen.id }).from(lektionen).where(eq(lektionen.kurs_id, kursId)).limit(1).get();
   return row !== undefined;
 });
+
+/** Wie viele Lektionen der Lernpfad eines Kurses hat (0: keiner). */
+export const lektionenAnzahl = cache((kursId: string): number => db.select({ n: count() }).from(lektionen).where(eq(lektionen.kurs_id, kursId)).get()?.n ?? 0);
 
 export const ladeQuizBank = cache((kursId: string): QuizBank | null => {
   const fragenZeilen = db.select().from(quiz_fragen).where(eq(quiz_fragen.kurs_id, kursId)).all();

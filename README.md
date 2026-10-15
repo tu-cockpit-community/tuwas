@@ -27,7 +27,7 @@ Plan, Entscheidungen und Hintergründe: [PLAN.md](PLAN.md).
 
 ## Installieren
 
-Die fertigen Dateien liegen bei jeder Version unter **[Releases](https://github.com/hulrap/tuwas/releases/latest)**
+Die fertigen Dateien liegen bei jeder Version unter **[Releases](https://github.com/tu-cockpit-community/tuwas/releases/latest)**
 (rechts auf der GitHub-Seite oder über den Link). Dort unter **Assets** die passende Datei herunterladen:
 
 | System | Datei |
@@ -101,7 +101,7 @@ TUWAS schaut alle sechs Stunden auf GitHub nach einer neuen Version. **Deine Dat
 Einstellungen, Zugänge, eigene Termine und Notizen liegen außerhalb des Programms (siehe
 [Wo liegen die Daten?](#wo-liegen-die-daten)). Welche Version du hast und ob es eine neue gibt, steht unter
 Einstellungen → Info → Updates. Dort steht auch die **Update-Quelle**: der Link zum GitHub-Repository, aus dessen
-Releases neue Versionen kommen (Standard `https://github.com/hulrap/tuwas`). Wer einen eigenen Fork nutzt, trägt hier
+Releases neue Versionen kommen (Standard `https://github.com/tu-cockpit-community/tuwas`). Wer einen eigenen Fork nutzt, trägt hier
 dessen Link ein.
 
 ### Windows und Linux (AppImage): von selbst
@@ -118,7 +118,7 @@ eine Benachrichtigung „Neue Version von TUWAS“ und unter Einstellungen → I
 Dann:
 
 1. TUWAS ganz beenden: Cmd+Q oder im Menü des Symbols „Beenden“.
-2. Auf der [Releases-Seite](https://github.com/hulrap/tuwas/releases/latest) die neue `.dmg` herunterladen
+2. Auf der [Releases-Seite](https://github.com/tu-cockpit-community/tuwas/releases/latest) die neue `.dmg` herunterladen
    (Apple-Chip: `…-mac-arm64.dmg`, Intel: `…-mac-x64.dmg`).
 3. Die `.dmg` öffnen, TUWAS in **Programme** ziehen und **„Ersetzen“** wählen.
 4. TUWAS starten. Weil die neue Fassung wieder nicht signiert ist, blockiert macOS den ersten Start erneut:
@@ -196,7 +196,7 @@ dann einfach warten, bis wieder eine Eingabezeile kommt.
    ```
 3. TUWAS herunterladen und vorbereiten:
    ```sh
-   git clone https://github.com/hulrap/tuwas.git
+   git clone https://github.com/tu-cockpit-community/tuwas.git
    cd tuwas
    npm install
    ```
@@ -231,7 +231,7 @@ Ohne Paket geht es auch direkt aus dem Projektordner, siehe
    Danach das Fenster schließen und ein **neues** öffnen (sonst kennt es die neuen Befehle noch nicht).
 2. TUWAS herunterladen, vorbereiten und den Installer bauen:
    ```
-   git clone https://github.com/hulrap/tuwas.git
+   git clone https://github.com/tu-cockpit-community/tuwas.git
    cd tuwas
    npm install
    npm run dist:win
@@ -252,7 +252,7 @@ Ohne Paket geht es auch direkt aus dem Projektordner, siehe
    Wer [Homebrew](https://brew.sh) hat, kann stattdessen `brew install node@22 git` nehmen.
 2. TUWAS herunterladen, vorbereiten und bauen:
    ```sh
-   git clone https://github.com/hulrap/tuwas.git
+   git clone https://github.com/tu-cockpit-community/tuwas.git
    cd tuwas
    npm install
    npm run dist:mac

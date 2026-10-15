@@ -473,8 +473,12 @@ async function smokeLernen(main: BrowserWindow, dir: string, report: Record<stri
     report['lernen'] = 'skipped'
     return shots
   }
-  // The Lernen tab lists the user's courses, so EP1 has to be one of them.
-  rememberCourses([{ key: '185.A91', semester: '2026W', type: 'VU', title: 'Einführung in die Programmierung 1', ects: 5.5 }])
+  // The Lernen tab lists the user's courses, so EP1 has to be one of them. The second LVA is in no course list of the
+  // Lernen app: it still has to get a row ("ausständig"), from the title and ECTS TUWAS passes on.
+  rememberCourses([
+    { key: '185.A91', semester: '2026W', type: 'VU', title: 'Einführung in die Programmierung 1', ects: 5.5 },
+    { key: '999.T01', semester: '2026W', type: 'VO', title: 'Smoke-Testkurs ohne Inhalte', ects: 3 }
+  ])
   syncLernenCourses()
   main.webContents.send(IPC.navigate, 'lernen')
   const deadline = Date.now() + 90_000
@@ -484,7 +488,7 @@ async function smokeLernen(main: BrowserWindow, dir: string, report: Record<stri
     if (frame) {
       found = await frame
         .executeJavaScript(
-          `({ embed: document.documentElement.dataset.embed ?? null, heading: document.querySelector('h1')?.textContent ?? null, ep1: document.body.innerText.includes('Einführung in die Programmierung 1'), sbp: document.body.innerText.includes('Studienberechtigungsprüfung') })`
+          `({ embed: document.documentElement.dataset.embed ?? null, heading: document.querySelector('h1')?.textContent ?? null, ep1: document.body.innerText.includes('Einführung in die Programmierung 1'), skelett: /Smoke-Testkurs ohne Inhalte[\\s\\S]*ausständig/.test(document.body.innerText), sbp: document.body.innerText.includes('Studienberechtigungsprüfung') })`
         )
         .catch(() => 'frame not ready')
       if (typeof found === 'object' && (found as { heading: string | null }).heading) break

@@ -3,7 +3,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 import { erzeugeStandSpeicher, type StandSpeicher } from "./fortschrittSync";
 import { neuesEreignis, type StandArt } from "./standEreignisse";
-import { LEER, lesbarerStand, type AufgabenStatus, type Stand } from "./stand";
+import { LEER, type AufgabenStatus, type Stand } from "./stand";
 
 export type { AufgabenStatus, Stand } from "./stand";
 
@@ -75,17 +75,6 @@ export function speicherePruefung(kurs: string, id: string, erg: { punkte: numbe
 /** Leitner-artige Wiederholung fuer Karteikarten: Stufe 0..5, Intervalle in Tagen (siehe standEreignisse.ts). */
 export function bewerteKarte(kurs: string, id: string, gewusst: boolean): void {
   melde(kurs, "karte", id, { gewusst });
-}
-
-/** Ganzen Fortschritt eines Kurses als JSON (Sicherung) bzw. zurueckspielen. */
-export function exportiere(kurs: string): string {
-  return JSON.stringify({ kurs, version: 1, stand: standSpeicher().lies(kurs) }, null, 1);
-}
-export function importiere(kurs: string, json: string): void {
-  const d = JSON.parse(json) as { kurs?: string; stand?: unknown };
-  if (d.kurs !== kurs || !d.stand || !lesbarerStand(d.stand)) throw new Error(`Die Datei gehört nicht zum Kurs „${kurs}“.`);
-  // ersetzt den Stand; was danach gelernt wird, gilt darauf
-  melde(kurs, "ersetzen", "", lesbarerStand(d.stand) ?? LEER);
 }
 
 /** Alles faellige (Karten-ids und Aufgaben-ids) zum Zeitpunkt jetzt. */

@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
-import { exportiere, faellig, importiere, useStand } from "@/lib/lernen/fortschritt";
+import { faellig, useStand } from "@/lib/lernen/fortschritt";
 import { kapitelStand, naechsterSchritt, type MKapitel } from "@/lib/lernen/mastery";
 
 /** "Heute"-Leiste der Kursseite: was als Naechstes dran ist, was faellig ist, wie weit du bist. */
@@ -62,56 +61,18 @@ export function KursHeute({ kurs, kapitel }: { kurs: string; kapitel: MKapitel[]
   );
 }
 
-/** Fortschritt als Datei sichern und wiederherstellen (zum Mitnehmen oder um einen aelteren Stand zurueckzuholen). */
-export function FortschrittSichern({ kurs }: { kurs: string }) {
-  const datei = useRef<HTMLInputElement>(null);
-  const [meldung, setMeldung] = useState<string | null>(null);
+/** Hinweis statt Knoepfen: jede Lernaktion landet von selbst im Lernstand-Protokoll (lib/lernen/journal.ts). */
+export function LernstandGesichert({ pfad }: { pfad: string }) {
   return (
     <section className="kurs-werkzeuge" aria-labelledby="sichern-titel">
-      <h2 id="sichern-titel">Fortschritt sichern</h2>
-      <p>Dein Lernstand wird auf diesem Rechner gespeichert. Als Datei nimmst du ihn mit oder holst einen älteren Stand zurück.</p>
-      <div className="knopf-reihe">
-        <button
-          type="button"
-          className="knopf knopf-klein"
-          onClick={() => {
-            const blob = new Blob([exportiere(kurs)], { type: "application/json" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = `lernstand-${kurs}-${new Date().toISOString().slice(0, 10)}.json`;
-            a.click();
-            URL.revokeObjectURL(a.href);
-            setMeldung("Sicherung heruntergeladen.");
-          }}
-        >
-          Sicherung herunterladen
-        </button>
-        <button type="button" className="knopf knopf-klein" onClick={() => datei.current?.click()}>
-          Sicherung laden
-        </button>
-        <input
-          ref={datei}
-          type="file"
-          accept="application/json"
-          hidden
-          onChange={async (e) => {
-            const f = e.target.files?.[0];
-            if (!f) return;
-            try {
-              importiere(kurs, await f.text());
-              setMeldung("Lernstand wiederhergestellt.");
-            } catch (err) {
-              setMeldung(err instanceof Error ? err.message : "Die Datei konnte nicht gelesen werden.");
-            }
-            e.target.value = "";
-          }}
-        />
-      </div>
-      {meldung ? (
-        <p role="status" style={{ marginTop: "0.6rem" }}>
-          {meldung}
-        </p>
-      ) : null}
+      <h2 id="sichern-titel">Lernstand</h2>
+      <p>
+        Wird automatisch gesichert: Jede gelöste Aufgabe, jede Karte und jede gelesene Lektion landet sofort in deinem
+        Lernstand-Protokoll auf diesem Rechner, dazu eine Kopie pro Tag. Du musst nichts von Hand sichern.
+      </p>
+      <p className="kurs-werkzeuge-pfad">
+        Für einen anderen Rechner diese Datei mitnehmen: <code>{pfad}</code>
+      </p>
     </section>
   );
 }

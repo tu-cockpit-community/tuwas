@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { Bereiche } from "@/lib/lernen/kurs";
 import { faellig, useStand } from "@/lib/lernen/fortschritt";
-import { FokusKnopf } from "./FokusKnopf";
 import { kapitelKurz, ortImKurs, type GliederungKapitel } from "./KursGliederung";
 
 /** Kapitelwechsel im Brotkrumen: <details>-Menue, Escape und Klick daneben schliessen es. */
@@ -160,7 +159,6 @@ export function KursNav({
           </div>
         ))}
       </div>
-      <FokusKnopf />
     </nav>
   );
 }

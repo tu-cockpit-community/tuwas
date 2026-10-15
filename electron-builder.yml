@@ -1,6 +1,6 @@
 # Installers and packages: npm run dist (see README).
 # Linux: AppImage + RPM · Windows: installer (NSIS) · macOS: .dmg + .zip – each built on its own system.
-appId: io.github.hulrap.tuwas # also in src/main/index.ts (APP_ID)
+appId: io.github.tu-cockpit-community.tuwas # also in src/main/index.ts (APP_ID)
 productName: TUWAS
 copyright: Copyright © 2026 MentorDerGrosse, hulrap
 
@@ -21,7 +21,7 @@ artifactName: ${productName}-${version}-${arch}.${ext}
 # New versions: GitHub releases (.github/workflows/release.yml); Windows and the AppImage update themselves.
 publish:
   provider: github
-  owner: hulrap
+  owner: tu-cockpit-community
   repo: tuwas
 
 linux:

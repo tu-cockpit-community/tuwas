@@ -96,7 +96,7 @@ zugeordnet ist (Abschnitt 5, P7). Lernende bekommen:
   **Mastery** (eine Lektion gilt als gemeistert, wenn ≥ 80 % ihrer Übungen selbständig richtig gelöst sind),
   Lernplan bis zum Prüfungstermin (`pruefung.datum` in `kurs.yaml`).
 - **Training** (unbegrenzt viele Zufallsaufgaben aus Generatoren), **Prüfungssimulation** mit Timer,
-  **mündliche Prüfung** (Karten mit Selbstabgleich), Formelsammlung, Glossar, Suche, Fokusmodus, eine Kursgliederung
+  **mündliche Prüfung** (Karten mit Selbstabgleich), Formelsammlung, Glossar, Suche, eine Kursgliederung
   neben jeder Lektion und eine Brotkrumenleiste mit Kapitelwechsel.
 - Der Lernfortschritt liegt in **einer** Datei außerhalb des Projekts (`~/.local/share/tuwas/lernen/lernstand.jsonl`, ein
   Protokoll, an das nur angehängt wird; Details in `lernen/README.md`, Abschnitt „Daten“). Jeder Eintrag verweist auf eine

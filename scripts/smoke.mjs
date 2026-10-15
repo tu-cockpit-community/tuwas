@@ -344,7 +344,7 @@ try {
 const problems = []
 if (report.error) problems.push(`Fehler: ${report.error}`)
 for (const [check, ok] of Object.entries(report.notes?.editing ?? {})) if (!ok) problems.push(`Notizen: ${check} fehlgeschlagen`)
-if (report.lernen !== 'skipped' && !(report.lernen?.heading === 'Fächer' && report.lernen?.embed === '1' && report.lernen?.ep1 === true && report.lernen?.sbp === false && report.lernenSbp === true)) problems.push(`Lernen-Tab: ${JSON.stringify(report.lernen)}`)
+if (report.lernen !== 'skipped' && !(report.lernen?.heading === 'Fächer' && report.lernen?.embed === '1' && report.lernen?.ep1 === true && report.lernen?.skelett === true && report.lernen?.sbp === false && report.lernenSbp === true)) problems.push(`Lernen-Tab: ${JSON.stringify(report.lernen)}`)
 // The window is scaled up when it is large (zoom), so the page is measured against what is left of the scaled width:
 // the sidebar (224 px) and the side margins (4 vw, at most 72 px each) – or the page's maximum of 1320 px.
 const wideLeft = report.wide ? report.wide.window - 224 - 2 * Math.min(72, report.wide.window * 0.04) : 0

@@ -58,7 +58,7 @@ export default async function KapitelSeite({ params }: Props) {
           </div>
         ) : null}
         {voraus.length > 0 ? (
-          <p className="kapitel-kopf-stand">
+          <p className="kapitel-voraus">
             Baut auf:{" "}
             {voraus.map((v, i) => (
               <span key={v.slug}>

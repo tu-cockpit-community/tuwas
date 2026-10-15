@@ -39,6 +39,15 @@ export default function App({ initialView, initialNote }: { initialView: View; i
   if (view === 'notes' && !notesOpened) setNotesOpened(true)
   // Same for Lernen: the frame keeps its page, scroll position and progress while you are elsewhere.
   const [lernenOpened, setLernenOpened] = useState(view === 'lernen')
+  // Choosing "Lernen" in the menu opens its overview, also from deep inside a course; back/forward keep the page.
+  const [lernenHome, setLernenHome] = useState(0)
+  const selectNav = useCallback(
+    (next: View) => {
+      if (next === 'lernen') setLernenHome((count) => count + 1)
+      navigate(next)
+    },
+    [navigate]
+  )
   if (view === 'lernen' && !lernenOpened) setLernenOpened(true)
 
   const [sidebarWidth, setSidebarWidth] = useRemembered('tuwas.sidebar.width', SIDEBAR.default)
@@ -107,7 +116,7 @@ export default function App({ initialView, initialNote }: { initialView: View; i
         </div>
         <nav className="nav">
           {NAV.map((item) => (
-            <NavItem key={item.view} {...item} active={view === item.view} onSelect={navigate} />
+            <NavItem key={item.view} {...item} active={view === item.view} onSelect={selectNav} />
           ))}
         </nav>
         <div className="nav nav-bottom">
@@ -144,7 +153,7 @@ export default function App({ initialView, initialNote }: { initialView: View; i
       {lernenOpened && (
         <main className="content content-lernen" hidden={view !== 'lernen'}>
           <Suspense fallback={null}>
-            <LernenView />
+            <LernenView home={lernenHome} />
           </Suspense>
         </main>
       )}

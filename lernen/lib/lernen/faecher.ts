@@ -1,5 +1,6 @@
 import type { Kurs } from "@/lib/types";
 import { lvaSchluessel } from "./lva";
+import type { HostKurs } from "./tuwasVorgabe";
 import { MODULE, modulVon } from "./module";
 
 /** Was die Seite "Faecher" zeigt: aus den Kursen der Datenbank, den SBP-Pruefungen und dem, was TUWAS vorgibt. */
@@ -17,6 +18,8 @@ export interface Pruefung {
 export interface TuwasVorgabe {
   lvas: Set<string>;
   sbp: boolean;
+  /** Titel, Typ, ECTS je LVA-Schluessel, wie TUWAS sie aus TISS und TUWEL kennt */
+  kurse?: Map<string, HostKurs>;
 }
 
 export interface FaecherEingabe<P extends Pruefung> {
@@ -44,10 +47,22 @@ export interface Kurszeile {
   hatLernpfad: boolean;
 }
 
+/** Eine angemeldete LVA, die die Kursliste nicht kennt: Zeile aus dem, was TUWAS mitgibt (Skelett). */
+export interface Skelettzeile {
+  lva: string;
+  titel: string;
+  typ: string | null;
+  ects: number | null;
+  /** Lernkurs unter content/ mit dieser LVA-Nummer, falls es schon einen gibt */
+  inhaltId?: string;
+}
+
 export interface FaecherAnsicht<P extends Pruefung> {
   /** `null`: die SBP ist ausgeblendet */
   sbp: Pruefungszeile<P>[] | null;
   gruppen: { titel: string; zeilen: Kurszeile[] }[];
+  /** Angemeldete Lehrveranstaltungen ausserhalb der Kursliste: jede bekommt eine Zeile, nie faellt eine weg. */
+  weitere: Skelettzeile[];
   anzahlKurse: number;
 }
 
@@ -59,6 +74,20 @@ export function baueFaecher<P extends Pruefung>(e: FaecherEingabe<P>): FaecherAn
     .filter((k) => (e.tuwas ? e.tuwas.lvas.has(lvaSchluessel(k.lva_nummer)) : e.hatLernpfad(k.id) || nachLva.has(lvaSchluessel(k.lva_nummer))))
     .map((kurs) => ({ kurs, inhaltId: nachLva.get(lvaSchluessel(kurs.lva_nummer)), hatLernpfad: e.hatLernpfad(kurs.id) }));
 
+  // Was TUWAS meldet, aber die Kursliste nicht kennt, faellt nicht weg: eine Zeile aus Titel, Typ und ECTS von TUWAS.
+  const bekannt = new Set(e.kurse.map((k) => lvaSchluessel(k.lva_nummer)));
+  const weitere: Skelettzeile[] = e.tuwas
+    ? [...e.tuwas.lvas]
+        .filter((schluessel) => !bekannt.has(schluessel))
+        .map((schluessel) => {
+          const k = e.tuwas!.kurse?.get(schluessel);
+          const lva = k?.lva ?? `${schluessel.slice(0, 3)}.${schluessel.slice(3)}`;
+          return { lva, titel: k?.titel ?? lva, typ: k?.typ ?? null, ects: k?.ects ?? null, inhaltId: nachLva.get(schluessel) };
+        })
+        // mit Titel alphabetisch, reine LVA-Nummern (Titel unbekannt) am Ende
+        .sort((a, b) => Number(a.titel === a.lva) - Number(b.titel === b.lva) || a.titel.localeCompare(b.titel, "de"))
+    : [];
+
   const gruppen = MODULE.map((titel) => ({ titel, zeilen: zeilen.filter((z) => modulVon(z.kurs.kategorie) === titel) })).filter((m) => m.zeilen.length > 0);
 
   // Das Wahlfach der SBP ist eine LVA der StEOP, die doppelt zaehlt.
@@ -68,6 +97,7 @@ export function baueFaecher<P extends Pruefung>(e: FaecherEingabe<P>): FaecherAn
   return {
     sbp: zeigeSbp ? e.pruefungen.map((pruefung) => ({ pruefung, inhaltId: nachSbp.get(pruefung.id), wahlfach: pruefung.id === "sbp-wahlfach" ? wahlfach : undefined })) : null,
     gruppen,
-    anzahlKurse: zeilen.length,
+    weitere,
+    anzahlKurse: zeilen.length + weitere.length,
   };
 }

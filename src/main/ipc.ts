@@ -124,7 +124,11 @@ export function registerIpc(): void {
     return calendarData()
   })
   ipcMain.handle(IPC.updateCourse, (_event, key: unknown, patch: unknown) => {
-    if (typeof key === 'string' && patch && typeof patch === 'object') updateCourse(key, patch as CoursePatch)
+    if (typeof key === 'string' && patch && typeof patch === 'object') {
+      updateCourse(key, patch as CoursePatch)
+      // A course shown or hidden again also appears in or leaves the Lernen tab.
+      syncLernenCourses()
+    }
     return calendarData()
   })
   // Own appointments: change, then hand back the calendar with them.

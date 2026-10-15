@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./fonts.css";
 import "./globals.css";
 import { Logo } from "@/components/Logo";
+import { MittelklickScroll } from "@/components/MittelklickScroll";
 import { ThemeUmschalter } from "@/components/ThemeUmschalter";
 
 export const metadata: Metadata = {
@@ -54,6 +55,7 @@ export default function RootLayout({
           <ThemeUmschalter />
         </header>
         <main className="min-h-0 min-w-0 flex-1 overflow-y-auto">{children}</main>
+        <MittelklickScroll />
       </body>
     </html>
   );

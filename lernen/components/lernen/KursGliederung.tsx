@@ -64,6 +64,91 @@ function setzeEingeklappt(zu: boolean) {
   hoerer.forEach((h) => h());
 }
 
+/* Breite der Spalte in px (UI-Praeferenz wie oben); null heisst Standardbreite aus dem CSS */
+const BREITE_SCHLUESSEL = "lernen-gliederung-breite";
+const MIN_BREITE = 200;
+const MAX_BREITE = 560;
+const breiteHoerer = new Set<() => void>();
+function begrenze(px: number): number {
+  return Math.round(Math.min(MAX_BREITE, Math.max(MIN_BREITE, px)));
+}
+function liesBreite(): number | null {
+  try {
+    const wert = Number(localStorage.getItem(BREITE_SCHLUESSEL));
+    return wert > 0 ? begrenze(wert) : null;
+  } catch {
+    return null;
+  }
+}
+function abonniereBreite(h: () => void) {
+  breiteHoerer.add(h);
+  window.addEventListener("storage", h);
+  return () => {
+    breiteHoerer.delete(h);
+    window.removeEventListener("storage", h);
+  };
+}
+function setzeBreite(px: number | null) {
+  try {
+    if (px === null) localStorage.removeItem(BREITE_SCHLUESSEL);
+    else localStorage.setItem(BREITE_SCHLUESSEL, String(begrenze(px)));
+  } catch {
+    /* ohne Speicher gilt die Breite nur bis zum naechsten Laden */
+  }
+  breiteHoerer.forEach((h) => h());
+}
+
+/**
+ * Griff am rechten Rand der Gliederung, wie der zwischen Seitenleiste und Inhalt in TUWAS: ziehen verstellt die
+ * Breite, Pfeiltasten in 16px-Schritten, Doppelklick setzt auf die Standardbreite zurueck.
+ */
+function BreitenGriff({ rahmen, breite, onZiehen }: { rahmen: React.RefObject<HTMLDivElement | null>; breite: number | null; onZiehen: (px: number | null) => void }) {
+  const zieht = useRef(false);
+  const ende = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!zieht.current) return;
+    zieht.current = false;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+    document.body.classList.remove("gliederung-zieht");
+    const aside = rahmen.current?.querySelector(".kurs-gliederung");
+    setzeBreite(aside ? aside.getBoundingClientRect().width : null);
+    onZiehen(null);
+  };
+  const aktuell = () => breite ?? rahmen.current?.querySelector(".kurs-gliederung")?.getBoundingClientRect().width ?? 280;
+  return (
+    <div
+      role="separator"
+      aria-orientation="vertical"
+      aria-label="Breite der Gliederung"
+      aria-valuemin={MIN_BREITE}
+      aria-valuemax={MAX_BREITE}
+      aria-valuenow={Math.round(aktuell())}
+      title="Breite der Gliederung: ziehen zum Verstellen, Doppelklick setzt zurück"
+      tabIndex={0}
+      className="gliederung-griff"
+      onPointerDown={(e) => {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        zieht.current = true;
+        e.currentTarget.setPointerCapture(e.pointerId);
+        document.body.classList.add("gliederung-zieht");
+      }}
+      onPointerMove={(e) => {
+        const links = rahmen.current?.getBoundingClientRect().left;
+        if (zieht.current && links !== undefined) onZiehen(begrenze(e.clientX - links));
+      }}
+      onPointerUp={ende}
+      onPointerCancel={ende}
+      onLostPointerCapture={ende}
+      onDoubleClick={() => setzeBreite(null)}
+      onKeyDown={(e) => {
+        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+        e.preventDefault();
+        setzeBreite(aktuell() + (e.key === "ArrowLeft" ? -16 : 16));
+      }}
+    />
+  );
+}
+
 function GliederungsListe({ fach, kapitel, stand, ort }: { fach: string; kapitel: GliederungKapitel[]; stand: Stand; ort: { kapitel: string; lektion: string | null } }) {
   return (
     <ol className="gliederung-kapitel">
@@ -142,6 +227,11 @@ export function KursGliederung({ fach, kapitel, children }: { fach: string; kapi
   }
   const dialog = useRef<HTMLDialogElement>(null);
   const knopf = useRef<HTMLButtonElement>(null);
+  const rahmen = useRef<HTMLDivElement>(null);
+  const gespeicherteBreite = useSyncExternalStore(abonniereBreite, liesBreite, () => null);
+  // Waehrend des Ziehens nur im Zustand, gespeichert wird beim Loslassen
+  const [gezogen, setGezogen] = useState<number | null>(null);
+  const breite = gezogen ?? gespeicherteBreite;
 
   useEffect(() => {
     const d = dialog.current;
@@ -152,7 +242,12 @@ export function KursGliederung({ fach, kapitel, children }: { fach: string; kapi
 
   const zustand = !ort ? "aus" : eingeklappt ? "zu" : "auf";
   return (
-    <div className="kurs-rahmen" data-gliederung={zustand}>
+    <div
+      ref={rahmen}
+      className="kurs-rahmen"
+      data-gliederung={zustand}
+      style={breite !== null ? ({ "--gliederung-breite": `${breite}px` } as React.CSSProperties) : undefined}
+    >
       {ort ? (
         <aside className="kurs-gliederung" aria-label="Gliederung des Kurses">
           <div className="gliederung-kopf">
@@ -174,6 +269,7 @@ export function KursGliederung({ fach, kapitel, children }: { fach: string; kapi
           </div>
         </aside>
       ) : null}
+      {ort && !eingeklappt ? <BreitenGriff rahmen={rahmen} breite={breite} onZiehen={setGezogen} /> : null}
       <div className="kurs-rahmen-inhalt">
         {ort ? (
           <div className="gliederung-schublade-leiste">
