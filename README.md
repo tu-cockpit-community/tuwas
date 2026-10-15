@@ -18,7 +18,7 @@ Kurz, was TUWAS kann:
   Ankündigungen der Kurse
 - **Prüfungen**: Termine und Anmeldefristen deiner LVAs, Gruppenanmeldung, LVA-Abmeldefrist
 - **Noten**: ECTS und Notendurchschnitt, Bewertungen und Feedback aus TUWEL
-- **Notizen** pro Fach mit Formeln, PDFs daneben, Bildern per Strg+V, Links zwischen Notizen, PDF-Export;
+- **Notizen** pro Fach mit Live-Editor, eigenen Ordnern, Formeln, PDFs daneben, Bildern per Strg+V, Links zwischen Notizen, PDF-Export;
   TUWEL-Unterlagen landen von selbst im Fach-Ordner
 - **Lernen**: Kursinhalte mit Aufgaben, Training und Prüfungssimulation (nur im Entwicklungsordner, siehe [Lernen](#lernen))
 - Erinnerungen, Mini-Ansicht beim Symbol, hell/dunkel mit mehreren Farbschemata, Updates von selbst
@@ -416,8 +416,18 @@ Notizen sind normale Markdown-Dateien in einem Ordner, den du beim ersten Öffne
         └── Folien/                         PDFs, werden neben der Notiz angezeigt
 ```
 
+- **Start:** Ohne offene Notiz zeigt „Notizen“ eine Karte pro Fach dieses Semesters (plus Inbox) mit den zuletzt
+  bearbeiteten Notizen. Ein Klick auf das Fach öffnet seinen Ordner.
+- **Ordner:** In jedem Ordner gehen „Neue Notiz“, „Neuer Ordner“ und „Dateien übernehmen“, über das „…“-Menü eines
+  Eintrags (in der Liste links oder in der Ordneransicht) auch Umbenennen, Verschieben, Papierkorb und „Im Dateimanager
+  zeigen“. Dateien und Ordner lassen sich auf andere Ordner ziehen. Markdown-Dateien, PDFs oder ganze Ordner von
+  woanders ins Fenster oder auf einen Ordner ziehen kopiert sie hinein; die Originale bleiben, wo sie sind. Die Inbox und
+  die Semesterordner bleiben, wie sie sind, und ein umbenannter Fachordner behält seine LVA-Nummer.
 - **Schreiben:** Markdown mit Formeln (`$a^2 + b^2 = c^2$`, `$$ … $$` für eigene Zeilen), Code, Tabellen und
-  Checklisten (`- [ ]`). Daneben eine Live-Ansicht, wahlweise nur Schreiben oder nur Lesen. Gespeichert wird von selbst.
+  Checklisten (`- [ ]`). Der Editor zeigt das gleich formatiert: Überschriften, Fett, Formeln, Tabellen, Bilder und
+  Checkboxen (zum Anklicken) sehen aus wie in der Vorschau, die Markdown-Zeichen erscheinen nur dort, wo der Cursor
+  steht. Das `#`-Symbol in der Leiste zeigt sie überall. Die Dateien bleiben normales Markdown. Daneben wahlweise die
+  Vorschau („Geteilt“) oder nur „Lesen“. Gespeichert wird von selbst.
 - **Kürzel** (Mac: Cmd statt Strg): Strg+B fett, Strg+I kursiv, Strg+M Formel, Strg+Umschalt+M Formelblock, Strg+Umschalt+L Checkliste,
   Strg+E Code, Strg+F suchen in der Notiz, Strg+N neue Notiz, Strg+Umschalt+F alle Notizen durchsuchen.
 - **Folien:** PDFs ins Fenster ziehen oder über „Folien daneben“ hinzufügen – sie landen im `Folien/`-Ordner des Fachs.
@@ -427,7 +437,8 @@ Notizen sind normale Markdown-Dateien in einem Ordner, den du beim ersten Öffne
 - **Bilder:** Ein Bild in der Zwischenablage (z. B. ein Screenshot) mit Strg+V (Mac: Cmd+V) einfügen. Es landet im
   Ordner `Bilder` neben der Notiz.
 - **Links zwischen Notizen:** `[[Zusammenfassung]]` oder `[[Zusammenfassung|anderer Text]]`. Nach `[[` schlägt der Editor
-  die Notizen vor. Gibt es die Notiz noch nicht, ist der Link grau und ein Klick legt sie an.
+  die Notizen vor. Gibt es die Notiz noch nicht, ist der Link grau und ein Klick legt sie an. Im Editor öffnet
+  Strg+Klick (Mac: Cmd+Klick) einen Link, ein einfacher Klick setzt den Cursor zum Bearbeiten.
 - **Als PDF:** das Symbol mit dem Pfeil in der Notizleiste. Die Notiz kommt so wie in der Vorschau heraus, immer hell.
 - **TUWEL-Unterlagen:** Mit TUWEL-Verbindung kommen die Dateien deiner Kurse alle sechs Stunden in den Ordner
   `Unterlagen` des Fachs. Was du dort löschst, kommt nicht wieder. Abschaltbar unter Einstellungen → Notizen.
@@ -505,7 +516,8 @@ Erzeugt erfundene Testdaten: Fächer wie „Beispielkunde“, Abgaben, TISS-LVA-
 und eine zweite Synchronisierung. Diese bringt einen Raumwechsel, einen verschobenen und einen entfallenen Termin, eine
 Prüfungsanmeldung, einen neuen Prüfungstermin und eine neue Aufgabe. TUWAS startet unsichtbar damit, legt
 Screenshots der Ansichten und `report.json` in `smoke/` ab und meldet, ob alles geklappt hat. Geprüft wird unter
-anderem das Speichern der Notizen (von selbst, bei Änderungen von außen, bei Konflikten, beim Schließen), das
+anderem das Speichern der Notizen (von selbst, bei Änderungen von außen, bei Konflikten, beim Schließen), der
+Live-Editor (Formeln, Tabelle, Checkbox anklicken), Ordner anlegen, umbenennen, verschieben und von außen übernehmen, das
 Erkennen von Änderungen, wie TUWAS jede Prüfung einordnet (offen, angemeldet, nicht nötig …), das Zurück- und
 Vorspringen zwischen Ansichten und dass PDFs nur aus dem Notizordner kommen. Nutzt einen eigenen Datenordner und nicht den
 Schlüsselbund.

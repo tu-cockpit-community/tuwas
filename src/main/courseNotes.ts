@@ -11,6 +11,7 @@ import {
   createNoteFile,
   findCourseDir,
   findFile,
+  importIntoNotes,
   joinRel,
   moveNoteTo,
   notesChanged,
@@ -213,4 +214,23 @@ export async function importPdfs(courseKey: string | null, files: string[] | und
   if (pdfs.length === 0) throw new Error('Nur PDF-Dateien lassen sich hier ablegen.')
   const dir = isCourseKey(courseKey) ? joinRel(courseDir(courseInfo(courseKey), new Date()), FOLDERS.slides) : INBOX
   return copyIntoNotes(pdfs, dir)
+}
+
+/** Files from outside into a folder of the notes (copied). Without `files` a file picker opens. */
+export async function importFiles(dir: string, files: string[] | undefined, parent: BrowserWindow | null): Promise<string[]> {
+  let sources = files
+  if (!sources) {
+    const options: OpenDialogOptions = {
+      title: 'Dateien in die Notizen übernehmen',
+      properties: ['openFile', 'multiSelections'],
+      filters: [
+        { name: 'Notizen und Unterlagen', extensions: ['md', 'markdown', 'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'] },
+        { name: 'Alle Dateien', extensions: ['*'] }
+      ]
+    }
+    const result = parent ? await dialog.showOpenDialog(parent, options) : await dialog.showOpenDialog(options)
+    if (result.canceled) return []
+    sources = result.filePaths
+  }
+  return importIntoNotes(sources, dir)
 }

@@ -8,8 +8,8 @@ import { dismissExam, examsData, syncExams } from './exams'
 import { tuwelExtras } from './tuwelExtras'
 import { checkForUpdates, installUpdate, openUpdateHelp, updateSourceChanged, updateState } from './updater'
 import { addStudyCourse, removeStudyCourse, studiesData, updateStudyCourse } from './studies'
-import { chooseNotesDir, createLinkedNote, createNote, importPdfs, moveNote, noteForEvent, noteForTask, quickNote, setupNotes } from './courseNotes'
-import { flushNote, notesData, readNote, renameNote, resolveNote, saveNoteImage, searchNotes, showInFolder, trashNote, writeNote } from './notes'
+import { chooseNotesDir, createLinkedNote, createNote, importFiles, importPdfs, moveNote, noteForEvent, noteForTask, quickNote, setupNotes } from './courseNotes'
+import { createFolder, createNoteIn, flushNote, moveEntry, notesData, readNote, renameEntry, resolveNote, saveNoteImage, searchNotes, showInFolder, trashNote, writeNote } from './notes'
 import { addOwnEvent, deleteOwnEvent, updateOwnEvent } from './ownEvents'
 import { launcherPath } from './paths'
 import { clearSecret, getSecret, secretsStatus, setSecret } from './secrets'
@@ -261,7 +261,7 @@ function registerNotesIpc(): void {
       return choice.filePath
     })
   )
-  ipcMain.handle(IPC.renameNote, (_event, path: unknown, name: unknown) => attempt(() => renameNote(text(path), text(name))))
+  ipcMain.handle(IPC.renameNote, (_event, path: unknown, name: unknown) => attempt(() => renameEntry(text(path), text(name))))
   ipcMain.handle(IPC.moveNote, (_event, path: unknown, courseKey: unknown) => attempt(() => moveNote(text(path), stringOrNull(courseKey))))
   ipcMain.handle(IPC.trashNote, (_event, path: unknown) =>
     attempt(async () => {
@@ -272,6 +272,14 @@ function registerNotesIpc(): void {
   ipcMain.handle(IPC.importPdfs, (event, courseKey: unknown, files: unknown) =>
     attempt(() =>
       importPdfs(stringOrNull(courseKey), Array.isArray(files) ? files.filter((file): file is string => typeof file === 'string') : undefined, BrowserWindow.fromWebContents(event.sender))
+    )
+  )
+  ipcMain.handle(IPC.createFolder, (_event, parent: unknown, name: unknown) => attempt(() => createFolder(text(parent), text(name))))
+  ipcMain.handle(IPC.createNoteIn, (_event, dir: unknown, name: unknown) => attempt(() => createNoteIn(text(dir), text(name))))
+  ipcMain.handle(IPC.moveEntry, (_event, path: unknown, dir: unknown) => attempt(() => moveEntry(text(path), text(dir))))
+  ipcMain.handle(IPC.importFiles, (event, dir: unknown, files: unknown) =>
+    attempt(() =>
+      importFiles(text(dir), Array.isArray(files) ? files.filter((file): file is string => typeof file === 'string') : undefined, BrowserWindow.fromWebContents(event.sender))
     )
   )
   ipcMain.on(IPC.showNoteInFolder, (_event, path: unknown) => {
