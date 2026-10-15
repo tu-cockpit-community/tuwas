@@ -5,3 +5,5 @@ dist/
 smoke/
 docs/
 *:Zone.Identifier
+*.tsbuildinfo
+.claude/
