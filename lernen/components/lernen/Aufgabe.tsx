@@ -5,7 +5,7 @@ import type { Teil } from "@/lib/lernen/typen";
 import { NIVEAUS } from "@/lib/lernen/typen";
 import { pruefeTeil, type Urteil } from "@/lib/lernen/rechnen";
 import { pruefeTeilAsync } from "@/lib/lernen/codePruefen";
-import { setzeAufgabe, useStand, type AufgabenStatus } from "@/lib/lernen/fortschritt";
+import { setzeAufgabe, useStand, useStandGeladen, type AufgabenStatus } from "@/lib/lernen/fortschritt";
 import { Eingabe, leereAntwort, type Antwort } from "./Eingabe";
 import { CodeErgebnisAnsicht } from "./CodeErgebnis";
 import { GefuehrtLoesen, type SchrittRender } from "./GefuehrtLoesen";
@@ -55,6 +55,13 @@ const STATUS_TEXT = { richtig: "Gelöst", versucht: "Versucht", angesehen: "Lös
 export function Aufgabe(p: AufgabeProps) {
   const stand = useStand(p.kurs);
   const status = p.beiErgebnis ? undefined : stand.aufgaben[p.id]?.s;
+  // Bereits geloeste Aufgaben starten zugeklappt. Entscheidend ist der Stand beim Laden: wer eine Aufgabe in dieser
+  // Sitzung loest, behaelt Rueckmeldung und Loesung im Blick. Ein Klick auf den Titel gilt danach immer.
+  const geladen = useStandGeladen(p.kurs);
+  const [anfangZu, setAnfangZu] = useState<boolean | null>(null);
+  if (geladen && anfangZu === null) setAnfangZu(status === "richtig");
+  const [klick, setKlick] = useState<boolean | null>(null);
+  const zu = klick ?? anfangZu ?? false;
   const [antworten, setAntworten] = useState<Antwort[]>(() => p.teile.map(leereAntwort));
   const [urteile, setUrteile] = useState<(Urteil | null)[]>(() => p.teile.map(() => null));
   const [hinweise, setHinweise] = useState(0);
@@ -127,7 +134,7 @@ export function Aufgabe(p: AufgabeProps) {
 
   return (
     <article
-      className={`aufgabe niveau-${p.niveau} ${p.art === "check" ? "aufgabe-check" : ""}`}
+      className={`aufgabe niveau-${p.niveau} ${p.art === "check" ? "aufgabe-check" : ""} ${zu ? "aufgabe-zu" : ""}`}
       id={p.id}
       aria-labelledby={`${p.id}-titel`}
     >
@@ -135,7 +142,12 @@ export function Aufgabe(p: AufgabeProps) {
         <div className="aufgabe-kennung">
           {p.art === "check" ? <span className="aufgabe-nummer">Kurz gecheckt</span> : p.nummer ? <span className="aufgabe-nummer">{p.nummer}</span> : null}
           <h4 id={`${p.id}-titel`} className="aufgabe-titel">
-            {p.titel}
+            <button type="button" className="aufgabe-umschalter" aria-expanded={!zu} aria-controls={`${p.id}-inhalt`} onClick={() => setKlick(!zu)}>
+              <svg className="aufgabe-pfeil" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              {p.titel}
+            </button>
           </h4>
         </div>
         <div className="aufgabe-meta">
@@ -151,6 +163,7 @@ export function Aufgabe(p: AufgabeProps) {
           {status ? <span className={`status status-${status}`}>{STATUS_TEXT[status]}</span> : null}
         </div>
       </header>
+      <div id={`${p.id}-inhalt`} hidden={zu}>
       {p.quelle ? <p className="aufgabe-quelle">Quelle: {p.quelle}</p> : null}
 
       <div className="rechenblatt">
@@ -315,6 +328,7 @@ export function Aufgabe(p: AufgabeProps) {
           ) : null}
         </section>
       ) : null}
+      </div>
     </article>
   );
 }

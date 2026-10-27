@@ -464,6 +464,38 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   border-bottom: 1px solid var(--color-line);
   background: color-mix(in srgb, var(--color-accent) 4%, var(--lern-papier));
 }
+.aufgabe-umschalter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.aufgabe-umschalter:hover {
+  color: var(--color-accent);
+}
+.aufgabe-pfeil {
+  flex: none;
+  align-self: center;
+  color: var(--color-ink-faint);
+  transition: transform 0.15s;
+}
+.aufgabe-zu .aufgabe-pfeil {
+  transform: rotate(-90deg);
+}
+.aufgabe-zu .aufgabe-kopf {
+  border-bottom: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aufgabe-pfeil {
+    transition: none;
+  }
+}
 .aufgabe-kennung {
   display: flex;
   align-items: baseline;

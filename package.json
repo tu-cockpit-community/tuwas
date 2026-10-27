@@ -44,7 +44,7 @@
     "@vitejs/plugin-react": "^5.2.0",
     "@vscode/markdown-it-katex": "^1.1.2",
     "codemirror": "^6.0.2",
-    "electron": "^44.5.1",
+    "electron": "^44.9.1",
     "electron-builder": "^26.15.3",
     "electron-updater": "^6.8.9",
     "electron-vite": "^5.0.0",
