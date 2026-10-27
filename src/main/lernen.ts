@@ -139,7 +139,8 @@ async function launch(): Promise<LernenStatus> {
   let output = ''
   const server = spawn('node', [join(dir, 'node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port), '-H', '127.0.0.1'], {
     cwd: dir,
-    env: { ...process.env, TUWAS_ANGEMELDET: enrolledFile(), LERNEN_DATEN: join(app.getPath('userData'), 'lernen-fortschritt') },
+    // The Java runner only answers 127.0.0.1 (see -H above); on by default for this single-user desktop app, EP1_JAVA_RUNNER=0 turns it off.
+    env: { ...process.env, EP1_JAVA_RUNNER: process.env['EP1_JAVA_RUNNER'] ?? '1', TUWAS_ANGEMELDET: enrolledFile(), LERNEN_DATEN: join(app.getPath('userData'), 'lernen-fortschritt') },
     stdio: ['ignore', 'pipe', 'pipe']
   })
   child = server

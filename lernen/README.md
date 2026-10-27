@@ -27,7 +27,7 @@ Für korrekte Vorschaubilder beim Teilen setzt du die öffentliche Adresse (sons
 NEXT_PUBLIC_SITE_URL=https://example.org npm run build
 ```
 
-Mit Code-Aufgaben (siehe Abschnitt Sicherheit):
+Mit Code-Aufgaben (siehe Abschnitt Sicherheit; TUWAS selbst schaltet den Runner beim Start der App ein, `EP1_JAVA_RUNNER=0` schaltet ihn dort aus):
 
 ```sh
 EP1_JAVA_RUNNER=1 npm run dev

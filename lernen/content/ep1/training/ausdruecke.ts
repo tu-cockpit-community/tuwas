@@ -306,17 +306,18 @@ export const DRILLS: Drill[] = [
       const anfang = klein ? "a" : "A";
       const loesung = zeilen([basis + pos + k, String.fromCharCode(basis + pos + k), pos, ziffer]);
       return {
-        angabe: `Was gibt der Ausschnitt aus? (\`'A'\` hat die Nummer 65, \`'a'\` die Nummer 97, \`'0'\` die Nummer 48.)`,
+        angabe: `Was gibt der Ausschnitt aus? Jedes Zeichen hat eine Nummer in der Zeichentabelle (nicht seine Stelle im Alphabet). Gegeben: \`'A'\` hat die Nummer 65, \`'a'\` hat 97, \`'0'\` hat 48. Danach geht es der Reihe nach weiter: \`'B'\` = 66, \`'C'\` = 67, \`'1'\` = 49 und so weiter. Alle anderen Nummern zählst du selbst ab.`,
         teile: [
           {
             typ: "ausgabe",
             code: `char c = '${c}';\nchar z = '${ziffer}';\nSystem.out.println(c + ${k});\nSystem.out.println((char) (c + ${k}));\nSystem.out.println(c - '${anfang}');\nSystem.out.println(z - '0');`,
             loesung,
-            fehler: [{ wert: zeilen([String.fromCharCode(basis + pos + k), String.fromCharCode(basis + pos + k), pos, ziffer]), meldung: "`c + " + k + "` ist eine Rechnung ohne String. Das Ergebnis ist eine Zahl, kein Zeichen. Erst `(char)` macht wieder ein Zeichen daraus." }],
+            fehler: [{ wert: zeilen([String.fromCharCode(basis + pos + k), String.fromCharCode(basis + pos + k), pos, ziffer]), meldung: "`c + " + k + "` ist eine Rechnung ohne String. Das Ergebnis ist eine Zahl, kein Zeichen. Erst `(char)` macht wieder ein Zeichen daraus." },
+              { wert: zeilen([basis + pos + k, String.fromCharCode(basis + pos + k), pos, ziffer - 48]), meldung: "`z` enthält das Zeichen `'" + ziffer + "'` (einfache Anführungszeichen), nicht die Zahl " + ziffer + ". In der Rechnung zählt seine Nummer " + (48 + ziffer) + ", also `z - '0'` = " + (48 + ziffer) + " − 48 = " + ziffer + "." }],
           },
         ],
         hinweis: "In einer Rechnung wird ein `char` zu seiner Nummer. Zeichen erscheint nur mit `(char)` oder allein.",
-        loesung: `**Ansatz:** Zeichen durch ihre Nummern ersetzen. \`'${c}'\` ist ${basis} + ${pos} = ${basis + pos}.\n---\n\`c + ${k}\` = ${basis + pos + k} (Zahl). \`(char) (c + ${k})\` = \`${String.fromCharCode(basis + pos + k)}\`.\n---\n\`c - '${anfang}'\` = ${basis + pos} − ${basis} = ${pos} (Position im Alphabet ab 0). \`z - '0'\` = ${48 + ziffer} − 48 = ${ziffer}.`,
+        loesung: `**Ansatz:** In einer Rechnung zählt bei einem \`char\` nur seine Nummer aus der Zeichentabelle. Die Nummern zählst du von den gegebenen Ankern ab.\n---\n\`'${c}'\`: ab \`'${anfang}'\` (${basis}) sind es ${pos} Schritte weiter, also ${basis} + ${pos} = ${basis + pos}. \`z\` enthält das **Zeichen** \`'${ziffer}'\`, nicht die Zahl ${ziffer}. Ab \`'0'\` (48) sind es ${ziffer} Schritte, also 48 + ${ziffer} = ${48 + ziffer}.\n---\n\`c + ${k}\` = ${basis + pos} + ${k} = ${basis + pos + k} (Zahl). \`(char) (c + ${k})\` macht aus der Nummer ${basis + pos + k} wieder ein Zeichen: \`${String.fromCharCode(basis + pos + k)}\`.\n---\n\`c - '${anfang}'\` = ${basis + pos} − ${basis} = ${pos}. Es ist der Unterschied der beiden Nummern. \`z - '0'\` = ${48 + ziffer} − 48 = ${ziffer}.`,
       };
     },
   }),
