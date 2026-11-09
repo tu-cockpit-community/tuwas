@@ -52,7 +52,11 @@ export function Bloecke({ kurs, bloecke, praefix, kapitel }: { kurs: string; blo
       {bloecke.map((b, i) => {
         switch (b.art) {
           case "md":
-            return <Md key={i}>{b.md}</Md>;
+            return (
+              <Md key={i} ablauf>
+                {b.md}
+              </Md>
+            );
           case "plot":
             return <Plot key={i} spec={b.plot} />;
           case "widget":

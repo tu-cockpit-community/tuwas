@@ -1336,8 +1336,19 @@ loesung: |
   **Ansatz:** Nur der Ort der Ausgabe bestimmt die Reihenfolge. Hinter dem Selbstaufruf kommt sie auf dem Rückweg.
   ---
   ```java
-  zeigeAuf(n - 1);
-  System.out.println(n);
+  public class Probe {
+      public static void zeigeAuf(int n) {
+          if (n < 1) {
+              return;
+          }
+          zeigeAuf(n - 1);
+          System.out.println(n);
+      }
+
+      public static void main(String[] args) {
+          zeigeAuf(3);
+      }
+  }
   ```
   ---
   Probe mit `n = 3`: Hinweg 3, 2, 1, 0 ohne Ausgabe. Rückweg gibt 1, 2, 3 aus.
@@ -1648,13 +1659,21 @@ loesung: |
   **Ansatz:** Das Intervallmuster mit einer Bedingung um die Ausgabe. Fortschritt ist `start + 1`.
   ---
   ```java
-  if (start > end) {
-      return;
+  public class Probe {
+      public static void druckeGeradeAufsteigend(int start, int end) {
+          if (start > end) {
+              return;
+          }
+          if (start % 2 == 0) {
+              System.out.println(start);
+          }
+          druckeGeradeAufsteigend(start + 1, end);
+      }
+
+      public static void main(String[] args) {
+          druckeGeradeAufsteigend(3, 10);
+      }
   }
-  if (start % 2 == 0) {
-      System.out.println(start);
-  }
-  druckeGeradeAufsteigend(start + 1, end);
   ```
   ---
   Variante: Ist `start` gerade, kann man mit `start + 2` weitermachen. Dann muss man aber den ungeraden Fall getrennt behandeln.
@@ -2150,11 +2169,19 @@ loesung: |
   Die Ausgabe von `von` passiert in jedem Aufruf, auch im Basisfall. Darum steht sie ganz vorne.
   ---
   ```java
-  System.out.println(von);
-  if (von == bis) {
-      return von;
+  public class Probe {
+      public static int druckeUndSumme(int von, int bis) {
+          System.out.println(von);
+          if (von == bis) {
+              return von;
+          }
+          return von + druckeUndSumme(von + 1, bis);
+      }
+
+      public static void main(String[] args) {
+          System.out.println(druckeUndSumme(2, 5));
+      }
   }
-  return von + druckeUndSumme(von + 1, bis);
   ```
   ---
   Probe `(2, 5)`: Ausgaben 2, 3, 4, 5. Rückgabe `2 + (3 + (4 + 5)) = 14`. Der Basisfall `von == bis` ist sicher, weil die Vorbedingung `von ≤ bis` garantiert.
@@ -2166,7 +2193,12 @@ Tausendertrennzeichen aus, etwa 31004 als `31,004`. Ein häufiger falscher Ansat
 gibt den Rest `n % 1000` einfach als Zahl aus:
 
 ```java
-System.out.print(n / 1000 + "," + n % 1000);   // falsch für 31004
+public class Probe {
+    public static void main(String[] args) {
+        int n = 31004;
+        System.out.print(n / 1000 + "," + n % 1000);   // falsch für 31004
+    }
+}
 ```
 
 `31004 % 1000` ist 4, und die Ausgabe lautet `31,4`. Die zwei Nullen vor der 4 gehören aber zur Zahl. Eine Zahl wie
@@ -2236,20 +2268,28 @@ loesung: |
   Der vordere Teil muss vor dem letzten Block erscheinen. Darum steht der Selbstaufruf vor der Ausgabe, und der Block erscheint auf dem Rückweg.
   ---
   ```java
-  if (n < 1000) {
-      System.out.print(n);
-      return;
+  public class Probe {
+      public static void tausender(int n) {
+          if (n < 1000) {
+              System.out.print(n);
+              return;
+          }
+          tausender(n / 1000);
+          int rest = n % 1000;
+          String nullen = "";
+          if (rest < 100) {
+              nullen = "0";
+          }
+          if (rest < 10) {
+              nullen = "00";
+          }
+          System.out.print("," + nullen + rest);
+      }
+
+      public static void main(String[] args) {
+          tausender(31004);
+      }
   }
-  tausender(n / 1000);
-  int rest = n % 1000;
-  String nullen = "";
-  if (rest < 100) {
-      nullen = "0";
-  }
-  if (rest < 10) {
-      nullen = "00";
-  }
-  System.out.print("," + nullen + rest);
   ```
   ---
   Probe `31004`: Der Selbstaufruf gibt `31` aus. Danach ist `rest = 4`, also `nullen = "00"`, und es erscheint `,004`.
@@ -4509,9 +4549,20 @@ loesung: |
   **Ansatz:** Für jeden Testfall eine Ausgabe aus Beschriftung und Rückgabewert.
   ---
   ```java
-  System.out.println("quersumme(4827) = " + quersumme(4827));
-  System.out.println("quersumme(7) = " + quersumme(7));
-  System.out.println("quersumme(1000) = " + quersumme(1000));
+  public class Probe {
+      public static int quersumme(int n) {
+          if (n < 10) {
+              return n;
+          }
+          return n % 10 + quersumme(n / 10);
+      }
+
+      public static void main(String[] args) {
+          System.out.println("quersumme(4827) = " + quersumme(4827));
+          System.out.println("quersumme(7) = " + quersumme(7));
+          System.out.println("quersumme(1000) = " + quersumme(1000));
+      }
+  }
   ```
   ---
   Gute Testfälle decken den Normalfall (4827), den Basisfall (7) und einen Randfall mit Nullen (1000) ab. Genau so wählt man sie im Test.
@@ -5521,25 +5572,41 @@ loesung: |
   ---
   a)
   ```java
-  if (start > end) {
-      return;
+  public class ProbeA {
+      public static void teilbarAbsteigend(int start, int end, int teiler) {
+          if (start > end) {
+              return;
+          }
+          if (end % teiler == 0) {
+              System.out.println(end);
+          }
+          teilbarAbsteigend(start, end - 1, teiler);
+      }
+
+      public static void main(String[] args) {
+          teilbarAbsteigend(4, 20, 6);
+      }
   }
-  if (end % teiler == 0) {
-      System.out.println(end);
-  }
-  teilbarAbsteigend(start, end - 1, teiler);
   ```
   ---
   b)
   ```java
-  int beitrag = 0;
-  if (n % 10 == ziffer) {
-      beitrag = 1;
+  public class ProbeB {
+      public static int zaehleZiffer(int n, int ziffer) {
+          int beitrag = 0;
+          if (n % 10 == ziffer) {
+              beitrag = 1;
+          }
+          if (n < 10) {
+              return beitrag;
+          }
+          return beitrag + zaehleZiffer(n / 10, ziffer);
+      }
+
+      public static void main(String[] args) {
+          System.out.println(zaehleZiffer(70070, 0));
+      }
   }
-  if (n < 10) {
-      return beitrag;
-  }
-  return beitrag + zaehleZiffer(n / 10, ziffer);
   ```
   ---
   Probe: `teilbarAbsteigend(4, 20, 6)` prüft 20, 19, …, 4 und gibt 18, 12, 6 aus. `zaehleZiffer(70070, 0)` findet die Nullen an drei Stellen.

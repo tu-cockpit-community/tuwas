@@ -9,7 +9,7 @@ import { vergleicheAusgabe } from "../bewertung";
 import { vergleicheFormen, type Form } from "./codedraw";
 import type { CodeErgebnis, CompilerMeldung, Regelverstoss, TestErgebnis } from "./ergebnis";
 import { erzeugePruefer, importe } from "./pruefer";
-import { javaProgramm, klassenName } from "./quelle";
+import { javaProgramm, klassenName, setzeInRahmen } from "./quelle";
 
 /**
  * Lokaler Java-Runner (Node). Genutzt von POST /api/java/pruefen, vom Validator und von den Tests.
@@ -460,17 +460,21 @@ export function laufzeitMeldung(status: string, meldung: string | null): string 
 }
 
 async function laufeTests(teil: CodeTeil, quelltext: string, mitRegeln: boolean): Promise<Lauf> {
-  const klasse = klassenName(teil.vorlage) ?? "Loesung";
+  // Quiz-Format: Rahmen + Antwort ergeben das Programm; die Vorlage fuer den Signaturvergleich ist der Rahmen mit der Vorlage
+  const ganz = setzeInRahmen(teil.rahmen, quelltext);
+  const vorlageQuelle = setzeInRahmen(teil.rahmen, teil.vorlage).quelle;
+  quelltext = ganz.quelle;
+  const klasse = klassenName(vorlageQuelle) ?? "Loesung";
   const hilfe = await hilfsklassen();
   const dir = await fsp.mkdtemp(path.join(os.tmpdir(), "ep1-runner-"));
   try {
     await fsp.mkdir(path.join(dir, "bin"));
     await fsp.mkdir(path.join(dir, "vorlage"));
     const eigen = path.join(dir, `${klasse}.java`);
-    const pruefer = erzeugePruefer(klasse, teil.tests, teil.zeitlimit ?? 2000, importe(teil.vorlage));
+    const pruefer = erzeugePruefer(klasse, teil.tests, teil.zeitlimit ?? 2000, importe(vorlageQuelle));
     await fsp.writeFile(eigen, quelltext);
     await fsp.writeFile(path.join(dir, "Ep1Pruefer.java"), pruefer.quelle);
-    await fsp.writeFile(path.join(dir, "vorlage", `${klasse}.java`), teil.vorlage);
+    await fsp.writeFile(path.join(dir, "vorlage", `${klasse}.java`), vorlageQuelle);
     const [k] = await kompiliere(
       [
         {
@@ -497,9 +501,14 @@ async function laufeTests(teil: CodeTeil, quelltext: string, mitRegeln: boolean)
           meldung: `${was} lässt sich mit deinem Code nicht übersetzen. Hast du Name, Parameter oder Rückgabetyp einer Methode verändert? Compiler: ${d.meldung.split("\n")[0]}`,
         };
       }
-      return { zeile: d.zeile, spalte: d.spalte, ort: "eigen", meldung: d.meldung };
+      if (teil.rahmen === undefined) return { zeile: d.zeile, spalte: d.spalte, ort: "eigen", meldung: d.meldung };
+      // Quiz-Format: Zeile der Antwort zaehlen; Fehler im vorgegebenen Rahmen (z. B. "bereits definiert") nennen den Rahmen
+      const z = d.zeile - ganz.versatz;
+      return { zeile: z >= 1 && z <= ganz.zeilen ? z : 0, spalte: z >= 1 && z <= ganz.zeilen ? d.spalte : 0, ort: "eigen", meldung: z >= 1 && z <= ganz.zeilen ? d.meldung : `Im vorgegebenen Programm (Zeile ${d.zeile}): ${d.meldung}` };
     });
-    if (!k.ok) return { compiler, regeln: k.regeln, kompiliert: false, roh: [] };
+    // Quiz-Format: Regelverstoesse mit Zeilen der Antwort melden
+    const regeln = teil.rahmen === undefined ? k.regeln : k.regeln.map((r) => ({ ...r, zeile: Math.max(0, r.zeile - ganz.versatz) }));
+    if (!k.ok) return { compiler, regeln, kompiliert: false, roh: [] };
 
     const limit = teil.zeitlimit ?? 2000;
     const sek = Math.min(30, Math.ceil((teil.tests.length * limit) / 1000) + 3);
@@ -527,7 +536,7 @@ async function laufeTests(teil: CodeTeil, quelltext: string, mitRegeln: boolean)
       else if (p.code !== 0) abbruch = `Das Programm wurde vorzeitig beendet (Exit-Code ${p.code}). ${p.stderr.split("\n")[0] ?? ""}`.trim();
       else abbruch = "Das Programm hat sich vorzeitig beendet (System.exit aufgerufen?).";
     }
-    return { compiler: [], regeln: k.regeln, kompiliert: true, roh, abbruch };
+    return { compiler: [], regeln, kompiliert: true, roh, abbruch };
   } finally {
     await fsp.rm(dir, { recursive: true, force: true });
   }

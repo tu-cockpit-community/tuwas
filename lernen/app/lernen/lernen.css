@@ -2245,12 +2245,19 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   display: flex;
   justify-content: flex-end;
 }
+.code-rahmen summary,
 .code-testliste summary {
   cursor: pointer;
   font-family: var(--font-sans);
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--lern-text-leise);
+}
+.code-rahmen {
+  margin-bottom: 0.6rem;
+}
+.code-rahmen pre {
+  margin: 0.5rem 0;
 }
 .code-testliste ul {
   margin: 0.5rem 0 0;
@@ -3410,4 +3417,799 @@ body.gliederung-zieht * {
   margin-top: 0.8rem;
   font-size: 0.85rem;
   color: var(--lern-text-leise);
+}
+
+/* =====================================================================================
+   Ablauf: Java-Code Schritt fuer Schritt (components/lernen/Ablauf.tsx, AblaufKnopf.tsx)
+   Nur Theme-Variablen. Jede Hervorhebung hat zusaetzlich Form oder Text (Balken, Zeiger, Unterstrich, Marken),
+   damit nichts nur an der Farbe haengt. Kontraste der Mischfarben in hell und dunkel >= 4,5:1 gerechnet.
+   ===================================================================================== */
+.ablauf-block {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.ablauf-start {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: start;
+  /* volle Breite auch in Eltern mit justify-items: start; der Spieler (container-type) hat keine Eigenbreite */
+  width: 100%;
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+.ablauf-knopf {
+  padding-left: 0.55rem;
+}
+.ablauf-knopf[aria-disabled="true"] {
+  cursor: progress;
+  opacity: 0.75;
+}
+.ablauf-inhalt {
+  display: grid;
+  gap: 0.6rem;
+  width: 100%;
+  min-width: 0;
+}
+.ablauf-meldung {
+  margin: 0;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--color-line-strong);
+  border-left: 4px solid var(--color-accent);
+  border-radius: 8px;
+  background: var(--lern-papier);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.ablauf-veraltet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  border-left-color: var(--color-warning);
+}
+.ablauf-code-wahl {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: start;
+  min-width: 0;
+}
+.ablauf-testwahl {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--lern-text-leise);
+}
+.ablauf-testwahl code {
+  font-family: var(--font-mono);
+  color: var(--color-ink);
+}
+.ablauf-testwahl select,
+.ablauf-tempo select {
+  min-height: 2.4rem;
+  max-width: 100%;
+  padding: 0.25rem 0.5rem;
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: 8px;
+  background: var(--lern-papier);
+  color: var(--color-ink);
+  font: inherit;
+  font-weight: 500;
+}
+.ablauf-testwahl select:focus-visible,
+.ablauf-tempo select:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Spieler */
+.ablauf {
+  container-type: inline-size;
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 12px;
+  background: var(--lern-papier);
+  color: var(--lern-text);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: left;
+  /* `<=`, `!=`, `++` so zeigen, wie sie getippt werden (keine Ligaturen wie ≤) */
+  font-variant-ligatures: none;
+}
+.ablauf:focus {
+  outline: none;
+}
+.ablauf:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+/* Regeln des Lesetexts (.lern-md) nicht in den Spieler tragen */
+.ablauf p,
+.ablauf li {
+  margin: 0;
+  overflow: visible;
+}
+.ablauf ol,
+.ablauf ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ablauf li + li {
+  margin-top: 0;
+}
+.ablauf code {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+.ablauf .inline-code {
+  padding: 0.05em 0.3em;
+  border-radius: 4px;
+  background: var(--code-flaeche);
+}
+.ablauf mark {
+  color: inherit;
+}
+
+.ablauf-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+}
+.ablauf-kopf-text {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.ablauf-name {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lern-text-leise);
+}
+.ablauf-kopfzeile {
+  overflow-wrap: anywhere;
+}
+.ablauf .ablauf-kopfzeile code {
+  padding: 0.05em 0.35em;
+  border-radius: 4px;
+  background: var(--code-flaeche);
+  white-space: pre-wrap;
+}
+.ablauf-hinweis {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--color-warning-line);
+  border-left: 4px solid var(--color-warning);
+  border-radius: 8px;
+  background: var(--color-warning-soft);
+  color: var(--color-ink);
+}
+
+.ablauf-raster,
+.ablauf-links,
+.ablauf-rechts {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  min-width: 0;
+}
+@container (min-width: 48rem) {
+  .ablauf-raster {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* Code: aktuelle Zeile mit Balken, Zeiger und Flaeche; der Bereich des Schritts zusaetzlich unterstrichen */
+.ablauf .ablauf-code {
+  position: relative;
+  max-height: 26rem;
+  margin: 0;
+  padding: 0.5rem 0;
+  overflow: auto;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+.ablauf-code:focus-visible,
+.ablauf-konsole:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.ablauf .ablauf-code > code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  font-size: inherit;
+}
+.ablauf-zeile {
+  display: block;
+  padding-right: 1rem;
+  border-left: 4px solid transparent;
+}
+.ablauf-zeile .code-nr {
+  margin-left: 0.35rem;
+  margin-right: 0.2rem;
+}
+.ablauf-zeiger {
+  display: inline-block;
+  width: 1.4em;
+  text-align: center;
+  color: var(--color-accent);
+}
+.ablauf-zeile.ist-besucht {
+  border-left-color: var(--color-accent-line);
+}
+.ablauf-zeile.ist-aktuell {
+  border-left-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 11%, var(--code-flaeche));
+}
+.ablauf-zeile.ist-aktuell .code-nr {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+.ablauf-bereich {
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--kasten-merke) 16%, var(--code-flaeche));
+  box-shadow: inset 0 -2px 0 var(--kasten-merke);
+}
+
+/* Erklaerung des Schritts */
+.ablauf-erklaerung {
+  display: grid;
+  gap: 0.45rem;
+  min-height: 5.5rem;
+  align-content: start;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--color-line);
+  border-left: 4px solid var(--color-accent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-accent) 5%, var(--lern-papier));
+}
+.ablauf-schrittkopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+}
+.ablauf-art {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.ablauf-zeilennr {
+  color: var(--lern-text-leise);
+  font-variant-numeric: tabular-nums;
+}
+.ablauf-satz {
+  font-family: var(--font-lese), system-ui, sans-serif;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--color-ink);
+}
+.ablauf-marke {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 999px;
+  background: var(--lern-papier);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.ablauf-marke.ist-wahr {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+.ablauf-marke.ist-falsch {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+.ablauf-marke-neu {
+  border-color: var(--color-success);
+}
+.ablauf-marke-geaendert {
+  border-color: var(--kasten-merke);
+}
+.ablauf-kette {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.4rem;
+}
+.ablauf-kette li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.ablauf-pfeil {
+  color: var(--lern-text-leise);
+  font-weight: 700;
+}
+.ablauf .ablauf-form {
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 6px;
+  background: var(--code-flaeche);
+  white-space: pre;
+}
+.ablauf .ist-ergebnis .ablauf-form {
+  border: 2px solid var(--color-accent);
+}
+.ablauf-fehler {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--color-danger-line);
+  border-left: 4px solid var(--color-danger);
+  border-radius: 6px;
+  background: var(--color-danger-soft);
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+.ablauf-fehler-art {
+  font-weight: 700;
+  color: var(--color-danger);
+}
+.ablauf-ergebnis {
+  font-weight: 600;
+}
+.ablauf .ablauf-fehler code,
+.ablauf .ablauf-ergebnis code {
+  padding: 0.05em 0.35em;
+  border-radius: 4px;
+  background: var(--code-flaeche);
+}
+.ablauf-erwartet {
+  font-weight: 400;
+  color: var(--lern-text-leise);
+}
+
+/* Steuerung */
+.ablauf-steuerung {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: var(--color-surface-sunken);
+}
+.ablauf-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.ablauf .ablauf-taste {
+  min-width: 2.6rem;
+  min-height: 2.6rem;
+  padding: 0.3rem 0.55rem;
+}
+.ablauf .ablauf-spielen {
+  padding-right: 0.85rem;
+}
+.knopf.ablauf-taste[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.knopf.ablauf-taste[aria-disabled="true"]:hover {
+  border-color: var(--color-line-strong);
+}
+.ablauf-regler {
+  display: grid;
+  gap: 0.15rem;
+}
+.ablauf-regler-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+.ablauf-regler input {
+  width: 100%;
+  min-height: 1.75rem;
+  accent-color: var(--color-accent);
+}
+.ablauf-regler input:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.ablauf-optionen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+.ablauf-modus {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.ablauf .ablauf-modus-knopf {
+  font-size: 0.85rem;
+}
+.ablauf-modus-knopf.ist-aus {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ablauf-tempo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.ablauf-tasten {
+  font-size: 0.8rem;
+  color: var(--lern-text-leise);
+}
+
+/* Variablen, Arrays, Aufrufstapel, Konsole */
+.ablauf-feld {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.ablauf-titel {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--lern-text-leise);
+}
+.ablauf-titel-zusatz {
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.ablauf-titelzeile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem 0.8rem;
+}
+.ablauf-leer {
+  font-size: 0.88rem;
+  font-style: italic;
+  color: var(--lern-text-leise);
+}
+.ablauf-tabelle-huelle {
+  overflow-x: auto;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+}
+.ablauf-tabelle {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.ablauf-tabelle > thead > tr > th,
+.ablauf-tabelle > tbody > tr > th,
+.ablauf-tabelle > tbody > tr > td {
+  padding: 0.35rem 0.6rem;
+  border-bottom: 1px solid var(--color-line);
+  text-align: left;
+  vertical-align: top;
+}
+.ablauf-tabelle > thead > tr > th {
+  background: var(--color-surface-sunken);
+  color: var(--lern-text-leise);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.ablauf-tabelle > tbody > tr:last-child > * {
+  border-bottom: 0;
+}
+.ablauf-tabelle > tbody > tr > th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ablauf-tabelle > tbody > tr > th .ablauf-marke {
+  margin-left: 0.4rem;
+}
+.ablauf-tabelle > tbody > tr.ist-neu > * {
+  background: color-mix(in srgb, var(--color-success) 9%, var(--lern-papier));
+}
+.ablauf-tabelle > tbody > tr.ist-geaendert > * {
+  background: color-mix(in srgb, var(--kasten-merke) 12%, var(--lern-papier));
+}
+.ablauf .ablauf-wert {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.ablauf-gleich {
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  color: var(--lern-text-leise);
+}
+.ablauf-array {
+  display: grid;
+  gap: 0.1rem;
+  justify-items: start;
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 0.15rem;
+}
+.ablauf-zellen {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.ablauf-zellen th {
+  padding: 0 0.3rem;
+  color: var(--lern-text-leise);
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-align: center;
+}
+.ablauf-zellen tbody th {
+  padding-right: 0.45rem;
+  text-align: right;
+}
+.ablauf-zellen td {
+  min-width: 2.2rem;
+  height: 2rem;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--color-line-strong);
+  background: var(--lern-papier);
+  text-align: center;
+  white-space: pre;
+}
+.ablauf-zellen td.ist-geaendert,
+.ablauf-zellen tr.ist-geaendert > td {
+  background: color-mix(in srgb, var(--kasten-merke) 18%, var(--lern-papier));
+  outline: 2px solid var(--kasten-merke);
+  outline-offset: -2px;
+  font-weight: 700;
+}
+.ablauf-zellen thead td,
+.ablauf-zellen td.ablauf-auslassung,
+.ablauf-zellen td.ablauf-keine-zelle {
+  min-width: 1.5rem;
+  border-color: transparent;
+  background: transparent;
+  color: var(--lern-text-leise);
+}
+.ablauf-zellen td.ablauf-nullzeile {
+  text-align: left;
+}
+.ablauf-array-info,
+.ablauf-leer-array {
+  font-size: 0.75rem;
+  color: var(--lern-text-leise);
+}
+.ablauf-stapel-liste {
+  display: grid;
+  gap: 0.35rem;
+}
+.ablauf-karte {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 8px;
+  background: var(--color-surface-sunken);
+}
+.ablauf-karte.ist-aktiv {
+  border: 2px solid var(--color-accent);
+  background: var(--lern-papier);
+}
+.ablauf-karte-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem 0.6rem;
+}
+.ablauf .ablauf-karte-kopf code {
+  font-weight: 600;
+}
+.ablauf-karte-zeile {
+  font-size: 0.78rem;
+  color: var(--lern-text-leise);
+}
+.ablauf-karte-werte {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+.ablauf-karte-details summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.6rem;
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ablauf-karte-details summary:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.ablauf-karte-details[open] summary {
+  margin-bottom: 0.35rem;
+}
+.ablauf-schalter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 1.75rem;
+  color: var(--lern-text-leise);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.ablauf-schalter input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--color-accent);
+}
+.ablauf-schalter input:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.ablauf-konsole {
+  min-height: 3.2rem;
+  max-height: 16rem;
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  overflow: auto;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 8px;
+  background: var(--code-flaeche);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  white-space: pre;
+  tab-size: 4;
+}
+.ablauf-neu {
+  background: color-mix(in srgb, var(--color-accent) 16%, var(--code-flaeche));
+  box-shadow: inset 0 -2px 0 var(--color-accent);
+}
+.ablauf-sonderzeichen {
+  color: var(--lern-text-leise);
+}
+.ablauf-umbruch-neu,
+.ablauf-cursor {
+  color: var(--color-accent);
+}
+/* Zeichenflaeche (CodeDraw): die Leinwand ist wie im Original immer weiss, auch im Dunkelmodus (Farben sind Teil der Aufgabe) */
+.ablauf-flaeche {
+  margin: 0;
+}
+.ablauf-flaeche-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(26rem, 70vh);
+  border: 1px solid var(--color-line-strong);
+  border-radius: 8px;
+  background: #fff;
+}
+/* neue Formen: heller Saum plus gestrichelter Rahmen, auf jeder Formfarbe sichtbar; Linienstaerke unabhaengig vom Massstab */
+.ablauf-flaeche-halo,
+.ablauf-flaeche-rahmen {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+.ablauf-flaeche-halo {
+  stroke: #fff;
+  stroke-width: 5;
+}
+.ablauf-flaeche-rahmen {
+  stroke: #c2410c;
+  stroke-width: 2.5;
+  stroke-dasharray: 6 4;
+}
+.ablauf-flaeche-neu {
+  animation: ablauf-puls 1.2s ease-in-out 2;
+}
+@keyframes ablauf-puls {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+.ablauf-flaeche-info {
+  display: grid;
+  gap: 0.15rem;
+  font-size: 0.82rem;
+  color: var(--lern-text-leise);
+}
+.ablauf-flaeche-neu-text {
+  color: var(--lern-text);
+}
+.ablauf-flaeche-legende {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: 0.4em;
+  border: 2px dashed #c2410c;
+  background: #fff;
+  vertical-align: -0.1em;
+}
+.ablauf .ablauf-flaeche-info code {
+  font-size: 0.95em;
+}
+/* Farbfeld vor dem Wert einer Color oder eines CodeDraw (Zeichenfarbe) im Variablenkasten */
+.ablauf-farbfeld {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: 0.4em;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 3px;
+  vertical-align: -0.12em;
+}
+/* schmal: die Zeichenflaeche steht gleich unter dem Erklaersatz, noch vor der Steuerung (sonst muesste man scrollen, um das Ergebnis des Schritts zu sehen) */
+@container (max-width: 47.99rem) {
+  .ablauf-links,
+  .ablauf-rechts {
+    display: contents;
+  }
+  .ablauf-links > *,
+  .ablauf-rechts > * {
+    order: 5;
+  }
+  .ablauf .ablauf-links > .ablauf-code {
+    order: 1;
+  }
+  .ablauf-links > .ablauf-erklaerung {
+    order: 2;
+  }
+  .ablauf-rechts > .ablauf-flaeche {
+    order: 3;
+  }
+  .ablauf-links > .ablauf-steuerung {
+    order: 4;
+  }
+}
+@media (max-width: 640px) {
+  .ablauf {
+    padding: 0.6rem;
+  }
+}
+/* schmal: alle fuenf Steuerknoepfe in einer Reihe; die Wiedergabe behaelt ihr aria-label */
+@container (max-width: 24rem) {
+  .ablauf-taste-text {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ablauf,
+  .ablauf * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
 }

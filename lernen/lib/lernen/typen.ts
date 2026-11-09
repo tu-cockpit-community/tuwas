@@ -212,6 +212,11 @@ export const TeilSchema = z.discriminatedUnion("typ", [
     fehler,
     /** Startcode mit der Klasse und den Methodensignaturen (muss kompilieren) */
     vorlage: z.string(),
+    /**
+     * Quiz-Format: ganze Klasse mit der Marke RAHMEN_MARKE (quelle.ts) allein auf einer Zeile. Dann sind `vorlage`, Antwort und
+     * `musterloesung` nur die Anweisungen, die dort eingesetzt werden; Lernende sehen den Rahmen nur zum Lesen.
+     */
+    rahmen: z.string().optional(),
     tests: z.array(JavaTestSchema).min(1),
     regeln: JavaRegelnSchema.optional(),
     /** Referenzloesung: bleibt auf dem Server, der Validator prueft sie gegen alle Tests und Regeln */

@@ -278,7 +278,7 @@ export function Aufgabe(p: AufgabeProps) {
           <ol className="loesung-schritte">
             {p.schritte.slice(0, schritte).map((s, i) => (
               <li key={i} className="loesung-schritt">
-                <Md>{s}</Md>
+                <Md ablauf>{s}</Md>
               </li>
             ))}
           </ol>

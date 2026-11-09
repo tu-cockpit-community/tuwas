@@ -756,9 +756,6 @@ loesung: |
   float anteil = 0.25f;
   char zeichen = 'Z';
   boolean fertig = true;
-  ```
-  ---
-  ```java
   System.out.println(zahl + ", " + gross + ", " + anteil + ", " + zeichen + ", " + fertig);
   ```
   Kontrolle: `0x1F` wird als `31` ausgegeben, das `L` und das `f` erscheinen nicht.
@@ -2701,6 +2698,7 @@ Bei der Umwandlung in Text erscheint jeder Wert so, wie `println` ihn ausgeben w
 Diese Aufgabe stammt in ähnlicher Form aus Übung 1 (WS 2021). Es gilt `int a = 2, b = 4, c = 6;`.
 
 ```java
+int a = 2, b = 4, c = 6;
 System.out.println("" + a + b + c);
 System.out.println(a + b + c + "");
 System.out.println("" + a + (b + c));
@@ -2720,6 +2718,9 @@ Diese Aufgabe stammt in ähnlicher Form aus dem Übungsblatt (WS 2021). Es gilt
 `String st = "Ergebnis"; int i = 21; char c = '5';`. Die Ziffer `'5'` hat die Nummer 53.
 
 ```java
+String st = "Ergebnis";
+int i = 21;
+char c = '5';
 System.out.println(st + i + c);
 System.out.println(i + c + st);
 ```

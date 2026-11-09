@@ -156,7 +156,7 @@ geprüft (`(1 | -8 | 14)` oder `\begin{pmatrix}…\end{pmatrix}`, optional mit V
 | `zeilen` | `code`, `loesung: [Zeilennummern]` | Menge, Teilwertung |
 | `trace` | `spalten`, `loesung: [[Zellen…], …]`, `zeilen?`, `vorgabe?` | zellweise, Teilwertung |
 | `reihenfolge` | `elemente` (richtige Reihenfolge), `start?` | Liste exakt |
-| `code` | `vorlage`, `tests`, `regeln?`, `musterloesung`, `zeitlimit?` | Java-Runner auf dem Server, siehe 4a |
+| `code` | `vorlage`, `rahmen?`, `tests`, `regeln?`, `musterloesung`, `zeitlimit?` | Java-Runner auf dem Server, siehe 4a |
 
 **Rechenfunktionen in `loesung`:** `sqrt`, `nthRoot(x, n)`, `abs`, `exp`, `ln`, `log(x, b)`, `lg`,
 `ld`, `sin cos tan` (Bogenmaß), `asin`/`arcsin`, `atan2(y, x)`, `inRad(grad)`, `inGrad(rad)`, `pi`, `e`,
@@ -378,6 +378,43 @@ loesung: |
   ```
 ````
 
+**Quiz-Format mit `rahmen`** (für Aufgaben, bei denen Lernende nur Anweisungen schreiben, wie in den TUWEL-Quiz:
+„Die Variable `n` ist bereits deklariert“): `rahmen` ist die ganze Klasse mit der Zeile `/*ANTWORT*/` (allein auf
+einer Zeile, genau einmal). Dann sind `vorlage` (meist `""`), die Antwort und `musterloesung` nur die eingesetzten
+Anweisungen; Rahmen und Antwort ergeben das Programm, gegen das `tests` laufen. Vorbelegte Variablen stehen im Rahmen
+(`int a = 10;`) oder als Methodenparameter (`static void f(int x, int y) {` mit der Marke im Rumpf, Test `aufruf: "f(2, 4)"`).
+Wer sie erneut deklariert, bekommt wie im echten Quiz „bereits definiert“. Compilerzeilen zählen ab der ersten Zeile der
+Antwort; Fehler im Rahmen werden als „Im vorgegebenen Programm“ gemeldet. Der Editor zeigt den Rahmen ausklappbar
+(„Das Programm drumherum“); „Meinen Code ablaufen sehen“ läuft mit dem zusammengesetzten Programm.
+
+```aufgabe
+id: beispiel-rahmen
+titel: Zuweisungen statt Deklarationen
+niveau: 1
+angabe: Ändern Sie die Belegungen so, dass `20` und `6.666666666666667` ausgegeben werden.
+teile:
+  - typ: code
+    rahmen: |
+      public class Quiz {
+          public static void main(String[] args) {
+              int a = 10;
+              double b = a / 3;
+              /*ANTWORT*/
+              System.out.println(a);
+              System.out.println(b);
+          }
+      }
+    vorlage: ""
+    musterloesung: |
+      a = 20;
+      b = a / 3.0;
+    tests:
+      - { stdout: "20\n6.666666666666667" }
+hinweise: [Der Typ steht schon im Programm. Schreibe nur `name = wert;`.]
+loesung: |
+  `a = 20;` und `b = a / 3.0;`: `a / 3` wäre eine Ganzzahldivision.
+```
+
 **Tests** (`tests`, mindestens einer):
 
 | Form | Felder | geprüft wird |
@@ -421,6 +458,19 @@ dieser Test scheitert) oder der Name einer Regel (erscheint bei diesem Verstoß)
 `clear`, `show`). Jeder Aufruf wird protokolliert; bei `zeichnung: true` vergleicht der Runner die Formen
 mit denen der Musterlösung als Multimenge (±1 px, Farbe und Füllung müssen stimmen, Reihenfolge nur
 mit `reihenfolge: true`). Die Rückmeldung zeigt beide Zeichnungen als SVG nebeneinander.
+
+**Zeichnungen im Darsteller („Ablauf ansehen“):** Auch Programme mit CodeDraw laufen Schritt für Schritt; daneben entsteht die Zeichnung auf
+einer Zeichenfläche (SVG), mit gestricheltem Rahmen um die im Schritt neuen Formen. Die Engine kennt alles, was das Fake-CodeDraw kann
+(`new CodeDraw()`, `new CodeDraw(b, h)`, alle `draw…`/`fill…`-Methoden oben, `setColor`, `setLineWidth`, `getWidth/getHeight`, `getColor`, `clear()`,
+`clear(Color)`, `show()`, `show(ms)`, `close`, …), `Palette.<FARBE>`, `Palette.fromRGB/fromRGBA/fromGrayscale` und `java.awt.Color`
+(`new Color(r, g, b)`, `Color.RED`, …); `import codedraw.*;` und `import java.awt.Color;` müssen wie in Java dastehen (in Anweisungen ohne Klasse
+ist `codedraw.*` schon dabei). Der Darsteller zeigt eine Form sofort beim Zeichnen (wie das Fake); im echten CodeDraw erscheint sie erst mit
+`show()`, darauf weist die Zeichenfläche hin, wenn das Programm `show()` aufruft.
+Regeln für Java-Blöcke in Lektionen (`siehtAusfuehrbarAus` in `components/lernen/Md.tsx`, geprüft von `npm run lernen:lektion-ablauf`):
+Ein Block mit CodeDraw bekommt den Knopf, wenn er eine Klasse mit `main` ist oder Anweisungen mit `new CodeDraw(` enthält und vollständig läuft
+(alle Variablen deklariert). Nicht: Anweisungen mit `import`-Zeile (gelten als Dateiausschnitt), Blöcke, die nur `import codedraw.*;` oder
+`cd.…` ohne eigenes Fenster zeigen, und Methoden ohne Aufruf. Ein Block, dem Deklarationen fehlen (`x`, `breite`, …), muss vervollständigt
+oder als ```` ```text ```` gesetzt werden, sonst meldet `lernen:lektion-ablauf` einen Fehler.
 
 `code`-Teile gehen nur in Kapiteln und Prüfungen (nicht in `gefuehrt` und nicht in Trainings-
 generatoren), weil die Route die Aufgabe über ihre `id` vom Server lädt.

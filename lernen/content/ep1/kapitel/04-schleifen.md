@@ -380,7 +380,7 @@ Stopp-Knopf beenden.
 :::achtung[Die Schleifenvariable wird nicht verändert]
 Eine typische falsche Version des Countdowns:
 
-```java
+```text
 int n = 3;
 while (n > 0) {
     System.out.println(n);
@@ -395,7 +395,7 @@ keine findest, hast du eine Endlosschleife.
 :::achtung[Ein Strichpunkt zu viel]
 Diese Version sieht fast richtig aus:
 
-```java
+```text
 int n = 3;
 while (n > 0); {
     System.out.println(n);
@@ -665,6 +665,7 @@ loesung: |
   **Ansatz:** Wie oft die Regel angewendet wird, weiß man vorher nicht. Das spricht für eine `while`-Schleife mit Zähler.
   ---
   ```java
+  int n = 6;
   int schritte = 0;
   while (n != 1) {
       if (n % 2 == 0) {
@@ -778,7 +779,7 @@ loesung: |
 Die Reihenfolge ist also: Initialisierung, dann immer wieder Bedingung, Rumpf, Aktualisierung. Jede
 `for`-Schleife lässt sich deshalb Wort für Wort in eine `while`-Schleife übersetzen:
 
-```java
+```text
 for (int i = 0; i < 5; i++) {          int i = 0;
     System.out.println(i);             while (i < 5) {
 }                                          System.out.println(i);
@@ -1187,6 +1188,7 @@ loesung: |
   **Ansatz:** Offenes Intervall heißt: Start bei `a + 1`, Bedingung `i < b`. Im Rumpf filtert ein `if` nach dem Rest.
   ---
   ```java
+  int a = 3, b = 20;
   for (int i = a + 1; i < b; i++) {
       if (i % 7 == 3) {
           System.out.println(i);
@@ -1609,6 +1611,7 @@ loesung: |
   **Ansatz:** Zähler-Muster. Die Schleife läuft über alle Positionen des Satzes.
   ---
   ```java
+  String satz = "Susi isst Eis";
   int anzahl = 0;
   for (int i = 0; i < satz.length(); i++) {
       char c = satz.charAt(i);
@@ -1672,6 +1675,7 @@ loesung: |
   **Ansatz:** Akkumulator-Muster für ein Produkt. Startwert 1, Typ `long` wegen der Größe.
   ---
   ```java
+  int n = 5;
   long f = 1;
   for (int i = 2; i <= n; i++) {
       f *= i;
@@ -2224,6 +2228,7 @@ loesung: |
   **Ansatz:** Gefiltert und mit Trennzeichen, also Flag `erste`.
   ---
   ```java
+  int a = 1, b = 10;
   boolean erste = true;
   for (int i = a; i <= b; i++) {
       if (i % 3 == 0 || i % 5 == 0) {
@@ -2412,7 +2417,7 @@ und a. Das `v`, das `t`, die Leerzeichen und `S`, `p`, `s`, `s` liegen außerhal
 :::
 
 :::achtung[Ein Index zu weit]
-```java
+```text
 String s = "Hallo";
 for (int i = 0; i <= s.length(); i++) {
     System.out.print(s.charAt(i));
@@ -2608,6 +2613,7 @@ loesung: |
   **Ansatz:** Den String rückwärts durchlaufen und die Zeichen hinten anhängen.
   ---
   ```java
+  String text = "Hallo";
   String r = "";
   for (int i = text.length() - 1; i >= 0; i--) {
       r = r + text.charAt(i);
@@ -2673,6 +2679,7 @@ loesung: |
   **Ansatz:** Durchlauf in Zweierschritten ab Index 1 mit Filter `!= 'e'`.
   ---
   ```java
+  String text = "Verbesserung";
   int i = 1;
   while (i < text.length()) {
       if (text.charAt(i) != 'e') {
@@ -2741,6 +2748,7 @@ loesung: |
   **Ansatz:** Zähler-Muster mit `while`. Der Filter besteht aus zwei Bereichen.
   ---
   ```java
+  String text = "NOZ noz AMZ";
   int anzahl = 0;
   int i = 0;
   while (i < text.length()) {
@@ -2811,6 +2819,7 @@ loesung: |
   **Ansatz:** Vorwärts durchlaufen. Vor Index `i` kommt ein Leerzeichen, wenn ab dort noch ein Vielfaches von 4 Zeichen folgt.
   ---
   ```java
+  String bin = "1011001";
   String r = "";
   int n = bin.length();
   for (int i = 0; i < n; i++) {
@@ -3201,6 +3210,7 @@ loesung: |
   **Ansatz:** Suchschleife mit zwei Bedingungen. Die Indexprüfung steht links vom `&&`.
   ---
   ```java
+  String text = "Mathematik";
   int i = 0;
   while (i < text.length() && text.charAt(i) != 't') {
       i++;
@@ -3276,6 +3286,7 @@ loesung: |
   **Ansatz:** Rückwärts lesen, vorne anfügen, `e` zählen. Abbruch, wenn der Anfang erreicht ist oder drei `e` gezählt sind.
   ---
   ```java
+  String text = "Sehen ist leicht.";
   String neu = "";
   int anzahl = 0;
   int j = text.length() - 1;
@@ -3355,6 +3366,8 @@ loesung: |
   **Ansatz:** Suchschleife mit Zähler. Abbruch bei `k` Treffern oder am Ende des Textes.
   ---
   ```java
+  String text = "Abrakadabra";
+  int k = 3;
   int gefunden = 0;
   int i = 0;
   while (i < text.length() && gefunden < k) {
@@ -3529,7 +3542,7 @@ hat eine Ziffer. Eine `while`-Schleife mit derselben Bedingung hätte 0 geliefer
 :::
 
 :::achtung[Der fehlende Strichpunkt]
-```java
+```text
 int x = 0;
 do {
     x++;
@@ -3767,6 +3780,7 @@ loesung: |
   **Ansatz:** Letzte Ziffer ausgeben, abschneiden, wiederholen. Mindestens einmal, also `do-while`.
   ---
   ```java
+  int n = 407;
   do {
       System.out.println(n % 10);
       n = n / 10;
@@ -3962,7 +3976,7 @@ beiden schließenden Klammern: nach der inneren Schleife, aber noch in der äuß
 :::
 
 :::achtung[Dieselbe Laufvariable innen und außen]
-```java
+```text
 for (int i = 0; i < 3; i++) {
     for (int i = 0; i < 2; i++) {
         System.out.print("*");
@@ -4203,6 +4217,8 @@ loesung: |
   **Ansatz:** Verschachtelte Schleifen. Außen alle möglichen Startpositionen, innen ein zeichenweiser Vergleich mit Abbruch beim ersten Unterschied.
   ---
   ```java
+  String text = "banana";
+  String wort = "ana";
   int treffer = 0;
   for (int i = 0; i + wort.length() <= text.length(); i++) {
       int j = 0;
@@ -4865,6 +4881,7 @@ loesung: |
   **Ansatz:** Zeichenweise durchlaufen. Bei einer Ziffer 2 bis 4 mit Nachfolger das nächste Zeichen vervielfachen und zwei Positionen weiterrücken, sonst das Zeichen übernehmen.
   ---
   ```java
+  String text = "a3bc2d";
   String r = "";
   int i = 0;
   while (i < text.length()) {

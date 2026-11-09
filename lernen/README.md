@@ -42,6 +42,8 @@ EP1_JAVA_RUNNER=1 npm run dev
 | `npm run lernen:pruefen [-- <fach> [NN]] [--qualitaet]` | Validiert Kursinhalte: Schema, Musterlösungen, Formeln, Generatoren |
 | `npm run lernen:test` | Unit-Tests der Lernlogik |
 | `npm run lernen:test:java` | Tests des Java-Runners (braucht JDK) |
+| `npm run lernen:ablauf` | Vergleicht die Ablauf-Engine mit den in `content/` hinterlegten Java-Ausgaben (alle `ausgabe`-Aufgaben, main-, Ausgabe- und Wert-Tests der Musterlösungen) und bei `zeichnung: true`-Tests die Formenliste mit dem Java-Lauf des Fake-CodeDraw (braucht ein JDK; Zeile „code: Zeichnungs-Tests“, Ziel 100 %); Exit-Code 1 bei Abweichung |
+| `npm run lernen:lektion-ablauf -- <kurs> [NN …] [--liste]` | Prüft jeden Java-Block in Kapitel- und Lösungstexten, der „Ablauf ansehen“ bekommt: läuft in echtem Java (JDK) und in der Ablauf-Engine mit gleicher Ausgabe; Exit-Code 1 bei Abweichung |
 | `npm run lernen:index` | Erzeugt `content/<fach>/training/index.ts` (läuft vor `dev` und `build` automatisch) |
 | `npm run inhalt:exportieren [-- <datei>]` | Erzeugt aus `db/lernen.db` das Inhaltspaket `dist/lernen-inhalt.db` für ein Release |
 | `npm run inhalt:test` | Tests des Inhalts-Updaters (Einspielen, Prüfung, Download) |
@@ -133,6 +135,31 @@ lehnen sich gegenseitig ab.
 
 **Nicht abgedeckt:** Die Fächer unter `content/` (Kapitel, Training, Prüfungen) sind Dateien und zum Teil Code
 (`content/<fach>/training/*.ts`). Sie ändern sich mit einer neuen App-Version, nicht über den Knopf.
+
+## Ablaufansicht („Ablauf ansehen“)
+
+Bei Code-Aufgaben und Java-Beispielen in Lektionen gibt es den Knopf **Ablauf ansehen**: Der Code läuft Zeile für Zeile oder Ausdruck für Ausdruck
+ab, mit hervorgehobener Zeile, Variablen (Arrays als Zellen), Aufrufstapel bei Methoden und Rekursion, wachsender Konsole und einem Erklärsatz je
+Schritt (←/→, Leertaste, Schieberegler, Tempo, Umschalter „Zeile für Zeile“ / „Ausdruck für Ausdruck“).
+
+- `ausgabe`-Aufgaben: der Knopf erscheint erst nach dem ersten Prüfen, weil der Ablauf die Antwort zeigt.
+- `code`-Aufgaben: „Meinen Code ablaufen sehen“ führt den aktuellen Editorinhalt mit einem sichtbaren Test aus (auch zum Fehlersuchen).
+- Java-Blöcke in Lektionen und Lösungswegen, die lauffähig aussehen (`System.out`, `main`, statische Methode; Zeichnungen: mit `new CodeDraw(`, siehe unten).
+
+**Zeichnungen (CodeDraw):** Programme mit `CodeDraw` laufen im Darsteller wie alle anderen. Daneben (schmal: unter dem Erklärsatz) steht die
+**Zeichenfläche**: eine weiße Leinwand in der Größe aus `new CodeDraw(b, h)` mit genau den Formen, die bis zum aktuellen Schritt gezeichnet
+und nicht durch `clear()` gelöscht sind. Neue Formen des Schritts haben einen gestrichelten Rahmen; der Erklärsatz sagt, was gezeichnet wird
+(„Zeichnet ein gefülltes Rechteck: Ecke links oben bei (20, 40), 60 breit, 30 hoch, Farbe Rot.“). Im Variablenkasten erscheint ein `CodeDraw` als
+`CodeDraw 400×400, Farbe Rot, Linienbreite 1` und eine `Color` mit Farbfeld. Das Fake-CodeDraw der Plattform (`lib/lernen/java/codedraw/`) ist das Orakel:
+gleiche Methoden, Koordinaten, Farbwerte (`Palette`, `java.awt.Color`), Zahlenformat und Fehler (`new CodeDraw(0, 5)`, `setColor(null)`, …). Die Formen
+stehen einmal in `Ablauf.formen`, jeder Schritt hat nur `zeichnung: { anzahl, ab, gezeigt }` (Länge und Löschstand des Protokolls); Hilfen in
+`lib/lernen/ablauf/zeichnung.ts`. Ob ein Block den Knopf bekommt, entscheidet `siehtAusfuehrbarAus` (`components/lernen/Md.tsx`): Klassen mit `main` und
+Anweisungen mit eigenem Fenster (`new CodeDraw(`), aber nicht Anweisungen mit `import`-Zeile (Dateiausschnitt), nicht Blöcke, die `CodeDraw` nennen
+ohne ein Fenster anzulegen, und keine Methoden ohne Aufruf. Bei `code`-Aufgaben sind `zeichnung: true`-Tests wie jeder andere sichtbare Test wählbar.
+
+Die Engine (`lib/lernen/ablauf/`) ist ein eigener Interpreter für die Java-Teilmenge von EP1 K1 und läuft im Browser, ohne Server und ohne JDK.
+Nicht unterstützt (mit Meldung): Objekte und eigene Klassen mit `new`, Generics, Collections, `try/catch`, Lambdas, `Math.random()`, `Thread`, CodeDraw-Methoden außerhalb des Fakes (`drawImage` u. a.).
+`npm run lernen:ablauf` prüft sie gegen die echten Java-Ausgaben aus `content/` und gegen die Formen des Fake-CodeDraw im echten Java-Lauf (jede Musterlösung mit `zeichnung: true`-Tests, Formenliste exakt gleich); `npm run lernen:lektion-ablauf` dasselbe für die Java-Blöcke in den Kapiteltexten (ein Block mit Knopf muss wirklich laufen); die Typen für Engine und Ansicht stehen in `lib/lernen/ablauf/typen.ts`.
 
 ## Marke
 

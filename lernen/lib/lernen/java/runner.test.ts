@@ -150,3 +150,44 @@ test("Programme ausführen (ausgabe im Validator): Ausschnitt in main, Compilerf
   assert.equal(b.diagnosen[0].zeile - b.versatz, 1);
   assert.equal(c.ausgabe, "HALLO\n");
 });
+
+// ------------------------------------------------------------------ Quiz-Format (rahmen)
+
+const belegung = code({
+  rahmen:
+    "public class Quiz {\n    public static void main(String[] args) {\n        int a = 10;\n        double b = a / 3;\n        char c = 'a';\n        String s = \"bc\";\n        /*ANTWORT*/\n        System.out.println(a);\n        System.out.println(b);\n        System.out.println(c);\n        System.out.print(s + c);\n    }\n}\n",
+  vorlage: "",
+  musterloesung: "a = 20;\nb = a / 3.0;\nc = 'b';\ns = \"acd\";",
+  tests: [{ stdout: "20\n6.666666666666667\nb\nacdb" }],
+});
+
+test("rahmen: Musterlösung aus reinen Zuweisungen besteht, Antwort steht eingerückt im Rahmen", opt, async () => {
+  const e = await pruefeCode(belegung, belegung.musterloesung);
+  assert.equal(e.status, "ok", JSON.stringify(e, null, 1));
+});
+
+test("rahmen: erneute Deklaration meldet den Fehler mit Zeile der Antwort, Fehler im Rahmen ohne Antwortzeile", opt, async () => {
+  const e = await pruefeCode(belegung, "int a = 20;\nb = a / 3.0;");
+  assert.equal(e.status, "compilerfehler");
+  assert.match(e.compiler[0].meldung, /bereits .* definiert/);
+  assert.equal(e.compiler[0].zeile, 1);
+  const k = await pruefeCode(belegung, "a = 20;\n}\n");
+  assert.equal(k.status, "compilerfehler");
+  assert.ok(k.compiler.every((m) => m.zeile === 0 || m.zeile <= 2));
+});
+
+test("rahmen: Test über Methodenparameter wie im Quiz (x, y vorgegeben, nur die Verzweigung geschrieben)", opt, async () => {
+  const t = code({
+    rahmen: "public class V {\n    static void f(int x, int y) {\n        /*ANTWORT*/\n    }\n}\n",
+    vorlage: "",
+    musterloesung: 'if (x % 2 == 0 && y > 3) {\n    System.out.println("A");\n} else {\n    System.out.println("C");\n}',
+    tests: [
+      { aufruf: "f(2, 4)", stdout: "A" },
+      { aufruf: "f(1, 4)", stdout: "C" },
+    ],
+  });
+  assert.equal((await pruefeCode(t, t.musterloesung)).status, "ok");
+  const falsch = await pruefeCode(t, 'System.out.println("A");');
+  assert.equal(falsch.status, "tests");
+  assert.deepEqual(falsch.tests.map((x) => x.bestanden), [true, false]);
+});

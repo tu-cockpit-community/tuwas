@@ -337,9 +337,14 @@ Element, `temp[6]` das letzte. Gesprochen: „temp an der Stelle 0“. Ein solch
 gewöhnliche `int`-Variable. Man kann ihm etwas zuweisen und ihn in Rechnungen verwenden:
 
 ```java
-temp[0] = 12;                 // Platz 0 bekommt den Wert 12
-temp[1] = temp[0] + 3;        // Platz 1 bekommt 12 + 3 = 15
-System.out.println(temp[1]);  // gibt 15 aus
+public class Zugriff {
+    public static void main(String[] args) {
+        int[] temp = new int[7];
+        temp[0] = 12;                 // Platz 0 bekommt den Wert 12
+        temp[1] = temp[0] + 3;        // Platz 1 bekommt 12 + 3 = 15
+        System.out.println(temp[1]);  // gibt 15 aus
+    }
+}
 ```
 
 Die Länge eines Arrays liefert `temp.length`. Achte auf die Schreibweise: Bei Arrays steht `length` **ohne**
@@ -1220,7 +1225,7 @@ Doppelpunkten. Dann brauchst du die Schleife.
 :::achtung[Das Array direkt mit println ausgeben]
 Wer ein `int`-Array einfach an `println` übergibt, sieht nicht den Inhalt:
 
-```java
+```text
 int[] a = {3, 1, 4};
 System.out.println(a);       // gibt etwas wie [I@1b6d3586 aus
 ```
@@ -1453,13 +1458,21 @@ loesung: |
   Kopf: `for (int i = a.length - 1; i >= 0; i -= schritt)`. Die Bedingung `i >= 0` lässt auch Index 0 zu.
   ---
   ```java
-  for (int i = a.length - 1; i >= 0; i -= schritt) {
-      if (i < a.length - 1) {
-          System.out.print(":");
+  public class Probe {
+      public static void druckeRueckwaerts(int[] a, int schritt) {
+          for (int i = a.length - 1; i >= 0; i -= schritt) {
+              if (i < a.length - 1) {
+                  System.out.print(":");
+              }
+              System.out.print(a[i]);
+          }
+          System.out.println();
       }
-      System.out.print(a[i]);
+
+      public static void main(String[] args) {
+          druckeRueckwaerts(new int[]{4, 7, 1, 9, 3}, 2);
+      }
   }
-  System.out.println();
   ```
   ---
   Probe mit `{4, 7, 1, 9, 3}` und Schritt 2: Indizes 4, 2, 0, also `3:1:4`. Der nächste Index -2 beendet die Schleife.
@@ -3285,7 +3298,7 @@ und `werte` zeigen auf dasselbe Array, jede Änderung trifft das Original. Für 
 Eine Referenzvariable kann statt eines Pfeils den besonderen Wert `null` enthalten. `null` heißt „zeigt auf
 nichts“. Folgt man diesem Pfeil, bricht das Programm ab:
 
-```java
+```text
 int[] d = null;
 System.out.println(d.length);       // falsch: NullPointerException
 ```
@@ -3520,6 +3533,8 @@ Parameter ist ein Alias. Daraus ergeben sich zwei Regeln, die du in jeder Aufgab
 
 :::beispiel[Ein Array in einer void-Methode füllen]
 ```java
+import java.util.Arrays;
+
 public class Fuellen {
     public static void fuelle(int[] feld, int start) {
         for (int i = 0; i < feld.length; i++) {
@@ -3654,6 +3669,8 @@ loesung: |
 
 :::beispiel[Ein neues Array im Parameter]
 ```java
+import java.util.Arrays;
+
 public class Ersetzen {
     public static void ersetze(int[] werte) {
         werte = new int[]{9, 9};
@@ -3806,9 +3823,23 @@ Die Methode verändert `werte` nicht. Sie liest es nur.
 
 :::achtung[Den Rückgabewert wegwerfen]
 ```java
-int[] z = {1, 4, 7};
-verdoppelt(z);                         // falsch: Ergebnis geht verloren
-System.out.println(Arrays.toString(z));
+import java.util.Arrays;
+
+public class Verloren {
+    public static int[] verdoppelt(int[] a) {
+        int[] r = new int[a.length];
+        for (int i = 0; i < a.length; i++) {
+            r[i] = 2 * a[i];
+        }
+        return r;
+    }
+
+    public static void main(String[] args) {
+        int[] z = {1, 4, 7};
+        verdoppelt(z);                         // falsch: Ergebnis geht verloren
+        System.out.println(Arrays.toString(z));
+    }
+}
 ```
 
 Liefert `verdoppelt` ein **neues** Array mit den doppelten Werten, gibt diese Ausgabe weiterhin `[1, 4, 7]` aus.

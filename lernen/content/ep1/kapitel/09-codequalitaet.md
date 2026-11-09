@@ -990,10 +990,13 @@ Die Ausgabe ist aber `1`. Ohne geschweifte Klammern gehört nur **eine** Anweisu
 erste. `zaehler++;` läuft immer, egal wie es eingerückt ist. Richtig ist:
 
 ```java
+int x = -2;
+int zaehler = 0;
 if (x > 0) {
     System.out.println("positiv");
     zaehler++;
 }
+System.out.println(zaehler);
 ```
 
 Setze deshalb immer Klammern. Dann stimmt das, was du siehst, mit dem überein, was Java tut.
@@ -1635,9 +1638,27 @@ man solche Abbrüche liest, zeigt [9.6 Exceptions und Stacktraces lesen](/lernen
 Nach dem Auslagern steht in `main` oft noch ein Rest der alten Struktur:
 
 ```java
-druckeVolleZeile(8);
-System.out.println();
-druckeWechselZeile(8, "#-");
+public class MusterMitLeerzeile {
+    public static void druckeVolleZeile(int breite) {
+        for (int i = 0; i < breite; i++) {
+            System.out.print("#");
+        }
+        System.out.println();
+    }
+
+    public static void druckeWechselZeile(int breite, String paar) {
+        for (int i = 0; i < breite / 2; i++) {
+            System.out.print(paar);
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        druckeVolleZeile(8);
+        System.out.println();
+        druckeWechselZeile(8, "#-");
+    }
+}
 ```
 
 `druckeVolleZeile` beendet die Zeile schon selbst mit `println()`. Das zusätzliche `println()` in `main`
@@ -2241,6 +2262,8 @@ loesung: |
 
 :::beispiel[Gleiches aus beiden Zweigen herausziehen]
 ```java
+int punkte = 50;
+int anzahlBewertet = 0;
 if (punkte >= 50) {
     System.out.println("Ergebnis:");
     System.out.println("bestanden");
@@ -2250,12 +2273,15 @@ if (punkte >= 50) {
     System.out.println("nicht bestanden");
     anzahlBewertet++;
 }
+System.out.println(anzahlBewertet);
 ```
 
 Beide Zweige beginnen mit derselben Ausgabe `Ergebnis:` und enden mit `anzahlBewertet++`. Nach Muster 4
 ziehen wir die erste Zeile vor das `if` und die letzte Zeile dahinter:
 
 ```java
+int punkte = 50;
+int anzahlBewertet = 0;
 System.out.println("Ergebnis:");
 if (punkte >= 50) {
     System.out.println("bestanden");
@@ -2263,6 +2289,7 @@ if (punkte >= 50) {
     System.out.println("nicht bestanden");
 }
 anzahlBewertet++;
+System.out.println(anzahlBewertet);
 ```
 
 Warum ist das verhaltensgleich? In beiden Fassungen erscheint zuerst `Ergebnis:`, dann die Bewertung, und
@@ -2294,6 +2321,7 @@ ersetzen. Umgekehrt wird aus verneintem `||` ein `&&`. Prüfe jede solche Umform
 Original:
 
 ```java
+int x = 5;
 if (x > 0) {
     x--;
     System.out.println(x);
@@ -2305,6 +2333,7 @@ if (x > 0) {
 Die Ausgabe ist in beiden Zweigen gleich, also zieht jemand sie heraus, aber **vor** das `if`:
 
 ```java
+int x = 5;
 System.out.println(x);   // falsch: vor der Änderung
 if (x > 0) {
     x--;
@@ -2761,7 +2790,16 @@ richtig `3.0`. Der Fehler tritt also nur auf, wenn die Summe nicht durch 3 teilb
 **Prüfen:** Wir setzen eine Kontrollausgabe vor das `return`:
 
 ```java
-System.out.println("DEBUG summe=" + (a + b + c) + " quotient=" + (a + b + c) / 3);
+public class Durchschnitt {
+    public static double durchschnitt(int a, int b, int c) {
+        System.out.println("DEBUG summe=" + (a + b + c) + " quotient=" + (a + b + c) / 3);
+        return (a + b + c) / 3;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(durchschnitt(1, 2, 2));
+    }
+}
 ```
 
 Sie zeigt `DEBUG summe=5 quotient=1`. Die Summe stimmt, der Quotient nicht: `5 / 3` ist `int / int` und
@@ -2819,7 +2857,23 @@ liefert sogar 0 statt 1. Kürzer geht es nicht.
 **Prüfen:** Eine Kontrollausgabe als erste Anweisung in der Schleife:
 
 ```java
-System.out.println("DEBUG i=" + i + " zeichen=" + s.charAt(i));
+public class ZaehleE {
+    public static int zaehleE(String s) {
+        int anzahl = 0;
+        for (int i = 0; i < s.length() - 1; i++) {
+            System.out.println("DEBUG i=" + i + " zeichen=" + s.charAt(i));
+            if (s.charAt(i) == 'e') {
+                anzahl++;
+            }
+        }
+        return anzahl;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(zaehleE("e"));
+        System.out.println(zaehleE("Tee"));
+    }
+}
 ```
 
 Bei `zaehleE("e")` erscheint keine einzige `DEBUG`-Zeile. Die Schleife läuft also nie. Warum? Die
@@ -3340,7 +3394,7 @@ art: check
 angabe: |
   Welche Zeilen gibt dieser Code aus, bevor er mit einer `ArithmeticException` abbricht? (Wiederholung: [1.6 Fehlermeldungen lesen](/lernen/ep1/werkzeuge/fehlermeldungen-lesen))
 
-  ```java
+  ```text
   int a = 10, b = 0;
   System.out.println("A");
   System.out.println(a / 5);
@@ -3387,7 +3441,7 @@ Division durch 0 den Wert `Infinity` (unendlich), und das Programm läuft weiter
 ist keine Exception, denn dann startet das Programm gar nicht.
 
 :::beispiel[Einen Stacktrace mit drei Methoden lesen]
-```java
+```text
 public class Noten {
     public static int mittelwert(int summe, int anzahl) {
         return summe / anzahl;
@@ -3447,7 +3501,7 @@ kommt der Name: *stack* heißt Stapel, *trace* heißt Spur.
 :::beispiel[Die Exception aus Blatt 4 als String-Fassung]
 Auf Blatt 4 wirft eine Methode `printArray` eine Exception. Hier ist dieselbe Situation mit einem String:
 
-```java
+```text
 public class Zeichen {
     public static void druckeZeichen(String text) {
         for (int i = 0; i <= text.length(); i++) {
@@ -3568,7 +3622,7 @@ angabe: |
   	at Laenge.main(Laenge.java:9)
   ```
 
-  ```java
+  ```text
   public class Laenge {
       public static int zaehleZeichen(String wort) {
           return wort.length();
@@ -3676,7 +3730,7 @@ kompetenz: anwenden
 angabe: |
   Wie viele Zeilen gibt dieses Programm aus, bevor es abbricht?
 
-  ```java
+  ```text
   public class Teilen {
       public static int teile(int a, int b) {
           System.out.println("teile " + a + " durch " + b);
@@ -4853,6 +4907,7 @@ angabe: |
   Das Original lautet:
 
   ```java
+  String s = "Hallo";
   int i = 0;
   while (i < s.length()) {
       System.out.print(s.charAt(i));
@@ -5214,7 +5269,7 @@ quelle: Aufgabenblatt 4 WS 2023, Aufgabe 1 a (Fragetyp nachgebaut, String statt 
 angabe: |
   (Zeitrichtwert: 10 Minuten) `zaehleDoppelte(s)` soll zählen, an wie vielen Stellen zwei gleiche Zeichen direkt hintereinander stehen. Für `"Kaffee"` erwartet man 2 (`ff` und `ee`). Das Programm bricht aber ab:
 
-  ```java
+  ```text
   public class Doppelt {
       public static int zaehleDoppelte(String s) {
           int anzahl = 0;

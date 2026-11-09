@@ -1643,8 +1643,22 @@ loesung: |
 Wer erwartet, dass zweimaliges Umdrehen die Zahl zurückbringt, irrt sich bei Nullen am Ende:
 
 ```java
-System.out.println(reverse(1200));            // 21, nicht 0021
-System.out.println(reverse(reverse(1200)));   // 12, nicht 1200
+public class Umkehren {
+    public static int reverse(int number) {
+        int result = 0;
+        while (number > 0) {
+            int digit = number % 10;
+            result = result * 10 + digit;
+            number = number / 10;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverse(1200));            // 21, nicht 0021
+        System.out.println(reverse(reverse(1200)));   // 12, nicht 1200
+    }
+}
 ```
 
 Eine `int`-Variable speichert nur den Wert. „0021“ und „21“ sind derselbe Wert. Darum ist eine Zahl mit 0 am
@@ -1656,7 +1670,21 @@ merken.
 Die Zahl 1999999999 passt in ein `int`. Ihre Umkehrzahl 9999999991 passt nicht, sie ist größer als 2147483647.
 
 ```java
-System.out.println(reverse(1999999999));   // 1410065399
+public class Ueberlauf {
+    public static int reverse(int number) {
+        int result = 0;
+        while (number > 0) {
+            int digit = number % 10;
+            result = result * 10 + digit;
+            number = number / 10;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverse(1999999999));   // 1410065399
+    }
+}
 ```
 
 Java rechnet ohne Fehlermeldung weiter, und `result * 10` läuft über. Heraus kommt eine sinnlose Zahl. Abhilfe:
@@ -2350,7 +2378,7 @@ loesung: |
 ```
 
 :::achtung[Division durch 0 bei der Zahl 0]
-```java
+```text
 System.out.println(isHarshadNumber(0));
 // Exception in thread "main" java.lang.ArithmeticException: / by zero
 ```
@@ -2824,17 +2852,40 @@ loesung: |
   Ein Merker `first` sagt, ob schon eine Zahl ausgegeben wurde. Ein Zähler wie `count > 0` ginge ebenso.
   ---
   ```java
-  boolean first = true;
-  for (int i = start; i <= end; i++) {
-      if (isHarshadNumber(i)) {
-          if (!first) {
-              System.out.print(", ");
+  public class HarshadListe {
+      public static int calcCrossSum(int number) {
+          int sum = 0;
+          while (number > 0) {
+              sum = sum + number % 10;
+              number = number / 10;
           }
-          System.out.print(i);
-          first = false;
+          return sum;
+      }
+
+      public static boolean isHarshadNumber(int number) {
+          return number % calcCrossSum(number) == 0;
+      }
+
+      public static void printHarshad(int start, int end) {
+          boolean first = true;
+          for (int i = start; i <= end; i++) {
+              if (isHarshadNumber(i)) {
+                  if (!first) {
+                      System.out.print(", ");
+                  }
+                  System.out.print(i);
+                  first = false;
+              }
+          }
+          System.out.println();
+      }
+
+      public static void main(String[] args) {
+          printHarshad(30, 40);
+          printHarshad(141, 143);
+          printHarshad(7, 7);
       }
   }
-  System.out.println();
   ```
   ---
   Kontrolle: Für [141, 143] gibt es keinen Treffer, es erscheint nur der Zeilenumbruch. Für [7, 7] erscheint `7` ohne Komma.

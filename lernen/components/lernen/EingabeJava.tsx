@@ -3,9 +3,10 @@
 import { Fragment, useEffect, useId, useRef, useState } from "react";
 import type { TeilVon } from "@/lib/lernen/typen";
 import { startReihenfolge, type NeuerTeil } from "@/lib/lernen/bewertung";
-import { LUECKE } from "@/lib/lernen/java/quelle";
+import { LUECKE, RAHMEN_MARKE, setzeInRahmen } from "@/lib/lernen/java/quelle";
 import { CodeEditor } from "./CodeEditor";
 import { JavaCode, JavaTokens } from "./JavaCode";
+import { AblaufFuerCode, AblaufKnopf } from "./AblaufKnopf";
 
 /**
  * Eingaben der Programmier-Typen (ausgabe, richtigfalsch, lueckentext, zeilen, trace, reihenfolge, code).
@@ -56,6 +57,9 @@ function Kopf({ label, id }: { label?: React.ReactNode; id: string }) {
 
 export function AusgabeEingabe({ teil, wert, setze, label, zustand, gesperrt }: Props<"ausgabe">) {
   const id = useId();
+  // Der Ablauf zeigt die Ausgabe, verraet also die Antwort: erst nach dem ersten Pruefen (zustand gesetzt), danach bleibt er
+  const [ablaufFrei, setAblaufFrei] = useState(false);
+  if (zustand && !ablaufFrei) setAblaufFrei(true);
   return (
     <div className={`eingabe-zeile ${zustand}`}>
       {teil.codeAnzeigen === false ? null : <JavaCode code={teil.code} zeilenNummern />}
@@ -64,6 +68,7 @@ export function AusgabeEingabe({ teil, wert, setze, label, zustand, gesperrt }: 
           Eingabe über die Tastatur (System.in): <code className="inline-code">{teil.stdin.replace(/\n/g, "⏎")}</code>
         </p>
       ) : null}
+      {ablaufFrei ? <AblaufKnopf quelle={teil.code} optionen={teil.stdin !== undefined ? { stdin: teil.stdin } : undefined} /> : null}
       <label htmlFor={id} className="eingabe-label">
         {label ?? "Was gibt das Programm aus?"}
       </label>
@@ -346,7 +351,14 @@ export function CodeEingabe({ teil, wert, setze, label, zustand, gesperrt }: Pro
     .filter((x): x is string => !!x);
   return (
     <div className={`eingabe-zeile eingabe-code ${zustand}`}>
-      <CodeEditor wert={wert as string} setze={(s) => setze(s)} label={label} gesperrt={gesperrt} />
+      {teil.rahmen !== undefined ? (
+        <details className="code-rahmen">
+          <summary>Das Programm drumherum (fest vorgegeben, nur zum Lesen)</summary>
+          <JavaCode code={teil.rahmen.split("\n").map((z) => (z.trim() === RAHMEN_MARKE ? `${/^\s*/.exec(z)![0]}// ⟵ hier steht deine Antwort` : z)).join("\n")} />
+          <p className="eingabe-hilfe">Im Antwortfeld schreibst du nur die Anweisungen für die markierte Stelle, ohne Klasse und ohne Methode. Variablen, die das Programm schon anlegt, deklarierst du nicht noch einmal.</p>
+        </details>
+      ) : null}
+      <CodeEditor wert={wert as string} setze={(s) => setze(s)} label={label} gesperrt={gesperrt} zeilenMin={teil.rahmen !== undefined ? 5 : undefined} />
       <div className="code-eingabe-leiste">
         <button
           type="button"
@@ -359,6 +371,7 @@ export function CodeEingabe({ teil, wert, setze, label, zustand, gesperrt }: Pro
           Vorlage wiederherstellen
         </button>
       </div>
+      <AblaufFuerCode quelle={setzeInRahmen(teil.rahmen, wert as string).quelle} tests={teil.tests} />
       {regeln.length ? (
         <p className="eingabe-hilfe">
           <strong>Regeln:</strong> {regeln.join(" · ")}

@@ -1526,7 +1526,7 @@ angabe: |
   `wiederhole` aus dem Beispiel „Zeilen wiederholen, auch rückwärts“ ist richtig implementiert. Was gibt dieser Aufruf
   aus?
 
-  ```java
+  ```text
   int[][] t = {{9, 8}, {7}, {1, 2, 3}};
   System.out.println(Arrays.deepToString(wiederhole(t, new int[]{0, 3, -2})));
   ```
@@ -2797,7 +2797,7 @@ quelle: nach Beispiel-Programmiertest 2 vom 18.05.2020 und den Probetests 2023 (
 angabe: |
   `genauKMal` aus dem Beispiel „Genau k-mal ein Zeichen“ ist richtig implementiert. Was gibt das Programm aus?
 
-  ```java
+  ```text
   System.out.println(genauKMal("Rhabarber", 'r', 2));
   System.out.println(genauKMal("Rhabarber", 'r', 3));
   System.out.println(genauKMal("", 'x', 0));
@@ -3438,7 +3438,40 @@ mit `spiegeln`, `tauscheNachbarn` und `zaehleGroesser` sieht `main` so aus:
 import java.util.Arrays;
 
 public class Werkstatt {
-    // … hier stehen die drei Methoden …
+    public static int[][] spiegeln(int[][] input) {
+        int n = input.length;
+        int[][] r = new int[2 * n - 1][];
+        for (int i = 0; i < r.length; i++) {
+            int q = i;
+            if (i >= n) {
+                q = 2 * n - 2 - i;
+            }
+            r[i] = new int[input[q].length];
+            for (int j = 0; j < r[i].length; j++) {
+                r[i][j] = input[q][j];
+            }
+        }
+        return r;
+    }
+
+    public static void tauscheNachbarn(int[][] input) {
+        for (int i = 0; i + 1 < input.length; i += 2) {
+            int[] h = input[i];
+            input[i] = input[i + 1];
+            input[i + 1] = h;
+        }
+    }
+
+    public static int zaehleGroesser(int[] seq, int grenze, int index) {
+        if (index >= seq.length) {
+            return 0;
+        }
+        int eins = 0;
+        if (seq[index] > grenze) {
+            eins = 1;
+        }
+        return eins + zaehleGroesser(seq, grenze, index + 1);
+    }
 
     public static void main(String[] args) {
         int[][] test1 = {{3, 1, 2}, {4, 4}, {9}};          // Deklarationen wörtlich
@@ -3591,11 +3624,32 @@ Der erste Aufruf ändert nichts, denn der Bereich hat nur eine Zeile. Der zweite
 Array um. In `main` stehen beide Aufrufe in genau dieser Reihenfolge, jeweils mit einer Ausgabe dahinter:
 
 ```java
-dreheZeilen(test3, 1, 1);
-System.out.println(Arrays.deepToString(test3));
-dreheZeilen(test3, 3, 0);
-System.out.println(Arrays.deepToString(test3));
+import java.util.Arrays;
+
+public class Reihenfolge {
+    public static void dreheZeilen(int[][] a, int i1, int i2) {
+        int l = Math.min(i1, i2);
+        int r = Math.max(i1, i2);
+        while (l < r) {
+            int[] h = a[l];
+            a[l] = a[r];
+            a[r] = h;
+            l++;
+            r--;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[][] test3 = {{6}, {7, 7}, {}, {8}};
+        dreheZeilen(test3, 1, 1);
+        System.out.println(Arrays.deepToString(test3));
+        dreheZeilen(test3, 3, 0);
+        System.out.println(Arrays.deepToString(test3));
+    }
+}
 ```
+
+Im Ablauf siehst du, dass der erste Aufruf das Array unverändert lässt und erst der zweite die Zeilen umdreht.
 
 Vertauscht man die beiden Aufrufe, stimmt die erste Ausgabe nicht mehr mit der Tabelle überein. Darum gilt: Testfälle
 in der Reihenfolge der Tabelle schreiben und **nach jedem** Aufruf einer M2-Methode ausgeben.
@@ -3729,7 +3783,7 @@ angabe: |
   `spiegeln` und `tauscheNachbarn` aus der Übungsangabe in [20.1 Aufbau, Bewertung und die Angabe lesen](/lernen/ep1/programmiertest/aufbau-bewertung-und-die-angabe-lesen)
   sind richtig implementiert. Was gibt dieser Teil von `main` aus?
 
-  ```java
+  ```text
   int[][] t = {{1}, {2, 2}, {3, 3, 3}};
   tauscheNachbarn(t);
   int[][] r = spiegeln(t);
@@ -3908,14 +3962,45 @@ loesung: |
   **Ansatz:** Deklarationen wörtlich, dann je Tabellenzeile Aufruf und passende Ausgabe.
   ---
   ```java
-  int[][] test1 = {{1, 2, 3}, {4}, {}};
-  String wort = "Lampe";
-  int[][] result1 = umgekehrt(test1);
-  System.out.println(Arrays.deepToString(result1));
-  nullSetzen(test1, 0);
-  System.out.println(Arrays.deepToString(test1));
-  System.out.println(enthaelt(wort, 'p'));
-  System.out.println(enthaelt(wort, 'P'));
+  import java.util.Arrays;
+
+  public class Tabelle {
+      public static int[][] umgekehrt(int[][] input) {
+          int[][] r = new int[input.length][];
+          for (int i = 0; i < input.length; i++) {
+              int n = input[i].length;
+              r[i] = new int[n];
+              for (int j = 0; j < n; j++) {
+                  r[i][j] = input[i][n - 1 - j];
+              }
+          }
+          return r;
+      }
+
+      public static void nullSetzen(int[][] a, int zeile) {
+          for (int j = 0; j < a[zeile].length; j++) {
+              a[zeile][j] = 0;
+          }
+      }
+
+      public static boolean enthaelt(String s, char c) {
+          if (s.isEmpty()) {
+              return false;
+          }
+          return s.charAt(0) == c || enthaelt(s.substring(1), c);
+      }
+
+      public static void main(String[] args) {
+          int[][] test1 = {{1, 2, 3}, {4}, {}};
+          String wort = "Lampe";
+          int[][] result1 = umgekehrt(test1);
+          System.out.println(Arrays.deepToString(result1));
+          nullSetzen(test1, 0);
+          System.out.println(Arrays.deepToString(test1));
+          System.out.println(enthaelt(wort, 'p'));
+          System.out.println(enthaelt(wort, 'P'));
+      }
+  }
   ```
   ---
   `result1` bleibt nach `nullSetzen` unverändert, weil `umgekehrt` eigene Zeilen anlegt. Das könnte ein Zusatztest zeigen.
@@ -4073,14 +4158,61 @@ loesung: |
   **Ansatz:** Deklarationen, dann die Tabelle Zeile für Zeile. Bei jeder Zeile entscheiden, ob es ein Ergebnis gibt oder ein Seiteneffekt gezeigt wird.
   ---
   ```java
-  int[][] result1 = spiegeln(test1);
-  System.out.println(Arrays.deepToString(result1));
-  System.out.println(result1[0] == test1[0]);
-  tauscheNachbarn(test2);
-  System.out.println(Arrays.deepToString(test2));
-  tauscheNachbarn(test1);
-  System.out.println(Arrays.deepToString(test1));
-  System.out.println(Arrays.deepToString(result1));
+  import java.util.Arrays;
+
+  public class Werkstatt {
+      public static int[][] spiegeln(int[][] input) {
+          int n = input.length;
+          int[][] r = new int[2 * n - 1][];
+          for (int i = 0; i < r.length; i++) {
+              int q = i;
+              if (i >= n) {
+                  q = 2 * n - 2 - i;
+              }
+              r[i] = new int[input[q].length];
+              for (int j = 0; j < r[i].length; j++) {
+                  r[i][j] = input[q][j];
+              }
+          }
+          return r;
+      }
+
+      public static void tauscheNachbarn(int[][] input) {
+          for (int i = 0; i + 1 < input.length; i += 2) {
+              int[] h = input[i];
+              input[i] = input[i + 1];
+              input[i + 1] = h;
+          }
+      }
+
+      public static int zaehleGroesser(int[] seq, int grenze, int index) {
+          if (index >= seq.length) {
+              return 0;
+          }
+          int eins = 0;
+          if (seq[index] > grenze) {
+              eins = 1;
+          }
+          return eins + zaehleGroesser(seq, grenze, index + 1);
+      }
+
+      public static void main(String[] args) {
+          int[][] test1 = {{5, 1}, {2}};
+          int[][] test2 = {{7}, {8, 8}, {9}};
+          int[] seq = {4, 9, 1, 7};
+          int[][] result1 = spiegeln(test1);
+          System.out.println(Arrays.deepToString(result1));
+          System.out.println(result1[0] == test1[0]);
+          tauscheNachbarn(test2);
+          System.out.println(Arrays.deepToString(test2));
+          tauscheNachbarn(test1);
+          System.out.println(Arrays.deepToString(test1));
+          System.out.println(Arrays.deepToString(result1));
+          System.out.println(zaehleGroesser(seq, 5, 0));
+          System.out.println(zaehleGroesser(seq, 5, 2));
+          System.out.println(zaehleGroesser(new int[]{6}, 6, 0));
+      }
+  }
   ```
   ---
   Der Vergleich mit `==` liefert `false`, weil `spiegeln` eigene Zeilen anlegt. Darum bleibt `result1` auch nach `tauscheNachbarn(test1)` unverändert.
@@ -5444,13 +5576,66 @@ loesung: |
   **Ansatz:** Deklarationen wörtlich, dann je Tabellenzeile Aufruf und passende Ausgabe.
   ---
   ```java
-  int[][] result1 = sanduhr(test1);
-  System.out.println(Arrays.deepToString(result1));
-  zaehleMuster(daten, test1[0], ziel);
-  System.out.println(Arrays.toString(ziel));
-  zaehleMuster(daten, new int[]{2}, ziel);
-  System.out.println(Arrays.toString(ziel));
-  System.out.println(mitteEinfuegen("Tor", "|"));
+  import java.util.Arrays;
+
+  public class Probetest {
+      public static int[][] sanduhr(int[][] input) {
+          int n = input.length;
+          int[][] r = new int[2 * n - 1][];
+          for (int i = 0; i < r.length; i++) {
+              int q = i;
+              if (i >= n) {
+                  q = 2 * n - 2 - i;
+              }
+              r[i] = new int[n - q];
+              for (int j = 0; j < n - q; j++) {
+                  r[i][j] = input[q][q + j];
+              }
+          }
+          return r;
+      }
+
+      public static void zaehleMuster(int[][] daten, int[] muster, int[] ziel) {
+          for (int i = 0; i < daten.length; i++) {
+              int anzahl = 0;
+              for (int s = 0; s + muster.length <= daten[i].length; s++) {
+                  boolean passt = true;
+                  for (int m = 0; m < muster.length && passt; m++) {
+                      if (daten[i][s + m] != muster[m]) {
+                          passt = false;
+                      }
+                  }
+                  if (passt) {
+                      anzahl++;
+                  }
+              }
+              ziel[i] = anzahl;
+          }
+      }
+
+      public static String mitteEinfuegen(String input, String seps) {
+          if (seps.isEmpty() || input.length() < 2) {
+              return input;
+          }
+          int mitte = input.length() / 2;
+          String links = mitteEinfuegen(input.substring(0, mitte), seps.substring(1));
+          String rechts = mitteEinfuegen(input.substring(mitte), seps.substring(1));
+          return links + seps.charAt(0) + rechts;
+      }
+
+      public static void main(String[] args) {
+          int[][] test1 = {{6, 1}, {2, 8}};
+          int[][] daten = {{1, 2, 1, 2, 1}, {2}, {2, 1, 2}};
+          int[] ziel = {-1, -1, -1, 5};
+          int[][] result1 = sanduhr(test1);
+          System.out.println(Arrays.deepToString(result1));
+          zaehleMuster(daten, test1[0], ziel);
+          System.out.println(Arrays.toString(ziel));
+          zaehleMuster(daten, new int[]{2}, ziel);
+          System.out.println(Arrays.toString(ziel));
+          System.out.println(mitteEinfuegen("Tor", "|"));
+      }
+  }
   ```
   ---
   `result1` ist zweidimensional, also `deepToString`. `ziel` ist eindimensional, also `toString`. Der zweite Aufruf überschreibt die ersten drei Plätze von `ziel`.

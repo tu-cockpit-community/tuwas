@@ -527,6 +527,12 @@ Für das ausgefranste Level
 hat Zeile 0 die Länge 4, die anderen Zeilen haben die Länge 6. Diese Fassung ist falsch:
 
 ```java
+char[][] feld = {
+    "####".toCharArray(),
+    "#  ###".toCharArray(),
+    "#@$ .#".toCharArray(),
+    "######".toCharArray()
+};
 for (int y = 0; y < feld.length; y++) {
     for (int x = 0; x < feld[0].length; x++) {   // falsch: immer die Länge von Zeile 0
         System.out.print(feld[y][x]);

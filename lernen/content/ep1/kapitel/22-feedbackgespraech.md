@@ -1665,7 +1665,7 @@ loesung: |
 :::achtung[„Mit hasNextInt wird die falsche Eingabe übersprungen“]
 **Falscher Code:** Die Zeile `sc.next()` fehlt.
 
-```java
+```text
 while (!sc.hasNextInt()) {
     System.out.println("Bitte eine ganze Zahl!");
 }
@@ -1688,7 +1688,7 @@ quelle: Zusatzfrage „Warum muss eine ungültige Eingabe aus dem Input-Stream d
 angabe: |
   Eine Methode liest mit dieser Schleife eine Zahl ein. Die Eingabe ist `neun 9`.
 
-  ```java
+  ```text
   while (!sc.hasNextInt()) {
       System.out.println("ungültig");
   }
@@ -1799,13 +1799,26 @@ loesung: |
   **Ansatz:** Eine Methode macht die Arbeit, die überladene Methode ruft sie mit dem Standardwert auf. So gibt es keinen doppelten Code.
   ---
   ```java
-  for (int i = 0; i < text.length(); i++) {
-      if (i > 0) {
-          System.out.print(trenner);
+  public class Trenner {
+      public static void zeigeGetrennt(String text, char trenner) {
+          for (int i = 0; i < text.length(); i++) {
+              if (i > 0) {
+                  System.out.print(trenner);
+              }
+              System.out.print(text.charAt(i));
+          }
+          System.out.println();
       }
-      System.out.print(text.charAt(i));
+
+      public static void zeigeGetrennt(String text) {
+          zeigeGetrennt(text, '.');
+      }
+
+      public static void main(String[] args) {
+          zeigeGetrennt("EP1", '/');
+          zeigeGetrennt("Java");
+      }
   }
-  System.out.println();
   ```
   ---
   Die zweite Methode lautet `zeigeGetrennt(text, '.');`. Java erkennt am Aufruf mit einem Argument, welche Methode gemeint ist. Kontrolle: Bei `""` läuft die Schleife nicht, es erscheint nur der Zeilenumbruch.
@@ -1868,7 +1881,7 @@ angabe: |
   **Zusatzfrage:** „Deine Methode `void verdopple(int z)` setzt `z = 2 * z;`. Warum hat die Variable des Aufrufers
   danach trotzdem noch ihren alten Wert?“
 
-  ```java
+  ```text
   int z = 3;
   verdopple(z);
   System.out.println(z);   // gibt 3 aus, nicht 6
@@ -2734,7 +2747,7 @@ loesung: |
 :::achtung[Ein Index vom Typ double]
 **Falscher Code:** Eine Studentin berechnet die Mitte eines Arrays mit Kommazahlen.
 
-```java
+```text
 double mitte = a.length / 2.0;
 System.out.println(a[mitte]);
 ```
@@ -3420,17 +3433,25 @@ loesung: |
   **Ansatz:** Absteigend durchlaufen, Vielfache mit `% k` erkennen und das Trennzeichen nur vor der zweiten und jeder weiteren Zahl ausgeben.
   ---
   ```java
-  boolean erste = true;
-  for (int i = bis; i >= von; i--) {
-      if (i % k == 0) {
-          if (!erste) {
-              System.out.print(", ");
+  public class Abwaerts {
+      public static void druckeAbwaerts(int k, int von, int bis) {
+          boolean erste = true;
+          for (int i = bis; i >= von; i--) {
+              if (i % k == 0) {
+                  if (!erste) {
+                      System.out.print(", ");
+                  }
+                  System.out.print(i);
+                  erste = false;
+              }
           }
-          System.out.print(i);
-          erste = false;
+          System.out.println();
+      }
+
+      public static void main(String[] args) {
+          druckeAbwaerts(4, 3, 21);
       }
   }
-  System.out.println();
   ```
   ---
   Die Variable `erste` ist nötig, weil man vorher nicht weiß, welche Zahl als erste ausgegeben wird. Grenzfall ohne Vielfache: `erste` bleibt `true`, es erscheint nur der Zeilenumbruch.
@@ -3589,7 +3610,7 @@ kompetenz: begruenden
 angabe: |
   Deine Lösung gibt die Zeichen eines Strings rückwärts aus, jedes in einer eigenen Zeile:
 
-  ```java
+  ```text
   for (int i = text.length() - 1; i >= 0; i--) {
       System.out.println(text.charAt(i));
   }

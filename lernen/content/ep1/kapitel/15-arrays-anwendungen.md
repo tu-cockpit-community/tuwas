@@ -622,7 +622,7 @@ angabe: |
   Die Methoden `istImFeld` und `zaehleMinen` sind dieselben wie im Beispiel „Minen in der Umgebung zählen“. Sie
   zählen die Minen `'*'` in der **Achter-Nachbarschaft**. Was gibt dieses `main` aus?
 
-  ```java
+  ```text
   char[][] feld = {
       {'.', '*', '*'},
       {'.', '.', '.'},
@@ -4944,16 +4944,26 @@ loesung: |
   **Ansatz:** Wiederholen, bis ein passender Wert kommt. Erst den Typ prüfen, dann den Bereich.
   ---
   ```java
-  while (true) {
-      if (sc.hasNextInt()) {
-          int wert = sc.nextInt();
-          if (wert >= 1 && wert <= 40) {
-              return wert;
+  import java.util.Scanner;
+
+  public class Probe {
+      public static int leseProzent(Scanner sc) {
+          while (true) {
+              if (sc.hasNextInt()) {
+                  int wert = sc.nextInt();
+                  if (wert >= 1 && wert <= 40) {
+                      return wert;
+                  }
+                  System.out.println("Nur 1 bis 40!");
+              } else {
+                  System.out.println("Keine ganze Zahl!");
+                  sc.next();
+              }
           }
-          System.out.println("Nur 1 bis 40!");
-      } else {
-          System.out.println("Keine ganze Zahl!");
-          sc.next();
+      }
+
+      public static void main(String[] args) {
+          System.out.println(leseProzent(new Scanner("abc 70 25")));
       }
   }
   ```

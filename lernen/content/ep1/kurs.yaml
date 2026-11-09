@@ -10,6 +10,7 @@ teile:
   projekt: Abschlussprojekt
   algorithmen: Algorithmen (Komplexität, Suchen, Sortieren)
   training: Prüfungstraining
+  blaetter: Aufgabenblätter und Quiz
 pruefung:
   form: prüfungsimmanent. Kompetenzstufe K1 = 2 Übungen ohne Blatt (6 P) + 4 Aufgabenblätter mit Feedbackgespräch (24 P) + 4 Quiz (40 P) + 1 Test (30 P, mindestens 50 % nötig). Noten ab 92 / 83 / 74 / 65 Punkten.
   dauer_minuten: 75

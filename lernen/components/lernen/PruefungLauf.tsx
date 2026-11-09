@@ -386,7 +386,7 @@ export function PruefungLauf({
               <ol className="loesung-schritte">
                 {a.schritte.map((s, k) => (
                   <li key={k} className="loesung-schritt">
-                    <Md>{s}</Md>
+                    <Md ablauf>{s}</Md>
                   </li>
                 ))}
               </ol>

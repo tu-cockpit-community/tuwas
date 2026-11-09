@@ -291,6 +291,7 @@ loesung: |
 So sieht eine `if`-Anweisung aus:
 
 ```java
+int temperatur = -3;
 if (temperatur < 0) {
     System.out.println("Frostgefahr!");
 }
@@ -728,7 +729,7 @@ quelle: Typischer Fehler beim Teilbarkeitstest, vergleiche Folie „if – Hinwe
 angabe: |
   Jemand prüft so, ob eine Zahl ungerade ist:
 
-  ```java
+  ```text
   if (n % 2 == 1) {
       System.out.println(n + " ist ungerade");
   } else {
@@ -1034,6 +1035,7 @@ Jeder einzelne Vergleich wird dabei umgedreht: aus `<` wird `>=`, aus `<=` wird 
 Eine Studentin will „außerhalb von 18 bis 24“ prüfen und schreibt:
 
 ```java
+int t = 30;
 if (t < 18 && t > 24) {
     System.out.println("Heizung regeln");
 }
@@ -1941,6 +1943,7 @@ loesung: |
   **Ansatz:** Die Bereiche lückenlos von klein nach groß ordnen und mit `<` gegen die Untergrenze der nächsten Klasse prüfen.
   ---
   ```java
+  int kg = 5;
   if (kg < 1) {
       System.out.println("Klasse: Päckchen");
   } else if (kg < 5) {
@@ -2018,6 +2021,7 @@ loesung: |
   **Ansatz:** Das bisher Kleinste in einer Variablen merken und mit zwei unabhängigen `if` verbessern.
   ---
   ```java
+  int a = 8, b = 7, c = -4;
   int min = a;
   if (b < min) {
       min = b;
@@ -2215,7 +2219,7 @@ lernziel: 3
 kompetenz: anwenden
 quelle: TUWEL-Test zur Vorbereitung (TUWEL-Test 1) WS2021, Frage 3, mit neuen Startwerten
 angabe: |
-  ```java
+  ```text
   String s = "";
   if (x < y) {
       if (x + y < z) {
@@ -2312,7 +2316,7 @@ niveau: 1
 lernziel: 3
 kompetenz: verstehen
 angabe: |
-  ```java
+  ```text
   if (a >= 0) {
       if (b > a) {
           System.out.println("P");
@@ -2347,7 +2351,7 @@ niveau: 2
 lernziel: 3
 kompetenz: anwenden
 angabe: |
-  ```java
+  ```text
   String s = "";
   if (x > y) {
       if (x - y > z) {
@@ -2501,7 +2505,7 @@ lernziel: 3
 kompetenz: anwenden
 quelle: TUWEL-Test 1 WS2021 (26.11.2021), Frage 3, mit anderer gesuchter Ausgabe und neuen Startwerten
 angabe: |
-  ```java
+  ```text
   String s = "";
   if (x < y) {
       if (x + y < z) {
@@ -2547,7 +2551,7 @@ niveau: 3
 lernziel: 3
 kompetenz: modellieren
 angabe: |
-  ```java
+  ```text
   String s = "";
   if (x > y) {
       if (x - y > z) {
@@ -2624,6 +2628,7 @@ nach Wert an eine bestimmte Stelle.
 ### Aufbau der switch-Anweisung
 
 ```java
+int tag = 2;
 switch (tag) {
     case 1:
         System.out.println("Montag");
@@ -2735,6 +2740,7 @@ Fallthrough hat eine praktische Anwendung. Stehen mehrere `case`-Marken direkt u
 Anweisungen dazwischen, teilen sie sich denselben Code:
 
 ```java
+int monat = 6;
 switch (monat) {
     case 4:
     case 6:
@@ -2742,7 +2748,6 @@ switch (monat) {
     case 11:
         System.out.println("30 Tage");
         break;
-    // ...
 }
 ```
 
@@ -3277,6 +3282,8 @@ loesung: |
   **Ansatz:** Ein `switch` über `month` mit drei Gruppen (31 Tage, 30 Tage, Februar) und `default` für ungültige Monate.
   ---
   ```java
+  int month = 2;
+  int year = 1900;
   switch (month) {
       case 1: case 3: case 5: case 7: case 8: case 10: case 12:
           System.out.println(31);
@@ -3432,6 +3439,10 @@ Mit `c = 's'` ist `erst = 2` und `letzt = 6`. Beide Prüfungen sind falsch, es e
 
 :::achtung[Die Prüfungen in der falschen Reihenfolge]
 ```java
+String w = "Mississippi";
+char c = 'x';
+int erst = w.indexOf(c);
+int letzt = w.lastIndexOf(c);
 if (erst == letzt) {
     System.out.println("kommt genau einmal vor");
 } else if (erst == -1) {
@@ -3482,7 +3493,7 @@ mit genau einem Punkt sind beide gleich. In beiden Fällen bleibt der Text unver
 :::achtung[substring mit -1]
 Wer den Sonderfall „kein Punkt“ nicht abfängt, bekommt einen Absturz:
 
-```java
+```text
 String t = "Hallo";
 System.out.println(t.substring(0, t.indexOf('.')));
 ```
@@ -3688,6 +3699,8 @@ loesung: |
   **Ansatz:** Mit `indexOf` und `lastIndexOf` die erste und letzte Position bestimmen und daraus die Anzahl ablesen.
   ---
   ```java
+  String s = "Marillenknödel";
+  char c = 'l';
   int erst = s.indexOf(c);
   int letzt = s.lastIndexOf(c);
   if (erst == -1) {
@@ -3901,6 +3914,7 @@ loesung: |
   **Ansatz:** Erste und letzte Punktposition bestimmen. Sind sie gleich, gibt es höchstens einen Punkt.
   ---
   ```java
+  String s = ".Start. Mitte!";
   int erster = s.indexOf('.');
   int letzter = s.lastIndexOf('.');
   if (erster == letzter) {
@@ -4359,7 +4373,7 @@ quelle: Nach dem Muster von TUWEL-Test 1 WS2021, Frage 3 (neues Programm)
 angabe: |
   Sie haben folgendes Programmfragment gegeben:
 
-  ```java
+  ```text
   String s = "";
   if (a >= b) {
       if (a % b == 0) {
@@ -4607,7 +4621,7 @@ loesung: |
   ---
   Die Binärdarstellung findest du, indem du die Stellenwerte 8, 4, 2, 1 zerlegst: 10 = 8 + 2, also `1010`. 5 = 4 + 1, also `0101`.
   ---
-  ```java
+  ```text
   switch (h) {
       case 0: System.out.println("0x0 entspricht 0000"); break;
       case 1: System.out.println("0x1 entspricht 0001"); break;
@@ -4691,6 +4705,7 @@ loesung: |
   **Ansatz:** Position `p` des ersten Punkts bestimmen. Ohne Punkt in der Mitte teilen, sonst die beiden Teile vertauschen.
   ---
   ```java
+  String s = "Vorne. Hinten.";
   int p = s.indexOf('.');
   if (p == -1) {
       int m = s.length() / 2;

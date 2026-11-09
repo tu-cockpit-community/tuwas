@@ -24,7 +24,7 @@ import { kartenGruppen } from "../lib/lernen/kartenGruppen";
 import { pruefeQualitaet, type QWarnung } from "./qualitaet";
 import type { CodeTeil, TeilVon } from "../lib/lernen/typen";
 import { istNeuerTyp, lueckenImText, startReihenfolge } from "../lib/lernen/bewertung";
-import { fuelleLuecken, klassenName } from "../lib/lernen/java/quelle";
+import { fuelleLuecken, klassenName, RAHMEN_MARKE } from "../lib/lernen/java/quelle";
 import { fuehreProgrammeAus, jdkVerfuegbar, pruefeCode } from "../lib/lernen/java/runner";
 
 const WURZEL = path.join(process.cwd(), "content");
@@ -320,9 +320,16 @@ function pruefeNeuenTeil(ort: string, t: Teil) {
     }
     case "code": {
       if (imGenerator) return fehler(ort, "code-Teile gehen nur in Kapiteln und Prüfungen (die Route lädt Tests und Musterlösung vom Server)");
-      const k = klassenName(t.vorlage);
-      if (!k) return fehler(ort, "vorlage enthält keine Klasse");
-      if (klassenName(t.musterloesung) !== k) fehler(ort, `musterloesung muss dieselbe Klasse ${k} enthalten wie die vorlage`);
+      if (t.rahmen !== undefined) {
+        // Quiz-Format: Rahmen enthaelt die Klasse, vorlage und musterloesung sind nur die eingesetzten Anweisungen
+        if (!t.rahmen.split("\n").some((z) => z.trim() === RAHMEN_MARKE)) return fehler(ort, `rahmen enthält die Marke ${RAHMEN_MARKE} nicht allein auf einer Zeile`);
+        if (!klassenName(t.rahmen)) return fehler(ort, "rahmen enthält keine Klasse");
+        if (t.rahmen.split("\n").filter((z) => z.trim() === RAHMEN_MARKE).length !== 1) fehler(ort, "rahmen enthält die Marke mehrfach");
+      } else {
+        const k = klassenName(t.vorlage);
+        if (!k) return fehler(ort, "vorlage enthält keine Klasse");
+        if (klassenName(t.musterloesung) !== k) fehler(ort, `musterloesung muss dieselbe Klasse ${k} enthalten wie die vorlage`);
+      }
       t.tests.forEach((x, i) => {
         if (!x.aufruf?.trim() && x.stdout === undefined && !x.zeichnung) fehler(ort, `Test ${i + 1}: ohne aufruf (main-Test) braucht er stdout oder zeichnung`);
         if (x.ergebnis && x.erwartet === undefined) fehler(ort, `Test ${i + 1}: ergebnis ohne erwartet`);

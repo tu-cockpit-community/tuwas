@@ -4242,10 +4242,23 @@ loesung: |
   **Ansatz:** Erst die Deklaration, dann je Testfall eine `println`-Zeile in der verlangten Reihenfolge.
   ---
   ```java
-  int[] daten = {12, -4, 30, 7};
-  System.out.println(maximum(daten, 0));
-  System.out.println(maximum(daten, 3));
-  System.out.println(Arrays.toString(daten));
+  import java.util.Arrays;
+
+  public class Probe {
+      public static int maximum(int[] a, int index) {
+          if (index == a.length - 1) {
+              return a[index];
+          }
+          return Math.max(a[index], maximum(a, index + 1));
+      }
+
+      public static void main(String[] args) {
+          int[] daten = {12, -4, 30, 7};
+          System.out.println(maximum(daten, 0));
+          System.out.println(maximum(daten, 3));
+          System.out.println(Arrays.toString(daten));
+      }
+  }
   ```
   ---
   `maximum(daten, 0)` ist 30. `maximum(daten, 3)` ist sofort der Basisfall und liefert 7. Danach erscheint `[12, -4, 30, 7]`.

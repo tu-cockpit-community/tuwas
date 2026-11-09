@@ -372,7 +372,7 @@ hat.
 :::achtung[Strichpunkt nach dem Methodenkopf]
 Wer aus Gewohnheit jede Zeile mit `;` beendet, schreibt
 
-```java
+```text
 public static void druckeLinie(); {     // falsch
     System.out.println("----------");
 }
@@ -1508,6 +1508,8 @@ loesung: |
   **Ansatz:** Eine Schleife über die Zeilen 1 bis `hoehe`. In Zeile `zeile` wird das Zeichen `zeile`-mal ausgegeben.
   ---
   ```java
+  int hoehe = 4;
+  char zeichen = '*';
   for (int zeile = 1; zeile <= hoehe; zeile++) {
       for (int k = 0; k < zeile; k++) {
           System.out.print(zeichen);
@@ -1632,6 +1634,9 @@ loesung: |
   **Ansatz:** Jede Stelle (Zeile, Spalte) einzeln entscheiden: Rand oder innen. Die Entscheidung ist eine `if`-Bedingung mit vier Vergleichen.
   ---
   ```java
+  int breite = 5;
+  int hoehe = 3;
+  char rand = '#';
   for (int zeile = 1; zeile <= hoehe; zeile++) {
       for (int spalte = 1; spalte <= breite; spalte++) {
           if (zeile == 1 || zeile == hoehe || spalte == 1 || spalte == breite) {
@@ -2387,7 +2392,7 @@ quelle: TUWEL-Test 1 vom 26.11.2021, Frage 8 (nachgebaut)
 angabe: |
   Diese Anweisungen
 
-  ```java
+  ```text
   String a = "Tag";
   String b = "Uhr";
   System.out.println(fun(a, b));
@@ -2496,7 +2501,7 @@ art: check
 angabe: |
   Kompiliert dieser Code? Schleifenvariablen kennst du aus [4.2 Die for-Schleife und Intervallgrenzen](/lernen/ep1/schleifen/die-for-schleife-und-intervallgrenzen).
 
-  ```java
+  ```text
   for (int i = 0; i < 3; i++) {
       System.out.print(i);
   }
@@ -2657,7 +2662,7 @@ ihre Blöcke sich nicht überlappen, etwa in zwei verschiedenen Methoden oder zw
 :::
 
 :::achtung[Eine Variable nach ihrem Block verwenden]
-```java
+```text
 if (punkte >= 50) {
     String note = "bestanden";
 }
@@ -4564,10 +4569,22 @@ public static int zaehleZeichen(String text, char zeichen) {
 **Schritt 5, in `main` mit den Beispielen und einem Randfall testen.**
 
 ```java
-public static void main(String[] args) {
-    System.out.println(zaehleZeichen("Banane", 'a'));   // erwartet 2
-    System.out.println(zaehleZeichen("", 'x'));         // erwartet 0
-    System.out.println(zaehleZeichen("aaa", 'a'));      // erwartet 3
+public class Zaehlen {
+    public static int zaehleZeichen(String text, char zeichen) {
+        int anzahl = 0;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == zeichen) {
+                anzahl++;
+            }
+        }
+        return anzahl;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(zaehleZeichen("Banane", 'a'));   // erwartet 2
+        System.out.println(zaehleZeichen("", 'x'));         // erwartet 0
+        System.out.println(zaehleZeichen("aaa", 'a'));      // erwartet 3
+    }
 }
 ```
 
@@ -4851,13 +4868,22 @@ loesung: |
   **Ansatz:** Eine Schleife über die Zeichen von `from` bis `to`. Trennzeichen nur zwischen den Zeichen.
   ---
   ```java
-  for (char c = from; c <= to; c++) {
-      System.out.print(c);
-      if (c < to) {
-          System.out.print(' ');
+  public class Zeichenfolge {
+      public static void printCharRange(char from, char to) {
+          for (char c = from; c <= to; c++) {
+              System.out.print(c);
+              if (c < to) {
+                  System.out.print(' ');
+              }
+          }
+          System.out.println();
+      }
+
+      public static void main(String[] args) {
+          printCharRange('a', 'e');
+          printCharRange('X', 'X');
       }
   }
-  System.out.println();
   ```
   ---
   Kontrolle mit `('X', 'X')`: Die Schleife läuft einmal, `c < to` ist falsch, also kein Leerzeichen. Ausgabe `X`.
@@ -5348,17 +5374,27 @@ loesung: |
   ---
   Grundvariante: Jedes Zeichen anhängen. Nach jedem Zeichen außer dem letzten ein `sep`, bei ungeradem `i` noch ein zweites.
   ```java
-  String ergebnis = "";
-  for (int i = 0; i < text.length(); i++) {
-      ergebnis = ergebnis + text.charAt(i);
-      if (i < text.length() - 1) {
-          ergebnis = ergebnis + sep;
-          if (i % 2 == 1) {
-              ergebnis = ergebnis + sep;
+  public class Trennzeichen {
+      public static void addSeparator(String text, char sep) {
+          String ergebnis = "";
+          for (int i = 0; i < text.length(); i++) {
+              ergebnis = ergebnis + text.charAt(i);
+              if (i < text.length() - 1) {
+                  ergebnis = ergebnis + sep;
+                  if (i % 2 == 1) {
+                      ergebnis = ergebnis + sep;
+                  }
+              }
           }
+          System.out.println(ergebnis);
+      }
+
+      public static void main(String[] args) {
+          addSeparator("Wasser", '#');
+          addSeparator("Z", '#');
+          addSeparator("", '#');
       }
   }
-  System.out.println(ergebnis);
   ```
   ---
   Die drei anderen Varianten:
@@ -5781,15 +5817,24 @@ loesung: |
   Links oben ist `zeile + spalte = 0`, gerade, also `#`. Ein Schritt nach rechts oder unten macht die Summe ungerade, also `.`.
   ---
   ```java
-  for (int zeile = 0; zeile < n; zeile++) {
-      for (int spalte = 0; spalte < n; spalte++) {
-          if ((zeile + spalte) % 2 == 0) {
-              System.out.print('#');
-          } else {
-              System.out.print('.');
+  public class Schachbrett {
+      public static void druckeSchachbrett(int n) {
+          for (int zeile = 0; zeile < n; zeile++) {
+              for (int spalte = 0; spalte < n; spalte++) {
+                  if ((zeile + spalte) % 2 == 0) {
+                      System.out.print('#');
+                  } else {
+                      System.out.print('.');
+                  }
+              }
+              System.out.println();
           }
       }
-      System.out.println();
+
+      public static void main(String[] args) {
+          druckeSchachbrett(3);
+          druckeSchachbrett(4);
+      }
   }
   ```
 ```
@@ -6113,11 +6158,20 @@ loesung: |
   ---
   Grundvariante: Rand mit einer Schleife aufbauen, dann einmal ausgeben.
   ```java
-  String rand = "";
-  for (int i = 0; i < text.length(); i++) {
-      rand = rand + tag;
+  public class Rahmen {
+      public static void frame(String text, char tag) {
+          String rand = "";
+          for (int i = 0; i < text.length(); i++) {
+              rand = rand + tag;
+          }
+          System.out.println(rand + text + rand);
+      }
+
+      public static void main(String[] args) {
+          frame("Uhr", '*');
+          frame("", '*');
+      }
   }
-  System.out.println(rand + text + rand);
   ```
   ---
   `frame(int, char)`: `frame(Integer.toString(number), tag);`. `frame(String, String)`: Schleife über `tags` mit `frame(text, tags.charAt(i));`. `frame(String)`: `frame(text, '*');`.

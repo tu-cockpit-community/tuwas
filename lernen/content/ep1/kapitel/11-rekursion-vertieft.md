@@ -1143,7 +1143,18 @@ loesung: |
 Mit der Methode `fak` aus der geführten Aufgabe schreibt jemand in `main`:
 
 ```java
-System.out.println(fak(4, 0));    // falsch: liefert 0
+public class Probe {
+    public static int fak(int n, int bisher) {
+        if (n == 0) {
+            return bisher;
+        }
+        return fak(n - 1, bisher * n);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(fak(4, 0));    // falsch: liefert 0
+    }
+}
 ```
 
 Die Argumentpaare sind (4, 0), (3, 0), (2, 0), (1, 0) und (0, 0). Jede Multiplikation mit 0 ergibt 0, das Ergebnis
@@ -2649,12 +2660,20 @@ loesung: |
   **Ansatz:** Die drei Schritte aus dem Beispiel: Teilturm wegräumen, größte Scheibe ziehen, Teilturm daraufsetzen.
   ---
   ```java
-  if (n == 0) {
-      return;
+  public class Probe {
+      public static void hanoi(int n, char von, char hilf, char nach) {
+          if (n == 0) {
+              return;
+          }
+          hanoi(n - 1, von, nach, hilf);
+          System.out.println(von + " -> " + nach);
+          hanoi(n - 1, hilf, von, nach);
+      }
+
+      public static void main(String[] args) {
+          hanoi(2, 'L', 'M', 'R');
+      }
   }
-  hanoi(n - 1, von, nach, hilf);
-  System.out.println(von + " -> " + nach);
-  hanoi(n - 1, hilf, von, nach);
   ```
   ---
   `von + " -> " + nach` ist eine Verkettung, weil in der Mitte ein String steht. Zwei `char` direkt addiert ergäben dagegen eine Zahl.

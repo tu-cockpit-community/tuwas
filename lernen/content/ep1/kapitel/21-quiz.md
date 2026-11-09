@@ -292,13 +292,26 @@ Option nur den ersten und den letzten Wert geprüft, denn nur dort unterscheiden
 Es gilt `String s = "Kino";`. Gesucht ist das Fragment mit der Ausgabe `o-n-i-K-`.
 
 ```java
-// Option A
-for (int i = s.length() - 1; i >= 0; i--) System.out.print(s.charAt(i) + "-");
+public class Kino {
+    public static void main(String[] args) {
+        String s = "Kino";
+        // Option A
+        for (int i = s.length() - 1; i >= 0; i--) System.out.print(s.charAt(i) + "-");
+        System.out.println();
+        // Option C
+        for (int i = s.length() - 1; i > 0; i--) System.out.print(s.charAt(i) + "-");
+    }
+}
+```
+
+Option B lässt sich nicht ablaufen, denn sie bricht sofort ab:
+
+```text
 // Option B
 for (int i = s.length(); i > 0; i--) System.out.print(s.charAt(i) + "-");
-// Option C
-for (int i = s.length() - 1; i > 0; i--) System.out.print(s.charAt(i) + "-");
 ```
+
+Im Ablauf siehst du die Ausgabe von Option A und die von Option C ohne das `K`.
 
 **Unterschiede:** Startwert (`s.length() - 1` oder `s.length()`) und Bedingung (`i >= 0` oder `i > 0`).
 
@@ -354,8 +367,15 @@ fragst du: Erfüllt der letzte gewünschte Wert die Bedingung noch? Und erfüllt
 Eine Option sieht fast genauso aus wie die richtige, nur mit einfachen statt doppelten Anführungszeichen:
 
 ```java
-for (int i = s.length() - 1; i >= 0; i--) System.out.print(s.charAt(i) + '-');
+public class Kino {
+    public static void main(String[] args) {
+        String s = "Kino";
+        for (int i = s.length() - 1; i >= 0; i--) System.out.print(s.charAt(i) + '-');
+    }
+}
 ```
+
+Im Ablauf erscheint statt `o-n-i-K-` nur eine Zahlenkette.
 
 Wer das für richtig hält, übersieht den Typ. `'-'` ist ein `char`, kein String. `char + char` ist eine
 **Rechnung mit Zahlen**: `'o'` hat den Code 111 und `'-'` den Code 45. Für das `o` wird also `156` statt `o-`
@@ -496,7 +516,7 @@ lernziel: 0
 kompetenz: begruenden
 angabe: |
   Es gilt `String w = "Rad";`. Gesucht ist ein Fragment mit der Ausgabe `d.a.R.`. Drei Kandidaten:
-  ```java
+  ```text
   // Option 1
   for (int i = w.length(); i >= 0; i--) System.out.print(w.charAt(i) + ".");
   // Option 2
@@ -1584,18 +1604,29 @@ Ausgabe mit der gesuchten. Das ist eine reine Rechenaufgabe, aber mit einer Fall
 
 :::beispiel[Welche Startwerte erzeugen „AC“?]
 ```java
-if (x > y) {
-    System.out.print("A");
-    if (z < x) {
-        System.out.print("B");
-    } else {
-        System.out.print("C");
+public class Tripel {
+    static void zeige(int x, int y, int z) {
+        if (x > y) {
+            System.out.print("A");
+            if (z < x) {
+                System.out.print("B");
+            } else {
+                System.out.print("C");
+            }
+        } else {
+            System.out.print("D");
+        }
+        if (x + y > z) {
+            System.out.print("E");
+        }
+        System.out.println();
     }
-} else {
-    System.out.print("D");
-}
-if (x + y > z) {
-    System.out.print("E");
+
+    public static void main(String[] args) {
+        zeige(5, 2, 9);   // Option (a)
+        zeige(5, 2, 6);   // Option (b)
+        zeige(2, 5, 1);   // Option (c)
+    }
 }
 ```
 Zur Auswahl stehen drei Tripel. Option (a) ist `x = 5, y = 2, z = 9`. Option (b) ist `x = 5, y = 2, z = 6`. Option (c) ist `x = 2, y = 5, z = 1`.
@@ -1784,7 +1815,7 @@ lernziel: 3
 kompetenz: anwenden
 quelle: nach TUWEL-Test 1 WS2021, Frage 3 (Schablone, eigenes Programm)
 angabe: |
-  ```java
+  ```text
   if (a < b && b < c) {
       System.out.print("A");
   } else if (a < c) {
@@ -2061,8 +2092,17 @@ ausgerechnet wird.
 Mit derselben Methode `k` schreibt jemand:
 
 ```java
-if (k(3) > 4) {
-    System.out.print(k(3));
+public class Doppelt {
+    static int k(int x) {
+        System.out.print(x + " ");
+        return x * 2 - 1;
+    }
+
+    public static void main(String[] args) {
+        if (k(3) > 4) {
+            System.out.print(k(3));
+        }
+    }
 }
 ```
 
@@ -4138,7 +4178,7 @@ punkte: 1
 quelle: nach TUWEL-Test 1 WS2021, Frage 3 (Schablone, eigenes Programm)
 angabe: |
   Zeitrichtwert: 3 Minuten.
-  ```java
+  ```text
   if (x % 2 == 0) {
       if (y > x) {
           System.out.print("K");

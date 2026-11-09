@@ -949,6 +949,7 @@ loesung: |
   Für 3725: Stunden `3725 / 3600 = 1`. Rest nach den Stunden `3725 % 3600 = 125`, davon Minuten `125 / 60 = 2`. Sekunden `3725 % 60 = 5`.
   ---
   ```java
+  int sekunden = 3725;
   int h = sekunden / 3600;
   int m = sekunden % 3600 / 60;
   int s = sekunden % 60;
@@ -2134,6 +2135,7 @@ loesung: |
   **Ansatz:** Zahl mit `nextInt()`, dann Puffer leeren, dann zwei ganze Zeilen mit `nextLine()`.
   ---
   ```java
+  Scanner sc = new Scanner("31\nGrace Hopper\nNew York");  // feste Eingabe statt Tastatur
   int alter = sc.nextInt();
   sc.nextLine();
   String name = sc.nextLine();
@@ -2298,11 +2300,15 @@ loesung: |
 ### Das Grundmuster: prüfen, sonst wegwerfen
 
 ```java
+Scanner sc = new Scanner("abc 7.5 12");
 while (!sc.hasNextInt()) {
     System.out.println("Keine ganze Zahl: " + sc.next());
 }
 int n = sc.nextInt();
+System.out.println(n);
 ```
+
+Der Darsteller („Ablauf ansehen“) kennt keine Tastatur. Darum steht die Eingabe hier fest im Scanner: `new Scanner("abc 7.5 12")` liest aus diesem Text statt von der Tastatur. Alle anderen Methoden (`hasNextInt`, `next`, `nextInt`) arbeiten genauso wie bei `new Scanner(System.in)`. Im Ablauf siehst du, wie `abc` und `7.5` weggeworfen werden und danach 12 gelesen wird.
 
 So liest du das Muster:
 
@@ -2352,7 +2358,7 @@ würde sie weiter auf Eingaben warten.
 :::
 
 :::achtung[Das Wegwerfen vergessen: eine Endlosschleife]
-```java
+```text
 while (!sc.hasNextInt()) {
     System.out.println("Bitte eine ganze Zahl!");   // kein sc.next()
 }
@@ -2370,11 +2376,13 @@ entfernt werden?“. Der Scanner bleibt an dem Token hängen, bis jemand es entn
 
 :::achtung[if statt while: nur ein zweiter Versuch]
 ```java
+Scanner sc = new Scanner("abc 7");
 if (!sc.hasNextInt()) {
     System.out.println("Bitte eine ganze Zahl!");
     sc.next();
 }
 int n = sc.nextInt();
+System.out.println(n);
 ```
 
 Mit der Eingabe `abc 7` klappt das: `abc` wird weggeworfen, dann wird 7 gelesen. Mit `abc xyz 7` stürzt das
@@ -3389,12 +3397,23 @@ loesung: |
   **Ansatz:** Zeilenweise lesen, weil auch „gültiges Zeichen plus Rest“ abgelehnt werden muss.
   ---
   ```java
-  String zeile = sc.nextLine();
-  while (zeile.length() != 1 || "+-*/".indexOf(zeile.charAt(0)) < 0) {
-      System.out.println("Ungueltiger Operator: [" + zeile + "]");
-      zeile = sc.nextLine();
+  import java.util.Scanner;
+
+  public class Operator {
+      public static char readOperator(Scanner sc) {
+          String zeile = sc.nextLine();
+          while (zeile.length() != 1 || "+-*/".indexOf(zeile.charAt(0)) < 0) {
+              System.out.println("Ungueltiger Operator: [" + zeile + "]");
+              zeile = sc.nextLine();
+          }
+          return zeile.charAt(0);
+      }
+
+      public static void main(String[] args) {
+          Scanner sc = new Scanner("plus\n+-\n*");
+          System.out.println(readOperator(sc));
+      }
   }
-  return zeile.charAt(0);
   ```
   ---
   Statt `indexOf` geht auch `c != '+' && c != '-' && c != '*' && c != '/'` mit `char c = zeile.charAt(0);`. Dann muss die Längenprüfung aber vorher in einem eigenen `if` stehen.
@@ -3450,12 +3469,23 @@ loesung: |
   **Ansatz:** Zeilenweise lesen und die ganze Zeile mit den vier erlaubten Texten vergleichen.
   ---
   ```java
-  String zeile = sc.nextLine();
-  while (!(zeile.equals("q") || zeile.equals("Q") || zeile.equals("c") || zeile.equals("C"))) {
-      System.out.println("Bitte q/Q oder c/C eingeben.");
-      zeile = sc.nextLine();
+  import java.util.Scanner;
+
+  public class WeiterOderEnde {
+      public static boolean readContinue(Scanner sc) {
+          String zeile = sc.nextLine();
+          while (!(zeile.equals("q") || zeile.equals("Q") || zeile.equals("c") || zeile.equals("C"))) {
+              System.out.println("Bitte q/Q oder c/C eingeben.");
+              zeile = sc.nextLine();
+          }
+          return zeile.equals("c") || zeile.equals("C");
+      }
+
+      public static void main(String[] args) {
+          Scanner sc = new Scanner("ja\ncc\nC");
+          System.out.println(readContinue(sc));
+      }
   }
-  return zeile.equals("c") || zeile.equals("C");
   ```
   ---
   Nach der Schleife ist die Zeile sicher einer der vier Texte. Ist sie nicht `c` oder `C`, muss sie `q` oder `Q` sein, also stimmt `false`.
@@ -3658,21 +3688,32 @@ loesung: |
   **Ansatz:** Schleife mit Merker. Erst Typ prüfen, dann Bereich. Nur ein Token, das kein `int` ist, muss mit `next()` entfernt werden.
   ---
   ```java
-  int x = min;
-  boolean gueltig = false;
-  while (!gueltig) {
-      if (sc.hasNextInt()) {
-          x = sc.nextInt();
-          if (x >= min && x <= max) {
-              gueltig = true;
-          } else {
-              System.out.println("Nicht in [" + min + ", " + max + "]: " + x);
+  import java.util.Scanner;
+
+  public class Bereich {
+      public static int readInRange(Scanner sc, int min, int max) {
+          int x = min;
+          boolean gueltig = false;
+          while (!gueltig) {
+              if (sc.hasNextInt()) {
+                  x = sc.nextInt();
+                  if (x >= min && x <= max) {
+                      gueltig = true;
+                  } else {
+                      System.out.println("Nicht in [" + min + ", " + max + "]: " + x);
+                  }
+              } else {
+                  System.out.println("Keine ganze Zahl: " + sc.next());
+              }
           }
-      } else {
-          System.out.println("Keine ganze Zahl: " + sc.next());
+          return x;
+      }
+
+      public static void main(String[] args) {
+          Scanner sc = new Scanner("hundert 91 9 90");
+          System.out.println(readInRange(sc, 10, 90));
       }
   }
-  return x;
   ```
   ---
   Der Startwert `x = min` ist nur nötig, damit der Compiler zufrieden ist. Zurückgegeben wird immer ein gelesener Wert.
@@ -4265,28 +4306,39 @@ loesung: |
   **Ansatz:** Schleife über die Versuche. In jedem Durchlauf ein Token prüfen: ungültig, falsch oder richtig.
   ---
   ```java
-  int versuche = 0;
-  while (versuche < maxVersuche) {
-      if (!sc.hasNextInt()) {
-          sc.next();
-          System.out.println("Ungueltig");
-      } else {
-          int tipp = sc.nextInt();
-          if (tipp < 0 || tipp > 120) {
-              System.out.println("Ungueltig");
-          } else {
-              versuche++;
-              if (tipp == geheim) {
-                  return versuche;
-              } else if (tipp < geheim) {
-                  System.out.println("Groesser");
+  import java.util.Scanner;
+
+  public class Raten {
+      public static int spieleRunde(Scanner sc, int geheim, int maxVersuche) {
+          int versuche = 0;
+          while (versuche < maxVersuche) {
+              if (!sc.hasNextInt()) {
+                  sc.next();
+                  System.out.println("Ungueltig");
               } else {
-                  System.out.println("Kleiner");
+                  int tipp = sc.nextInt();
+                  if (tipp < 0 || tipp > 120) {
+                      System.out.println("Ungueltig");
+                  } else {
+                      versuche++;
+                      if (tipp == geheim) {
+                          return versuche;
+                      } else if (tipp < geheim) {
+                          System.out.println("Groesser");
+                      } else {
+                          System.out.println("Kleiner");
+                      }
+                  }
               }
           }
+          return -1;
+      }
+
+      public static void main(String[] args) {
+          Scanner sc = new Scanner("20 x 60 50");
+          System.out.println(spieleRunde(sc, 50, 3));
       }
   }
-  return -1;
   ```
   ---
   Ein Durchlauf mit ungültiger Eingabe erhöht `versuche` nicht. Darum endet die Schleife erst nach `maxVersuche` gültigen Tipps.
@@ -4687,17 +4739,24 @@ loesung: |
   **Ansatz:** Zahl lesen, Puffer leeren, dann `n` Zeilen mit `nextLine()`. Pro Zeile die Vokale mit einer Schleife wie in [4.5 Strings Zeichen für Zeichen durchlaufen](/lernen/ep1/schleifen/strings-zeichen-fuer-zeichen-durchlaufen) zählen.
   ---
   ```java
-  int n = sc.nextInt();
-  sc.nextLine();
-  for (int k = 0; k < n; k++) {
-      String zeile = sc.nextLine();
-      int anzahl = 0;
-      for (int i = 0; i < zeile.length(); i++) {
-          if ("aeiouAEIOU".indexOf(zeile.charAt(i)) >= 0) {
-              anzahl++;
+  import java.util.Scanner;
+
+  public class Vokale {
+      public static void main(String[] args) {
+          Scanner sc = new Scanner("2\nHallo Welt\nEP1 ist super");
+          int n = sc.nextInt();
+          sc.nextLine();
+          for (int k = 0; k < n; k++) {
+              String zeile = sc.nextLine();
+              int anzahl = 0;
+              for (int i = 0; i < zeile.length(); i++) {
+                  if ("aeiouAEIOU".indexOf(zeile.charAt(i)) >= 0) {
+                      anzahl++;
+                  }
+              }
+              System.out.println(anzahl);
           }
       }
-      System.out.println(anzahl);
   }
   ```
   ---
@@ -4988,7 +5047,7 @@ loesung: |
   `readOperand`: Frage ausgeben, dann `while (!sc.hasNextInt())` mit Meldung und `sc.nextLine()`. Danach `nextInt()` und `sc.nextLine()` für den Zeilenrest. `readOperator` und `readContinue` lesen ganze Zeilen und prüfen sie wie in den Aufgaben „Den Operator einlesen“ und „Weiter oder beenden?“.
   ---
   `main`:
-  ```java
+  ```text
   boolean weiter = true;
   while (weiter) {
       int a = readOperand(sc);
@@ -5212,7 +5271,7 @@ loesung: |
   a) Schleife über `wort`, jeden Buchstaben für den Vergleich klein machen und je nach `erraten.indexOf(klein) >= 0` den Originalbuchstaben oder `_` anhängen.
   ---
   b) Kern der Spielschleife:
-  ```java
+  ```text
   String erraten = "";
   while (versuche > 0 && maske(wort, erraten).indexOf('_') >= 0) {
       String t = sc.next();

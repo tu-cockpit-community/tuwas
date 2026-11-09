@@ -1125,7 +1125,7 @@ ein unbekannter Name), bei der zweiten mit dem Zusatz `symbol: method printn(Str
 :::achtung[Strichpunkt hinter dem Methodenkopf]
 Manche setzen aus Gewohnheit überall einen Strichpunkt, auch hier:
 
-```java
+```text
 public static void main(String[] args); {
 ```
 
@@ -2306,7 +2306,7 @@ darauf springt direkt zur Zeile.
 :::
 
 :::beispiel[Einen Laufzeitfehler zerlegen]
-```java
+```text
 public class Teilen {
     public static void main(String[] args) {
         System.out.println("Start");
@@ -2396,7 +2396,7 @@ versteht den Rest der Zeile falsch. Darum gilt: ersten Fehler beheben, neu über
 :::achtung[Die Zeilennummer zeigt hinter die Ursache]
 Hier fehlt die schließende Klammer von `main`:
 
-```java
+```text
 public class Hallo {
     public static void main(String[] args) {
         System.out.println("Hi");

@@ -341,6 +341,7 @@ Wir gehen die Zeile Zeichen für Zeichen durch:
 Danach liest und schreibst du einzelne Elemente mit zwei Indizes:
 
 ```java
+int[][] punkte = new int[3][4];
 punkte[1][2] = 2;                      // Zeile 1, Spalte 2 bekommt den Wert 2
 System.out.println(punkte[1][2]);      // gibt 2 aus
 ```
@@ -537,6 +538,7 @@ Gegeben ist `int[][] m = {{7, 3, 9}, {4, 8, 1}};` mit 2 Zeilen und 3 Spalten. Je
 der Zeile 1** ausgeben und schreibt
 
 ```java
+int[][] m = {{7, 3, 9}, {4, 8, 1}};
 System.out.println(m[0][1]);     // falsch: gibt 3 aus
 ```
 
@@ -1013,6 +1015,7 @@ Probe: Beide Arrays müssen zusammen den Gesamtumsatz ergeben. 12 + 9 + 15 = 36 
 Jemand will den Gesamtumsatz aller Filialen berechnen und schreibt
 
 ```java
+int[][] umsatz = {{4, 0, 3, 5}, {2, 6, 1, 0}, {7, 2, 2, 4}};
 int summe = 0;
 for (int i = 0; i < umsatz.length; i++) {
     summe = 0;                                  // falsch: löscht die bisherige Summe
@@ -2441,7 +2444,7 @@ kompetenz: verstehen
 angabe: |
   Was passiert bei diesen beiden Zeilen?
 
-  ```java
+  ```text
   String[][] s = new String[2][3];
   System.out.println(s[1][2].length());
   ```
@@ -3400,36 +3403,40 @@ Daraus folgen drei Regeln. Sie sind der Kern dieser Lektion.
 
 :::beispiel[Werte ändern und Zeilen kürzen]
 ```java
-public static void verdoppeln(int[][] a) {
-    for (int i = 0; i < a.length; i++) {
-        for (int j = 0; j < a[i].length; j++) {
-            a[i][j] = 2 * a[i][j];                  // Regel 1: Element ändern
-        }
-    }
-}
+import java.util.Arrays;
 
-public static void kuerze(int[][] a, int laenge) {
-    for (int i = 0; i < a.length; i++) {
-        if (a[i].length > laenge) {
-            int[] neu = new int[laenge];            // kürzere Zeile anlegen
-            for (int j = 0; j < laenge; j++) {
-                neu[j] = a[i][j];                   // vordere Elemente kopieren
+public class Zeilen {
+    public static void verdoppeln(int[][] a) {
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a[i].length; j++) {
+                a[i][j] = 2 * a[i][j];                  // Regel 1: Element ändern
             }
-            a[i] = neu;                             // Regel 2: Zeile ersetzen
         }
+    }
+
+    public static void kuerze(int[][] a, int laenge) {
+        for (int i = 0; i < a.length; i++) {
+            if (a[i].length > laenge) {
+                int[] neu = new int[laenge];            // kürzere Zeile anlegen
+                for (int j = 0; j < laenge; j++) {
+                    neu[j] = a[i][j];                   // vordere Elemente kopieren
+                }
+                a[i] = neu;                             // Regel 2: Zeile ersetzen
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int[][] t = {{1, 2, 3, 4}, {5}, {6, 7, 8}};
+        verdoppeln(t);
+        System.out.println(Arrays.deepToString(t));     // [[2, 4, 6, 8], [10], [12, 14, 16]]
+        kuerze(t, 2);
+        System.out.println(Arrays.deepToString(t));     // [[2, 4], [10], [12, 14]]
     }
 }
 ```
 
-In `main` steht:
-
-```java
-int[][] t = {{1, 2, 3, 4}, {5}, {6, 7, 8}};
-verdoppeln(t);
-System.out.println(Arrays.deepToString(t));     // [[2, 4, 6, 8], [10], [12, 14, 16]]
-kuerze(t, 2);
-System.out.println(Arrays.deepToString(t));     // [[2, 4], [10], [12, 14]]
-```
+Die Methode `main` ruft beide Methoden auf und gibt `t` nach jedem Aufruf aus:
 
 - `verdoppeln` schreibt jeden neuen Wert direkt in die vorhandene Zeile. `main` sieht die verdoppelten Werte, obwohl die Methode nichts zurückgibt.
 - `kuerze` kann eine Zeile nicht „kürzer machen“, denn die Länge eines Arrays ist fest. Stattdessen legt die Methode eine neue, kürzere Zeile an, kopiert die vorderen Elemente und setzt sie mit `a[i] = neu` an den Platz der alten.

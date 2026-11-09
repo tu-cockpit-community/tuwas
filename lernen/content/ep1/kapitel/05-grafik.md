@@ -423,12 +423,23 @@ loesung: |
 Jemand sieht, dass die Pyramide oben einen Stern hat, und schreibt für die Sterne `j < i + 1`:
 
 ```java
-for (int j = 0; j < i + 1; j++) {
-    System.out.print("*");
+public class FalscheFormel {
+    public static void main(String[] args) {
+        int n = 4;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n - 1 - i; j++) {
+                System.out.print(" ");
+            }
+            for (int j = 0; j < i + 1; j++) {
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+    }
 }
 ```
 
-Die Ausgabe für `n = 4` ist dann kein Dreieck mit Spitze, sondern das rechtsbündige Dreieck:
+Die Ausgabe für `n = 4` ist dann kein Dreieck mit Spitze, sondern das rechtsbündige Dreieck (im Ablauf kannst du es Zeile für Zeile entstehen sehen):
 
 ```text
    *
@@ -446,8 +457,23 @@ immer geraten. Prüfe sie an mindestens zwei Zeilen. Der Unterschied zwischen zw
 Jemand will die Pyramide „symmetrisch“ machen und gibt nach den Sternen noch einmal `n - 1 - i` Leerzeichen aus:
 
 ```java
-for (int j = 0; j < n - 1 - i; j++) {
-    System.out.print(" ");
+public class Pyramide {
+    public static void main(String[] args) {
+        int n = 4;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n - 1 - i; j++) {
+                System.out.print(" ");
+            }
+            for (int j = 0; j < 2 * i + 1; j++) {
+                System.out.print("*");
+            }
+            // die überflüssige Schleife:
+            for (int j = 0; j < n - 1 - i; j++) {
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
+    }
 }
 ```
 
@@ -721,6 +747,7 @@ loesung: |
   **Ansatz:** Zeilentabelle für `n = 3`: Leerzeichen 0, 1, 2 und Zeichen 5, 3, 1. Daraus die Formeln `i` und `2 * (n - i) - 1`.
   ---
   ```java
+  int n = 3;
   for (int i = 0; i < n; i++) {
       for (int j = 0; j < i; j++) {
           System.out.print(" ");
@@ -1234,6 +1261,7 @@ loesung: |
   **Ansatz:** Zeilentabelle mit `h = breite / 2` Zeilen, Leerzeichen `h - 1 - i`, Zeichen `breite - 2 * (h - 1 - i)`.
   ---
   ```java
+  int breite = 9;
   int h = breite / 2;
   for (int i = 0; i < h; i++) {
       for (int j = 0; j < h - 1 - i; j++) {
@@ -1337,6 +1365,7 @@ loesung: |
   **Ansatz:** Zeilentabelle für einen Abschnitt: Zeile `r` hat `hoehe - 1 - r` Leerzeichen und `2 * r + 1` Elemente. Die Abschnitte wiederholen das mit wachsender Zeilenzahl.
   ---
   ```java
+  int hoehe = 3;
   for (int k = 1; k <= hoehe; k++) {
       for (int r = 0; r < k; r++) {
           for (int j = 0; j < hoehe - 1 - r; j++) {
@@ -1928,6 +1957,7 @@ loesung: |
   **Ansatz:** Das Parallelogramm ist ein hohles Quadrat, dessen Zeile `i` um `breite - 1 - i` Stellen eingerückt ist. Die Einrückung nimmt also von `breite - 1` bis 0 ab.
   ---
   ```java
+  int breite = 3;
   for (int i = 0; i < breite; i++) {
       for (int j = 0; j < breite - 1 - i; j++) {
           System.out.print(" ");
@@ -3555,6 +3585,7 @@ loesung: |
   **Ansatz:** Erst prüfen, dann im gültigen Fall Radius und Mittelindex berechnen. Zwei Schleifen: Zeile (rot, zuerst) und Spalte (blau, ohne Mitte).
   ---
   ```java
+  int n = 5; // in der Aufgabe liest der Scanner n ein; hier fest für die Probe
   if (n % 2 == 1 && n >= 5 && n <= 19) {
       CodeDraw cd = new CodeDraw(300, 300);
       double r = 300.0 / (2 * n);
@@ -4931,6 +4962,8 @@ loesung: |
   **Ansatz:** Zwei unabhängige Formen, jede hinter ihrem eigenen `if`. Trapez mit Zeilentabelle, Parallelogramm mit Einrückung und Positionsbedingung.
   ---
   ```java
+  boolean istTrapez = true;
+  int breite = 9;
   if (istTrapez) {
       int h = breite / 2;
       for (int i = 0; i < h; i++) {
@@ -4946,6 +4979,8 @@ loesung: |
   ```
   ---
   ```java
+  boolean istParallelogramm = true;
+  int breite = 4;
   if (istParallelogramm) {
       for (int i = 0; i < breite; i++) {
           for (int j = 0; j < breite - 1 - i; j++) {
@@ -5069,6 +5104,7 @@ loesung: |
   Zeilentabelle für `hoehe = 5` (`m = 2`): `d` = 2, 1, 0, 1, 2. Buchstaben `2 * (m - d)` = 0, 2, 4, 2, 0. Die Zeilenlänge ist `2d + 2 + 2(m - d) = 2m + 2 = hoehe + 1`.
   ---
   ```java
+  int hoehe = 5;
   int m = hoehe / 2;
   for (int i = 0; i < hoehe; i++) {
       int d = i - m;

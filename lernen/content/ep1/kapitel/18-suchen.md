@@ -1002,13 +1002,26 @@ Mit dieser Methode findet man **alle** Treffer nacheinander. Man sucht zuerst ab
 
 :::beispiel[Alle Stellen eines Werts ausgeben]
 ```java
-int[] d = {4, 1, 4, 4, 9};
-int pos = sucheAb(d, 4, 0);
-while (pos != -1) {
-    System.out.print(pos + " ");
-    pos = sucheAb(d, 4, pos + 1);
+public class AlleStellen {
+    public static int sucheAb(int[] daten, int schluessel, int start) {
+        for (int i = start; i < daten.length; i++) {
+            if (daten[i] == schluessel) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] d = {4, 1, 4, 4, 9};
+        int pos = sucheAb(d, 4, 0);
+        while (pos != -1) {
+            System.out.print(pos + " ");
+            pos = sucheAb(d, 4, pos + 1);
+        }
+        System.out.println();
+    }
 }
-System.out.println();
 ```
 
 |Aufruf|Ergebnis `pos`|Ausgabe|
@@ -1241,7 +1254,7 @@ kompetenz: rechnen
 angabe: |
   `findeFolge` ist die Methode aus dem Beispiel. Was gibt der Code aus?
 
-  ```java
+  ```text
   int[] d = {1, 2, 1, 2, 3};
   System.out.println(findeFolge(d, new int[]{1, 2, 3}));
   System.out.println(findeFolge(d, new int[]{2, 1}));
@@ -2748,13 +2761,33 @@ Teste eine binäre Suche immer mit sechs Fällen. Drei davon sind Treffer: ganz 
 Dazu kommen ein Suchwert kleiner als alle Elemente, einer größer als alle Elemente und das leere Array.
 
 ```java
-int[] d = {4, 10, 16, 21, 29, 35};
-System.out.println(binaereSuche(d, 4));
-System.out.println(binaereSuche(d, 35));
-System.out.println(binaereSuche(d, 21));
-System.out.println(binaereSuche(d, 1));
-System.out.println(binaereSuche(d, 40));
-System.out.println(binaereSuche(new int[0], 4));
+public class Testfaelle {
+    public static int binaereSuche(int[] daten, int schluessel) {
+        int low = 0;
+        int high = daten.length - 1;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (daten[mid] < schluessel) {
+                low = mid + 1;
+            } else if (daten[mid] > schluessel) {
+                high = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] d = {4, 10, 16, 21, 29, 35};
+        System.out.println(binaereSuche(d, 4));
+        System.out.println(binaereSuche(d, 35));
+        System.out.println(binaereSuche(d, 21));
+        System.out.println(binaereSuche(d, 1));
+        System.out.println(binaereSuche(d, 40));
+        System.out.println(binaereSuche(new int[0], 4));
+    }
+}
 ```
 
 |Suchwert|Mitten (Indizes)|Werte dort|Ergebnis|
@@ -4482,21 +4515,29 @@ loesung: |
   **Ansatz:** Binäre Suche wie in [18.5 Binäre Suche programmieren und Fehler vermeiden](/lernen/ep1/suchen/binaere-suche-programmieren-und-fehler-vermeiden), dazu zwei Ausgaben: eine in jedem Durchlauf, eine nach erfolgloser Schleife.
   ---
   ```java
-  int low = 0;
-  int high = daten.length - 1;
-  while (low <= high) {
-      int mid = low + (high - low) / 2;
-      System.out.println(low + " " + mid + " " + high);
-      if (daten[mid] < schluessel) {
-          low = mid + 1;
-      } else if (daten[mid] > schluessel) {
-          high = mid - 1;
-      } else {
-          return mid;
+  public class Probe {
+      public static int sucheMitProtokoll(int[] daten, int schluessel) {
+          int low = 0;
+          int high = daten.length - 1;
+          while (low <= high) {
+              int mid = low + (high - low) / 2;
+              System.out.println(low + " " + mid + " " + high);
+              if (daten[mid] < schluessel) {
+                  low = mid + 1;
+              } else if (daten[mid] > schluessel) {
+                  high = mid - 1;
+              } else {
+                  return mid;
+              }
+          }
+          System.out.println("nicht gefunden");
+          return -1;
+      }
+
+      public static void main(String[] args) {
+          sucheMitProtokoll(new int[]{2, 5, 8, 13, 21, 34, 55}, 4);
       }
   }
-  System.out.println("nicht gefunden");
-  return -1;
   ```
   ---
   Probe mit dem Suchwert 4: Mitte 3 (13 > 4), Mitte 1 (5 > 4), Mitte 0 (2 < 4). Dann ist `low = 1 > high = 0`, es folgt `nicht gefunden`. Das sind genau die erwarteten vier Zeilen.
