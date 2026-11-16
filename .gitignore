@@ -7,3 +7,9 @@ docs/
 *:Zone.Identifier
 *.tsbuildinfo
 .claude/
+
+# Persönliche Kapitel zu Aufgabenblättern und Quiz: enthalten eigene Lösungen, nur lokal.
+# Anleitung: lernen/content/ANLEITUNG-BLAETTER-QUIZ.md, Gerüst: lernen/content/ep1/gehaeuse-blaetter/
+lernen/content/*/kapitel/*-blatt[0-9]*.md
+lernen/content/*/kapitel/*-probequiz*.md
+lernen/content/*/kapitel/*-blaetter-und-quiz.md

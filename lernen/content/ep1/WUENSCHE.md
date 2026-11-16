@@ -1,0 +1,6 @@
+## Plattformwünsche (EP1)
+
+- **Q-S1 prüft Codeblöcke mit.** Die Regel „verbotene Floskeln“ (zum Beispiel „wie oben“ oder „weiter unten“) trifft auch wörtlich abgedruckte Code-Kommentare. Der Validator sollte ```-Blöcke bei Q-S1 ausnehmen, so wie Q-S2 sie schon entfernt (in `scripts/qualitaet.ts` die Codeblöcke vor der Suche mit `VERBOTEN` entfernen). Bis dahin bleibt bei Kapiteln, die Code mit solchen Kommentaren zeigen, genau diese Meldung offen.
+- **`toleranz: 0` ist im Schema nicht erlaubt (`> 0`).** Für ganzzahlige Antworten, bei denen ein Nachbarwert (z. B. 3,25 statt 3) nicht gelten soll, hilft nur `toleranz: 0.1`. Ein Hinweis in `AUTHORING.md` (Zeile zu `zahl`) wäre nützlich.
+- **Ablauf-Darsteller:** Programme mit mehr als 3000 Schritten werden abgeschnitten (zum Beispiel ein Raster mit mehreren tausend Rechtecken). Ein Hinweis in der Zeichenfläche („Darstellung nach 3000 Schritten beendet“) würde das für Lernende selbst sichtbar machen.
+- **Q-A10 (Selbsterklärung) verlangt einen `reflexion`-Block oder eine Aufgabe mit `kompetenz: begruenden`.** Die EP1-Kapitel enthalten bewusst keine freien Textfelder mehr (weder `typ: text` noch `reflexion`). Q-A10 sollte für solche Kurse abschaltbar sein oder auch Auswahlaufgaben mit `kompetenz: begruenden` gelten lassen.
