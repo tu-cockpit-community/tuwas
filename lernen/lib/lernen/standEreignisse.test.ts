@@ -42,6 +42,25 @@ test("Ereignisse: gelesen an und wieder aus, Pruefungen werden angehaengt", () =
   ]);
 });
 
+test("Ereignisse: manuell als geloest markieren und zuruecknehmen, ohne Aufgabenstatus und Wiederholung zu aendern", () => {
+  const an = falte([ev(1, "manuell", "x", { an: true }), ev(2, "manuell", "y", { an: true }), ev(3, "manuell", "x", { an: false })]);
+  assert.deepEqual(an.manuell, { y: 2 });
+  assert.deepEqual(an.aufgaben, {});
+  assert.deepEqual(an.wiederholen, {});
+  // eine echte Loesung bleibt davon unberuehrt
+  const gemischt = falte([ev(1, "aufgabe", "x", { status: "versucht" }), ev(2, "manuell", "x", { an: true })]);
+  assert.equal(gemischt.aufgaben.x.s, "versucht");
+  assert.deepEqual(gemischt.manuell, { x: 2 });
+  // unpassender Wert aendert nichts
+  assert.deepEqual(falte([ev(1, "manuell", "x", { an: "ja" })]).manuell, {});
+});
+
+test("Ereignisse: Uebernahme fuehrt manuell Gelostes verlustfrei zusammen", () => {
+  const alt: Stand = { ...LEER, manuell: { a: 5, b: 9 } };
+  const s = falte([ev(3, "manuell", "a", { an: true }), ev(4, "uebernahme", "", alt)]);
+  assert.deepEqual(s.manuell, { a: 5, b: 9 });
+});
+
 test("Ereignisse: ersetzen setzt den Stand, spaetere Ereignisse gelten darauf", () => {
   const sicherung: Stand = { ...LEER, gelesen: { alt: 1 } };
   const s = falte([ev(1, "aufgabe", "x", { status: "richtig" }), ev(2, "ersetzen", "", sicherung), ev(3, "gelesen", "neu", { an: true })]);

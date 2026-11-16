@@ -1,12 +1,12 @@
 "use client";
 
-import { useStand } from "@/lib/lernen/fortschritt";
+import { istGeloest, useStand } from "@/lib/lernen/fortschritt";
 
 /** Anteil geloester Aufgaben einer id-Liste, als schmaler Balken mit Zahl. */
 export function AufgabenFortschritt({ kurs, ids, kompakt = false }: { kurs: string; ids: string[]; kompakt?: boolean }) {
   const stand = useStand(kurs);
-  const geloest = ids.filter((id) => stand.aufgaben[id]?.s === "richtig").length;
-  const versucht = ids.filter((id) => stand.aufgaben[id] && stand.aufgaben[id].s !== "richtig").length;
+  const geloest = ids.filter((id) => istGeloest(stand, id)).length;
+  const versucht = ids.filter((id) => stand.aufgaben[id] && !istGeloest(stand, id)).length;
   const anteil = ids.length ? geloest / ids.length : 0;
   const anteilV = ids.length ? versucht / ids.length : 0;
   return (
@@ -32,7 +32,7 @@ export function AufgabenFortschritt({ kurs, ids, kompakt = false }: { kurs: stri
 /** Gesamtzahlen eines Kurses fuer die Kopfzeile der Uebersicht. */
 export function KursZahlen({ kurs, ids, karten, mitPruefung }: { kurs: string; ids: string[]; karten: number; mitPruefung: boolean }) {
   const stand = useStand(kurs);
-  const geloest = ids.filter((id) => stand.aufgaben[id]?.s === "richtig").length;
+  const geloest = ids.filter((id) => istGeloest(stand, id)).length;
   const gewusst = Object.values(stand.karten).filter((k) => k.stufe > 0).length;
   const versuche = Object.values(stand.pruefungen).flat();
   const beste = versuche.length ? Math.max(...versuche.map((v) => v.punkte / v.max)) : null;

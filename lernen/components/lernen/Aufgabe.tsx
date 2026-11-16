@@ -5,7 +5,7 @@ import type { Teil } from "@/lib/lernen/typen";
 import { NIVEAUS } from "@/lib/lernen/typen";
 import { pruefeTeil, type Urteil } from "@/lib/lernen/rechnen";
 import { pruefeTeilAsync } from "@/lib/lernen/codePruefen";
-import { setzeAufgabe, useStand, useStandGeladen, type AufgabenStatus } from "@/lib/lernen/fortschritt";
+import { istGeloest, setzeAufgabe, setzeManuell, useStand, useStandGeladen, type AufgabenStatus } from "@/lib/lernen/fortschritt";
 import { Eingabe, leereAntwort, type Antwort } from "./Eingabe";
 import { CodeErgebnisAnsicht } from "./CodeErgebnis";
 import { GefuehrtLoesen, type SchrittRender } from "./GefuehrtLoesen";
@@ -55,11 +55,13 @@ const STATUS_TEXT = { richtig: "Gelöst", versucht: "Versucht", angesehen: "Lös
 export function Aufgabe(p: AufgabeProps) {
   const stand = useStand(p.kurs);
   const status = p.beiErgebnis ? undefined : stand.aufgaben[p.id]?.s;
+  // Von Hand als geloest markiert: zaehlt als geloest, ohne dass die Aufgabe in der Plattform geloest wurde
+  const manuell = !p.beiErgebnis && Boolean(stand.manuell[p.id]);
   // Bereits geloeste Aufgaben starten zugeklappt. Entscheidend ist der Stand beim Laden: wer eine Aufgabe in dieser
   // Sitzung loest, behaelt Rueckmeldung und Loesung im Blick. Ein Klick auf den Titel gilt danach immer.
   const geladen = useStandGeladen(p.kurs);
   const [anfangZu, setAnfangZu] = useState<boolean | null>(null);
-  if (geladen && anfangZu === null) setAnfangZu(status === "richtig");
+  if (geladen && anfangZu === null) setAnfangZu(!p.beiErgebnis && istGeloest(stand, p.id));
   const [klick, setKlick] = useState<boolean | null>(null);
   const zu = klick ?? anfangZu ?? false;
   const [antworten, setAntworten] = useState<Antwort[]>(() => p.teile.map(leereAntwort));
@@ -160,7 +162,11 @@ export function Aufgabe(p: AufgabeProps) {
             {NIVEAUS[p.niveau]}
           </span>
           {p.punkte ? <span className="aufgabe-punkte">{p.punkte} P.</span> : null}
-          {status ? <span className={`status status-${status}`}>{STATUS_TEXT[status]}</span> : null}
+          {status === "richtig" || !manuell ? (
+            status ? <span className={`status status-${status}`}>{STATUS_TEXT[status]}</span> : null
+          ) : (
+            <span className="status status-manuell">Manuell gelöst</span>
+          )}
         </div>
       </header>
       <div id={`${p.id}-inhalt`} hidden={zu}>
@@ -240,6 +246,17 @@ export function Aufgabe(p: AufgabeProps) {
         {schritte < p.schritte.length ? (
           <button type="button" className="knopf knopf-leise" disabled={!loesungFrei} onClick={() => zeigeLoesung(true)}>
             Ganze Lösung
+          </button>
+        ) : null}
+        {!p.beiErgebnis ? (
+          <button
+            type="button"
+            className={`knopf knopf-leise manuell-knopf${manuell ? " knopf-gewaehlt" : ""}`}
+            aria-pressed={manuell}
+            title="Zählt als gelöst, auch wenn du die Aufgabe nicht in der Plattform gelöst hast. Ein weiterer Klick nimmt die Markierung zurück."
+            onClick={() => setzeManuell(p.kurs, p.id, !manuell)}
+          >
+            {manuell ? "Manuell als gelöst markiert ✓" : "Als gelöst markieren"}
           </button>
         ) : null}
         {!loesungFrei ? <span className="aktions-hinweis">Lösung erst nach einem eigenen Versuch</span> : null}

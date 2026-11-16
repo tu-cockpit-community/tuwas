@@ -1,9 +1,11 @@
-import type { Stand } from "./fortschritt";
+import { istGeloest, type Stand } from "./fortschritt";
 
 /**
  * Mastery-Modell: Ein Abschnitt gilt als gemeistert, wenn mindestens MASTERY_QUOTE seiner Uebungen
- * selbststaendig richtig geloest wurden (nicht nur angesehen oder gefuehrt). Daraus folgen
- * Kapitelstand und "naechster Schritt".
+ * selbststaendig richtig geloest wurden (nicht nur angesehen oder gefuehrt) oder wenn die Person den ganzen
+ * Abschnitt als durchgearbeitet markiert hat. Die Markierung gilt vor den Uebungen: Der Abschnitt ist dann fertig,
+ * die Uebungen selbst bleiben so, wie sie sind (geloest oder offen). Eine Aufgabe, die die Person von Hand als geloest
+ * markiert hat, zaehlt wie eine geloeste. Daraus folgen Kapitelstand und "naechster Schritt".
  * Bewusst typunabhaengig vom Server-Index (nur die benoetigten Felder), damit es im Client laeuft.
  */
 
@@ -35,12 +37,14 @@ export interface AbschnittStand {
   quote: number;
   gemeistert: boolean;
   begonnen: boolean;
+  /** Die Person hat den Abschnitt als durchgearbeitet markiert (das macht ihn zum gemeisterten, egal wie die Uebungen stehen). */
+  gelesen: boolean;
 }
 
 export function abschnittStand(a: MAbschnitt, s: Stand, gelesenSchluessel?: string): AbschnittStand {
   const uebungen = a.aufgaben.filter((x) => x.art === "uebung");
-  const geloest = uebungen.filter((x) => s.aufgaben[x.id]?.s === "richtig").length;
-  const versucht = uebungen.filter((x) => s.aufgaben[x.id] && s.aufgaben[x.id].s !== "richtig").length;
+  const geloest = uebungen.filter((x) => istGeloest(s, x.id)).length;
+  const versucht = uebungen.filter((x) => s.aufgaben[x.id] && !istGeloest(s, x.id)).length;
   const gesamt = uebungen.length;
   const quote = gesamt ? geloest / gesamt : 0;
   const gelesen = gelesenSchluessel ? Boolean(s.gelesen[gelesenSchluessel]) : false;
@@ -49,9 +53,10 @@ export function abschnittStand(a: MAbschnitt, s: Stand, gelesenSchluessel?: stri
     geloest,
     versucht,
     quote,
-    // Abschnitte ohne Uebungen gelten als gemeistert, sobald sie als durchgearbeitet markiert sind
-    gemeistert: gesamt ? quote >= MASTERY_QUOTE : gelesen,
+    // Die Markierung "durchgearbeitet" gilt vor den Uebungen; sonst zaehlt die Quote selbst geloester Uebungen
+    gemeistert: gelesen || (gesamt > 0 && quote >= MASTERY_QUOTE),
     begonnen: geloest + versucht > 0 || gelesen,
+    gelesen,
   };
 }
 

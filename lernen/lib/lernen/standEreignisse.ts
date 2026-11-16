@@ -13,7 +13,7 @@ import { LEER, lesbarerStand, vereine, type AufgabenStatus, type Stand } from ".
  * - uebernahme (Stand von frueher) wird verlustfrei eingemischt, ersetzen (Sicherung laden) setzt den Stand.
  */
 
-export const STAND_ARTEN = ["aufgabe", "gelesen", "training", "pruefung", "karte", "uebernahme", "ersetzen"] as const;
+export const STAND_ARTEN = ["aufgabe", "gelesen", "manuell", "training", "pruefung", "karte", "uebernahme", "ersetzen"] as const;
 export type StandArt = (typeof STAND_ARTEN)[number];
 
 const TAG = 864e5;
@@ -21,6 +21,7 @@ const TAG = 864e5;
 const Werte = {
   aufgabe: z.object({ status: z.enum(["richtig", "versucht", "angesehen"]) }),
   gelesen: z.object({ an: z.boolean() }),
+  manuell: z.object({ an: z.boolean() }),
   training: z.object({ richtig: z.boolean() }),
   pruefung: z.object({ punkte: z.number(), max: z.number(), dauer: z.number() }),
   karte: z.object({ gewusst: z.boolean() }),
@@ -49,6 +50,14 @@ function anwenden(s: Stand, e: Ereignis): Stand {
       if (!w.success) return s;
       if (w.data.an) s.gelesen[e.ref] = e.t;
       else delete s.gelesen[e.ref];
+      return s;
+    }
+    case "manuell": {
+      // Von Hand als geloest markiert (oder die Markierung zurueckgenommen). Beruehrt weder den Aufgabenstatus noch die Wiederholung.
+      const w = Werte.manuell.safeParse(e.wert);
+      if (!w.success) return s;
+      if (w.data.an) s.manuell[e.ref] = e.t;
+      else delete s.manuell[e.ref];
       return s;
     }
     case "training": {

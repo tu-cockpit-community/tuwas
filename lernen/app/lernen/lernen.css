@@ -557,6 +557,13 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   background: var(--color-success-soft);
   border-color: var(--color-success-line);
 }
+/* von Hand als geloest markiert: gruen wie geloest, aber gestrichelt, damit man es von selbst Geloestem unterscheidet */
+.status-manuell {
+  color: var(--color-success);
+  background: var(--color-success-soft);
+  border-color: var(--color-success-line);
+  border-style: dashed;
+}
 .status-versucht {
   color: var(--color-warning);
   background: var(--color-warning-soft);

@@ -7,6 +7,8 @@ export type AufgabenStatus = "richtig" | "versucht" | "angesehen";
 export interface Stand {
   aufgaben: Record<string, { s: AufgabenStatus; v: number; t: number }>;
   gelesen: Record<string, number>;
+  /** Aufgaben, die die Person selbst als geloest markiert hat (id -> Zeitpunkt); zaehlen als geloest, auch ohne Loesung in der Plattform */
+  manuell: Record<string, number>;
   pruefungen: Record<string, { t: number; punkte: number; max: number; dauer: number }[]>;
   training: Record<string, { r: number; f: number }>;
   karten: Record<string, { stufe: number; faellig: number }>;
@@ -14,12 +16,18 @@ export interface Stand {
   wiederholen: Record<string, { stufe: number; faellig: number }>;
 }
 
-export const LEER: Stand = { aufgaben: {}, gelesen: {}, pruefungen: {}, training: {}, karten: {}, wiederholen: {} };
+export const LEER: Stand = { aufgaben: {}, gelesen: {}, manuell: {}, pruefungen: {}, training: {}, karten: {}, wiederholen: {} };
+
+/** Gilt die Aufgabe als geloest? Entweder selbststaendig in der Plattform richtig geloest oder von der Person manuell so markiert. */
+export function istGeloest(s: Stand, id: string): boolean {
+  return s.aufgaben[id]?.s === "richtig" || Boolean(s.manuell[id]);
+}
 
 const zahl = z.number().finite();
 export const StandSchema: z.ZodType<Stand> = z.object({
   aufgaben: z.record(z.string(), z.object({ s: z.enum(["richtig", "versucht", "angesehen"]), v: zahl, t: zahl })),
   gelesen: z.record(z.string(), zahl),
+  manuell: z.record(z.string(), zahl),
   pruefungen: z.record(z.string(), z.array(z.object({ t: zahl, punkte: zahl, max: zahl, dauer: zahl }))),
   training: z.record(z.string(), z.object({ r: zahl, f: zahl })),
   karten: z.record(z.string(), z.object({ stufe: zahl, faellig: zahl })),
@@ -37,6 +45,7 @@ export function umfang(s: Stand): number {
   return (
     Object.keys(s.aufgaben).length +
     Object.keys(s.gelesen).length +
+    Object.keys(s.manuell).length +
     Object.values(s.pruefungen).reduce((n, v) => n + v.length, 0) +
     Object.keys(s.training).length +
     Object.keys(s.karten).length +
@@ -63,6 +72,7 @@ export function vereine(a: Stand, b: Stand): Stand {
       t: Math.max(x.t, y.t),
     })),
     gelesen: vereineMap(a.gelesen, b.gelesen, (x, y) => Math.max(x, y)),
+    manuell: vereineMap(a.manuell, b.manuell, (x, y) => Math.max(x, y)),
     pruefungen: vereineMap(a.pruefungen, b.pruefungen, (x, y) => {
       const bekannt = new Set(x.map((v) => v.t));
       return [...x, ...y.filter((v) => !bekannt.has(v.t))].sort((p, q) => p.t - q.t);

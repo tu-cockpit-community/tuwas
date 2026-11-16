@@ -13,7 +13,8 @@ export function LektionsBilanz({ kurs, kapitel, lektion }: { kurs: string; kapit
   const noetig = Math.max(0, Math.ceil(st.gesamt * MASTERY_QUOTE) - st.geloest);
   let text: string;
   if (st.gesamt === 0) text = "Diese Lektion hat keine Übungen. Lies sie in Ruhe und mach dann weiter.";
-  else if (st.gemeistert) text = `Gemeistert: ${st.geloest} von ${st.gesamt} Übungen selbst gelöst. Die Lektion kommt später zur Wiederholung.`;
+  else if (st.gemeistert && st.quote >= MASTERY_QUOTE) text = `Gemeistert: ${st.geloest} von ${st.gesamt} Übungen selbst gelöst. Die Lektion kommt später zur Wiederholung.`;
+  else if (st.gelesen) text = `Als durchgearbeitet markiert und links grün. ${st.geloest} von ${st.gesamt} Übungen sind gelöst, die übrigen bleiben offen.`;
   else if (st.geloest === 0) text = `Löse mindestens ${Math.ceil(st.gesamt * MASTERY_QUOTE)} der ${st.gesamt} Übungen selbst, dann sitzt die Lektion.`;
   else text = `${st.geloest} von ${st.gesamt} Übungen gelöst. Noch ${noetig}, dann gilt die Lektion als gemeistert.`;
   return (

@@ -6,6 +6,7 @@ import { neuesEreignis, type StandArt } from "./standEreignisse";
 import { LEER, type AufgabenStatus, type Stand } from "./stand";
 
 export type { AufgabenStatus, Stand } from "./stand";
+export { istGeloest } from "./stand";
 
 /**
  * Lernfortschritt pro Kurs fuer die Oberflaeche: Hooks und die Aenderungen, die Aufgaben, Karten und Pruefungen
@@ -62,6 +63,11 @@ export function setzeAufgabe(kurs: string, id: string, status: AufgabenStatus): 
 
 export function setzeGelesen(kurs: string, schl: string, an: boolean): void {
   melde(kurs, "gelesen", schl, { an });
+}
+
+/** Eine Aufgabe von Hand als geloest markieren (`an`) oder die Markierung zuruecknehmen. Der Aufgabenstatus bleibt unveraendert. */
+export function setzeManuell(kurs: string, id: string, an: boolean): void {
+  melde(kurs, "manuell", id, { an });
 }
 
 export function zaehleTraining(kurs: string, drill: string, richtig: boolean): void {
