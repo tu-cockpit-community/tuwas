@@ -633,15 +633,6 @@ loesung: |
   Option 3 endet bei 6. Option 1 läuft bis 7 und gibt `1,2,3|4,5,6|7,` aus. Richtig ist Option 1.
 ```
 
-```reflexion
-frage: Warum ist es sicherer, zwei Optionen mit Begründung auszuschließen, als die richtige Option direkt zu suchen?
-antwort: |
-  Wer direkt sucht, kreuzt die erste Option an, die gut aussieht. Distraktoren sind aber genau so gebaut, dass sie
-  gut aussehen: Der Anfang der Ausgabe stimmt, nur der letzte Durchlauf oder ein Anführungszeichen ist anders. Wer jede
-  falsche Option mit einem konkreten Grund verwirft, prüft jede Option an ihrer kritischen Stelle. Bleiben am Ende zwei
-  Optionen übrig oder keine, weiß man sofort, dass man sich verrechnet hat, und kann gezielt nachprüfen.
-```
-
 ## Richtig oder falsch: Aussagen zerlegen und prüfen
 
 ```aufgabe
@@ -1102,15 +1093,6 @@ loesung: |
   Aussage 3 ist eine „nur“-Aussage. Gegenbeispiel: `p(3) = 3`. Falsch. Kontrolle mit der Tabelle: `p(1)=1`, `p(2)=3`, `p(3)=3`, `p(4)=9`, `p(9)=9`, `p(10)=27`.
 ```
 
-```reflexion
-frage: Warum genügt für „falsch“ bei einer Allaussage ein Gegenbeispiel, während für „richtig“ eine Begründung nötig ist?
-antwort: |
-  Eine Allaussage behauptet etwas für jede erlaubte Eingabe. Eine einzige Eingabe, für die es nicht stimmt, widerlegt
-  das bereits. Für „richtig“ müsste man aber jede erlaubte Eingabe prüfen, und das sind meist unendlich viele oder
-  zumindest viel zu viele. Darum braucht man ein Argument, das für alle gleichzeitig gilt, etwa „die Schleife endet
-  erst, wenn `r >= n` ist“. Beispiele helfen beim Finden der Begründung, können sie aber nicht ersetzen.
-```
-
 ## Quiz 1: Typen, Casts und Strings
 
 ```aufgabe
@@ -1540,15 +1522,6 @@ loesung: |
   Gesucht ist umgekehrte Reihenfolge, also muss `r` rechts stehen. Das schließt Option 3 aus. Ein Stück muss `*x` sein, nicht `x*`. Das schließt Option 2 aus.
   ---
   Option 1 baut `*K`, dann `*a*K`, dann `*t*a*K` und so weiter. Am Ende `*e*z*t*a*K`.
-```
-
-```reflexion
-frage: Warum ergibt `'a' + 'b'` eine Zahl, `"" + 'a' + 'b'` aber den Text `ab`?
-antwort: |
-  Java wertet `+` von links nach rechts aus und entscheidet bei jedem `+` neu anhand der beiden Seiten. Bei `'a' + 'b'`
-  sind beide Seiten `char`. Mit Zeichen rechnet Java wie mit Zahlen: 97 + 98 = 195. Bei `"" + 'a'` ist links ein
-  String, also wird verkettet, und es entsteht `"a"`. Beim nächsten `+` steht links wieder ein String, also wird auch
-  `'b'` angehängt. Der leere String am Anfang dient genau dazu, die Verkettung zu erzwingen.
 ```
 
 ## Quiz 1: Verzweigungen und Schleifen
@@ -2010,15 +1983,6 @@ loesung: |
   Zusammen `n + (n − 1) + … + 1`. Für `n = 4` ist das 10. Das ist nicht `n * n`, Gegenbeispiel `n = 2` mit 3 statt 4.
   ---
   Mit `j = 1` läuft die innere Schleife immer `n` Mal: `n * n`. Ohne den Durchlauf `i = n` fehlt genau 1. Aussagen 1, 3 und 4 sind richtig.
-```
-
-```reflexion
-frage: Warum erzeugt `int i = 0` statt `int i = 1` in Zeile A des Sternmusters eine zusätzliche, aber leere Zeile?
-antwort: |
-  Die äußere Schleife läuft dann für `i = 0, 1, 2, 3, 4`, also fünfmal statt viermal. In jedem äußeren Durchlauf
-  wird am Ende `println()` ausgeführt, also entsteht in jedem Durchlauf eine Zeile. Die innere Schleife läuft aber nur,
-  solange `j <= i` gilt. Für `i = 0` ist schon `1 <= 0` falsch, sie läuft keinmal. Darum besteht die erste Zeile nur
-  aus dem Zeilenumbruch. Die Zahl der Zeilen hängt an der äußeren Schleife, der Inhalt an der inneren.
 ```
 
 ## Quiz 1: Methoden, Vor- und Nachbedingungen
@@ -2491,15 +2455,6 @@ loesung: |
   Für `i = 0` entsteht `"undH"`, nicht `s`. Ohne `i < s.length()` wäre `i = s.length()` erlaubt, und schon `s.substring(i + 1)` würde scheitern. Aussagen 1, 2 und 4 sind richtig.
 ```
 
-```reflexion
-frage: Warum ist bei Slot 9 eine Vorbedingung wie `a > 0 && b > 0` gefährlich, obwohl sie „vernünftig“ aussieht?
-antwort: |
-  Die Frage verlangt eine Vorbedingung, die jede Exception ausschließt. Ob eine Vorbedingung das leistet, hängt nur
-  von der Gefahrenstelle im Code ab, nicht davon, ob sie vernünftig klingt. Bei `100 * a / (b - a)` entsteht die
-  Exception genau dann, wenn `a` und `b` gleich sind. „Beide positiv“ erlaubt gleiche Werte wie 3 und 3 und
-  schließt die Gefahr deshalb nicht aus. Man muss jede Option mit dem kritischen Wert prüfen.
-```
-
 ## Arrays und Rekursion beurteilen
 
 ```aufgabe
@@ -2942,15 +2897,6 @@ loesung: |
   `z1` und `z3` haben den Basisfall `""` und verkürzen den String in jedem Aufruf um ein Zeichen. Sie zählen das abgetrennte Zeichen. Beide richtig.
   ---
   `z2` scheitert am leeren String, weil der Basisfall erst bei Länge 1 greift. `z4` macht keinen Fortschritt und terminiert nie. Richtig sind also nur `z1` und `z3`.
-```
-
-```reflexion
-frage: Warum ist der kleinste erlaubte Wert bei Rekursions- und Array-Fragen der wichtigste Testfall?
-antwort: |
-  An den Rändern der erlaubten Eingaben passieren die meisten Fehler: Ein Basisfall deckt den leeren String nicht ab,
-  eine Schleife greift einen Index zu weit, eine Formel stimmt erst ab `n = 2`. Die Distraktoren in Richtig/Falsch-
-  Fragen sind oft genau so gebaut, dass sie für „normale“ Eingaben funktionieren und nur am Rand versagen. Wer den
-  kleinsten erlaubten Wert zuerst prüft, findet solche Gegenbeispiele mit der wenigsten Rechenarbeit.
 ```
 
 ## Komplexität, Suchen und Sortieren beurteilen
@@ -3412,15 +3358,6 @@ loesung: |
   Veränderung 2 fügt nur leere Durchläufe hinzu, Veränderung 3 nur überflüssige Vergleiche. Beide terminieren, sortieren und tauschen gleiche Werte nie. Richtig sind also die Aussagen zu Veränderung 2 und 3.
 ```
 
-```reflexion
-frage: Warum ist im Quiz eine Aussage wie „Die Laufzeit liegt in O(n²)“ für eine Schleife mit n · log n Schritten als falsch zu werten, obwohl n · log n kleiner ist als n²?
-antwort: |
-  Mathematisch ist `O(n²)` eine obere Schranke für `n · log n`, denn `n · log n` wächst nicht schneller als `n²`. Die
-  Fragen in den TUWEL-Tests verlangen aber ausdrücklich die **kleinste** obere Schranke. Das ist die engste Klasse,
-  die noch passt. Für `n · log n` ist das `O(n log n)`. Eine größere Klasse beschreibt die Laufzeit zu grob und
-  beantwortet die Frage nicht. Lies deshalb im Stamm genau, ob „kleinste obere Schranke“ verlangt ist.
-```
-
 ## Lückentext: Code ergänzen
 
 ```aufgabe
@@ -3815,16 +3752,6 @@ loesung: |
   Lücke 1: `&&`. Wegen der Kurzschlussauswertung wird `a[i]` nur gelesen, wenn `i < a.length` gilt.
   ---
   Lücke 2: `a.length`. Probe: `finde({5, 8, 5}, 5)` liefert 0, `finde({5, 8}, 3)` liefert −1, `finde({}, 1)` liefert −1.
-```
-
-```reflexion
-frage: Warum ist ein Lückentext oft schwerer als eine Auswahlfrage zum selben Code?
-antwort: |
-  Bei einer Auswahlfrage stehen die möglichen Antworten schon da. Man kann sie vergleichen, ausschließen und die
-  übrige prüfen. Beim Lückentext muss man die Antwort selbst erzeugen und dabei auch die Schreibweise genau treffen:
-  `length()` oder `length`, `==` oder `=`, `&&` oder `||`. Dafür muss man den Zweck jeder Stelle verstanden haben,
-  nicht nur den Unterschied zwischen drei Varianten. Gerade deshalb ist der Lückentext eine gute Vorbereitung auf den
-  Test am Rechner, wo es auch keine Optionen gibt.
 ```
 
 ## Gemischte Wiederholung
@@ -4474,18 +4401,6 @@ loesung: |
 ```
 
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Regeln dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten.
-antwort: |
-  Eine mögliche Auswahl: (1) Bei Auswahlfragen markiere ich die Unterschiede zwischen den Optionen und schließe jede
-  falsche Option mit einem konkreten Grund aus. Bei Schleifen prüfe ich dafür den ersten und den letzten Durchlauf.
-  (2) Bei Richtig/Falsch-Aussagen bestimme ich den Geltungsbereich. Eine Allaussage widerlegt ein einziges
-  Gegenbeispiel, eine Existenzaussage belegt ein einziges Beispiel. Gegenbeispiele suche ich zuerst bei Randfällen
-  wie 0, dem leeren String oder `n = 2`, aber nur innerhalb der Vorbedingung. (3) Jede Aussage wird unabhängig von den
-  anderen beurteilt. Gute Antworten sind auch die Tabelle „Aufruf, Ausgabe, Rückgabe“ oder die Regel „verschachtelt
-  multiplizieren, hintereinander addieren“.
-```
 
 :::zusammenfassung
 1. **Quizformat** (nach TUWEL-Tests 2021–2023, 2026W unbestätigt): Auswahlfragen mit drei Optionen zu 1 Punkt, Richtig/Falsch-Blöcke mit vier Aussagen zu 2 Punkten (1 Punkt bei genau einer falschen Aussage), Lückentext. Erlaubt sind Folien und Java-API.

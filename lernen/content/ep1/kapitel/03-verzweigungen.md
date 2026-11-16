@@ -778,16 +778,6 @@ loesung: |
   Probe: Für `-5` ist `-1 != 0` wahr, für `3` ist `1 != 0` wahr, für `4` ist `0 != 0` falsch.
 ```
 
-```reflexion
-frage: Bei `int x` übersetzt Java `if (x = 5)` nicht, bei `boolean b` aber sehr wohl `if (b = true)`. Erkläre den Unterschied mit dem Typ der Bedingung.
-antwort: |
-  In den runden Klammern muss ein Ausdruck vom Typ `boolean` stehen. Eine Zuweisung hat als Wert den zugewiesenen Wert
-  und dessen Typ. `x = 5` hat den Wert `5` vom Typ `int`. Das ist keine Bedingung, also meldet der Compiler einen Fehler.
-  `b = true` hat den Wert `true` vom Typ `boolean`. Das ist formal eine gültige Bedingung, deshalb übersetzt der Compiler
-  sie. Sie ist aber immer wahr und verändert nebenbei `b`. Der Fehler fällt deshalb erst beim Ausführen auf. Darum ist
-  `if (b)` die beste Schreibweise: Sie ist kürzer und kann nicht versehentlich zur Zuweisung werden.
-```
-
 ```aufgabe
 id: vz-if-max-zwei
 titel: Die größere von zwei Zahlen
@@ -1320,62 +1310,6 @@ loesung: |
   ---
   1996: Reste 0, 96, 396. Die Klammer ist `true && true`, also Schaltjahr. 2026: `2026 % 4` ist 2, die Klammer ist `false`, und 2026 ist nicht durch 400 teilbar.
   Kontrolle: 1996 war ein Schaltjahr, und 2400 wird eines sein. 2100 und 2026 sind keine.
-```
-
-```aufgabe
-id: vz-log-reihenfolge-division
-titel: Sicher dividieren
-niveau: 3
-lernziel: 1
-kompetenz: begruenden
-angabe: |
-  Es gilt `int a = 0;` und `int b = 12;`. Beurteile die Aussagen über die vier Bedingungen.
-teile:
-  - typ: richtigfalsch
-    aussagen:
-      - text: "`a != 0 && b / a > 1` lässt sich bei `a = 0` ohne Exception auswerten."
-        richtig: true
-        erklaerung: Die linke Seite ist `false`. Wegen der Kurzschlussauswertung findet die Division nie statt.
-      - text: "`b / a > 1 && a != 0` lässt sich bei `a = 0` ohne Exception auswerten."
-        richtig: false
-        erklaerung: Hier steht die Division links und wird zuerst ausgeführt. `12 / 0` löst eine `ArithmeticException` aus.
-      - text: "`a == 0 || b / a > 1` lässt sich bei `a = 0` ohne Exception auswerten."
-        richtig: true
-        erklaerung: Die linke Seite ist `true`. Bei `||` steht das Ergebnis damit fest, die Division läuft nicht.
-      - text: "`a != 0 & b / a > 1` lässt sich bei `a = 0` ohne Exception auswerten."
-        richtig: false
-        erklaerung: Der einfache Operator `&` wertet immer beide Seiten aus. Die Division durch 0 findet statt.
-    fehler:
-      - wert: [r, r, r, f]
-        meldung: Bei Aussage 2 steht die gefährliche Division auf der linken Seite. Die linke Seite wird immer ausgewertet.
-      - wert: [r, f, r, r]
-        meldung: '`&` mit nur einem Zeichen kennt keine Kurzschlussauswertung. Es rechnet beide Seiten aus.'
-  - typ: text
-    label: Begründe in zwei Sätzen, warum die Reihenfolge der beiden Seiten bei `&&` eine Rolle spielt.
-    muster: |
-      Java wertet bei `&&` zuerst die linke Seite aus und überspringt die rechte, wenn die linke `false` ist. Steht die
-      Prüfung `a != 0` links, schützt sie die Division auf der rechten Seite. Steht die Division links, läuft sie immer,
-      und bei `a = 0` bricht das Programm ab.
-hinweise:
-  - Welche Seite wertet Java immer aus? Wann überspringt es die andere?
-  - Stelle für jede Aussage fest, ob die Division `b / a` tatsächlich ausgeführt wird.
-loesung: |
-  **Ansatz:** Für jede Bedingung klären, ob `b / a` wirklich ausgeführt wird. Nur dann kommt es zur Exception.
-  ---
-  Aussage 1: `a != 0` ist `false`, die Division wird übersprungen. Aussage 2: Die Division steht links und läuft immer.
-  ---
-  Aussage 3: `a == 0` ist `true`, bei `||` wird übersprungen. Aussage 4: `&` wertet immer beide Seiten aus.
-  Richtig sind also die Aussagen 1 und 3. Faustregel: Die Schutzbedingung kommt immer nach links.
-```
-
-```reflexion
-frage: '„x liegt zwischen 1 und 10“ heißt `x >= 1 && x <= 10`. Warum ist das Gegenteil davon nicht `x < 1 && x > 10`, sondern `x < 1 || x > 10`? Erkläre es mit einem Zahlenstrahl.'
-antwort: |
-  „Zwischen 1 und 10“ ist auf dem Zahlenstrahl ein zusammenhängendes Stück von 1 bis 10. Das Gegenteil sind alle
-  Zahlen, die nicht in diesem Stück liegen. Das sind zwei getrennte Bereiche: links von 1 und rechts von 10. Eine Zahl
-  muss nur in **einem** der beiden Bereiche liegen, deshalb verbindet sie ein ODER. Mit UND müsste eine Zahl in beiden
-  Bereichen zugleich liegen, also kleiner als 1 und größer als 10 sein. So eine Zahl gibt es nicht. Formal sagt das
-  die Regel von De Morgan: Aus `!(x >= 1 && x <= 10)` wird `x < 1 || x > 10`.
 ```
 
 ```aufgabe
@@ -1961,16 +1895,6 @@ loesung: |
   Probe an den Grenzen: 4 ergibt `Paket S`, 5 ergibt `Paket M`, 29 ergibt `Paket L`, 30 ergibt `Sperrgut`.
 ```
 
-```reflexion
-frage: Warum muss man bei einer else-if-Kette mit `>=` die größte Grenze zuerst prüfen, bei `<` aber die kleinste? Erkläre es am Notenschlüssel.
-antwort: |
-  Die Kette nimmt den ersten wahren Zweig. Eine Bedingung wie `punkte >= 65` ist für alle Werte ab 65 wahr, also auch
-  für 95. Stünde sie oben, würde sie alle guten Noten „verschlucken“. Steht dagegen `punkte >= 92` oben, fängt sie nur
-  die besten Werte ab. Alle anderen fallen zur nächsten Bedingung durch, die dann nur noch die nächste Grenze prüfen
-  muss. Bei `<` ist es spiegelbildlich: `t < 30` ist auch für alle kleinen Werte wahr, deshalb muss `t < 0` davor stehen.
-  Allgemein gilt: Zuerst kommt die Bedingung, die den engsten Bereich am Rand abschneidet.
-```
-
 ```aufgabe
 id: vz-mehr-max3-code
 titel: Minimum von drei Zahlen ohne Math.min
@@ -2485,16 +2409,6 @@ loesung: |
   Möglich sind also `AC`, `AD`, `BC`, `BD`, `C` und `D`. `AB` und eine leere Ausgabe sind unmöglich.
   ---
   Richtig sind die Aussagen 2 und 4. Für Aussage 2 genügt ein Beispiel: `x = 5, y = 1, z = 9` ergibt `D`.
-```
-
-```reflexion
-frage: Warum genügt beim Prüfen eines Kandidaten die erste verletzte Bedingung, um ihn zu streichen? Und warum macht man am Ende trotzdem eine Probe vorwärts?
-antwort: |
-  Jede Zusicherung ist eine notwendige Bedingung: Ohne sie kann der Buchstabe gar nicht entstehen. Ist eine davon
-  verletzt, kann die gesuchte Ausgabe also nicht entstehen, egal wie die übrigen Bedingungen ausgehen. Das spart Zeit.
-  Die Probe vorwärts schützt vor eigenen Fehlern beim Aufschreiben der Zusicherungen, etwa wenn man eine äußere
-  Bedingung vergessen oder das `else` dem falschen `if` zugeordnet hat. Erst wenn der Kandidat vorwärts genau die
-  gesuchte Ausgabe liefert, ist die Antwort sicher.
 ```
 
 ```aufgabe
@@ -3188,17 +3102,6 @@ loesung: |
   Im Feedbackgespräch sagst du am besten: „Ja, man darf `break` weglassen, dann fällt die Ausführung in den nächsten Fall durch. Das nutze ich bei den Monaten mit 31 Tagen absichtlich.“
 ```
 
-```reflexion
-frage: Warum hat Java bei switch den Fallthrough überhaupt eingebaut, wenn er so oft zu Fehlern führt? Nenne einen Fall, in dem er nützlich ist, und einen, in dem er schadet.
-antwort: |
-  Die `case`-Marken sind nur Sprungziele. Dieses Verhalten hat Java von der älteren Sprache C übernommen. Nützlich ist es,
-  wenn mehrere Werte denselben Code teilen sollen: Bei den Monaten 4, 6, 9 und 11 stehen vier Marken untereinander
-  und nur einmal `30 Tage`. Auch das Abzeichen-Beispiel nutzt ihn, weil höhere Stufen alles der niedrigeren mitbekommen.
-  Schädlich ist er bei einem vergessenen `break`: Dann laufen zusätzlich die Anweisungen des nächsten Falls, und das
-  Programm gibt zum Beispiel `Gut` und `Befriedigend` aus. Der neuere switch-Ausdruck mit `->` hat deshalb gar keinen
-  Fallthrough mehr.
-```
-
 ```aufgabe
 id: vz-sw-kalender-code
 titel: Tage im Monat
@@ -3836,16 +3739,6 @@ loesung: |
   ---
   Zeile 4: Bei `"Ohne Punkt"` ist `erster == -1` wahr, also läuft der Umstell-Zweig mit `substring(-1, -1)`, und Java bricht ab. Richtig ist `if (erster != letzter)` allein.
   Mit beiden Korrekturen liefert das Programm `. Zwei.Eins` und lässt `"Ohne Punkt"` unverändert.
-```
-
-```reflexion
-frage: Warum deckt die eine Bedingung `erster == letzter` sowohl „kein Punkt“ als auch „genau ein Punkt“ ab? Gilt das auch umgekehrt, folgt also aus „kein oder ein Punkt“ immer `erster == letzter`?
-antwort: |
-  Ohne Punkt liefern `indexOf` und `lastIndexOf` beide `-1`, also sind sie gleich. Mit genau einem Punkt ist das erste
-  Vorkommen zugleich das letzte, beide liefern dieselbe Position. Umgekehrt gilt es auch: Sind die Positionen gleich,
-  gibt es entweder keinen Punkt (beide `-1`) oder einen Punkt, der zugleich der erste und der letzte ist. Zwei
-  verschiedene Punkte hätten zwei verschiedene Positionen. Die Bedingung ist also genau dann wahr, wenn höchstens ein
-  Punkt vorkommt. Darum genügt ein einziges `if`.
 ```
 
 ```aufgabe
@@ -4721,16 +4614,6 @@ loesung: |
 ```
 
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten.
-antwort: |
-  Eine mögliche Auswahl: (1) Eine Verzweigung führt Code nur aus, wenn eine Bedingung vom Typ `boolean` wahr ist. Von `if`
-  und `else` läuft immer genau ein Block, und in einer else-if-Kette nur der erste wahre Zweig. (2) Bei `&&` und `||`
-  wertet Java zuerst links aus und überspringt die rechte Seite, wenn das Ergebnis schon feststeht. (3) Ein `switch`
-  springt zur passenden Marke und läuft bis zum nächsten `break` weiter. Andere gute Antworten sind das
-  Rückwärtsverfahren mit Zusicherungen oder der Trick mit `indexOf` und `lastIndexOf`.
-```
 
 :::zusammenfassung
 1. **Bedingungen** sind Ausdrücke vom Typ `boolean`. Vergleiche schreibst du mit `<`, `>`, `<=`, `>=`, `==` und `!=`. Ein einzelnes `=` ist eine Zuweisung.

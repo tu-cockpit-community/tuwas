@@ -842,39 +842,6 @@ loesung: |
   Probe mit `{{'#', '#'}, {'#', '@', '#'}}`: Bei `y = 0` kommt `##`, bei `y = 1` zuerst `\n`, dann `#@#`. Ergebnis `"##\n#@#"`.
 ````
 
-```aufgabe
-id: pj-sf-warum-zeilen
-titel: Warum ein char-Array statt eines Strings?
-niveau: 2
-lernziel: 0
-kompetenz: begruenden
-quelle: nach den Zusatzfragen der Aufgabenblätter (eigene Frage)
-angabe: |
-  Eine Tutorin fragt im Feedbackgespräch: „Das Level steht doch schon im String `text`. Warum wandelt das Programm
-  es in ein `char[][]` um? Und warum ist das Array **ausgefranst** statt rechteckig?“ Beantworte beide Fragen in drei
-  bis fünf Sätzen.
-teile:
-  - typ: text
-    muster: |
-      In einem `char[][]` erreiche ich jedes Feld direkt mit `feld[y][x]`. Das Nachbarfeld rechts ist `feld[y][x + 1]`,
-      das darüber `feld[y - 1][x]`. Im String müsste ich dafür Indizes über die Zeilenumbrüche hinweg ausrechnen, und
-      das ist fehleranfällig, besonders wenn die Zeilen verschieden lang sind. Außerdem ist ein String in Java
-      unveränderlich: Für jeden Zug müsste ein neuer String gebaut werden, während ich im Array einfach einzelne
-      Zeichen überschreibe. Ausgefranst ist das Array, weil jede Zeile genau so lang wird wie die Textzeile. So
-      entstehen keine erfundenen Felder rechts außerhalb des Levels.
-hinweise:
-  - Wie kommst du im String an das Zeichen genau über der Figur?
-  - Kann man in einem String ein einzelnes Zeichen überschreiben?
-loesung: |
-  **Ansatz:** Zwei Vorteile des Arrays nennen (direkter Zugriff, veränderbar) und den Grund für die Zeilenlängen.
-  ---
-  Direkter Zugriff: `feld[y][x]` statt Indexrechnung über Zeilenumbrüche. Nachbarn erreicht man mit `x ± 1` oder `y ± 1`.
-  ---
-  Veränderbar: Strings kann man nicht verändern, ein `char`-Array schon. Jeder Zug überschreibt nur zwei oder drei Zeichen.
-  ---
-  Ausgefranst: Jede Zeile ist so lang wie im Text. Rechts außerhalb des Levels entsteht kein künstliches Feld.
-```
-
 ````aufgabe
 id: pj-sf-rechteckig
 titel: Ein ausgefranstes Feld rechteckig machen
@@ -959,15 +926,6 @@ loesung: |
   ---
   Warum das `else`? Ein neues `char`-Array ist mit dem Zeichen mit Code 0 gefüllt (geschrieben `'\u0000'`), nicht mit Leerzeichen. Probe mit `{{'#'}, {'#', '@'}}`: Breite 2, Ergebnis `{{'#', ' '}, {'#', '@'}}`, das Original bleibt gleich.
 ````
-
-```reflexion
-frage: Warum ist es kein Widerspruch, dass die Position der Figur als `{x, y}` gespeichert wird, der Zugriff aber `feld[y][x]` lautet?
-antwort: |
-  Die beiden Schreibweisen beschreiben verschiedene Dinge. `{x, y}` ist eine **Position**, so wie man sie aus der
-  Mathematik kennt: erst die Spalte (waagrecht), dann die Zeile (senkrecht). `feld[y][x]` ist ein **Zugriff** auf ein
-  Array von Zeilen: Man muss zuerst die Zeile auswählen, bevor man darin eine Stelle wählen kann. Wichtig ist nur,
-  beim Übergang sauber umzusetzen: Aus `int[] pos = {x, y}` wird `feld[pos[1]][pos[0]]`.
-```
 
 ## Figur und Kisten finden
 
@@ -1591,16 +1549,6 @@ loesung: |
   Probe mit dem Beispiel: Die `$` stehen bei `(1, 0)`, `(3, 0)` und `(0, 1)`. Der zweite Treffer ist `{3, 0}`. Einen vierten gibt es nicht, also `null`.
 ````
 
-```reflexion
-frage: Aufgabenblatt 6 verspricht als Vorbedingung, dass die Figur genau einmal im Feld steht. Was würde `findeFigur` liefern, wenn diese Vorbedingung verletzt wäre, also bei zwei Figuren oder bei keiner?
-antwort: |
-  Bei zwei Figuren liefert die Methode die Position der ersten in Lesereihenfolge, denn das `return` beendet die Suche
-  beim ersten Treffer. Die zweite Figur wird nie gesehen. Bei keiner Figur erreicht die Methode `return null;`. Der
-  Aufrufer würde dann bei `pos[0]` mit einer `NullPointerException` abbrechen, weil `null` kein Array ist. Die
-  Vorbedingung erlaubt uns, diese Fälle nicht eigens zu behandeln. Sie legt aber auch fest, wer schuld ist, wenn es
-  doch passiert: der Aufrufer, nicht die Methode.
-```
-
 ## Richtungen und Nachbarfelder
 
 ```aufgabe
@@ -2032,36 +1980,6 @@ loesung: |
   ---
   Probe: `(3, 3)` und `(4, 4)` erfüllen keine Bedingung, Ergebnis 0. `(5, 1)` und `(5, 3)` liegen zwei Zeilen auseinander, ebenfalls 0.
 ````
-
-```aufgabe
-id: pj-ri-text-grenzen
-titel: Warum prüft nachbar keine Grenzen?
-niveau: 2
-lernziel: 2
-kompetenz: begruenden
-quelle: nach den Vorbedingungen in Aufgabenblatt 6, WS 2023 (eigene Frage)
-angabe: |
-  `nachbar(0, 0, 1)` liefert `{0, -1}`, eine Position außerhalb jedes Spielfelds. Trotzdem stürzt das Spiel von Aufgabenblatt 6
-  nie mit einer `ArrayIndexOutOfBoundsException` ab, wenn es auf `feld[neu[1]][neu[0]]` zugreift. Erkläre in drei bis
-  vier Sätzen, warum.
-teile:
-  - typ: text
-    muster: |
-      Aufgabenblatt 6 verspricht, dass jedes Level ringsum von Wänden umgeben ist, ohne Löcher und ohne Ausgänge. Die Figur
-      steht darum immer im Inneren. Ihr Nachbarfeld ist entweder ein Innenfeld oder eine Wand, liegt aber immer im
-      Array. In eine Wand geht die Figur nie hinein, und eine Kiste kann nie auf einer Wand liegen. Darum liegt auch
-      das Feld hinter einer Kiste immer im Array. Eine Grenzprüfung wäre also nur nötig, wenn diese Vorbedingung nicht
-      gälte.
-hinweise:
-  - Was verspricht Aufgabenblatt 6 über den Rand jedes Levels?
-  - Wo kann die Figur stehen, und wo kann eine Kiste stehen?
-loesung: |
-  **Ansatz:** Die Vorbedingung von Aufgabenblatt 6 nutzen: Jedes Level ist vollständig von Wänden umschlossen.
-  ---
-  Die Figur steht nie auf einer Wand, also nie am Rand. Ihre Nachbarn existieren im Array.
-  ---
-  Kisten stehen ebenfalls im Inneren. Das Feld hinter einer Kiste ist darum auch ein gültiges Feld, zur Not eine Wand.
-```
 
 ````aufgabe
 id: pj-ri-code-freie-schritte
@@ -2700,35 +2618,6 @@ loesung: |
   Probe mit `"#@  #"` und `"rrl"`: rechts, rechts, links. Die Figur steht danach bei `x = 2`, alle drei Schritte gelingen.
 ````
 
-```aufgabe
-id: pj-zu-text-boolean
-titel: Warum liefert der Zug einen Wahrheitswert?
-niveau: 2
-lernziel: 3
-kompetenz: begruenden
-quelle: nach den Zusatzfragen der Aufgabenblätter (eigene Frage)
-angabe: |
-  Im Feedbackgespräch fragt der Tutor: „Ihre Methode `bewege` verändert das Spielfeld doch schon selbst. Wozu
-  braucht sie dann noch den Rückgabetyp `boolean`? Und warum muss sie das Feld nicht zurückgeben?“ Antworte in drei
-  bis vier Sätzen.
-teile:
-  - typ: text
-    muster: |
-      Das Spielfeld muss nicht zurückgegeben werden, weil die Methode einen Verweis auf dasselbe Array bekommt wie der
-      Aufrufer. Jede Änderung, die sie hineinschreibt, sieht danach auch `main`. Der Wahrheitswert sagt dem Aufrufer,
-      ob sich die Figur wirklich bewegt hat. Nur dann zählt `main` einen Schritt. Bei einem Zug gegen eine Wand bleibt
-      der Schrittzähler gleich, und die Figur dreht sich laut Aufgabenblatt 6 nur in die neue Richtung.
-hinweise:
-  - Was bekommt die Methode beim Aufruf übergeben, eine Kopie des Arrays oder einen Verweis darauf?
-  - Was macht das Hauptprogramm von Aufgabenblatt 6 nach jedem Zug mit der Schrittzahl?
-loesung: |
-  **Ansatz:** Zwei Fragen trennen: Wie kommt die Änderung zum Aufrufer, und welche Information fehlt dem Aufrufer noch?
-  ---
-  Arrays werden als Verweis übergeben. Die Methode verändert das Array des Aufrufers direkt, eine Rückgabe ist unnötig.
-  ---
-  Ob sich etwas bewegt hat, sieht der Aufrufer nicht ohne Weiteres. Der Rückgabewert liefert genau diese Information für den Schrittzähler.
-```
-
 ````aufgabe
 id: pj-zu-code-bewege
 titel: Der vollständige Zug mit Kisten
@@ -2861,16 +2750,6 @@ loesung: |
   ---
   Probe mit `#@$$ #`: `vor` ist eine Kiste, `hinter` auch. Die Prüfung `!= ' '` liefert `false`, bevor etwas geschrieben wird. Das Feld bleibt unverändert.
 ````
-
-```reflexion
-frage: Warum prüft `bewege` alle Fälle, die zu `false` führen, bevor es das erste Zeichen ins Feld schreibt? Was könnte sonst passieren?
-antwort: |
-  Die Methode verspricht: Bei `false` bleibt das Spielfeld unverändert. Würde sie zuerst die Figur auf `vor` setzen und
-  erst danach merken, dass die Kiste nicht verschoben werden kann, wäre das Feld schon kaputt. Die Kiste wäre
-  überschrieben, und man müsste die Änderung mühsam rückgängig machen. Wer erst prüft und dann schreibt, braucht nie
-  etwas zurückzunehmen. Dieses Muster „erst prüfen, dann ändern“ hilft bei jeder Methode, die ein Array an Ort und
-  Stelle verändert.
-```
 
 ## Zielpunkte, Sieg und Sackgassen
 
@@ -3328,35 +3207,6 @@ loesung: |
   `(5, 3)`: unten und rechts Wand, steckt fest. Richtig sind die erste und die dritte Kiste.
 ```
 
-```aufgabe
-id: pj-zi-text-getrennt
-titel: Warum die Ziele getrennt speichern?
-niveau: 2
-lernziel: 4
-kompetenz: begruenden
-quelle: nach der Beschreibung von goals in Aufgabenblatt 6, WS 2023 (eigene Frage)
-angabe: |
-  Eine Tutorin fragt: „Warum speichert das Spiel die Zielpunkte in einem eigenen Array `goals`, statt sie einfach als
-  Punkte im Spielfeld stehen zu lassen?“ Antworte in drei bis vier Sätzen und nenne ein konkretes Beispiel.
-teile:
-  - typ: text
-    muster: |
-      Im Spielfeld kann pro Feld nur ein Zeichen stehen. Betritt die Figur einen Zielpunkt oder wird eine Kiste darauf
-      geschoben, wird der Punkt überschrieben. Verlässt sie das Feld wieder, setzt der Zug ein Leerzeichen, und der
-      Zielpunkt ist verloren. Beispiel: In `#@. #` geht die Figur zweimal nach rechts, danach steht `#  @#` da, und
-      kein Punkt mehr. In einem eigenen Array bleiben die Ziele das ganze Level über erhalten. Damit kann man sie
-      jederzeit zeichnen und mit `gewonnen` prüfen, ob auf jedem Ziel eine Kiste liegt.
-hinweise:
-  - Wie viele Zeichen kann ein einzelnes Feld des Spielfelds gleichzeitig speichern?
-  - Was schreibt der Zug auf das alte Feld der Figur?
-loesung: |
-  **Ansatz:** Den Informationsverlust beim Überschreiben erklären und ein Beispiel durchspielen.
-  ---
-  Ein Feld kann nur ein Zeichen speichern. Figur oder Kiste auf einem Ziel überschreiben den Punkt.
-  ---
-  Beim Verlassen wird das Feld zu `' '`. Die Zielliste dagegen ändert sich nie und hält die Ziele für Zeichnen und Siegprüfung fest.
-```
-
 ````aufgabe
 id: pj-zi-code-festgefahren
 titel: Eine Kiste steckt in einer Ecke
@@ -3441,16 +3291,6 @@ loesung: |
   ---
   Probe mit dem ersten Test: Die Kiste bei `(1, 1)` hat oben und links eine Wand, und das einzige Ziel ist `(3, 2)`. Ergebnis `true`.
 ````
-
-```reflexion
-frage: Eine Kiste kann auch ohne Ecke feststecken, zum Beispiel an einer langen Wand ohne Ziel. Warum erkennt `festgefahren` solche Fälle nicht, und ist das schlimm?
-antwort: |
-  `festgefahren` schaut nur auf die vier Nachbarfelder einer Kiste. Eine Kiste an einer geraden Wand kann noch entlang
-  der Wand geschoben werden. Ob sie dabei je ein Ziel erreicht, hängt aber vom ganzen Level ab, etwa davon, ob an
-  dieser Wand überhaupt ein Ziel liegt. Das lässt sich nicht aus vier Nachbarn ablesen. Schlimm ist das nicht: Die
-  Methode meldet nur sichere Fälle. Was sie nicht erkennt, muss die Spielerin selbst merken und mit `r` neu beginnen.
-  Eine Methode, die nie falsch „verloren“ sagt, ist nützlicher als eine, die manchmal zu früh aufgibt.
-```
 
 ## Das Spielfeld zeichnen
 
@@ -3866,35 +3706,6 @@ loesung: |
   Vor der Schleife: Level umwandeln, Ziele herauslösen, einmal zeichnen.
   ---
   In der Schleife: Taste abwarten, Richtung bestimmen, Zug ausführen, neu zeichnen, Sieg prüfen. Ist das Level gelöst, endet die Schleife, und das nächste Level wird geladen.
-```
-
-```aufgabe
-id: pj-ze-text-trennung
-titel: Warum verändert die Zeichenmethode nichts?
-niveau: 2
-lernziel: 5
-kompetenz: begruenden
-angabe: |
-  Ein Mitstudent schlägt vor: „Ich lösche in `zeichne` gleich die Ziele aus der Liste, auf denen eine Kiste liegt.
-  Dann muss `gewonnen` nur noch prüfen, ob die Liste leer ist.“ Erkläre in drei bis vier Sätzen, warum das keine gute
-  Idee ist.
-teile:
-  - typ: text
-    muster: |
-      Eine Zeichenmethode soll nur darstellen und nichts verändern. Wird sie öfter aufgerufen, etwa zweimal
-      hintereinander, darf sich am Spiel nichts ändern. Das Ziel bleibt außerdem ein Ziel, auch wenn gerade eine Kiste
-      darauf liegt: Schiebt die Spielerin die Kiste wieder weg, muss das Ziel wieder gezeichnet werden. Wäre es aus der
-      Liste gelöscht, wäre es für immer verschwunden. Darum bleibt die Zielliste unverändert, und `gewonnen` prüft sie
-      bei jedem Aufruf neu.
-hinweise:
-  - Kann eine Kiste ein Ziel auch wieder verlassen?
-  - Was passiert, wenn das Programm `zeichne` zweimal hintereinander aufruft?
-loesung: |
-  **Ansatz:** Zwei Gründe nennen: Zeichnen darf den Spielzustand nicht ändern, und Ziele bleiben das ganze Level über bestehen.
-  ---
-  Eine Kiste kann vom Ziel wieder weggeschoben werden. Ein gelöschtes Ziel käme nicht zurück.
-  ---
-  Eine Methode, die nur darstellt, kann man beliebig oft aufrufen, ohne etwas kaputt zu machen. Logik und Darstellung bleiben getrennt.
 ```
 
 ````aufgabe
@@ -4486,35 +4297,6 @@ loesung: |
   ---
   Warum braucht es die Vorbedingung `laenge ≤ farben`? Gäbe es weniger Farben als Stellen, fände die Schleife irgendwann keine neue Farbe mehr und liefe ewig.
 ````
-
-```aufgabe
-id: pj-mm-text-vorbedingung
-titel: Warum endet erzeugeCode?
-niveau: 2
-lernziel: 6
-kompetenz: begruenden
-angabe: |
-  In `erzeugeCode` läuft eine `while`-Schleife, die bei einer schon vorhandenen Farbe einfach noch einmal zieht.
-  Begründe in drei bis vier Sätzen: Warum endet die Schleife bei `laenge ≤ farben` (fast sicher), und was passiert bei
-  `erzeugeCode(5, 4, rnd)`?
-teile:
-  - typ: text
-    muster: |
-      Solange noch nicht alle Stellen gefüllt sind, gibt es bei `laenge ≤ farben` immer mindestens eine Farbe, die
-      noch nicht im Code steht. Jede Ziehung trifft diese Farbe mit einer festen Wahrscheinlichkeit größer als 0.
-      Darum kommt nach endlich vielen Ziehungen fast sicher eine neue Farbe, und `i` wächst bis `laenge`. Bei
-      `erzeugeCode(5, 4, rnd)` sind nach vier Stellen alle vier Farben verbraucht. Jede weitere Ziehung liefert eine
-      schon vorhandene Farbe, `i` bleibt bei 4, und die Schleife läuft endlos.
-hinweise:
-  - Wie viele Farben sind noch frei, wenn schon `i` Stellen gefüllt sind?
-  - Was passiert, wenn keine Farbe mehr frei ist?
-loesung: |
-  **Ansatz:** Zählen, wie viele Farben nach `i` gefüllten Stellen noch frei sind: `farben - i`.
-  ---
-  Bei `laenge ≤ farben` ist `farben - i ≥ 1` für jedes `i < laenge`. Eine freie Farbe wird früher oder später gezogen.
-  ---
-  Bei 5 Stellen und 4 Farben ist nach 4 Stellen keine Farbe mehr frei. Die Schleife zieht ewig weiter, das Programm hängt. Darum steht die Bedingung als Vorbedingung in der Angabe der Methode.
-```
 
 ### Variante: Farben dürfen sich wiederholen
 
@@ -5454,68 +5236,7 @@ loesung: |
   Zeile 6: `feld[x][y]` vertauscht Zeile und Spalte. Richtig ist `feld[y][x]`.
 ```
 
-```aufgabe
-id: pj-pruef-feedback
-titel: Drei Fragen im Feedbackgespräch
-niveau: 3
-punkte: 3
-lernziel: 7
-kompetenz: begruenden
-quelle: nach den Zusatzfragen und Variationsaufträgen der Aufgabenblätter (eigene Fragen zu Blatt 6)
-angabe: |
-  (Zeitrichtwert: 8 Minuten, je Frage 1 Punkt) Beantworte jede Frage in zwei bis vier Sätzen, so wie du sie im
-  Gespräch sagen würdest.
-
-  **a)** „Warum liefert Ihre Methode für die Position der Figur ein `int`-Array und nicht zwei Zahlen?“
-
-  **b)** „Was müssten Sie in `move` ändern, damit die Figur **zwei** Kisten hintereinander schieben kann?“ (`move` heißt der Zug in Aufgabenblatt 6, in diesem Kapitel `bewege`.)
-
-  **c)** „Was würde passieren, wenn ein Level eine Lücke in der Außenwand hätte?“
-teile:
-  - typ: text
-    label: a)
-    muster: |
-      Eine Java-Methode kann nur einen einzigen Wert zurückgeben. Eine Position besteht aber aus x und y. Darum packe
-      ich beide in ein kleines Array `new int[]{x, y}` und gebe dieses eine Array zurück. Der Aufrufer liest dann
-      `pos[0]` als Spalte und `pos[1]` als Zeile.
-  - typ: text
-    label: b)
-    muster: |
-      Bisher prüfe ich nur das Feld `hinter` direkt nach der Kiste. Für zwei Kisten müsste ich, wenn auf `hinter` eine
-      zweite Kiste liegt, noch ein Feld weiter schauen. Nur wenn dieses dritte Feld frei ist, schreibe ich eine Kiste
-      dorthin, die Figur auf `vor`, und das alte Feld wird frei. Die mittlere Kiste bleibt einfach eine Kiste. Wichtig
-      bleibt die Reihenfolge: erst alles prüfen, dann schreiben.
-  - typ: text
-    label: c)
-    muster: |
-      Meine Methoden verlassen sich auf die Vorbedingung, dass jedes Level von Wänden umschlossen ist. Mit einer Lücke
-      könnte die Figur auf ein Randfeld gehen. Beim nächsten Schritt nach außen würde `nachbar` eine Position außerhalb
-      des Arrays liefern, und der Zugriff würfe eine `ArrayIndexOutOfBoundsException`. Ich müsste dann vor jedem
-      Zugriff prüfen, ob die Position im Feld liegt.
-hinweise:
-  - Bei a) geht es um eine Grenze von `return`. Bei b) um ein drittes Feld in der Reihe.
-  - Bei c) hilft die Vorbedingung von Aufgabenblatt 6, die erklärt, warum `nachbar` keine Grenzen prüft.
-loesung: |
-  **Ansatz:** Jede Antwort nennt die Ursache im Code und eine konkrete Folge oder Änderung.
-  ---
-  a) Eine Methode hat nur einen Rückgabewert. Zwei Zahlen passen in ein Array mit zwei Plätzen, `{x, y}`.
-  ---
-  b) Ein drittes Feld in derselben Richtung prüfen. Nur wenn es frei ist, rutschen beide Kisten. Geschrieben wird erst, wenn alle Prüfungen bestanden sind.
-  ---
-  c) Ohne geschlossene Wand kann die Figur an den Rand gelangen. Dann liegt ein Nachbarfeld außerhalb des Arrays, und es kommt zu einer Exception. Abhilfe ist eine Grenzprüfung wie in `freieSchritte` aus [16.3 Richtungen und Nachbarfelder](/lernen/ep1/projekt/richtungen-und-nachbarfelder).
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Zusammenfassungskasten, der auf diese Frage folgt.
-antwort: |
-  Eine mögliche Auswahl: (1) Ein Spielfeld ist ein `char[][]`. Der Zugriff lautet `feld[y][x]` mit der Zeile zuerst,
-  eine Position dagegen wird als `{x, y}` gespeichert, und Zeilen können verschieden lang sein. (2) Ein Spiel besteht
-  aus kleinen Methoden mit wenigen Mustern: zählen, finden mit sofortigem `return`, sammeln mit Schreibindex,
-  Nachbarfeld berechnen. (3) Ein Zug prüft zuerst alle Fälle, die zu `false` führen, und verändert erst danach das
-  Spielfeld. Ebenso gut sind die getrennte Zielliste oder die Regel „ein Pin pro Farbe, rot hat Vorrang“ bei Mastermind.
-```
 
 :::zusammenfassung
 1. **Spielfeld:** Ein Level wird aus einem Text mit Zeilenumbrüchen `'\n'` in ein `char[][]` umgewandelt. `feld[y]` ist die Zeile `y`, `feld[y][x]` das Zeichen an der Stelle `x`. `y` wächst nach unten. Zeilen dürfen verschieden lang sein, darum läuft die innere Schleife immer bis `feld[y].length`.

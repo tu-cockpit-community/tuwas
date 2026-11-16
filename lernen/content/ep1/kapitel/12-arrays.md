@@ -794,35 +794,6 @@ loesung: |
 ```
 
 ```aufgabe
-id: ar-an-text-indextyp
-titel: Zusatzfrage zum Indextyp
-niveau: 2
-lernziel: 7
-kompetenz: begruenden
-quelle: Zusatzfrage 1 zu Aufgabenblatt 4, WS 2023 (umformuliert)
-angabe: |
-  Im Feedbackgespräch fragt die Tutorin: „Von welchem Typ muss der Ausdruck in den eckigen Klammern sein, wenn du
-  auf ein Element eines Arrays zugreifst? Geht auch ein `char` oder ein `long`?“ Antworte in drei bis fünf Sätzen.
-teile:
-  - typ: text
-    muster: |
-      Der Index muss vom Typ int sein, denn die Plätze eines Arrays sind mit ganzen Zahlen ab 0 nummeriert.
-      Erlaubt sind auch kleinere ganzzahlige Typen wie char, weil Java sie ohne Verlust automatisch in einen int
-      umwandelt. Ein char wird dabei zu seiner Nummer, zum Beispiel 'A' zu 65. Ein long oder ein double geht nicht
-      direkt, auch wenn der Wert klein ist. Der Compiler meldet dann einen möglichen Informationsverlust, und man
-      müsste ausdrücklich mit (int) umwandeln.
-hinweise:
-  - Welche Zahlen kommen als Platznummer überhaupt in Frage, ganze Zahlen oder Kommazahlen?
-  - Welche Typen wandelt Java automatisch in einen `int` um, ohne dass Information verloren gehen kann?
-loesung: |
-  **Ansatz:** Zuerst den verlangten Typ nennen, dann die beiden Nachfragen zu `char` und `long` beantworten.
-  ---
-  Der Index ist ein `int`. Ein `char` geht, weil Java ihn automatisch in seine Nummer umwandelt.
-  ---
-  Ein `long` geht nicht ohne Cast. Die Umwandlung von `long` nach `int` könnte Information verlieren, darum lehnt der Compiler sie ab.
-```
-
-```aufgabe
 id: ar-an-code-monate
 titel: Tage eines Monats nachschlagen
 niveau: 3
@@ -884,15 +855,6 @@ loesung: |
   ```
   ---
   Probe: `tageImMonat(12, false)` liest `tage[11] = 31`. Mit `tage[monat]` wäre es `tage[12]`, und das Programm bräche ab.
-```
-
-```reflexion
-frage: Warum ist es sinnvoll, dass der erste Index 0 und nicht 1 ist? Denk an die Frage „Wie weit ist dieser Platz vom Anfang entfernt?“.
-antwort: |
-  Der Index gibt an, wie viele Plätze man vom Anfang des Arrays weitergehen muss. Das erste Element liegt direkt am
-  Anfang, man muss null Plätze weitergehen. Das dritte Element liegt zwei Plätze weiter, also hat es den Index 2.
-  Dadurch rechnet der Computer die Lage eines Elements ganz einfach aus: Anfang plus Index mal Platzgröße. Eine
-  Folge davon ist, dass der letzte Index immer `length - 1` ist. Genau dort passieren die meisten Fehler.
 ```
 
 ## Arrays mit Schleifen durchlaufen
@@ -1539,15 +1501,6 @@ loesung: |
   (2) Für `n = 4` entsteht `0, 2, 4, 6`. Die 0 auf Platz 0 ist auch gerade. Richtig.
   ---
   (3) Für `n = 4` entsteht `0, 1, 4, 9`. Platz 0 behält die 0. Falsch. (4) Für `n = 3` entsteht `1, 0, 1`, also zwei Einsen von drei. Falsch.
-```
-
-```reflexion
-frage: Warum lautet die Bedingung der Standardschleife `i < a.length` und nicht `i <= a.length`? Erkläre es mit den Indizes eines Arrays der Länge 3.
-antwort: |
-  Ein Array der Länge 3 hat die Indizes 0, 1 und 2. Die Schleife soll genau für diese drei Werte laufen. Mit
-  `i < 3` ist die Bedingung für 0, 1 und 2 wahr und für 3 falsch, die Schleife endet also rechtzeitig. Mit
-  `i <= 3` liefe sie auch für `i = 3`, und der Zugriff `a[3]` würde eine `ArrayIndexOutOfBoundsException`
-  auslösen. Allgemein: Die Länge ist immer der erste Index, der nicht mehr zum Array gehört.
 ```
 
 ## Typische Algorithmen: Summe, Minimum, Zählen und Suchen
@@ -2234,16 +2187,6 @@ loesung: |
   Der Vergleich mit `beste` steht in jedem Durchlauf, nicht nur beim Abbruch einer Serie. So zählt auch eine Serie am Ende. Probe mit `{8, 3, 3, 3, 3}`: `aktuell` wird 1, 2, 3, 4, also `beste = 4`.
 ```
 
-```reflexion
-frage: Beim Maximum beginnt man mit `a[0]`, bei der Summe mit 0. Nach welcher Regel wählst du den Startwert eines Akkumulators?
-antwort: |
-  Der Startwert muss das richtige Ergebnis für den Fall sein, dass noch kein Element verarbeitet wurde, und er
-  darf das Ergebnis nicht verfälschen. Bei der Summe ist das 0, denn 0 zu addieren ändert nichts. Beim Zählen ist
-  es ebenfalls 0. Beim Maximum gibt es keinen solchen neutralen Wert unter den üblichen Zahlen: Jede feste Zahl
-  könnte größer sein als alle Elemente. Darum nimmt man ein echtes Element, nämlich `a[0]`. Das setzt voraus, dass
-  das Array nicht leer ist.
-```
-
 ## Neue Arrays bauen: kopieren, umdrehen, filtern, einfügen
 
 ```aufgabe
@@ -2869,16 +2812,6 @@ loesung: |
   Probe mit dem Beispiel: drei Großbuchstaben, also Länge `6 + 3 = 9`. Am Ende ist `j = 9`, jeder Platz ist gefüllt.
 ```
 
-```reflexion
-frage: Warum braucht man zum Filtern zwei Schleifen, obwohl doch eine Schleife alle Elemente einmal ansieht?
-antwort: |
-  Ein Array muss mit seiner endgültigen Länge angelegt werden, und die Länge lässt sich danach nicht mehr ändern.
-  Beim Filtern hängt die Länge aber davon ab, wie viele Elemente die Bedingung erfüllen. Das weiß man erst, wenn man
-  alle Elemente angesehen hat. Darum zählt die erste Schleife die Treffer, dann wird das Array mit genau dieser
-  Länge angelegt, und erst die zweite Schleife kann es füllen. Mit nur einer Schleife müsste man das neue Array
-  vorher zu groß anlegen und hätte am Ende überzählige Nullen.
-```
-
 ## Referenzen: zwei Namen für dasselbe Array
 
 ```aufgabe
@@ -3405,35 +3338,6 @@ loesung: |
   a) Erzeugt werden `new int[3]` (A), `{1, 2}` (B) und `new int[]{4}` (C). Das sind 3 Arrays.
   ---
   b) Am Ende zeigen `p` und `q` auf C, `r` und `s` auf A. Auf B zeigt niemand mehr. Erreichbar sind also 2 Arrays.
-```
-
-```aufgabe
-id: ar-ref-text-gleich
-titel: Zusatzfrage zum Vergleich mit ==
-niveau: 2
-lernziel: 7
-kompetenz: begruenden
-quelle: Zusatzfrage 4 zu Aufgabenblatt 4, WS 2023 (umformuliert)
-angabe: |
-  Im Feedbackgespräch kommt die Frage: „Taugt `==`, um zwei Arrays zu vergleichen? Was
-  prüft der Operator dabei genau?“ Antworte in drei bis fünf Sätzen und nenne, wie man es richtig macht.
-teile:
-  - typ: text
-    muster: |
-      Meistens ist es nicht sinnvoll. Eine Array-Variable enthält nur eine Referenz auf das Array, und == vergleicht
-      genau diese Referenzen. Das Ergebnis ist also nur dann true, wenn beide Variablen auf dasselbe Array zeigen.
-      Zwei verschiedene Arrays mit gleichem Inhalt liefern false. Will man den Inhalt vergleichen, prüft man zuerst
-      die Längen und dann in einer Schleife jedes Element. Sinnvoll ist == nur, wenn man wirklich wissen will, ob zwei
-      Variablen Aliase für dasselbe Array sind.
-hinweise:
-  - Was steht in einer Array-Variable, die Elemente oder eine Referenz?
-  - Nenne den Fall, in dem `==` trotz gleichem Inhalt `false` liefert, und die richtige Alternative.
-loesung: |
-  **Ansatz:** Erst sagen, was `==` vergleicht, dann die Folge für gleiche Inhalte, dann die Alternative.
-  ---
-  `==` vergleicht die Referenzen. Es ist nur `true`, wenn beide Variablen auf dasselbe Array zeigen.
-  ---
-  Für den Inhalt vergleicht man die Längen und danach jedes Element in einer Schleife.
 ```
 
 ```aufgabe
@@ -4167,33 +4071,6 @@ loesung: |
   `main` gibt zuletzt das alte Array aus: `99 10 0 20 25 0`.
 ```
 
-```aufgabe
-id: ar-par-text-void
-titel: Zusatzfrage zur void-Methode
-niveau: 2
-lernziel: 7
-kompetenz: begruenden
-quelle: Aufgabenblatt 4, WS 2023, Aufgabe 1 b (umformuliert)
-angabe: |
-  Es geht um das Programm aus der Aufgabe „Das Programm aus Aufgabe 1 von Blatt 4“. Die Tutorin fragt: „Die Methode
-  `fuelle` soll ein Array mit Werten füllen. Warum kommt sie trotzdem ohne Rückgabewert aus?“ Antworte in zwei bis vier Sätzen.
-teile:
-  - typ: text
-    muster: |
-      Beim Aufruf wird die Referenz auf das Array von main in den Parameter kopiert. Der Parameter feld zeigt also auf
-      dasselbe Array wie die Variable in main. Wenn fuelle die Elemente über feld[i] beschreibt, ändert sie genau
-      dieses eine Array. Darum sieht main die Werte auch ohne Rückgabewert.
-hinweise:
-  - Was wird beim Aufruf in den Parameter `feld` kopiert?
-  - Wie viele Arrays gibt es, und welche Variablen zeigen darauf?
-loesung: |
-  **Ansatz:** Mit call-by-value und Referenzen argumentieren.
-  ---
-  Kopiert wird die Referenz. Parameter und Variable in `main` zeigen auf dasselbe Array.
-  ---
-  Die Methode schreibt in dieses Array. Ein Rückgabewert ist überflüssig, weil `main` das Array schon kennt.
-```
-
 ## Gemischte Wiederholung
 
 Hier sind die Aufgaben bunt gemischt, auch mit Stoff aus den Kapiteln 2, 4, 6, 8 und 10. Im Quiz und im Test steht
@@ -4729,79 +4606,6 @@ loesung: |
 ```
 
 ```aufgabe
-id: ar-pruef-blatt-a1
-titel: Eine Exception erklären und beheben
-niveau: 3
-punkte: 4
-lernziel: 7
-kompetenz: begruenden
-quelle: nach Aufgabenblatt 4, WS 2023, Aufgabe 1 a und Zusatzfragen 2 und 3 (umformuliert)
-angabe: |
-  (Zeitrichtwert: 10 Minuten) Die Methode soll alle Elemente in einer Zeile ausgeben, getrennt durch Leerzeichen:
-
-  ```java
-  public static void ausgeben(int[] w) {
-      for (int i = 1; i <= w.length; i++) {
-          System.out.print(w[i] + " ");
-      }
-      System.out.println();
-  }
-  ```
-
-  Der Aufruf `ausgeben(new int[]{4, 8, 15})` gibt `8 15 ` aus und bricht dann mit einer
-  `ArrayIndexOutOfBoundsException` ab.
-
-  **a)** Bei welchem Wert von `i` bricht das Programm ab?
-
-  **b)** Repariere den Schleifenkopf, sodass die Methode alle Elemente ausgibt und keine Exception wirft.
-
-  **c)** Beantworte zwei Fragen aus dem Feedbackgespräch. Erstens: „Lässt sich die Länge eines Arrays nachträglich
-  ändern, und was tut man, wenn man mehr Platz braucht?“ Zweitens: „Wie erstellst du eine echte Kopie eines
-  `int`-Arrays?“
-teile:
-  - typ: auswahl
-    label: a)
-    optionen: ['bei `i = 3`', 'bei `i = 0`', 'bei `i = 2`']
-    richtig: [0]
-    fehler:
-      - wert: 1
-        meldung: Die Schleife beginnt bei `i = 1`. Der Wert 0 kommt gar nicht vor, darum fehlt auch die 4 in der Ausgabe.
-      - wert: 2
-        meldung: '`w[2]` ist 15 und wurde noch ausgegeben. Erst der nächste Zugriff liegt außerhalb.'
-  - typ: lueckentext
-    label: b)
-    code: |
-      int[] w = {4, 8, 15};
-      for (int i = ___; ___; i++) {
-          System.out.print(w[i] + " ");
-      }
-    luecken: [["0"], ["i < w.length", "i <= w.length - 1", "i<w.length"]]
-    fehler:
-      - wert: ["1", "i < w.length"]
-        meldung: Mit Start 1 wird `w[0]` nie ausgegeben. Der erste Index eines Arrays ist 0.
-      - wert: ["0", "i <= w.length"]
-        meldung: 'Mit `<=` erreicht `i` den Wert `w.length`, und `w[3]` gibt es nicht.'
-  - typ: text
-    label: c)
-    muster: |
-      Die Länge eines Arrays lässt sich nicht verändern, sie wird beim Erzeugen festgelegt. Braucht man eine andere
-      Länge, legt man ein neues Array mit der gewünschten Länge an und überträgt die Werte. Zum Kopieren legt man
-      ein neues int-Array derselben Länge an und überträgt jeden Wert einzeln in einer Schleife. Die Zuweisung
-      b = a ist keine Kopie, denn danach zeigen beide Variablen auf dasselbe Array.
-hinweise:
-  - Bei Länge 3 sind die Indizes 0, 1 und 2 erlaubt. Welche Werte nimmt `i` an?
-  - Für c) denk an die feste Länge und daran, was `b = a` bei Arrays bewirkt.
-loesung: |
-  **Ansatz:** Die Indizes der Schleife mit den erlaubten Indizes 0 bis 2 vergleichen.
-  ---
-  a) `i` läuft über 1, 2 und 3. Bei 1 und 2 erscheinen 8 und 15. Bei `i = 3` greift `w[3]` daneben.
-  ---
-  b) Zwei Fehler: Der Start muss 0 sein, sonst fehlt `w[0]`. Die Bedingung muss `i < w.length` lauten.
-  ---
-  c) Die Länge ist fest. Für eine andere Länge oder eine Kopie legt man ein neues Array an und überträgt die Werte in einer Schleife. `b = a` kopiert nur die Referenz.
-```
-
-```aufgabe
 id: ar-pruef-blatt-a2
 titel: Ein Array in main füllen und zweimal ausgeben
 niveau: 3
@@ -5100,67 +4904,7 @@ loesung: |
   Probe mit `{1, 2, 3, 4, 5}` und `{7, 8}`: Bis `i = 1` kommen Paare, ab `i = 2` nur noch Elemente von `a`. Am Ende ist `j = 7`, das ist die Länge.
 ```
 
-```aufgabe
-id: ar-pruef-gespraech
-titel: Drei Fragen im Feedbackgespräch
-niveau: 3
-punkte: 3
-lernziel: 7
-kompetenz: begruenden
-quelle: Zusatzfragen und Aufgabe 1 c zu Aufgabenblatt 4, WS 2021 und WS 2023 (umformuliert)
-angabe: |
-  (Zeitrichtwert: 6 Minuten, je Frage 1 Punkt) Beantworte jede Frage in zwei bis vier Sätzen, so wie du sie im
-  Gespräch sagen würdest.
-
-  **a)** Eine Methode legt mit `int[] kopie = werte;` eine „Kopie“ an und setzt darin einige Werte auf 0. Warum ist
-  das Array des Aufrufers danach ebenfalls verändert?
-
-  **b)** Eine Methode weist ihrem Parameter mit `werte = hilfe;` ein neues Array zu. Warum sieht der Aufrufer danach
-  trotzdem den alten Inhalt?
-
-  **c)** Beginnt die Indexzählung eines Arrays immer bei 0, und was ist der größte erlaubte Index?
-teile:
-  - typ: text
-    label: a)
-    muster: |
-      Die Zuweisung kopiert nur die Referenz, nicht das Array. Danach zeigen kopie und werte auf dasselbe Array, und
-      werte zeigt wiederum auf das Array des Aufrufers. Jede Änderung über kopie trifft also das Original.
-  - typ: text
-    label: b)
-    muster: |
-      Der Parameter werte ist eine eigene Variable, in die beim Aufruf die Referenz kopiert wurde. Die Zuweisung
-      biegt nur diese lokale Referenz auf das neue Array um. Die Variable des Aufrufers zeigt weiter auf das alte
-      Array, und das wurde nicht verändert.
-  - typ: text
-    label: c)
-    muster: |
-      Ja, in Java beginnt der Index immer bei 0. Der größte erlaubte Index ist die Länge minus 1, also a.length - 1.
-      Ein Zugriff mit einem Index außerhalb von 0 bis a.length - 1 wirft eine ArrayIndexOutOfBoundsException.
-hinweise:
-  - Bei a) und b) hilft das Bild mit den Pfeilen. Wie viele Arrays gibt es, und wohin zeigt welche Variable?
-  - Unterscheide bei a) und b) zwischen „ein Element ändern“ und „die Variable neu zuweisen“.
-loesung: |
-  **Ansatz:** Alle drei Fragen mit dem Referenzmodell beantworten: Variablen enthalten Pfeile, Arrays liegen im Heap.
-  ---
-  a) `kopie = werte` kopiert den Pfeil. Es gibt nur ein Array, also ändert jede Änderung über `kopie` das Original.
-  ---
-  b) `werte = hilfe` biegt nur den Pfeil des Parameters um. Der Pfeil des Aufrufers bleibt, wo er war.
-  ---
-  c) Ja, ab 0. Der größte Index ist `length - 1`. Alles andere wirft eine `ArrayIndexOutOfBoundsException`.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Ein Array hat eine feste Länge, seine Indizes laufen von 0 bis `length - 1`, und jeder
-  Zugriff außerhalb wirft eine `ArrayIndexOutOfBoundsException`. (2) Eine Array-Variable enthält nur eine Referenz.
-  `b = a` erzeugt keine Kopie, sondern einen zweiten Namen für dasselbe Array, und `==` vergleicht nur Referenzen.
-  (3) Eine Methode bekommt eine Kopie der Referenz. Änderungen an Elementen sieht der Aufrufer, eine neue Zuweisung
-  an den Parameter nicht. Ebenso gute Antworten sind der Plan „erst Länge, dann füllen“ oder der Startwert `a[0]`
-  beim Maximum.
-```
 
 :::zusammenfassung
 1. **Array:** eine feste Anzahl von Plätzen gleichen Typs unter einem Namen. Anlegen mit `new int[n]` (alle Plätze mit dem Standardwert, bei `int` 0) oder mit einer Initialisierungsliste `{3, 1, 4}`. Die Länge `a.length` (ohne Klammern) ändert sich nie.

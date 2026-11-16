@@ -825,16 +825,6 @@ loesung: |
   Probe mit dem Beispiel: Treffer auf Index 0 (Zähler 1), dann auf Index 2 (Zähler 2). Die Methode liefert 2, das dritte `"rot"` auf Index 4 wird nicht mehr angesehen.
 ```
 
-```reflexion
-frage: Warum steht return -1 erst hinter der Schleife? Und warum vereinbart man -1 als Ergebnis für „nicht gefunden“ und nicht 0?
-antwort: |
-  Ein einzelnes Element, das nicht passt, sagt nichts über die anderen Elemente. Dass der Wert fehlt, steht erst
-  fest, wenn **alle** Elemente geprüft sind, also nach der Schleife. Stünde das `return -1;` in der Schleife, würde
-  die Suche schon nach dem ersten Fehlversuch aufgeben. Die -1 eignet sich als Ergebnis, weil sie nie ein gültiger
-  Index ist. Die 0 dagegen ist der Index des ersten Elements. Der Aufrufer könnte „nicht gefunden“ und „gefunden auf
-  Index 0“ dann nicht unterscheiden.
-```
-
 ## Varianten der linearen Suche
 
 ```aufgabe
@@ -2200,16 +2190,6 @@ loesung: |
   Steht der Wert nur auf Index 0, werden die Indizes n - 1 bis 1 ohne Treffer verglichen und zuletzt Index 0. Das ist jedes Element genau einmal. Aussage 4 stimmt.
 ```
 
-```reflexion
-frage: Warum genügt im Quiz ein einziges Gegenbeispiel, um eine Aussage als falsch zu erkennen, während ein passendes Beispiel nicht reicht, um sie als richtig zu erkennen?
-antwort: |
-  Die Aussagen im Quiz behaupten etwas für **jedes** erlaubte Array, etwa „liefert immer den kleinsten Index“. Ein
-  einziges Array, bei dem das nicht stimmt, zeigt, dass „immer“ falsch ist. Ein Beispiel, bei dem es stimmt, zeigt
-  dagegen nur, dass es **manchmal** stimmt. Bei der Suche von beiden Seiten liefert `{3, 1, 3, 1}` den kleinsten
-  Index, `{1, 3, 1, 3}` aber nicht. Für „richtig“ brauchst du darum eine Begründung, die für jedes Array gilt, zum
-  Beispiel: „Die Schleife beginnt bei Index 0 und endet beim ersten Treffer, also ist es der kleinste Index.“
-```
-
 ## Binäre Suche: halbieren statt durchprobieren
 
 ```aufgabe
@@ -2557,70 +2537,6 @@ loesung: |
   `mid = 3` (14 < 26, also `low = 4`), dann `mid = 4 + 3 / 2 = 5` (22 < 26, also `low = 6`).
   ---
   Dann `mid = 6 + 1 / 2 = 6`, dort steht 26. Reihenfolge: 14, 22, 26.
-```
-
-```aufgabe
-id: su-bin-unsortiert
-titel: Binäre Suche im falschen Array
-niveau: 3
-lernziel: 3
-kompetenz: begruenden
-angabe: |
-  Die Methode `binaereSuche` setzt die Regeln aus der Definition genau um. Sie wird hier mit einem **unsortierten**
-  Array aufgerufen. Was gibt das Programm aus? Erkläre danach, warum.
-teile:
-  - typ: ausgabe
-    code: |
-      public class Falsch {
-          public static int binaereSuche(int[] a, int schluessel) {
-              int low = 0;
-              int high = a.length - 1;
-              while (low <= high) {
-                  int mid = low + (high - low) / 2;
-                  if (a[mid] < schluessel) {
-                      low = mid + 1;
-                  } else if (a[mid] > schluessel) {
-                      high = mid - 1;
-                  } else {
-                      return mid;
-                  }
-              }
-              return -1;
-          }
-
-          public static void main(String[] args) {
-              int[] a = {30, 5, 18, 2, 11, 40, 7};
-              System.out.println(binaereSuche(a, 30));
-              System.out.println(binaereSuche(a, 2));
-              System.out.println(binaereSuche(a, 18));
-          }
-      }
-    loesung: |
-      -1
-      3
-      -1
-    fehler:
-      - wert: "0\n3\n2"
-        meldung: So würde die lineare Suche antworten. Die binäre Suche geht davon aus, dass das Array sortiert ist, und schließt deshalb Hälften aus, in denen die Werte doch stehen.
-      - wert: "-1\n-1\n-1"
-        meldung: Die 2 steht zufällig genau auf der ersten Mitte, Index 3. Dieser Vergleich trifft sofort.
-  - typ: text
-    label: Warum findet die Suche die 30 nicht, obwohl sie im Array steht?
-    muster: |
-      Die erste Mitte ist Index 3 mit dem Wert 2. Weil 2 kleiner als 30 ist, schließt die Suche die linke Hälfte aus
-      und sucht nur noch rechts weiter. Das wäre nur richtig, wenn das Array sortiert wäre. Die 30 steht aber links,
-      auf Index 0. Die binäre Suche setzt ein sortiertes Array voraus, sonst liefert sie falsche Ergebnisse.
-hinweise:
-  - Spiele jede Suche mit `low`, `high` und `mid` durch, auch wenn das Ergebnis seltsam wirkt.
-  - Die erste Mitte ist bei allen drei Aufrufen Index 3 mit dem Wert 2.
-loesung: |
-  **Ansatz:** Die binäre Suche stur nach ihren Regeln durchspielen.
-  ---
-  Suchwert 30: `mid = 3`, 2 < 30, also `low = 4`. `mid = 5`, 40 > 30, also `high = 4`. `mid = 4`, 11 < 30, also `low = 5`. Jetzt ist `low > high`, Ergebnis -1.
-  ---
-  Suchwert 2: `a[3] = 2` gleich im ersten Durchlauf, Ergebnis 3. Das ist reines Glück, die 2 steht zufällig auf der ersten Mitte.
-  ---
-  Suchwert 18: `mid = 3` (2 < 18, also `low = 4`). Dann `mid = 5` (40 > 18, also `high = 4`). Dann `mid = 4` (11 < 18, also `low = 5`). Ergebnis -1, obwohl die 18 auf Index 2 steht. Die Suche schließt Hälften aus, weil sie eine Ordnung annimmt, die es nicht gibt.
 ```
 
 ```aufgabe
@@ -3382,16 +3298,6 @@ loesung: |
   Probe mit `{2, 4, 4, 4, 9}` und 4: Mitte 2 (4, nicht kleiner, `high = 1`). Dann Mitte 0 (2 < 4, `low = 1`). Dann Mitte 1 (4, `high = 0`). Ende mit `low = 1`. Die Java-Methode `Arrays.binarySearch` liefert bei einem Fehlschlag übrigens `-(low + 1)`, damit man diese Stelle aus dem negativen Ergebnis zurückrechnen kann.
 ```
 
-```reflexion
-frage: Die binäre Suche hat zwei Abbruchgründe, die lineare Suche auch. Welche sind es jeweils, und warum muss bei der binären Suche nach einem Fehlvergleich mid + 1 oder mid - 1 stehen?
-antwort: |
-  Die lineare Suche endet beim ersten Treffer oder wenn der Index das Ende des Arrays erreicht. Die binäre Suche endet
-  bei einem Treffer auf der Mitte oder wenn der Suchbereich leer ist, also `low > high`. Damit der Suchbereich
-  irgendwann leer wird, muss er in jedem Durchlauf schrumpfen. Das geprüfte Element auf `mid` ist erledigt, also
-  darf es nicht im Suchbereich bleiben. Darum springt `low` auf `mid + 1` oder `high` auf `mid - 1`. Bleibt `mid`
-  drin, kann bei zwei verbleibenden Elementen immer wieder dieselbe Mitte herauskommen, und die Schleife endet nie.
-```
-
 ## Wie viel Arbeit macht eine Suche? Vergleiche zählen
 
 ```aufgabe
@@ -3840,16 +3746,6 @@ loesung: |
   Wir ziehen auf beiden Seiten `11 · k` ab und erhalten `1013 · k > 10240`. Teilen durch 1013 ergibt `k > 10,108…`.
   ---
   Das kleinste ganze `k` ist 11. Probe: Bei `k = 11` kostet linear 11264, die andere Strategie 10240 + 121 = 10361. Ab 11 Suchen lohnt sich das Sortieren.
-```
-
-```reflexion
-frage: Die Suche von beiden Seiten braucht nur etwa halb so viele Durchläufe wie die Grundform. Warum liegt sie trotzdem in O(n) und nicht in einer besseren Klasse?
-antwort: |
-  Die O-Notation fragt, wie die Arbeit **wächst**, wenn `n` wächst. Bei der Suche von beiden Seiten macht jeder
-  Durchlauf zwei Vergleiche, im schlechtesten Fall sind es zusammen wieder etwa `n`. Selbst wenn es wirklich nur
-  `n / 2` Vergleiche wären: Verdoppelt man `n`, verdoppelt sich auch `n / 2`. Ein fester Faktor wie ein Halb ändert
-  nichts am Wachstum, darum fällt er in der O-Notation weg. Erst die binäre Suche ist grundsätzlich besser, weil eine
-  Verdoppelung von `n` dort nur einen einzigen Durchlauf mehr kostet.
 ```
 
 ## Gemischte Wiederholung
@@ -4708,68 +4604,7 @@ loesung: |
   Probe mit `{4, 9, 4, 1}`, 4 und 3: Index 3 (1), Index 2 (4, Treffer). Ergebnis 2.
 ```
 
-```aufgabe
-id: su-pruef-gespraech
-titel: Drei Fragen im Feedbackgespräch
-niveau: 3
-punkte: 3
-lernziel: 6
-kompetenz: begruenden
-quelle: Format nach den Zusatzfragen der Aufgabenblätter (umformuliert), Inhalt nach den Folien „Suchalgorithmen“
-angabe: |
-  (Zeitrichtwert: 6 Minuten, je Frage 1 Punkt) Beantworte jede Frage in zwei bis vier Sätzen, so wie du sie im
-  Gespräch sagen würdest.
-
-  **a)** Warum liefert eine Suchmethode -1, wenn sie nichts findet, und nicht 0?
-
-  **b)** Warum darf man die binäre Suche nur auf ein sortiertes Array anwenden?
-
-  **c)** Was ist der Vorteil der binären Suche, und wann nimmst du trotzdem die lineare?
-teile:
-  - typ: text
-    label: a)
-    muster: |
-      Das Ergebnis einer Suche ist ein Index. Die 0 ist ein gültiger Index, nämlich der des ersten Elements. Der
-      Aufrufer könnte dann „nicht gefunden“ nicht von „gefunden auf Index 0“ unterscheiden. Die -1 ist nie ein
-      gültiger Index und deshalb eindeutig.
-  - typ: text
-    label: b)
-    muster: |
-      Die binäre Suche schließt nach jedem Vergleich eine Hälfte aus. Ist die Mitte kleiner als der Suchwert, sucht
-      sie nur rechts weiter. Das ist nur richtig, wenn alle Werte links von der Mitte auch kleiner sind, also wenn das
-      Array sortiert ist. Sonst findet sie Werte nicht, die vorhanden sind.
-  - typ: text
-    label: c)
-    muster: |
-      Die binäre Suche braucht im schlechtesten Fall nur etwa log₂ n Vergleiche, bei einer Million Elementen 20 statt
-      einer Million. Die lineare Suche nehme ich, wenn das Array unsortiert ist und ich nur selten suche, denn
-      Sortieren kostet mehr als eine lineare Suche. Auch wenn ich den ersten Index im ursprünglichen Array brauche,
-      nehme ich die lineare Suche.
-hinweise:
-  - Für a) überlege, welche Zahlen gültige Indizes sind.
-  - Für b) und c) denk an das Ausschließen einer Hälfte und an die Kosten des Sortierens.
-loesung: |
-  **Ansatz:** Jede Antwort nennt den Grund und ein kurzes Beispiel.
-  ---
-  a) 0 ist ein gültiger Index, -1 nie. Darum ist -1 als Signal „nicht gefunden“ eindeutig.
-  ---
-  b) Der Schluss „Mitte zu klein, also rechts weiter“ gilt nur bei sortierten Daten. Beispiel: In `{30, 5, 18, 2, 11, 40, 7}` findet die binäre Suche die 30 nicht.
-  ---
-  c) Vorteil: O(log n) statt O(n). Lineare Suche bei unsortierten Daten und seltenen Suchen, oder wenn der Index im ursprünglichen Array gebraucht wird.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Die lineare Suche prüft die Elemente der Reihe nach, liefert beim ersten Treffer den
-  Index und erst nach der Schleife -1. Sie funktioniert auf jedem Array und liegt in O(n). (2) Die binäre Suche
-  vergleicht mit der Mitte und schließt jedes Mal eine Hälfte aus. Sie braucht ein sortiertes Array und liegt in
-  O(log n), weil nach jedem Vergleich `mid + 1` oder `mid - 1` den Suchbereich halbiert. (3) Eine unbekannte
-  Suchvariante beurteilst du mit vier Fragen: Welcher Treffer, was ohne Treffer, endet sie immer, wie viele
-  Vergleiche? Ebenso gute Antworten sind die fünf Testfälle oder die Regel „Exponent der größten Zweierpotenz plus 1“.
-```
 
 :::zusammenfassung
 1. **Lineare Suche:** Schleife über alle Indizes, beim ersten Treffer `return i;`, nach der Schleife `return -1;`. Sie liefert den kleinsten passenden Index, braucht keine Ordnung und liefert für ein leeres Array -1. Die -1 bedeutet „nicht gefunden“, weil sie nie ein gültiger Index ist.

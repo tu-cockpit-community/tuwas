@@ -436,15 +436,6 @@ Wörtern, beginnt jedes weitere Wort groß. Das nennt man **camelCase**, weil di
 Kamelhöcker aussehen. Groß- und Kleinschreibung zählt: `druckeLinie` und `DruckeLinie` sind für Java
 zwei verschiedene Namen.
 
-```reflexion
-frage: Lohnt sich eine Methode schon, wenn ein Codestück nur zweimal vorkommt? Überlege dir zwei Gründe, bevor du die Antwort aufdeckst.
-antwort: |
-  Ja. Erstens musst du eine Änderung nur an einer Stelle machen. Bei zwei Kopien vergisst man leicht
-  eine, und dann verhalten sich die beiden Stellen unterschiedlich. Zweitens sagt der Name, was der Code
-  tut. `druckeLinie();` liest sich schneller als eine Schleife, deren Zweck man erst erraten muss. Ein
-  dritter Grund: Man kann die Methode allein testen, bevor man sie überall verwendet.
-```
-
 ```aufgabe
 id: me-was-gefuehrt
 titel: Einen Ablauf Schritt für Schritt verfolgen
@@ -1163,15 +1154,6 @@ Methode. Wenn eine Methode ein Ergebnis nach außen liefern soll, braucht sie ei
 4. Am Ende verschwinden die Parameter. Die Variablen des Aufrufers sind unverändert.
 :::
 
-```reflexion
-frage: Eine Methode heißt `setzeAufNull(int wert)` und enthält nur `wert = 0;`. Kann sie überhaupt irgendetwas bewirken? Überlege, bevor du aufdeckst.
-antwort: |
-  Nein, sie bewirkt nichts Sichtbares. Wegen call-by-value bekommt `wert` nur eine Kopie des Arguments.
-  Die Zuweisung `wert = 0;` ändert diese Kopie, und am Ende der Methode verschwindet sie. Die Variable des
-  Aufrufers behält ihren alten Wert. Damit eine Methode etwas bewirkt, muss sie etwas ausgeben, einen
-  Wert zurückgeben oder eine Variable verändern, die außerhalb der Methode lebt.
-```
-
 ```aufgabe
 id: me-par-gefuehrt-bonus
 titel: Punkte mit Bonus
@@ -1650,34 +1632,6 @@ loesung: |
   ```
   ---
   Kontrolle mit `druckeRahmen(5, 3, '#')`: Zeile 2 hat nur in Spalte 1 und 5 ein `#`, dazwischen drei Leerzeichen. Das passt zum Beispiel.
-```
-
-```aufgabe
-id: me-par-text-kopie
-titel: Warum bleibt die Variable gleich?
-niveau: 2
-lernziel: 2
-kompetenz: begruenden
-angabe: |
-  Ein Mitstudent sagt im Feedbackgespräch: „Meine Methode `verdopple(int x)` setzt `x = x * 2`, aber in
-  `main` ist die Zahl danach nicht verdoppelt. Java hat einen Fehler.“ Erkläre in zwei bis drei Sätzen,
-  was wirklich passiert und wie man das gewünschte Verhalten erreicht.
-teile:
-  - typ: text
-    muster: |
-      Java übergibt Argumente mit call-by-value: Beim Aufruf wird der Wert der Variable in den Parameter `x`
-      kopiert. `x = x * 2` ändert nur diese Kopie, die am Ende der Methode verschwindet. Die Variable in
-      `main` wird nie angefasst. Wer das Ergebnis in `main` braucht, gibt es mit `return x * 2;` zurück
-      und schreibt in `main` zum Beispiel `zahl = verdopple(zahl);`.
-hinweise:
-  - Was genau wird beim Aufruf in den Parameter geschrieben, die Variable selbst oder ihr Wert?
-  - Wie kommt ein Ergebnis aus einer Methode zurück zum Aufrufer, wenn nicht über den Parameter?
-loesung: |
-  **Ansatz:** Den Mechanismus call-by-value benennen und auf das Beispiel anwenden.
-  ---
-  Der Parameter `x` ist eine eigene Variable der Methode. Beim Aufruf bekommt er eine Kopie des Werts.
-  ---
-  Die Verdopplung betrifft nur die Kopie. Abhilfe: Rückgabewert verwenden, also `return x * 2;` und in `main` `zahl = verdopple(zahl);`. Das zeigt [6.3 Rückgabewerte und return](/lernen/ep1/methoden/rueckgabewerte-und-return).
 ```
 
 ## Rückgabewerte und return
@@ -2453,44 +2407,6 @@ loesung: |
   Option 2: Ausgabe `Tag`, Rückgabe `"Uhr" + "Tag" = "UhrTag"`. Zweiter Aufruf: `Uhr` und `UhrUhr`. Das ist genau die gesuchte Ausgabe.
 ```
 
-```aufgabe
-id: me-rue-text-missing-return
-titel: Warum meckert der Compiler?
-niveau: 2
-lernziel: 3
-kompetenz: begruenden
-angabe: |
-  Erkläre in zwei bis drei Sätzen, warum diese Methode mit `missing return statement` abgelehnt wird,
-  obwohl jede Zahl entweder gerade oder ungerade ist. Gib eine korrigierte Fassung an.
-
-  ```java
-  public static String paritaet(int n) {
-      if (n % 2 == 0) {
-          return "gerade";
-      }
-      if (n % 2 != 0) {
-          return "ungerade";
-      }
-  }
-  ```
-teile:
-  - typ: text
-    muster: |
-      Der Compiler wertet die Bedingungen nicht inhaltlich aus. Er sieht zwei unabhängige `if`, die beide
-      falsch sein könnten, und dann käme die Methode ohne `return` an ihr Ende. Bei einem Rückgabetyp
-      `String` ist das verboten. Korrektur: das zweite `if` weglassen und am Ende `return "ungerade";`
-      schreiben, oder `if (...) { return "gerade"; } else { return "ungerade"; }`.
-hinweise:
-  - Prüft der Compiler, was die Bedingungen bedeuten, oder nur, welche Wege es im Code gibt?
-  - Welcher Weg durch die Methode endet ohne `return`?
-loesung: |
-  **Ansatz:** Den Code aus Sicht des Compilers lesen: Welche Wege durch die Methode gibt es?
-  ---
-  Es gibt einen Weg, auf dem beide `if` falsch sind. Dass dieser Weg nie vorkommt, weiß nur der Mensch.
-  ---
-  Mit einem abschließenden `return "ungerade";` oder einem `else` endet jeder Weg mit `return`, und die Methode kompiliert.
-```
-
 ## Sichtbarkeit und Lebensdauer von Variablen
 
 ```aufgabe
@@ -3111,35 +3027,6 @@ loesung: |
   ```
   ---
   Kontrolle: Jeder Aufruf mit 3 liefert 1 + 4 + 9 = 14, egal wie oft man ihn wiederholt. Das ist ein Grund, warum der Programmiertest globale Variablen verbietet.
-```
-
-```aufgabe
-id: me-sic-text-global
-titel: Warum sind globale Variablen verboten?
-niveau: 2
-lernziel: 4
-kompetenz: begruenden
-angabe: |
-  Im Programmiertest steht: „Sie dürfen keine zusätzlichen eigenen Hilfsmethoden oder globalen Variablen
-  verwenden“. Erkläre in zwei bis drei Sätzen, was mit globalen Variablen gemeint
-  ist und welches Problem eine Klassenvariable bei mehreren Testaufrufen verursachen kann.
-teile:
-  - typ: text
-    muster: |
-      Gemeint sind Klassenvariablen, also `static`-Variablen außerhalb der Methoden. Ihr Wert bleibt über
-      Aufrufe hinweg erhalten. Dann hängt das Ergebnis einer Methode nicht nur von ihren Argumenten ab,
-      sondern auch von früheren Aufrufen. Ruft der Test die Methode mehrmals auf, rechnet der zweite
-      Aufruf mit Resten des ersten und liefert ein falsches Ergebnis. Mit Parametern, lokalen Variablen und
-      Rückgabewerten ist jede Methode für sich vorhersagbar.
-hinweise:
-  - Wie lange lebt eine Klassenvariable, und wie lange eine lokale Variable?
-  - Denk an die Aufgabe „Ohne Klassenvariable rechnen“, bei der der zweite Aufruf 28 statt 14 liefert.
-loesung: |
-  **Ansatz:** Den Begriff „globale Variable“ übersetzen und dann die Lebensdauer betrachten.
-  ---
-  Globale Variablen sind Klassenvariablen. Sie leben das ganze Programm lang.
-  ---
-  Ein Rest aus einem früheren Aufruf verfälscht spätere Aufrufe. Tests, die eine Methode mehrmals aufrufen, schlagen dann fehl, obwohl der erste Aufruf richtig war.
 ```
 
 ## Überladen von Methoden
@@ -3884,33 +3771,6 @@ loesung: |
   `(char) ('x' + 1)` ist das Zeichen `y`, Ausgabe `char y`. `"" + 'x'` ist der String `"x"`, Ausgabe `String x`.
 ```
 
-```aufgabe
-id: me-ueb-text-rueckgabetyp
-titel: Warum zählt der Rückgabetyp nicht?
-niveau: 2
-lernziel: 5
-kompetenz: begruenden
-angabe: |
-  Begründe mit einem konkreten Aufruf, warum Java zwei Methoden `int lies(int x)` und `double lies(int x)`
-  in derselben Klasse nicht erlaubt.
-teile:
-  - typ: text
-    muster: |
-      Java wählt die Methode beim Aufruf nur anhand des Namens und der Argumente aus. Beim Aufruf
-      `lies(3);` als eigene Anweisung wird der Rückgabewert gar nicht verwendet. Es gibt also keinen
-      Hinweis, ob die `int`- oder die `double`-Variante gemeint ist. Damit jeder Aufruf eindeutig ist,
-      gehört der Rückgabetyp nicht zur Signatur, und beide Methoden haben dieselbe Signatur `lies(int)`.
-hinweise:
-  - Woran erkennt Java beim Aufruf, welche Methode gemeint ist?
-  - Denk an einen Aufruf, dessen Rückgabewert gar nicht verwendet wird.
-loesung: |
-  **Ansatz:** Die Auswahl der Methode aus der Sicht des Aufrufs betrachten.
-  ---
-  Beim Aufruf sind nur der Name und die Argumente bekannt. Bei `lies(3);` wird der Rückgabewert nicht einmal benutzt.
-  ---
-  Deshalb wäre die Auswahl unmöglich. Der Rückgabetyp gehört nicht zur Signatur, und beide Methoden heißen für Java `lies(int)`.
-```
-
 ## Vor- und Nachbedingungen
 
 ```aufgabe
@@ -4104,16 +3964,6 @@ Beim Beispiel „Alle Wege durch eine Methode“ probieren viele nur `marke(1, 3
 3. **Nachbedingung:** Gehe alle Wege durch die Methode und notiere die möglichen Ergebnisse mit je einem Beispielaufruf.
 4. Eine Option ist richtig, wenn sie für **jedes** dieser Ergebnisse wahr ist und sich ohne Exception auswerten lässt.
 :::
-
-```reflexion
-frage: Warum ist eine Nachbedingung wie `ergebnis >= 0` für eine Methode `betrag(int n)` korrekt, obwohl sie viel weniger sagt als „ergebnis ist der Betrag von n“?
-antwort: |
-  Korrekt heißt nur: Die Aussage ist nach jedem erlaubten Aufruf wahr. Das gilt für `ergebnis >= 0`,
-  denn ein Betrag ist nie negativ. Die Aussage ist schwach, weil sie zum Beispiel auch für eine Methode
-  gelten würde, die immer 0 liefert. Im Quiz wird aber nicht nach der genauesten, sondern nach einer
-  korrekten Nachbedingung gefragt. Eine genauere Nachbedingung wäre
-  `ergebnis == n || ergebnis == -n` zusammen mit `ergebnis >= 0`.
-```
 
 ```aufgabe
 id: me-vor-gefuehrt-produkt
@@ -4455,45 +4305,6 @@ loesung: |
   Antwort: `s.length() >= 1 && s.length() <= 3`. Kontrolle: Alle vier Fälle erfüllen diese Bedingung.
 ```
 
-```aufgabe
-id: me-vor-text-mitte
-titel: Den Vertrag selbst formulieren
-niveau: 3
-lernziel: 6
-kompetenz: begruenden
-angabe: |
-  Formuliere eine Vorbedingung und eine Nachbedingung für diese Methode. Begründe die Vorbedingung mit den
-  Exceptions, die sonst auftreten könnten.
-
-  ```java
-  public static char mitte(String s) {
-      return s.charAt(s.length() / 2);
-  }
-  ```
-teile:
-  - typ: text
-    muster: |
-      **Vorbedingung:** `s != null && s.length() > 0`. Bei `s == null` wirft schon `s.length()` eine
-      `NullPointerException`. Beim leeren String ist `s.length() / 2 = 0`, und `"".charAt(0)` wirft eine
-      `StringIndexOutOfBoundsException`. Für jeden String mit mindestens einem Zeichen liegt
-      `s.length() / 2` zwischen 0 und `s.length() - 1`, also ist die Position gültig.
-
-      **Nachbedingung:** Der Rückgabewert ist das Zeichen an Position `s.length() / 2`, also
-      `ergebnis == s.charAt(s.length() / 2)`. Bei gerader Länge ist das das rechte der beiden mittleren
-      Zeichen, zum Beispiel `'v'` bei `"Java"`.
-hinweise:
-  - Welche zwei Exceptions können in dieser einen Zeile entstehen?
-  - Prüfe, ob `s.length() / 2` für einen String der Länge 1 eine gültige Position ist.
-loesung: |
-  **Ansatz:** Jede mögliche Exception einzeln ausschließen und dann das Ergebnis beschreiben.
-  ---
-  `null` führt zur `NullPointerException`, der leere String zur `StringIndexOutOfBoundsException`. Vorbedingung: `s != null && s.length() > 0`.
-  ---
-  Für Länge 1 ist die Position `1 / 2 = 0`, gültig. Für Länge 4 ist sie 2, ebenfalls gültig.
-  ---
-  Nachbedingung: Rückgabewert ist `s.charAt(s.length() / 2)`. Beispiel: `mitte("Java")` liefert `'v'`, `mitte("EP1")` liefert `'P'`.
-```
-
 ## Methoden nach Vorgabe schreiben
 
 ```aufgabe
@@ -4722,17 +4533,6 @@ Die Angabe verlangt aber ausdrücklich, redundanten Code zu vermeiden. Im Feedba
 Frage, was man ändern müsste, wenn statt drei Symbolen nur noch zwei eingefügt werden sollen. Mit
 Kopien sind es vier Stellen, und eine vergessene Stelle ist ein Fehler. Mit Aufrufen ist es eine Stelle.
 :::
-
-```reflexion
-frage: In der Zahl-Variante steht `addSequence(Integer.toString(number), symbol);`. Warum ruft Java hier die String-Variante auf und nicht wieder die Zahl-Variante selbst?
-antwort: |
-  `Integer.toString(number)` hat den Typ `String`. Der Aufruf hat also die Argumenttypen `String` und
-  `char`. Nach den Regeln der Überladungsauflösung passt genau `addSequence(String, char)`. Die
-  Zahl-Variante `addSequence(int, char)` passt nicht, weil ein `String` nie in `int` umgewandelt wird.
-  Würde dort `addSequence(number, symbol)` stehen, riefe sich die Methode endlos selbst auf. Eine Methode,
-  die sich selbst aufruft, heißt rekursiv. Wie man das mit einem Ende baut, zeigt
-  [10.1 Eine Methode ruft sich selbst auf](/lernen/ep1/rekursion/eine-methode-ruft-sich-selbst-auf).
-```
 
 ```aufgabe
 id: me-vor-gefuehrt-addchar
@@ -5407,35 +5207,6 @@ loesung: |
   ```
   ---
   Kontrolle: `"Wasser"` hat Lücken nach i = 0 bis 4 mit 1, 2, 1, 2, 1 Zeichen: `W#a##s#s##e#r`. Im Original (Blatt 3, WS 2023) beginnt das Muster mit zweimal. Dort genügt es, die Bedingung auf `i % 2 == 0` zu ändern.
-```
-
-```aufgabe
-id: me-vor-text-redundanz
-titel: Im Feedbackgespräch die Varianten erklären
-niveau: 2
-lernziel: 8
-kompetenz: begruenden
-angabe: |
-  Die Tutorin fragt: „Warum rufen Ihre Varianten `addSeparator(int, char)` und `addSeparator(String)`
-  die Grundvariante auf, statt die Schleife selbst zu enthalten? Und was müssten Sie ändern, wenn das
-  Muster künftig mit zweimal beginnen soll?“ Antworte in drei bis vier Sätzen.
-teile:
-  - typ: text
-    muster: |
-      Die eigentliche Logik steht nur in der Grundvariante `addSeparator(String, char)`. Die anderen
-      Varianten wandeln nur ihre Argumente um, also die Zahl mit `Integer.toString` in einen String oder
-      sie setzen das Standardzeichen `_` ein, und rufen dann die Grundvariante auf. So gibt es keinen
-      doppelten Code, wie es die Angabe verlangt. Für das neue Muster ändere ich nur in der Grundvariante
-      die Bedingung von `i % 2 == 1` auf `i % 2 == 0`, und alle vier Varianten verhalten sich sofort richtig.
-hinweise:
-  - Was ist der Vorteil, wenn eine Logik nur an einer Stelle im Code steht?
-  - Welche Zeile der Grundvariante entscheidet, wann ein zweites Zeichen eingefügt wird?
-loesung: |
-  **Ansatz:** Den Begriff „redundanter Code“ erklären und mit der konkreten Änderung belegen.
-  ---
-  Nur die Grundvariante enthält die Schleife. Die anderen Varianten passen ihre Argumente an und rufen sie auf.
-  ---
-  Eine Änderung des Musters betrifft daher nur die Bedingung `i % 2 == 1` in der Grundvariante. Mit kopierten Schleifen müsste man vier Stellen ändern und könnte eine vergessen.
 ```
 
 ## Gemischte Wiederholung
@@ -6382,61 +6153,7 @@ loesung: |
   `verarbeite(verarbeite(1))`: innen Ausgabe `v2`, Rückgabe 3, außen Ausgabe `v6`, Rückgabe 7 (geht verloren). `zaehler = 14`. Zum Schluss `14`.
 ```
 
-```aufgabe
-id: me-pruef-gespraech
-titel: Fragen aus dem Feedbackgespräch
-niveau: 3
-punkte: 3
-lernziel: 2
-kompetenz: begruenden
-quelle: Zusatzfragen der Aufgabenblätter (Anzahl Parameter, void, mehrere Rückgabewerte, Sichtbarkeit), nachgebaut
-angabe: |
-  (Zeitrichtwert: 6 Minuten) Beantworte die vier Fragen zur Methode
-  `public static void zeigeRechnung(String name, int menge, double preis)` in ganzen Sätzen, so wie
-  im Feedbackgespräch.
-
-  1. Wie viele Parameter hat die Methode, und welche Typen haben sie?
-  2. Warum ist sie `void`, und was müsste sich ändern, damit sie den Gesamtpreis zurückgibt?
-  3. Kann eine Methode den Namen und den Gesamtpreis gleichzeitig zurückgeben?
-  4. In `main` gibt es eine Variable `menge`. Ändert `menge = menge + 1;` innerhalb von `zeigeRechnung` diese Variable?
-teile:
-  - typ: text
-    muster: |
-      1. Sie hat drei Parameter: `name` vom Typ `String`, `menge` vom Typ `int` und `preis` vom Typ `double`.
-      2. `void` heißt, sie liefert nichts zurück. Sie gibt die Rechnung nur auf der Konsole aus. Für einen
-         Rückgabewert würde ich den Rückgabetyp auf `double` ändern und am Ende `return menge * preis;` schreiben.
-      3. Nein, `return` liefert genau einen Wert. Man könnte zwei Methoden schreiben oder beides in einen
-         String packen. Mit Arrays geht es später auch anders, siehe
-         [12.6 Arrays als Parameter und Rückgabewert](/lernen/ep1/arrays/arrays-als-parameter-und-rueckgabewert).
-      4. Nein. Wegen call-by-value ist der Parameter `menge` eine Kopie. Die Änderung betrifft nur die Kopie,
-         die Variable in `main` bleibt unverändert. Außerdem sind die lokalen Variablen von `main` in
-         `zeigeRechnung` gar nicht sichtbar.
-hinweise:
-  - Zähle die Parameter in den runden Klammern. Jeder hat einen Typ und einen Namen.
-  - Für Frage 4 denk an call-by-value und an die Sichtbarkeit lokaler Variablen.
-loesung: |
-  **Ansatz:** Jede Frage mit dem passenden Begriff beantworten: Parameterliste, Rückgabetyp, `return`, call-by-value.
-  ---
-  1 und 2: drei Parameter `String`, `int`, `double`. `void` heißt keine Rückgabe. Mit Rückgabetyp `double` und `return menge * preis;` gäbe sie den Gesamtpreis zurück.
-  ---
-  3: Nein, genau ein Rückgabewert.
-  ---
-  4: Nein, call-by-value. Der Parameter ist eine Kopie, und `main`s Variablen sind in der Methode ohnehin unsichtbar.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Ein Aufruf springt in die Methode, führt sie vollständig aus und kehrt
-  direkt hinter die Aufrufstelle zurück. Dabei werden die Argumente als Kopien übergeben (call-by-value).
-  (2) Eine Methode liefert mit `return` genau einen Wert. Ausgaben sind Seiteneffekte und erscheinen
-  vor der Zeile, die `println` mit dem Rückgabewert druckt. (3) Überladene Methoden unterscheiden sich in
-  den Parametertypen. Java wählt die passendste Variante, und gute Varianten rufen einander auf, statt
-  Code zu kopieren. Ebenso gute Antworten sind die Regeln zur Sichtbarkeit oder das Prüfen von Vor- und
-  Nachbedingungen mit Gegenbeispielen.
-```
 
 :::zusammenfassung
 1. **Eine Methode** ist ein benannter Codeblock mit Kopf (`public static`, Rückgabetyp, Name, Parameterliste) und Rumpf. Sie läuft nur, wenn sie aufgerufen wird. Nach dem Aufruf geht es direkt hinter der Aufrufstelle weiter.

@@ -681,16 +681,6 @@ loesung: |
   Probe mit 6: Die Folge 6, 3, 10, 5, 16, 8, 4, 2, 1 hat 8 Pfeile, also 8 Durchläufe. Bei `n = 1` ist `1 != 1` sofort falsch, und es wird `0` ausgegeben.
 ```
 
-```reflexion
-frage: Warum muss im Rumpf jeder while-Schleife etwas stehen, das eine Variable aus der Bedingung verändert? Gibt es eine Ausnahme?
-antwort: |
-  Die Bedingung wird vor jedem Durchlauf neu ausgewertet. Wenn sich keine Variable darin ändert, liefert sie jedes Mal
-  denselben Wert. War sie beim ersten Mal `true`, bleibt sie `true`, und die Schleife endet nie. Die Ausnahme ist eine
-  Bedingung, die schon beim ersten Prüfen `false` ist. Dann läuft der Rumpf keinmal, und es spielt keine Rolle, was darin
-  steht. Später lernst du noch `break` kennen, das eine Schleife von innen beendet. Auch dann muss aber irgendwann eine
-  Bedingung erfüllt sein, damit `break` ausgeführt wird.
-```
-
 
 ## Die for-Schleife und Intervallgrenzen
 
@@ -1199,14 +1189,6 @@ loesung: |
   Probe am Rand: Für `a = 3`, `b = 4` startet `i` bei 4, und `4 < 4` ist sofort falsch. Es wird nichts ausgegeben, wie verlangt.
 ```
 
-```reflexion
-frage: Warum läuft `for (int i = a; i < b; i++)` genau b − a Mal, wenn b mindestens so groß wie a ist? Erkläre es mit einem kleinen Zahlenbeispiel.
-antwort: |
-  Die Schleife läuft für die Werte a, a + 1, … bis b − 1. Das sind alle ganzen Zahlen von a bis b − 1. Zieht man vom
-  letzten Wert den ersten ab und zählt 1 dazu, erhält man (b − 1) − a + 1 = b − a. Beispiel: `for (int i = 2; i < 5; i++)`
-  läuft für 2, 3 und 4, also dreimal, und 5 − 2 = 3. Mit `<=` kommt der Wert b selbst dazu, deshalb sind es dann b − a + 1 Durchläufe.
-```
-
 
 ## Akkumulieren: Summen, Zähler und Ergebnis-Strings
 
@@ -1684,17 +1666,6 @@ loesung: |
   ```
   ---
   Probe: Für `n = 0` und `n = 1` läuft die Schleife keinmal, ausgegeben wird 1. Für `n = 5`: 1 · 2 · 3 · 4 · 5 = 120.
-```
-
-```reflexion
-frage: Warum startet eine Summe bei 0, ein Produkt bei 1 und ein Ergebnis-String bei ""? Was ginge schief, wenn der String mit null oder mit " " startete?
-antwort: |
-  Der Startwert muss **neutral** sein: Er darf das Ergebnis nicht verändern. Für die Addition ist das 0, für die Multiplikation 1,
-  für das Aneinanderhängen von Text der leere String. Startet der Ergebnis-String mit `" "`, steht am Anfang des Ergebnisses ein
-  überflüssiges Leerzeichen. `null` ist der Wert für „hier ist gar kein String“. Startet der Ergebnis-String mit `null`,
-  schreibt Java beim ersten `+` das Wort `null` als Text davor: Aus `null + "a"` wird `"nulla"`. Fehlt der Startwert ganz,
-  meldet der Compiler zum Beispiel `variable u might not have been initialized` (`u` ist der Name der Variable).
-  Außerdem gilt: Läuft die Schleife keinmal, ist der Startwert das Ergebnis. Auch deshalb muss er für „nichts gesammelt“ stehen.
 ```
 
 
@@ -2243,15 +2214,6 @@ loesung: |
   ```
   ---
   Probe mit `a = 7`, `b = 8`: Keine Zahl passt, das Flag bleibt `true`, und nur `println()` erzeugt eine leere Zeile.
-```
-
-```reflexion
-frage: Warum ist „Trennzeichen vor jeder Zahl außer der ersten“ leichter umzusetzen als „Trennzeichen nach jeder Zahl außer der letzten“?
-antwort: |
-  Ob eine Zahl die erste Ausgabe ist, weiß man in dem Moment, in dem man sie ausgibt: Es wurde vorher noch nichts ausgegeben.
-  Das merkt sich ein einziges Flag. Ob eine Zahl die letzte Ausgabe ist, weiß man dagegen erst, wenn die Schleife fertig ist.
-  Man müsste in die Zukunft schauen, ob noch eine passende Zahl kommt. Deshalb funktioniert `if (i < b)` nur, wenn jede
-  Zahl ausgegeben wird, während das Flag auch bei gefilterten Ausgaben stimmt.
 ```
 
 
@@ -2834,15 +2796,6 @@ loesung: |
   Probe mit `110101` (n = 6): Bei `i = 2` folgen noch 4 Zeichen, also ein Leerzeichen davor. Ergebnis `11 0101`. Bei `11110000` wäre bei `i = 0` die Bedingung `(8 - 0) % 4 == 0` wahr, aber `i > 0` verhindert das Leerzeichen am Anfang.
 ```
 
-```reflexion
-frage: Warum steht bei einer Vorwärtsschleife über einen String i < s.length(), bei einer Rückwärtsschleife aber i >= 0 und nicht i > 0?
-antwort: |
-  Die gültigen Indizes sind 0 bis `s.length() - 1`. Vorwärts darf `i` also höchstens `s.length() - 1` erreichen. Das heißt
-  `i < s.length()`, und `<=` würde einen Index zu weit gehen. Rückwärts ist der kleinste gültige Index 0, und das erste
-  Zeichen steht genau dort. Mit `i > 0` würde die Schleife vor Index 0 aufhören, und das erste Zeichen fehlte. Beide
-  Bedingungen sagen dasselbe: Der Index muss im Bereich von 0 bis Länge minus 1 bleiben.
-```
-
 
 ## Suchen und vorzeitig aufhören
 
@@ -3386,15 +3339,6 @@ loesung: |
   Probe mit `Abrakadabra`, `k = 3`: Treffer bei 3, 5 und 7. Nach dem dritten Treffer wird `i` noch zu 8, dann endet die Schleife. Ausgegeben wird `8 - 1 = 7`.
 ```
 
-```reflexion
-frage: In der Suchschleife steht i < s.length() links und s.charAt(i) != gesucht rechts vom &&. Warum ist diese Reihenfolge nicht egal, obwohl „und“ in der Mathematik vertauschbar ist?
-antwort: |
-  In Java wertet `&&` von links nach rechts aus und hört auf, sobald die linke Seite `false` ist (Kurzschlussauswertung).
-  Steht die Indexprüfung links, wird `charAt(i)` nur aufgerufen, wenn `i` ein gültiger Index ist. Steht sie rechts, wird
-  `charAt(i)` zuerst aufgerufen, auch mit `i = s.length()`, und das Programm stürzt ab. Der Wahrheitswert wäre in beiden
-  Fällen gleich, aber die Nebenwirkung, also der mögliche Absturz, hängt von der Reihenfolge ab.
-```
-
 
 ## do-while und die Wahl der passenden Schleife
 
@@ -3788,15 +3732,6 @@ loesung: |
   ```
   ---
   Probe mit 1000: Ausgaben 0, 0, 0, 1, danach ist `n = 0` und die Schleife endet. Probe mit 0: eine Ausgabe `0`.
-```
-
-```reflexion
-frage: Man kann jede do-while-Schleife auch mit while schreiben. Wie geht das, und warum ist do-while trotzdem manchmal besser?
-antwort: |
-  Man schreibt den Rumpf einmal vor die Schleife und danach eine while-Schleife mit demselben Rumpf:
-  `R; while (B) { R }`. Das ist gleichwertig, verdoppelt aber den Code. Ändert man später den Rumpf, muss man beide
-  Kopien ändern, und vergisst man eine, entsteht ein Fehler. Eine andere Möglichkeit ist eine Hilfsvariable wie
-  `boolean erstes = true;` in der Bedingung. Das macht den Code länger. `do-while` drückt „mindestens einmal“ direkt aus.
 ```
 
 
@@ -4233,15 +4168,6 @@ loesung: |
   ```
   ---
   Probe mit `banana` und `ana`: Startpositionen 0 bis 3. Bei 1 und 3 stimmen alle drei Zeichen überein. Ergebnis 2. Für `abc` und `abcd` gilt schon bei `i = 0`, dass `0 + 4 <= 3` falsch ist. Ergebnis 0.
-```
-
-```reflexion
-frage: Warum ist die Gesamtzahl der inneren Durchläufe bei festen Grenzen ein Produkt und keine Summe? Was ändert sich, wenn die innere Grenze von i abhängt?
-antwort: |
-  Die innere Schleife läuft bei jedem äußeren Durchlauf vollständig. Bei 4 äußeren und 6 inneren Durchläufen kommt der
-  Block „6 innere Durchläufe“ viermal vor, also 6 + 6 + 6 + 6 = 4 · 6. Ein Produkt ist eine wiederholte Summe gleicher
-  Summanden. Hängt die innere Grenze von `i` ab, sind die Summanden verschieden, zum Beispiel 1 + 2 + 3 + 4. Dann muss man
-  sie einzeln bestimmen und addieren. Mit genau dieser Rechnung schätzt man später auch ab, wie lange ein Programm läuft.
 ```
 
 
@@ -4904,59 +4830,8 @@ loesung: |
   Probe mit `K3uchen`: K übernommen. Bei `3` wird `u` dreimal angehängt, `i` springt über das `u`. Dann `chen`. Ergebnis `Kuuuchen`. Die Ziffern 1 und 5 gehören nicht zum Bereich und bleiben stehen.
 ```
 
-```aufgabe
-id: sl-pa-gespraech
-titel: "Feedbackgespräch: Erkläre deine Schleife"
-niveau: 3
-lernziel: 6
-kompetenz: begruenden
-punkte: 2
-angabe: |
-  Im Feedbackgespräch zeigt dir die Tutorin deine Lösung der Aufgabe „Vielfache mit Schrägstrichen umrahmen“ aus
-  [4.4 Trennzeichen und das Zaunpfahlproblem](/lernen/ep1/schleifen/trennzeichen-und-das-zaunpfahlproblem).
-  Gesucht waren die Zahlen aus `[100, 385[`, die durch 7 und durch 11 teilbar sind:
-  ```java
-  System.out.print("/");
-  for (int i = 100; i < 385; i++) {
-      if (i % 7 == 0 && i % 11 == 0) {
-          System.out.print(i + "/");
-      }
-  }
-  ```
-  Sie fragt: a) Warum steht in der Bedingung `i < 385` und nicht `i <= 385`? b) Wie würdest du die Schleife ändern,
-  damit sie nur dreimal statt 285-mal durchläuft? Antworte in ganzen Sätzen.
-teile:
-  - typ: text
-    muster: |
-      a) Das Intervall ist `[100, 385[`. Die eckige Klammer nach der 385 zeigt von der Zahl weg, die 385 gehört also nicht
-      dazu. Deshalb steht `<` und nicht `<=`. Das ist wichtig, denn 385 ist durch 7 und durch 11 teilbar und würde
-      sonst ausgegeben.
-      b) Durch 7 und 11 teilbar sind genau die Vielfachen von 77. Ich starte bei der ersten passenden Zahl im Intervall,
-      154, und springe mit `i += 77` weiter: `for (int i = 154; i < 385; i += 77)`. Dann fällt das `if` weg, und die
-      Schleife läuft nur für 154, 231 und 308. Die Ausgabe bleibt gleich.
-hinweise:
-  - Erkläre die Intervallklammern in Worten und nenne das Vergleichszeichen.
-  - Für b) überlege, welche Zahlen durch 7 und durch 11 teilbar sind und wo die erste davon im Intervall liegt.
-loesung: |
-  **Ansatz:** a) Intervallschreibweise in Schleifengrenzen übersetzen. b) Statt filtern direkt in passenden Schritten springen.
-  ---
-  a) `385[` schließt 385 aus, also `i < 385`. Die Schleife läuft für 100 bis 384, das sind 384 − 100 + 1 = 285 Durchläufe.
-  ---
-  b) Gemeinsame Vielfache von 7 und 11 sind die Vielfachen von 77. Start bei 154 (2 · 77, denn 77 liegt unter 100), Schritt 77: drei Durchläufe statt 285, gleiche Ausgabe.
-```
-
 
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten.
-antwort: |
-  Eine mögliche Auswahl: (1) Eine Schleife wiederholt ihren Rumpf, solange die Bedingung wahr ist. Man versteht sie am
-  sichersten mit einer Trace-Tabelle, die nach jedem Durchlauf alle Variablen festhält. (2) Bei Intervallen entscheidet die
-  linke Klammer über den Startwert und die rechte über `<` oder `<=`. Den ersten und den letzten Durchlauf prüft man immer von
-  Hand. (3) Zwischen n Werten stehen n − 1 Trennzeichen. Bei gefilterter Ausgabe setzt man das Trennzeichen mit einem Flag vor
-  jede Zahl außer der ersten. Gute Antworten sind auch das Akkumulator-Muster oder die Suchschleife mit der Indexprüfung links vom `&&`.
-```
 
 :::zusammenfassung
 1. **while** prüft vor jedem Durchlauf, **do-while** nach jedem Durchlauf (mindestens ein Durchlauf), **for** fasst Initialisierung, Bedingung und Aktualisierung in einer Zeile zusammen. Jede Form lässt sich in jede andere umbauen.

@@ -761,35 +761,6 @@ loesung: |
 ```
 
 ```aufgabe
-id: rk-sa-text-abbruch
-titel: Warum eine Abbruchbedingung?
-niveau: 2
-lernziel: 0
-kompetenz: begruenden
-quelle: Zusatzfrage aus Aufgabenblatt 5, WS 2018 (umformuliert)
-angabe: |
-  Eine Zusatzfrage im Feedbackgespräch lautet: „Warum benötigen Sie bei einer Rekursion eine Abbruchbedingung,
-  und gibt es eine Grenze für die Rekursionstiefe?“ Beantworte beide Teile in drei bis fünf Sätzen.
-teile:
-  - typ: text
-    muster: |
-      Ohne Abbruchbedingung (Basisfall) ruft sich die Methode bei jedem Aufruf wieder selbst auf und hört nie von selbst auf.
-      Jeder noch nicht beendete Aufruf belegt Speicher im Aufrufstapel, weil Java sich seine Parameter und die
-      Rücksprungstelle merken muss. Dieser Speicher ist begrenzt. Darum gibt es eine Grenze für die Rekursionstiefe:
-      Sind zu viele Aufrufe gleichzeitig offen, bricht das Programm mit einem StackOverflowError ab. Auch eine
-      korrekte Rekursion mit sehr großer Tiefe, etwa summe(1000000), kann daran scheitern.
-hinweise:
-  - Was muss sich Java für jeden noch nicht beendeten Aufruf merken?
-  - Wie heißt der Fehler, wenn zu viele Aufrufe gleichzeitig offen sind?
-loesung: |
-  **Ansatz:** Zwei Teile beantworten: Was passiert ohne Basisfall, und warum ist die Tiefe begrenzt?
-  ---
-  Ohne Basisfall folgt auf jeden Aufruf ein weiterer. Die Rekursion endet nie von selbst.
-  ---
-  Jeder offene Aufruf belegt Platz im Aufrufstapel. Ist er voll, bricht Java mit `StackOverflowError` ab. Diese Grenze gilt auch für korrekte, aber sehr tiefe Rekursionen.
-```
-
-```aufgabe
 id: rk-sa-code-ungerade
 titel: Summe der ungeraden Zahlen bis n
 niveau: 3
@@ -852,16 +823,6 @@ loesung: |
   ```
   ---
   Probe: `summeUngerade(8)` geht zu `summeUngerade(7) = 7 + 5 + 3 + 1 + summeUngerade(-1) = 16 + 0 = 16`.
-```
-
-```reflexion
-frage: Warum ist es beim Schreiben einer Rekursion erlaubt, dem Selbstaufruf einfach zu „vertrauen“? Was muss dafür gelten?
-antwort: |
-  Der Selbstaufruf löst dieselbe Aufgabe für eine kleinere Eingabe. Wenn die Methode für den Basisfall stimmt und
-  jeder rekursive Fall aus einem richtigen kleineren Ergebnis ein richtiges größeres macht, dann stimmt sie für
-  alle Eingaben: erst für den Basisfall, dann für den nächstgrößeren Fall, dann für den nächsten und so weiter.
-  Dafür müssen zwei Dinge gelten. Der Basisfall muss richtig sein, und jeder Aufruf muss ihn über den Fortschritt
-  tatsächlich erreichen. Fehlt eines davon, ist das Vertrauen nicht gerechtfertigt.
 ```
 
 ## Der Aufrufstapel: Hinweg und Rückweg
@@ -1449,16 +1410,6 @@ loesung: |
   Rückweg: In `f(1)` ist `r = 0 + 1 = 1`, Ausgabe `z1`. In `f(2)` ist `r = 1 + 2 = 3`, Ausgabe `z3`. In `f(3)` ist `r = 3 + 3 = 6`, Ausgabe `z6`.
   ---
   Erst danach druckt `main` den Rückgabewert 6. Kontrolle: acht Zeilen, die letzte ist die Summe `1 + 2 + 3`.
-```
-
-```reflexion
-frage: Warum erscheinen Ausgaben, die hinter dem Selbstaufruf stehen, in umgekehrter Reihenfolge? Erkläre es mit dem Bild des Tellerstapels.
-antwort: |
-  Jeder Aufruf legt einen Teller auf den Stapel und wartet beim Selbstaufruf. Der zuletzt aufgelegte Teller gehört
-  zum zuletzt begonnenen Aufruf, und nur der oberste Teller kann weitermachen. Also wird der zuletzt begonnene Aufruf
-  als erster fertig und erreicht als erster die Anweisung hinter dem Selbstaufruf. Danach ist der Teller darunter dran.
-  Die Aufrufe werden in umgekehrter Reihenfolge fertig, wie sie begonnen haben. Darum erscheinen auch ihre späten
-  Ausgaben umgekehrt.
 ```
 
 ## Rekursion mit ganzen Zahlen
@@ -2293,16 +2244,6 @@ loesung: |
   ```
   ---
   Probe `31004`: Der Selbstaufruf gibt `31` aus. Danach ist `rest = 4`, also `nullen = "00"`, und es erscheint `,004`.
-```
-
-```reflexion
-frage: Bei `aufsteigend(start, end)` wird `start` größer, bei `quersumme(n)` wird `n` kleiner. Was haben beide Fortschritte gemeinsam, das die Rekursion beenden lässt?
-antwort: |
-  Beide machen die verbleibende Aufgabe kleiner. Bei `aufsteigend` wird das Intervall `[start, end]` um eine Zahl
-  kürzer, bei `quersumme` verliert die Zahl eine Ziffer. Man kann also eine Größe angeben, die bei jedem Aufruf
-  sinkt: die Länge `end - start + 1` des Intervalls oder die Anzahl der Ziffern. Diese Größe ist eine ganze Zahl und
-  kann nicht unendlich oft sinken, ohne den Basisfall zu erreichen. Ob der Parameter dabei größer oder kleiner wird,
-  ist egal. Entscheidend ist, dass die Aufgabe schrumpft.
 ```
 
 ## Rekursion mit Strings
@@ -3203,15 +3144,6 @@ loesung: |
   C: `c("")` landet nicht im Basisfall und ruft `charAt(0)` auf. Es folgt eine `StringIndexOutOfBoundsException`. D liefert `"abc"` unverändert, endet aber immer. Aussagen 1, 2 und 4 sind richtig.
 ```
 
-```reflexion
-frage: Beim Umdrehen steht das eigene Zeichen hinter dem Ergebnis des Rests, bei `nurZiffern` davor. Woran erkennst du an einer Angabe, welche der beiden Stellen richtig ist?
-antwort: |
-  Ich frage mich, wo das erste Zeichen im fertigen Ergebnis stehen soll. Soll die Reihenfolge erhalten bleiben, steht
-  das erste Zeichen auch im Ergebnis vor allen späteren Zeichen. Dann kommt das eigene Stück vor das Ergebnis des
-  Rests. Soll sich die Reihenfolge umdrehen, gehört das erste Zeichen ganz ans Ende, also hinter das Ergebnis des
-  Rests. Am schnellsten prüfe ich das mit einem Beispiel aus zwei Zeichen, etwa `"ab"`.
-```
-
 ## Zusätzliche Parameter: Index, Zähler und zweiter String
 
 ```aufgabe
@@ -3978,35 +3910,6 @@ loesung: |
   Probe `"Kiosk"`: Der letzte Aufruf mit Treffer liefert `"kk1"`. Davor `"skk1"`, `"oskk1"`, `"ioskk1"`. Das `K` ist ein Treffer, also `"KK"` und `1` wird zu `2`: `"KKioskk2"`.
 ```
 
-```aufgabe
-id: rk-zp-text-kein-index
-titel: Warum nicht einfach einen Parameter ergänzen?
-niveau: 2
-lernziel: 6
-kompetenz: begruenden
-angabe: |
-  Eine Kollegin sagt: „Für `mitIndex(String s)` füge ich einfach einen zweiten Parameter `int i` hinzu. Das ist viel
-  leichter.“ Erkläre in drei bis vier Sätzen, warum das im Programmiertest Punkte kostet. Sag auch, wie man das
-  Problem trotzdem löst.
-teile:
-  - typ: text
-    muster: |
-      Die Einschränkungen des Tests verbieten, die vorgegebenen Methodenköpfe zu erweitern oder zu ändern. Die
-      Testfälle rufen genau `mitIndex(s)` mit einem Argument auf, eine Methode mit zwei Parametern passt dazu nicht.
-      Eine Hilfsmethode mit dem Zusatzparameter ist ebenfalls verboten. Man löst das Problem, indem man die
-      fehlende Information anders gewinnt: Arbeitet man von hinten, ist der Index des letzten Zeichens gleich
-      s.length() - 1.
-hinweise:
-  - Welche Einschränkung des Programmiertests betrifft die Methodenköpfe?
-  - Welche Information liefert `s.length()`, wenn man das letzte Zeichen abspaltet?
-loesung: |
-  **Ansatz:** Regel des Tests nennen und dann die Alternative zeigen.
-  ---
-  Methodenköpfe dürfen nicht erweitert werden, und Hilfsmethoden sind verboten. Die Testfälle rufen genau die vorgegebene Signatur auf.
-  ---
-  Die Position bekommt man ohne Zusatzparameter, wenn man von hinten arbeitet. Der Index des letzten Zeichens ist `s.length() - 1`.
-```
-
 ## Rekursiv nach Vorgabe: Schleifenverbot und Bewertung
 
 ```aufgabe
@@ -4712,17 +4615,6 @@ loesung: |
   Basisfall: `s.length() == 1` fängt `""` nicht ab, und ein einzelner Vokal würde unverändert zurückgegeben. Richtig ist `if (s.isEmpty()) { return ""; }`.
   ---
   Probe: `ohneVokale("aua")` entfernt alle drei Vokale und liefert `""`. `ohneVokale("rekursion")` liefert `"rkrsn"`.
-```
-
-```reflexion
-frage: Warum verlangen die Blätter und der Test Rekursion ganz ohne Schleifen, obwohl viele dieser Aufgaben mit einer Schleife kürzer wären?
-antwort: |
-  Die Aufgaben prüfen, ob man rekursiv denken kann: eine Aufgabe auf eine kleinere derselben Art zurückführen, einen
-  Basisfall festlegen und das Ergebnis über Rückgabewerte zusammensetzen. Mit einer Schleife in der Methode könnte
-  man die Rekursion umgehen und hätte genau das nicht gezeigt. Außerdem gibt es Aufgaben, die rekursiv viel natürlicher
-  sind, etwa Fraktale in Kapitel 11 oder Verfahren auf Arrays, die ein Array in zwei Hälften teilen und jede Hälfte
-  wieder genauso behandeln. Dafür braucht man diese Denkweise sicher.
-  Das Schleifenverbot ist also eine Übungsregel, keine Aussage, dass Rekursion immer besser ist.
 ```
 
 ## Gemischte Wiederholung
@@ -5612,67 +5504,7 @@ loesung: |
   Probe: `teilbarAbsteigend(4, 20, 6)` prüft 20, 19, …, 4 und gibt 18, 12, 6 aus. `zaehleZiffer(70070, 0)` findet die Nullen an drei Stellen.
 ```
 
-```aufgabe
-id: rk-pruef-feedback
-titel: Fragen im Feedbackgespräch zu deiner Lösung
-niveau: 3
-punkte: 3
-lernziel: 2
-kompetenz: begruenden
-quelle: Zusatzfragen der Aufgabenblätter 3 (WS 2021, SS 2020) und 5 (WS 2018), auf Zahlen-Rekursion übertragen
-angabe: |
-  (Zeitrichtwert: 5 Minuten) Du hast für Blatt 3 diese Lösung abgegeben:
-
-  ```java
-  public static void druckeGeradeAufsteigend(int start, int end) {
-      if (start > end) {
-          return;
-      }
-      if (start % 2 == 0) {
-          System.out.println(start);
-      }
-      druckeGeradeAufsteigend(start + 1, end);
-  }
-  ```
-
-  Beantworte die drei Fragen der Tutorin in je ein bis zwei Sätzen.
-
-  1. Wie oft wird die Methode beim Aufruf `druckeGeradeAufsteigend(3, 10)` insgesamt aufgerufen?
-  2. Was musst du ändern, damit die geraden Zahlen absteigend erscheinen? Nenne zwei Möglichkeiten.
-  3. Warum lautet dein Basisfall `start > end` und nicht `start == end`?
-teile:
-  - typ: text
-    muster: |
-      1. Die Aufrufe haben start = 3, 4, …, 10 und zuletzt 11. Das sind 9 Aufrufe, der letzte ist der Basisfall.
-      2. Entweder setze ich das if mit der Ausgabe hinter den Selbstaufruf, dann erscheinen die Zahlen auf dem
-         Rückweg. Oder ich arbeite von oben: Ich prüfe und gebe end aus und rufe mich mit (start, end - 1) auf.
-      3. Mit start == end würde die Methode beim letzten Wert aufhören, bevor sie ihn prüft. Die 10 fehlte dann.
-         start > end bedeutet „Intervall leer“ und behandelt auch den Fall start == end noch normal.
-hinweise:
-  - Zähle die Werte von `start` bis zu dem, bei dem `start > end` gilt.
-  - Für die Reihenfolge entscheidet die Stelle der Ausgabe oder die Richtung des Fortschritts.
-loesung: |
-  **Ansatz:** Jede Frage mit einem Begriff aus dem Kapitel beantworten: Aufrufanzahl, Hin- und Rückweg, Basisfall.
-  ---
-  1. Neun Aufrufe: `start` von 3 bis 11, der letzte ist der Basisfall.
-  ---
-  2. Ausgabe hinter den Selbstaufruf setzen oder mit `end - 1` von oben her arbeiten.
-  ---
-  3. `start == end` würde die letzte Zahl des Intervalls nicht mehr prüfen. `start > end` heißt „nichts mehr übrig“.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Eine rekursive Methode braucht einen Basisfall ohne Selbstaufruf und einen Fortschritt,
-  der jeden erlaubten Aufruf sicher zum Basisfall führt. Fehlt eines davon, endet sie mit einem StackOverflowError.
-  (2) Jeder Aufruf hat einen eigenen Rahmen auf dem Aufrufstapel. Ausgaben vor dem Selbstaufruf erscheinen auf dem
-  Hinweg, Ausgaben danach in umgekehrter Reihenfolge auf dem Rückweg. (3) Zahlen zerlegt man mit `% 10` und `/ 10`,
-  Strings mit `charAt(0)` und `substring(1)`, und das Ergebnis entsteht aus dem eigenen Beitrag und dem Ergebnis des
-  Selbstaufrufs. Ebenso gute Antworten sind die Einschränkungen des Programmiertests oder der Umbau einer Schleife.
-```
 
 :::zusammenfassung
 1. **Rekursion** heißt: Eine Methode ruft sich selbst auf und führt so eine Aufgabe auf eine kleinere derselben Art zurück. Jeder Selbstaufruf ist ein gewöhnlicher Aufruf mit eigenen Parametern und lokalen Variablen.

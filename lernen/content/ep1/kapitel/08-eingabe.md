@@ -962,20 +962,6 @@ loesung: |
   Probe: 1 · 3600 + 2 · 60 + 5 = 3725. Bei 36000 Sekunden: 10 Stunden, Rest 0, also `10:00:00`.
 ```
 
-```reflexion
-frage: Warum erzeugt man den Scanner einmal am Anfang von main und nicht vor jedem einzelnen Einlesen neu? Überlege, bevor du die Antwort aufdeckst.
-antwort: |
-  Ein Scanner liest die Eingabe nicht Zeichen für Zeichen, sondern holt sich gleich einen ganzen Block auf
-  Vorrat und merkt sich den Rest. Dieser Vorrat heißt **Puffer**. Erzeugt man einen zweiten Scanner, kennt
-  er den Puffer des ersten nicht. Was der erste schon geholt, aber noch nicht geliefert hat, ist für den
-  zweiten verloren. Beim langsamen Eintippen fällt das oft nicht auf, weil der Puffer dann nur die gerade
-  getippte Zeile enthält. Wird die Eingabe aber auf einmal eingefügt, wie bei den automatischen Tests
-  dieses Kurses, bricht das Programm ab. Java meldet dann eine `NoSuchElementException`, also „es gibt
-  keine weitere Eingabe“ (mehr zu solchen Abbrüchen in
-  [8.2 Wie der Scanner die Eingabe zerlegt](/lernen/ep1/eingabe/wie-der-scanner-die-eingabe-zerlegt)).
-  Darum gilt: ein Scanner pro Programm, und Methoden bekommen ihn als Parameter.
-```
-
 ## Wie der Scanner die Eingabe zerlegt
 
 ```aufgabe
@@ -1581,17 +1567,6 @@ loesung: |
   Probe mit `3` und `4 -2 9`: Summe 4 − 2 + 9 = 11, Maximum 9. Wie die Zahlen auf Zeilen verteilt sind, spielt für `nextInt()` keine Rolle.
 ```
 
-```reflexion
-frage: 'Eine Zusatzfrage aus dem Feedbackgespräch lautet: „Wie können die eingegebenen Daten (beziehungsweise deren Datentypen) bei der Verwendung des Scanners unterschieden werden?“ Was antwortest du nach diesem Abschnitt, und was fehlt dir noch?'
-antwort: |
-  Der Scanner sieht nur Text. Er zerlegt ihn an Leerraum in Token. Ob ein Token eine ganze Zahl, eine
-  Kommazahl oder ein Wort ist, entscheidet sich an seiner Form: nur Ziffern mit optionalem Vorzeichen ist
-  ein `int`, mit Dezimaltrennzeichen ein `double`, alles andere nur ein `String`. Mit `nextInt()` verlangt
-  man einen bestimmten Typ, und passt das Token nicht, kommt eine `InputMismatchException`. Was noch fehlt:
-  Man kann den Typ auch **vorher prüfen**, ohne etwas zu lesen. Dafür gibt es `hasNextInt()`,
-  `hasNextDouble()` und `hasNext()`. Das ist das Thema von [8.4 Eingaben prüfen mit hasNextInt](/lernen/ep1/eingabe/eingaben-pruefen-mit-hasnextint).
-```
-
 ## Ganze Zeilen und die nextLine-Falle
 
 ```aufgabe
@@ -2193,16 +2168,6 @@ loesung: |
   `next()` liest `hinter`. `nextLine()` liefert den Rest ` den` und springt in Zeile 3. Das letzte `nextLine()` liefert `Bergen`.
   ---
   Ausgabe: `7| Zwerge|hinter| den|Bergen`. Die Trennstriche zeigen, wo jeder String beginnt und endet.
-```
-
-```reflexion
-frage: 'Eine naheliegende Nachfrage im Feedbackgespräch (sie steht so nicht auf den bisherigen Blättern): „Was ist der Puffer des Scanners, und warum liefert nextLine() nach nextInt() einen leeren String?“ Formuliere zuerst laut eine Antwort in drei Sätzen.'
-antwort: |
-  Der Puffer ist der Zwischenspeicher, in dem der Scanner die eingegebenen Zeichen hält. Jeder Leseaufruf
-  entnimmt ab dem Lesezeiger Zeichen, und was nicht entnommen wurde, sieht der nächste Aufruf. `nextInt()`
-  entnimmt nur die Ziffern und lässt den Zeilenumbruch der Enter-Taste liegen. `nextLine()` liest bis zum
-  nächsten Zeilenumbruch, und der steht sofort an. Darum liefert es die Zeichen davor, also keine. Abhilfe:
-  einmal `sc.nextLine();` ohne Speichern aufrufen, damit der Rest der Zeile verschwindet.
 ```
 
 ## Eingaben prüfen mit hasNextInt
@@ -2837,17 +2802,6 @@ loesung: |
   Probe mit `2 sehr gut 1 7 3.0 3`: gültig sind 2, 1 und 3. `sehr`, `gut` und `3.0` sind keine ganzen Zahlen, 7 liegt außerhalb. Schnitt 6 / 3 = 2.0.
 ```
 
-```reflexion
-frage: 'Zusatzfrage aus Blatt 2: „Warum muss eine ungültige Eingabe aus dem Input-Stream des Scanners entfernt werden?“ Antworte so, als würdest du es im Feedbackgespräch erklären.'
-antwort: |
-  Die Prüfmethoden wie `hasNextInt()` schauen nur auf das nächste Token und nehmen es nicht heraus. Auch
-  ein gescheitertes `nextInt()` lässt das Token im Puffer liegen. Solange niemand das ungültige Token
-  entnimmt, sieht jede weitere Prüfung wieder genau dieses Token. Eine Schleife „solange keine ganze Zahl,
-  melde einen Fehler“ läuft dann endlos, oder das nächste `nextInt()` stürzt ab. Darum muss man das Token
-  mit `sc.next()` oder die Zeile mit `sc.nextLine()` entnehmen. Erst dann kommt die nächste Eingabe an die
-  Reihe.
-```
-
 ## Eingabemethoden und der Taschenrechner
 
 ```aufgabe
@@ -2883,7 +2837,7 @@ sich, was der Methode übergeben werden muss und welchen Rückgabetyp diese habe
 **Was geht hinein?** Die Methode muss lesen können, also braucht sie einen Scanner. Sie bekommt ihn als
 **Parameter**: `int readOperand(Scanner sc)`. In `main` wird **ein** Scanner erzeugt und an jede
 Eingabemethode übergeben. Das ist kein Zufall. Ein zweiter Scanner auf `System.in` würde den Puffer des
-ersten nicht kennen (siehe die Reflexion am Ende von [8.1 Eingabe mit Scanner: das erste Programm](/lernen/ep1/eingabe/eingabe-mit-scanner-das-erste-programm)).
+ersten nicht kennen (siehe [8.1 Eingabe mit Scanner: das erste Programm](/lernen/ep1/eingabe/eingabe-mit-scanner-das-erste-programm)).
 
 **Was kommt heraus?** Heraus kommt der gelesene und **schon geprüfte** Wert. Sein Typ passt zu dem, was
 `main` damit macht: ein `int` für einen Operanden, ein `char` für einen Operator und ein `boolean` für die
@@ -3721,18 +3675,6 @@ loesung: |
   Probe mit `hundert 91 9 90` und `[10, 90]`: drei Meldungen, dann liefert die Methode 90. Die obere Grenze gehört dazu.
 ```
 
-```reflexion
-frage: Warum liefert readOperator einen char und nicht den gelesenen String? Und warum prüft nicht main die Eingaben, sondern die Methode selbst?
-antwort: |
-  Nach der Prüfung steht fest, dass die Zeile genau ein Zeichen hat. Ein `char` drückt genau das aus, und
-  `main` kann ihn direkt in `switch` oder mit `op == '/'` verwenden. Ein String würde Fragen offenlassen,
-  etwa ob er leer sein kann, und Vergleiche bräuchten `equals`. Die Prüfung gehört in die Methode, weil
-  dann `main` nur noch mit gültigen Werten arbeitet. Jede Methode hat eine klare Aufgabe, und ihr Ergebnis
-  ist durch eine Nachbedingung beschrieben, etwa „liefert eines der Zeichen + - * / %“ (vergleiche
-  [6.6 Vor- und Nachbedingungen](/lernen/ep1/methoden/vor-und-nachbedingungen)). So lässt sich jede
-  Methode allein testen, wie in den Aufgaben dieses Abschnitts.
-```
-
 ## Zufallszahlen und das Ratespiel
 
 ```aufgabe
@@ -4344,17 +4286,6 @@ loesung: |
   Ein Durchlauf mit ungültiger Eingabe erhöht `versuche` nicht. Darum endet die Schleife erst nach `maxVersuche` gültigen Tipps.
   ---
   Probe mit `geheim = 50`, Eingabe `20 x 60 50`: `Groesser` (Versuch 1), `Ungueltig`, `Kleiner` (Versuch 2), dann richtig im Versuch 3. Rückgabe 3.
-```
-
-```reflexion
-frage: Warum ist ein fester Seed beim Testen des Ratespiels sinnvoll, beim fertigen Spiel aber nicht?
-antwort: |
-  Mit einem festen Seed wie `new Random(42)` ist die geheime Zahl bei jedem Start dieselbe. Dann kann man
-  eine bestimmte Folge von Tipps eingeben und vorher wissen, welche Ausgaben richtig sind. Ein Fehler lässt
-  sich so jederzeit wiederholen und nach der Korrektur erneut prüfen. Beim fertigen Spiel wäre genau das
-  langweilig: Wer einmal gespielt hat, kennt die Zahl. Darum nimmt man dort `new Random()` ohne Seed. Ein
-  guter Weg ist, die Zahl in einer eigenen Methode zu erzeugen, die das Random-Objekt als Parameter bekommt.
-  Dann wechselt man zwischen Test und Spiel nur an einer einzigen Stelle.
 ```
 
 ## Gemischte Wiederholung
@@ -5297,67 +5228,7 @@ loesung: |
   `A` ist kein Kleinbuchstabe: `Ungueltig`, kein Versuch weg. Das zweite `a` wurde schon geraten und kostet den letzten Versuch: `Ja_a (0)`. Die Schleife endet, im Wort steht noch ein `_`, also `Verloren!`. Das `v` wird nie gelesen.
 ````
 
-````aufgabe
-id: ei-pa-feedback
-titel: Zusatzfragen im Feedbackgespräch
-niveau: 3
-punkte: 2
-lernziel: 3
-kompetenz: begruenden
-quelle: Aufgabenblatt 2 WS 2021, Aufgabe 5, Zusatzfragen 1 und 2 (ergänzt)
-angabe: |
-  (Zeitrichtwert: 8 Minuten) Beantworte die Fragen in ganzen Sätzen, so wie du sie im Feedbackgespräch
-  mündlich beantworten würdest.
-
-  1. Wie können die eingegebenen Daten (beziehungsweise deren Datentypen) bei der Verwendung des Scanners
-     unterschieden werden?
-  2. Warum muss eine ungültige Eingabe aus dem Eingabestrom des Scanners entfernt werden?
-  3. Warum bekommt deine Methode `readIntValue` den Scanner als Parameter, statt selbst einen zu erzeugen?
-  4. Was ist der Unterschied zwischen `next()` und `nextLine()`?
-teile:
-  - typ: text
-    muster: |
-      1. Der Scanner zerlegt die Eingabe an Leerraum in Token. Mit den has-Methoden prüfe ich, bevor ich
-         lese, welche Form das nächste Token hat: `hasNextInt()` für eine ganze Zahl, `hasNextDouble()`
-         für eine Kommazahl, `hasNext()` für irgendein Token. Erst danach lese ich mit `nextInt()`,
-         `nextDouble()` oder `next()`.
-      2. Die has-Methoden schauen nur und entnehmen nichts, und auch ein gescheitertes `nextInt()` lässt
-         das Token liegen. Ohne Entfernen sieht jede weitere Prüfung dasselbe ungültige Token, und die
-         Validierungsschleife läuft endlos. Darum entferne ich es mit `sc.next()` oder die ganze Zeile mit
-         `sc.nextLine()`.
-      3. Ein Scanner hält gelesene Zeichen in seinem Puffer. Ein zweiter Scanner auf `System.in` kennt
-         diesen Puffer nicht, und Eingaben gehen verloren, vor allem wenn sie auf einmal ankommen. Mit einem
-         gemeinsamen Scanner als Parameter liest jede Methode genau dort weiter, wo die vorige aufgehört hat.
-      4. `next()` überspringt Leerraum und liefert ein einzelnes Wort. `nextLine()` überspringt nichts und
-         liefert den Rest der aktuellen Zeile samt Leerzeichen, auch den leeren String. Nach `nextInt()`
-         liefert `nextLine()` deshalb oft `""`, und man muss den Puffer vorher mit einem zusätzlichen
-         `sc.nextLine()` leeren.
-hinweise:
-  - Denk an das Bild vom Briefkasten mit Sichtfenster und an den Lesezeiger.
-  - Jede Antwort braucht einen Grund, nicht nur eine Behauptung. Nenne zu Frage 3 die Ursache „Puffer“.
-loesung: |
-  **Ansatz:** Jede Frage mit dem passenden Begriff beantworten: Token und has-Methoden, Schauen gegenüber Nehmen, Puffer, Lesezeiger.
-  ---
-  1 und 2: Typ vorher mit `hasNextInt()` und Co. prüfen. Ungültiges muss entnommen werden, weil die Prüfung sonst immer dasselbe Token sieht.
-  ---
-  3: Ein Scanner pro Programm, sonst gehen Eingaben im Puffer eines anderen Scanners verloren.
-  ---
-  4: `next()` liest ein Token, `nextLine()` den Rest der Zeile. Daraus folgt die nextLine-Falle nach `nextInt()`.
-````
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Der Scanner zerlegt die Eingabe an Leerraum in Token. `next()`, `nextInt()`
-  und `nextDouble()` lesen je ein Token, `nextLine()` liest den Rest der aktuellen Zeile. (2) Nach
-  `nextInt()` bleibt der Zeilenumbruch im Puffer. Ein folgendes `nextLine()` liefert dann `""`, darum
-  leert man den Puffer vorher mit einem zusätzlichen `sc.nextLine();`. (3) Eingaben prüft man vor dem
-  Lesen mit `hasNextInt()` in einer Schleife und entfernt ungültige Token mit `next()`, sonst entsteht eine
-  Endlosschleife. Ebenso gute Antworten sind „ein Scanner pro Programm, als Parameter weitergeben“ oder
-  die Intervallformel `rnd.nextInt(b - a + 1) + a`.
-```
 
 :::zusammenfassung
 1. **Einlesen braucht drei Zeilen:** `import java.util.Scanner;`, einmal `Scanner sc = new Scanner(System.in);` und dann ein passender Leseaufruf wie `int n = sc.nextInt();`. Das Programm wartet an dieser Stelle auf eine Eingabe mit Enter. Die Eingabe selbst ist nicht Teil der Programmausgabe.

@@ -708,16 +708,6 @@ loesung: |
   **Terminierung:** `t` wächst in jedem Durchlauf um 1. Spätestens bei `t = n` gilt `n % n == 0`, und die Schleife endet. Für die Primzahl 1 000 003 läuft der Rumpf `t++` genau 1 000 001-mal, denn `t` steigt von 2 bis 1 000 003. Für 15 läuft er nur einmal, von 2 auf 3.
 ```
 
-```reflexion
-frage: Warum reicht es nicht, ein Programm mit vielen Eingaben zu testen, um zu zeigen, dass es für jede erlaubte Eingabe terminiert? Wie begründest du die Terminierung beim Euklidischen Algorithmus stattdessen?
-antwort: |
-  Es gibt unendlich viele erlaubte Eingaben, und jeder Test prüft nur eine davon. Die Subtraktions-Fassung des ggT
-  besteht viele Tests und hängt trotzdem bei `a = 5`, `b = 0`. Man braucht deshalb ein Argument, das für alle Eingaben
-  gilt. Beim Euklidischen Algorithmus mit Rest ist das der Wert von `b`: Der neue Wert `a % b` ist immer echt kleiner
-  als das alte `b` und nie negativ. Eine ganze Zahl, die bei 0 nicht weiter fallen kann und in jeder Runde kleiner
-  wird, erreicht nach endlich vielen Runden die 0. Dann endet die Schleife.
-```
-
 
 ## Laufzeit messen und Schritte zählen
 
@@ -1149,16 +1139,6 @@ loesung: |
   Dritte Schleife: `k` = 6, 3, 1, also 3 Durchläufe. Bei `k = 0` ist `0 > 0` falsch.
   ---
   Ausgabe `15`, denn 12 + 3 = 15.
-```
-
-```reflexion
-frage: Zwei Studierende messen dieselbe Methode und bekommen 2 Sekunden und 5 Sekunden. Warum ist das kein Widerspruch, und warum ist das Zählen der Ausführungen trotzdem für beide gleich?
-antwort: |
-  Die Zeit hängt vom Rechner ab: vom Prozessor, von der Java-Version und davon, was gleichzeitig läuft. Ein
-  langsamerer Rechner braucht für jede einzelne Operation länger. Die Anzahl der ausgeführten Operationen hängt
-  dagegen nur vom Code und von der Eingabe ab. Zählen beide die Ausführungen der innersten Zeile, kommen sie auf
-  dieselbe Zahl, zum Beispiel n(n − 1)/2 Vergleiche. Deshalb vergleicht man Algorithmen über das Zählen und nicht
-  über eine einzelne Messung.
 ```
 
 
@@ -1606,15 +1586,6 @@ loesung: |
   Jeder Treffer überschreibt `pos`. Bei `{3, 7, 3}` und `x = 3` bleibt `pos = 2`, die letzte Fundstelle. Aussage 2 stimmt.
 ```
 
-```reflexion
-frage: Eine Methode braucht im besten Fall 1 Schritt und im schlechtesten Fall n² Schritte. Ihre Kollegin sagt, die Methode sei schnell, weil der beste Fall so gut ist. Was antwortest du ihr?
-antwort: |
-  Der beste Fall sagt nur, was bei einer besonders günstigen Eingabe passiert. Man kann sich nicht darauf verlassen,
-  dass genau diese Eingabe kommt. Garantieren kann man nur den schlechtesten Fall: Kein Aufruf mit Größe n braucht
-  mehr als n² Schritte, aber manche brauchen so viele. Für n = 1000 sind das eine Million Schritte. Deshalb beurteilt
-  man die Laufzeit nach dem schlechtesten Fall, und die Methode ist für große n eher langsam.
-```
-
 
 ## Die O-Notation: nur das Wachstum zählt
 
@@ -1940,34 +1911,6 @@ ist der Summand mit dem höchsten Exponenten, egal wo er steht und welchen Fakto
 
 
 ```aufgabe
-id: ko-o-beweis-text
-titel: Eine Schranke beweisen
-niveau: 3
-lernziel: 3
-kompetenz: begruenden
-angabe: |
-  Zeige mit der Definition, dass f(n) = 5n² + 3n + 2 in O(n²) liegt. Gib c und n₀ ausdrücklich an und begründe jede
-  Ungleichung in einem Satz.
-teile:
-  - typ: text
-    muster: |
-      Für n ≥ 1 gilt n ≤ n² und 1 ≤ n². Deshalb ist 3n ≤ 3n² und 2 ≤ 2n². Daraus folgt
-      5n² + 3n + 2 ≤ 5n² + 3n² + 2n² = 10n². Mit c = 10 und n₀ = 1 gilt also f(n) ≤ c · n² für alle n ≥ n₀. Das ist
-      genau die Definition von f(n) ∈ O(n²). Andere Paare sind auch richtig, etwa c = 6 mit n₀ = 4.
-hinweise:
-  - Schätze jeden Summanden nach oben durch ein Vielfaches von n² ab. Für n ≥ 1 ist n ≤ n².
-  - Addiere die Faktoren 5, 3 und 2. Das ergibt ein passendes c, und n₀ = 1 genügt.
-loesung: |
-  **Ansatz:** Jeden Summanden durch ein Vielfaches von n² nach oben abschätzen, dann die Faktoren addieren.
-  ---
-  Für n ≥ 1 gilt n ≤ n², also 3n ≤ 3n². Ebenso gilt 1 ≤ n², also 2 ≤ 2n².
-  ---
-  Zusammen: 5n² + 3n + 2 ≤ 5n² + 3n² + 2n² = 10n² für alle n ≥ 1.
-  ---
-  Mit c = 10 und n₀ = 1 ist die Definition erfüllt. Probe bei n = 1: f(1) = 10 ≤ 10. Bei n = 4: f(4) = 94 ≤ 160.
-```
-
-```aufgabe
 id: ko-o-exponential-rf
 titel: Schranken für Zweierpotenzen
 niveau: 3
@@ -2004,16 +1947,6 @@ loesung: |
   $2^{n+1} = 2 \cdot 2^n$: fester Faktor 2, Aussage 1 stimmt. $2^{2n} = 2^n \cdot 2^n$: Der Faktor wächst mit n, Aussage 2 ist falsch.
   ---
   n(n + 1)/2 = n²/2 + n/2 liegt in O(n²), Aussage 3 stimmt. Eine feste Million Schritte liegt in O(1), Aussage 4 stimmt.
-```
-
-```reflexion
-frage: Die O-Notation lässt Faktoren weg. Methode A braucht 2n Schritte, Methode B braucht 50n. Beide liegen in O(n). Ist die O-Notation damit nutzlos für die Frage, welche schneller ist?
-antwort: |
-  Für die Frage „Welche ist bei diesem n schneller?“ reicht sie nicht. Hier ist A immer 25-mal schneller. Die
-  O-Notation beantwortet eine andere Frage: Wie wächst die Arbeit, wenn n größer wird? Beide verdoppeln ihre Arbeit bei
-  doppeltem n. Gegen eine Methode C mit n² Schritten verlieren beide nur bei kleinen n. Ab n = 50 ist C nicht mehr
-  schneller als B, und danach wird der Abstand immer größer. Deshalb vergleicht man zuerst die O-Klasse. Erst bei
-  gleicher Klasse lohnt sich ein Blick auf die Faktoren.
 ```
 
 
@@ -2669,15 +2602,6 @@ loesung: |
   Höchstens etwa 2n Ausführungen ergeben $O(n)$. Das ist die kleinste Schranke, nicht $O(n \log n)$.
 ```
 
-```reflexion
-frage: Warum macht die Schrittweite j += n / 3 die innere Schleife konstant, die Schrittweite j += 3 aber linear?
-antwort: |
-  Die innere Schleife läuft von 0 bis n. Mit der Schrittweite 3 braucht sie etwa n/3 Sprünge, und diese Zahl wächst mit
-  n. Mit der Schrittweite n/3 wächst die Sprunglänge im selben Maß wie die Strecke. Die Strecke n geteilt durch die
-  Sprunglänge n/3 ergibt immer ungefähr 3 Sprünge, egal wie groß n ist. Entscheidend ist also das Verhältnis von
-  Strecke zu Schrittweite. Ist es eine Konstante, ist die Schleife konstant. Hängt es von n ab, wächst sie mit n.
-```
-
 
 ## Typische Komplexitätsklassen und ihr Wachstum
 
@@ -3117,15 +3041,6 @@ loesung: |
   b) Q bekommt 1024-mal so viel Zeit. Gesucht ist der Faktor m mit m² = 1024, also m = 32. Q schafft in derselben Zeit n = 30 · 32 = 960.
   ---
   Vergleich: In 17 Minuten kommt E von 30 auf 40 Elemente, Q von 30 auf 960. Deshalb gelten exponentielle Verfahren schon bei mittleren n als unbrauchbar.
-```
-
-```reflexion
-frage: Ein Verfahren in O(log n) braucht für n = 1000 genau 10 Schritte. Wie viele Schritte erwartest du für n = 1 000 000, und warum ist das so wenig?
-antwort: |
-  Etwa 20 Schritte. Von 1000 auf 1 000 000 wird n tausendmal so groß. Das sind ungefähr zehn Verdopplungen, denn
-  2¹⁰ = 1024. Bei einem logarithmischen Verfahren kostet jede Verdopplung nur einen zusätzlichen Schritt. Der Grund:
-  Jeder Schritt halbiert den Rest der Arbeit. Doppelt so viel Eingabe ist nach einem einzigen Schritt wieder auf die
-  alte Größe geschrumpft. Deshalb sind logarithmische Verfahren selbst für riesige Eingaben schnell.
 ```
 
 
@@ -3721,16 +3636,6 @@ loesung: |
   `doppelt2`: O(n) + O(n log n) + O(n) = O(n log n) Laufzeit, O(n) Speicher für die Kopie. Für große n schlägt O(n log n) die O(n²) von `doppelt1`. Ohne Kopie würde `a` selbst sortiert, ein Seiteneffekt. Aussagen 1 und 3 stimmen.
   ---
   Leeres Array: Kopie leer, Schleife läuft nicht, Ergebnis `false`. Aussage 4 ist falsch.
-```
-
-```reflexion
-frage: Variante 3 der Abschnittssumme ist schneller als Variante 2 und braucht nicht mehr Speicher. Warum lohnt es sich trotzdem, Variante 2 zu verstehen?
-antwort: |
-  Variante 2 ist der natürliche erste Gedanke: alle Abschnitte ansehen, aber die Summe klug weiterführen. Sie ist
-  leicht als richtig zu erkennen und taugt deshalb als Probe für die schnelle Variante. Man kann beide mit kleinen
-  Arrays vergleichen und so Fehler in Variante 3 finden. Außerdem zeigt der Schritt von Variante 1 zu Variante 2 das
-  wichtigste Muster beim Beschleunigen: keine Arbeit doppelt machen. Variante 3 treibt diesen Gedanken weiter, bis
-  nur noch ein Durchlauf übrig bleibt.
 ```
 
 
@@ -4523,53 +4428,8 @@ loesung: |
   Probe mit `{1, 3, 4, 6, 9}` und 8. Zuerst ist 1 + 9 = 10 zu groß, dann 1 + 6 = 7 zu klein. Danach ist 3 + 6 = 9 zu groß und 3 + 4 = 7 zu klein. Jetzt ist `links = rechts`, Ergebnis `false`. Die Doppelschleife wäre O(n²).
 ```
 
-```aufgabe
-id: ko-pa-gespraech
-titel: "Feedbackgespräch: die Laufzeit deiner Lösung"
-niveau: 3
-lernziel: 7
-kompetenz: begruenden
-punkte: 2
-angabe: |
-  Im Feedbackgespräch zeigt dir die Tutorin deine Lösung zu „Doppelte Werte mit einem Hilfsarray finden“ aus
-  [17.7 Algorithmen vergleichen](/lernen/ep1/komplexitaet/algorithmen-vergleichen-laufzeit-und-speicher). Sie fragt:
-  a) Welche Laufzeit und welchen zusätzlichen Speicher hat deine Lösung, und wie ist es bei der Doppelschleife?
-  b) Was würdest du ändern, wenn die Werte bis zu einer Milliarde groß sein dürften? Antworte in ganzen Sätzen.
-  Zeitrichtwert: 5 Minuten.
-teile:
-  - typ: text
-    muster: |
-      a) Meine Lösung läuft einmal durch das Array und macht pro Element eine feste Zahl von Schritten. Die Laufzeit
-      liegt deshalb in O(n). Dafür brauche ich ein Hilfsarray mit 1000 Plätzen. Das ist eine feste Größe, also O(1)
-      zusätzlicher Speicher in Bezug auf n. Die Doppelschleife vergleicht jedes Paar und braucht O(n²) Zeit, aber nur
-      O(1) Speicher. Ich habe also Speicher gegen Laufzeit getauscht.
-      b) Ein Hilfsarray mit einer Milliarde Plätzen wäre viel zu groß. Ich würde dann das Array kopieren, die Kopie
-      sortieren und benachbarte Werte vergleichen. Das kostet O(n log n) Zeit und O(n) Speicher für die Kopie, und das
-      Original bleibt unverändert.
-hinweise:
-  - Nenne für beide Lösungen Laufzeit und zusätzlichen Speicher getrennt.
-  - 'Für b): Welche Idee aus „Kopieren, sortieren, vergleichen“ braucht keinen bekannten Wertebereich?'
-loesung: |
-  **Ansatz:** Für jede Lösung Laufzeit und Speicher einzeln begründen, dann die Grenze des Tricks benennen.
-  ---
-  a) Ein Durchlauf mit konstanter Arbeit pro Element: O(n). Das Hilfsarray hat eine feste Größe, unabhängig von n. Die Doppelschleife braucht O(n²) Zeit und O(1) Speicher.
-  ---
-  b) Der Trick braucht einen Platz pro möglichem Wert. Bei einer Milliarde möglicher Werte wären das rund eine Milliarde `boolean`-Plätze, also etwa ein Gigabyte. Besser: Kopie sortieren und Nachbarn vergleichen, O(n log n) Zeit und O(n) Speicher.
-```
-
 
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten.
-antwort: |
-  Eine mögliche Auswahl: (1) Die Laufzeit eines Algorithmus bestimmt man durch Zählen, nicht durch Messen. Man zählt, wie
-  oft die innerste Zeile in Abhängigkeit von n läuft, und zwar im schlechtesten Fall. (2) Die O-Notation behält nur den
-  am schnellsten wachsenden Summanden und lässt konstante Faktoren weg. Gemeint ist immer die kleinste obere Schranke.
-  (3) Bei Schleifen gilt: verschachtelt multiplizieren, hintereinander addieren. Feste Grenzen und Schrittweiten wie
-  n / 3 ergeben konstante, Multiplizieren und Halbieren logarithmische Schleifen. Gute Antworten sind auch die
-  Reihenfolge der Klassen oder der Unterschied zwischen Laufzeit und zusätzlichem Speicher.
-```
 
 :::zusammenfassung
 1. Ein **Algorithmus** ist ein endliches, eindeutiges, ausführbares Verfahren, das für jede erlaubte Eingabe terminiert. Determiniert betrifft das Ergebnis, deterministisch den Ablauf. Ein Problem kann viele Algorithmen haben.

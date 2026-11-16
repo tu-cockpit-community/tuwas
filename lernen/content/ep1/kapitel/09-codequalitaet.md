@@ -436,16 +436,6 @@ Zeile ausfüllst.
 5. **Mit einem zweiten Beispiel prüfen,** am besten mit einem Randfall: leerer String, 0, eine einzige Ziffer, ein einziges Zeichen.
 :::
 
-```reflexion
-frage: Warum reicht ein einziges durchgespieltes Beispiel nicht, um den Zweck eines Codestücks sicher zu bestimmen? Denk an die Methode f mit den Leerzeichen.
-antwort: |
-  Ein einziges Beispiel passt oft zu mehreren Erklärungen. Bei `f("Ich lerne Java")` mit Ergebnis 3
-  könnte man auch vermuten, die Methode zähle die großen Anfangsbuchstaben plus eins. Erst ein zweites
-  Beispiel trennt solche Vermutungen. Randfälle wie der leere String zeigen außerdem, für welche
-  Eingaben die Beschreibung gar nicht gilt. Diese Grenzen gehören in die Zweckbeschreibung, denn genau
-  dort entstehen später Fehler.
-```
-
 ```aufgabe
 id: cq-lesen-gefuehrt
 titel: Eine Methode geführt lesen
@@ -1059,18 +1049,6 @@ der dem Code widerspricht, ist schlimmer als gar keiner, denn der Leser glaubt i
 6. Umbenennen und Formatieren mit den IntelliJ-Werkzeugen, nicht von Hand.
 :::
 
-```reflexion
-frage: Ein Name, der lügt, ist schlimmer als ein nichtssagender Name wie `x`. Warum? Denk an eine Variable `kopie`, die gar keine Kopie enthält.
-antwort: |
-  Bei `x` weiß jeder Leser, dass er selbst nachsehen muss, was drinsteht. Bei `kopie` glaubt er dem
-  Namen und prüft nicht nach. Ändert der Code dann über `kopie` etwas, rechnet der Leser nicht damit,
-  dass sich das Original mit ändert. Genau so ein irreführender Name kommt auf einem älteren Blatt 4
-  (Wintersemester 2017) vor: Dort heißt ein Array (eine nummerierte Reihe von Werten) `copiedArray`, ist
-  aber keine Kopie. Warum das so ist,
-  zeigt [12.5 Referenzen: zwei Namen für dasselbe Array](/lernen/ep1/arrays/referenzen-zwei-namen-fuer-dasselbe-array). Ein falscher Name
-  erzeugt also falsches Vertrauen, ein nichtssagender nur Mehrarbeit.
-```
-
 ```aufgabe
 id: cq-namen-gefuehrt-umbenennen
 titel: Fünf Methoden umbenennen
@@ -1269,41 +1247,6 @@ loesung: |
   Aussage 1 falsch (Einrückung ist nur Lesehilfe). Aussage 2 falsch (wiederholt nur den Code).
   ---
   Aussage 3 richtig (Rename kennt die Sichtbarkeit). Aussage 4 falsch (Konventionen prüft der Compiler nicht). Ergebnis: falsch, falsch, richtig, falsch.
-```
-
-```aufgabe
-id: cq-namen-text-aendern
-titel: Was würdest du ändern und warum?
-niveau: 2
-lernziel: 1
-kompetenz: begruenden
-quelle: Aufgabenblatt 3 WS 2023, Aufgabe 1 b (nachgebaut)
-angabe: |
-  Beschreibe mindestens vier Stellen, die du an diesem Programm ändern würdest. Begründe jede Änderung in einem Satz.
-
-  ```java
-  public class x {
-  public static void main(String[] args){
-  int A=0;for(int i=1;i<=100;i++){if(i%7==0)A=A+i;}
-  System.out.println(A);}}
-  ```
-teile:
-  - typ: text
-    muster: |
-      1. **Klassenname:** `x` sollte groß beginnen und etwas sagen, zum Beispiel `Siebenerreihe`. Klassen beginnen nach Konvention groß.
-      2. **Variablenname:** `A` sollte `summe` heißen. Variablen beginnen klein, und der Name soll den Inhalt nennen.
-      3. **Formatierung:** eine Anweisung pro Zeile, vier Leerzeichen Einrückung je Block, Leerzeichen um Operatoren. So erkennt man die Struktur.
-      4. **Klammern:** Das `if` braucht `{ }`, damit eine später ergänzte zweite Anweisung nicht versehentlich außerhalb landet.
-      5. **Magische Zahlen und Methode:** `7` und `100` sollten Parameter einer Methode `summeDerVielfachen(int teiler, int grenze)` werden. Dann kann man sie auch für andere Zahlen verwenden.
-hinweise:
-  - Geh die Checkliste durch. Namen, Konventionen, Einrückung, Klammern, magische Zahlen.
-  - Für jede Stelle brauchst du das Was (welche Änderung) und das Warum (welcher Leser profitiert).
-loesung: |
-  **Ansatz:** Den Code mit der Checkliste für lesbaren Code vergleichen und jede Abweichung begründen.
-  ---
-  Namen: Klasse `x` und Variable `A` verletzen die Konventionen und sagen nichts aus. Form: alles in einer Zeile, keine Einrückung, `if` ohne Klammern.
-  ---
-  Die Zahlen `7` und `100` sind magisch. Als Parameter einer Methode werden sie erklärt und austauschbar. Die Ausgabe des Programms (735) bleibt bei allen Änderungen gleich.
 ```
 
 ```aufgabe
@@ -1675,16 +1618,6 @@ es in die Methode gehört oder nach `main`, aber nie an beide Stellen.
 5. Alte Blöcke durch Aufrufe ersetzen, Vorbedingungen als Kommentar über die Methode schreiben.
 6. Ausgabe vergleichen, zuerst mit dem Originalwert, dann mit einem anderen Wert.
 :::
-
-```reflexion
-frage: Warum ist „dieselbe Ausgabe wie vorher“ das wichtigste Kriterium beim Umbau von Spaghetticode? Man könnte doch einfach ein schöneres Programm schreiben.
-antwort: |
-  Der Spaghetticode ist das Einzige, was sicher funktioniert. Er ist die Spezifikation: Er zeigt, was
-  das Programm tun soll. Ein Umbau soll nur die Struktur verbessern, nicht das Verhalten. Wenn die
-  Ausgabe gleich bleibt, kann man sicher sein, dass beim Umbau nichts kaputtgegangen ist. Ein neu
-  geschriebenes „schöneres“ Programm könnte dagegen neue Fehler enthalten, die niemand bemerkt. Genau
-  deshalb verlangt Blatt 3 in Teil d) die identische Ausgabe.
-```
 
 ```aufgabe
 id: cq-spag-gefuehrt-parameter
@@ -2352,15 +2285,6 @@ also gehört sie **hinter** das `if`. Richtig ist `if (x > 0) { x--; }` gefolgt 
 5. Anweisungen nur dorthin ziehen, wo sie in beiden Zweigen an derselben Stelle standen: vom Anfang vor das `if`, vom Ende hinter das `if`.
 :::
 
-```reflexion
-frage: Warum baut man beim Refactoring in kleinen Schritten um und testet nach jedem Schritt, statt alles auf einmal neu zu schreiben?
-antwort: |
-  Wenn nach einem kleinen Schritt ein Test scheitert, weiß man genau, welche Änderung schuld ist: die
-  letzte. Man macht sie rückgängig oder korrigiert sie. Baut man dagegen alles auf einmal um und ein Test
-  scheitert, kann der Fehler an jeder Stelle stecken. Dann sucht man lange. Kleine Schritte sind also
-  insgesamt schneller, obwohl man öfter testet.
-```
-
 ```aufgabe
 id: cq-ref-gefuehrt-bestanden
 titel: Ein if mit zwei returns vereinfachen
@@ -2959,16 +2883,6 @@ Zeile für Zeile jemand anderem, notfalls einer Quietscheente auf dem Schreibtis
 fällt dir oft selbst auf, wo du etwas angenommen hast, das nicht stimmt. Zweitens: Schreibe und teste
 Methode für Methode, statt das ganze Programm auf einmal. Dann weißt du bei einem Fehler, in welcher Methode
 er steckt.
-
-```reflexion
-frage: Warum lohnt es sich, vor dem eigentlichen Suchen die kleinste Eingabe zu finden, die den Fehler noch zeigt?
-antwort: |
-  Mit einer kleinen Eingabe gibt es nur wenige Durchläufe und wenige Werte. Man kann sie vollständig in
-  einer Trace-Tabelle verfolgen oder mit dem Debugger Schritt für Schritt ansehen. Bei `zaehleE("e")`
-  sieht man sofort, dass die Schleife gar nicht läuft. Bei einem langen Wort müsste man viele Durchläufe
-  prüfen und übersieht den Fehler leicht. Außerdem zeigt die kleinste Eingabe oft schon, welcher Randfall
-  falsch behandelt wird, hier das letzte Zeichen.
-```
 
 ```aufgabe
 id: cq-debug-gefuehrt-summe
@@ -3597,16 +3511,6 @@ Aufrufer. Dort behebst du sie, oder du schreibst `anzahl > 0` als Vorbedingung �
 5. **Korrigieren und erneut ausführen.** Ausgaben vor der Exception zeigen, wie weit das Programm kam.
 :::
 
-```reflexion
-frage: Warum ist die Zeile, die im Stacktrace ganz oben bei deiner Klasse steht, nicht immer die Zeile, die du ändern musst? Nenne zwei Beispiele aus diesem Abschnitt.
-antwort: |
-  Der Stacktrace zeigt die Stelle, an der der falsche Wert Schaden anrichtet. Entstanden ist der falsche
-  Wert oft woanders. Bei `druckeZeichen` knallt es in Zeile 4 bei `charAt(i)`, aber die falsche
-  Schleifenbedingung `i <= text.length()` steht in Zeile 3. Bei `Noten` knallt es in `mittelwert`, aber
-  die 0 kommt aus `main`, wo `auswerten(7, 0)` aufgerufen wird. Man muss also vom Ort des Abbruchs
-  rückwärts fragen, woher der Wert stammt.
-```
-
 ```aufgabe
 id: cq-exc-gefuehrt-lesen
 titel: Einen Stacktrace Schritt für Schritt lesen
@@ -4206,16 +4110,6 @@ loesung: |
 5. **Minimal korrigieren** und alle Beispiele und Randfälle wiederholen.
 6. **Einschränkungen prüfen:** nur erlaubte Methoden, keine Hilfsmethoden oder Schleifen, wo sie verboten sind.
 :::
-
-```reflexion
-frage: Warum muss man KI-Code oft gründlicher prüfen als eigenen Code, obwohl er ordentlicher aussieht?
-antwort: |
-  Beim eigenen Code weiß man, was man sich bei jeder Zeile gedacht hat, und kennt die heiklen Stellen.
-  KI-Code entsteht ohne dieses Verständnis. Er ist darauf ausgelegt, plausibel auszusehen, nicht darauf,
-  jede Bedingung der Angabe einzuhalten. Die saubere Form verleitet dazu, ihm zu vertrauen. Fehler stecken
-  dann gerade in Randfällen oder in Details der Angabe wie „größere überdecken kleinere“ oder „nur
-  `charAt` erlaubt“. Außerdem muss man im Feedbackgespräch jede Zeile selbst erklären können.
-```
 
 ```aufgabe
 id: cq-ki-gefuehrt-kuerze
@@ -5028,121 +4922,6 @@ und arbeite zuerst ohne Hinweise. Das Quizformat 2026W ist nicht veröffentlicht
 TUWEL-Tests 2021 bis 2023.
 
 ```aufgabe
-id: cq-pruef-spaghetti
-titel: Spaghetticode analysieren, zerlegen und parametrisieren
-niveau: 3
-punkte: 6
-lernziel: 2
-kompetenz: modellieren
-quelle: Aufgabenblatt 3 WS 2023, Aufgabe 1 a bis d (nachgebaut, neues Muster)
-angabe: |
-  (Zeitrichtwert: 20 Minuten) Gegeben ist dieser Spaghetticode:
-
-  ```java
-  public class rahmen {
-  public static void main(String[] args) {
-  System.out.print("+"); for(int i=0;i<6;i++) System.out.print("-"); System.out.println("+");
-  System.out.print("|"); for(int i=0;i<3;i++) System.out.print("><"); System.out.println("|");
-  System.out.print("|"); for(int i=0;i<3;i++) System.out.print("<>"); System.out.println("|");
-  System.out.print("+"); for(int i=0;i<6;i++) System.out.print("-"); System.out.println("+");
-  }}
-  ```
-
-  **a)** (1 Punkt) Beschreibe in wenigen Sätzen, was der Code ausgibt.
-
-  **b)** (1 Punkt) Nenne Stellen, die du an Gliederung und Formatierung ändern würdest, und begründe sie.
-
-  **c) und d)** (4 Punkte) Zerlege den Code in Methoden. `druckeRahmen(int breite)` soll das Muster für jede
-  gerade Breite `breite >= 4` ausgeben. Die Breite zählt die beiden Ecken mit, im Original ist sie 8. Der
-  Aufruf in `main` muss genau die Ausgabe des Spaghetticodes erzeugen. Weitere Methoden darfst du ergänzen.
-teile:
-  - typ: text
-    label: a) Funktionsweise
-    muster: |
-      Der Code gibt einen Rahmen aus vier Zeilen und acht Zeichen Breite aus. Oben und unten steht eine
-      Randzeile `+------+`. Dazwischen stehen zwei Zeilen mit senkrechten Strichen am Rand. Innen steht
-      dreimal das Paar `><` und in der nächsten Zeile dreimal `<>`. Die Ausgabe ist `+------+`,
-      `|><><><|`, `|<><><>|`, `+------+`.
-  - typ: text
-    label: b) Änderungen mit Begründung
-    muster: |
-      1. Der Klassenname `rahmen` sollte groß beginnen (`Rahmen`), wie es die Konvention für Klassen verlangt.
-      2. Eine Anweisung pro Zeile und Einrückung je Block, damit man erkennt, was zur Schleife gehört.
-      3. Geschweifte Klammern auch bei den einzeiligen `for`-Schleifen, damit spätere Änderungen nicht danebengehen.
-      4. Die Randzeile steht zweimal fast gleich da, die Innenzeilen unterscheiden sich nur im Paar. Das gehört in Methoden.
-      5. Die Zahlen 6 und 3 hängen von der Breite ab. Sie sollten aus einem Parameter berechnet werden.
-  - typ: code
-    label: c) und d) Methoden
-    vorlage: |
-      public class Rahmen {
-          // Vorbedingung: breite >= 4 und breite gerade
-          public static void druckeRahmen(int breite) {
-              // TODO
-          }
-
-          public static void main(String[] args) {
-              druckeRahmen(8);
-          }
-      }
-    musterloesung: |
-      public class Rahmen {
-          public static void druckeRand(int breite) {
-              System.out.print("+");
-              for (int i = 0; i < breite - 2; i++) {
-                  System.out.print("-");
-              }
-              System.out.println("+");
-          }
-
-          public static void druckeInnen(int breite, String paar) {
-              System.out.print("|");
-              for (int i = 0; i < (breite - 2) / 2; i++) {
-                  System.out.print(paar);
-              }
-              System.out.println("|");
-          }
-
-          public static void druckeRahmen(int breite) {
-              druckeRand(breite);
-              druckeInnen(breite, "><");
-              druckeInnen(breite, "<>");
-              druckeRand(breite);
-          }
-
-          public static void main(String[] args) {
-              druckeRahmen(8);
-          }
-      }
-    tests:
-      - { aufruf: "druckeRahmen(8)", stdout: "+------+\n|><><><|\n|<><><>|\n+------+\n", beschreibung: "Breite 8 wie im Original" }
-      - { aufruf: "druckeRahmen(4)", stdout: "+--+\n|><|\n|<>|\n+--+\n", beschreibung: "kleinste Breite 4" }
-      - { aufruf: "druckeRahmen(12)", stdout: "+----------+\n|><><><><><|\n|<><><><><>|\n+----------+\n", versteckt: true }
-      - { stdout: "+------+\n|><><><|\n|<><><>|\n+------+\n", beschreibung: "main erzeugt die Originalausgabe" }
-    fehler:
-      - { wert: 2, meldung: "Bei Breite 8 stimmt es, bei Breite 4 nicht. Hängt jede Zahl in deinen Methoden von `breite` ab? Innen stehen `breite - 2` Zeichen, also `(breite - 2) / 2` Paare." }
-hinweise:
-  - Notiere zuerst die Ausgabe des Originals. Sie ist der Maßstab für Teil d).
-  - 'Zwei Arten von Zeilen: Randzeile mit `breite - 2` Strichen zwischen `+` und `+`, Innenzeile mit `(breite - 2) / 2` Paaren zwischen `|` und `|`. Das Paar wird ein Parameter.'
-loesung: |
-  **Ansatz:** a) Ausgabe bestimmen, b) mit der Checkliste für lesbaren Code vergleichen, c) gleiche Blöcke zu Methoden, Unterschiede zu Parametern, Zahlen aus `breite` berechnen.
-  ---
-  a) Ausgabe: `+------+`, `|><><><|`, `|<><><>|`, `+------+`. b) Klassenname, Formatierung, Klammern, doppelte Blöcke, magische Zahlen 6 und 3.
-  ---
-  c) Die 6 ist `breite - 2`, die 3 ist `(breite - 2) / 2`. Randzeile: `druckeRand(int breite)`. Innenzeile: `druckeInnen(int breite, String paar)`.
-  ---
-  ```java
-  public static void druckeRahmen(int breite) {
-      druckeRand(breite);
-      druckeInnen(breite, "><");
-      druckeInnen(breite, "<>");
-      druckeRand(breite);
-  }
-  ```
-  ---
-  d) Probe: `druckeRahmen(8)` liefert genau die vier Zeilen des Originals. `druckeRahmen(4)` liefert `+--+`, `|><|`, `|<>|`, `+--+`. Damit ist auch geprüft, dass keine feste Zahl übrig ist.
-```
-
-```aufgabe
 id: cq-pruef-quiz-sc
 titel: Drei Quizfragen zum Code lesen
 niveau: 3
@@ -5256,101 +5035,6 @@ loesung: |
   Aussage 1 falsch (`""` hat Länge 0, kein `null`). Aussage 2 richtig (`"007"` ist 7).
   ---
   Aussage 3 richtig (Aufrufer steht darunter). Aussage 4 falsch (jede Methode kann abbrechen). Ergebnis: falsch, richtig, richtig, falsch.
-```
-
-```aufgabe
-id: cq-pruef-exception
-titel: Warum stürzt zaehleDoppelte ab?
-niveau: 3
-punkte: 3
-lernziel: 5
-kompetenz: begruenden
-quelle: Aufgabenblatt 4 WS 2023, Aufgabe 1 a (Fragetyp nachgebaut, String statt Array)
-angabe: |
-  (Zeitrichtwert: 10 Minuten) `zaehleDoppelte(s)` soll zählen, an wie vielen Stellen zwei gleiche Zeichen direkt hintereinander stehen. Für `"Kaffee"` erwartet man 2 (`ff` und `ee`). Das Programm bricht aber ab:
-
-  ```text
-  public class Doppelt {
-      public static int zaehleDoppelte(String s) {
-          int anzahl = 0;
-          for (int i = 0; i < s.length(); i++) {
-              if (s.charAt(i) == s.charAt(i + 1)) {
-                  anzahl++;
-              }
-          }
-          return anzahl;
-      }
-
-      public static void main(String[] args) {
-          System.out.println(zaehleDoppelte("Kaffee"));
-      }
-  }
-  ```
-
-  ```
-  Exception in thread "main" java.lang.StringIndexOutOfBoundsException: Index 6 out of bounds for length 6
-  	...
-  	at Doppelt.zaehleDoppelte(Doppelt.java:5)
-  	at Doppelt.main(Doppelt.java:13)
-  ```
-
-  **a)** (1 Punkt) Erkläre, warum es zu der Exception kommt.
-
-  **b)** (2 Punkte) Korrigiere die Methode, sodass sie keine Exception mehr wirft und richtig zählt.
-teile:
-  - typ: text
-    label: a) Erklärung
-    muster: |
-      In Zeile 5 wird `s.charAt(i + 1)` gelesen. Die Schleife läuft bis `i = s.length() - 1`, also bei
-      `"Kaffee"` bis `i = 5`. Dann ist `i + 1 = 6`, und Position 6 gibt es bei Länge 6 nicht. Genau das sagt
-      die Meldung `Index 6 out of bounds for length 6`. Die Ursache steht in Zeile 4: Weil jedes Zeichen mit
-      seinem Nachfolger verglichen wird, darf `i` nur bis `s.length() - 2` laufen.
-  - typ: code
-    label: b) Korrektur
-    vorlage: |
-      public class Doppelt {
-          public static int zaehleDoppelte(String s) {
-              int anzahl = 0;
-              for (int i = 0; i < s.length(); i++) {
-                  if (s.charAt(i) == s.charAt(i + 1)) {
-                      anzahl++;
-                  }
-              }
-              return anzahl;
-          }
-      }
-    musterloesung: |
-      public class Doppelt {
-          public static int zaehleDoppelte(String s) {
-              int anzahl = 0;
-              for (int i = 0; i < s.length() - 1; i++) {
-                  if (s.charAt(i) == s.charAt(i + 1)) {
-                      anzahl++;
-                  }
-              }
-              return anzahl;
-          }
-      }
-    tests:
-      - { aufruf: 'zaehleDoppelte("Kaffee")', erwartet: "2" }
-      - { aufruf: 'zaehleDoppelte("Mississippi")', erwartet: "3" }
-      - { aufruf: 'zaehleDoppelte("a")', erwartet: "0", beschreibung: "ein Zeichen" }
-      - { aufruf: 'zaehleDoppelte("")', erwartet: "0", beschreibung: "leerer String" }
-      - { aufruf: 'zaehleDoppelte("aaa")', erwartet: "2", versteckt: true }
-    fehler:
-      - { wert: 1, meldung: "Läuft die Schleife noch bis `i = s.length() - 1`? Dann greift `charAt(i + 1)` hinter das Ende." }
-      - { wert: 4, meldung: "Beim leeren String ist `s.length() - 1` gleich -1. Mit `i < s.length() - 1` läuft die Schleife dann gar nicht, das ist richtig so." }
-hinweise:
-  - Die Meldung nennt Index 6 bei Länge 6. Welcher Ausdruck in Zeile 5 erreicht diesen Wert?
-  - Jedes Zeichen wird mit seinem Nachfolger verglichen. Das letzte Zeichen hat keinen Nachfolger.
-loesung: |
-  **Ansatz:** Aus dem Stacktrace den Ort (Zeile 5) und den ungültigen Index (6) ablesen, dann rückwärts zur Ursache gehen.
-  ---
-  a) In Zeile 5 steht `s.charAt(i + 1)`. Für `i = 5` ist `i + 1 = 6`, bei Länge 6 ungültig. Die Ursache ist die Schleifengrenze in Zeile 4.
-  ---
-  b) Korrektur: `for (int i = 0; i < s.length() - 1; i++)`. Dann ist `i + 1` höchstens `s.length() - 1`.
-  ---
-  Probe: `"Kaffee"` liefert 2, `"Mississippi"` liefert 3 (`ss`, `ss`, `pp`), `"a"` und `""` liefern 0 ohne Exception.
 ```
 
 ```aufgabe
@@ -5524,60 +5208,7 @@ loesung: |
   Probe: `(3, 2, 1)` liefert 2, `(2, 2, 5)` liefert 2, `(5, 5, 5)` liefert 5, `(2, 9, 4)` liefert 4.
 ```
 
-```aufgabe
-id: cq-pruef-feedback
-titel: Zusatzfragen im Feedbackgespräch
-niveau: 3
-punkte: 2
-lernziel: 3
-kompetenz: begruenden
-quelle: Format nach den Zusatzfragen der Aufgabenblätter (Feedbackgespräch), Inhalt neu
-angabe: |
-  (Zeitrichtwert: 5 Minuten) Du hast die Spaghetticode-Aufgabe abgegeben. Die Tutorin fragt:
-
-  1. Was ist der Unterschied zwischen einem Refactoring und einer Fehlerkorrektur?
-  2. Woran erkennst du, dass dein Umbau nichts kaputt gemacht hat?
-  3. Warum ist eine Methode mit Parameter besser als zwei fast gleiche Methoden?
-  4. Wie bist du vorgegangen, als dein Muster bei Breite 4 falsch war?
-
-  Formuliere die Antworten so, wie du sie im Gespräch sagen würdest.
-teile:
-  - typ: text
-    muster: |
-      1. Ein Refactoring ändert den Aufbau des Codes, aber nicht sein Verhalten. Rückgabewerte, Ausgaben und
-         Exceptions bleiben für jede Eingabe gleich. Eine Fehlerkorrektur ändert das Verhalten absichtlich,
-         weil es vorher falsch war.
-      2. Ich habe die Ausgabe des Originals notiert und mit der Ausgabe nach dem Umbau verglichen. Zusätzlich
-         habe ich eine andere Breite getestet, damit keine feste Zahl übrig bleibt.
-      3. Der Code steht nur einmal da. Eine Änderung mache ich an einer Stelle, und ich kann keine Kopie
-         vergessen. Außerdem lässt sich die Methode mit jedem Wert aufrufen.
-      4. Ich habe das Fehlerbild notiert, dann eine Hypothese aufgestellt, etwa „in der Schleife steht noch
-         die feste 6“. Mit einer Kontrollausgabe oder dem Debugger habe ich sie geprüft und danach die Zahl
-         durch eine Rechnung mit `breite` ersetzt. Am Ende habe ich alle Breiten noch einmal getestet.
-hinweise:
-  - Antworte in ganzen Sätzen und nenne bei jeder Frage den Fachbegriff, etwa Refactoring, Verhalten, Parameter, Hypothese.
-  - Bei Frage 4 helfen die sechs Schritte des Debuggens.
-loesung: |
-  **Ansatz:** Jede Frage mit dem passenden Begriff aus diesem Kapitel beantworten und ein konkretes Beispiel nennen.
-  ---
-  1 und 2: Refactoring heißt gleiches Verhalten, geprüft durch den Vergleich der Ausgaben mit dem Original und mit einem weiteren Wert.
-  ---
-  3: Ein Parameter vermeidet doppelten Code. 4: Fehlerbild, Hypothese, Prüfung mit Kontrollausgabe, Korrektur, alle Tests wiederholen.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Fremden Code liest man, indem man ihn mit kleinen Beispielen in einer
-  Trace-Tabelle durchspielt und dann seinen Zweck in einem Satz beschreibt, mit allen nötigen Bedingungen.
-  (2) Beim Umbau von Code, also beim Umbenennen, Auslagern in Methoden und Vereinfachen, muss das
-  Verhalten gleich bleiben. Das prüft man mit Testfällen an den Grenzen und mit einem zweiten Wert. (3)
-  Fehler sucht man systematisch: Fehlerbild, kleinste Eingabe, Hypothese, Prüfung mit Kontrollausgaben,
-  Debugger oder Stacktrace, Korrektur der Ursache, alle Tests wiederholen. Ebenso gute Antworten sind das
-  Lesen eines Stacktraces oder das Prüfen von KI-Code mit Gegenbeispielen.
-```
 
 :::zusammenfassung
 1. **Code lesen** heißt: Kopf lesen, Rollen der Variablen bestimmen, mit einem kleinen Beispiel in einer Trace-Tabelle mitspielen, den Zweck in einem Satz formulieren und mit einem Randfall prüfen. Eine Zweckbeschreibung sagt, was herauskommt, nicht wie.

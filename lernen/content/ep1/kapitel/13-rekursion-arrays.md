@@ -869,15 +869,6 @@ loesung: |
   Probe: Start 0 addiert `1 + 2 + 3 = 6`, Start 1 addiert `9 + 9 = 18`. Beide Ergebnisse stimmen mit dem Beispiel überein.
 ```
 
-```reflexion
-frage: Bei Strings genügte ein Parameter `s`, weil der Selbstaufruf `s.substring(1)` bekam. Warum braucht eine Array-Rekursion in den Prüfungen meist einen zusätzlichen Parameter `index`?
-antwort: |
-  Ein String-Aufruf kann einen kürzeren String erzeugen und weitergeben, deshalb wird die Aufgabe von selbst
-  kleiner. Ein Array kann man nicht kürzen. Ein kürzeres Array müsste man neu anlegen und befüllen, und das Kopieren
-  ist im Programmiertest verboten (`clone`, `System.arraycopy`, `Arrays.copyOfRange`). Darum bleibt das Array
-  gleich, und der Index beschreibt, welcher Rest noch zu bearbeiten ist. Er übernimmt die Rolle des kürzeren Strings.
-```
-
 ## Prüfen, suchen und das Größte finden
 
 ```aufgabe
@@ -1519,15 +1510,6 @@ loesung: |
   Wird `n` dabei negativ, gab es zu viele Anstiege. Am Ende ist dann `n == 0` falsch, und die Methode liefert richtig `false`.
   ---
   Probe ab Index 3 mit `n = 2`: (2, 4) ist ein Anstieg, `n` wird 1. (4, 9) ist einer, `n` wird 0. (9, 1) nicht. Bei Index 6 greift der Basisfall mit `0 == 0`, also `true`.
-```
-
-```reflexion
-frage: Warum endet die Maximum-Rekursion beim letzten Wert, die Suche nach einem Wert aber beim leeren Rest?
-antwort: |
-  Für die Suche gibt es eine sinnvolle Antwort für den leeren Rest: Im leeren Rest kommt nichts vor, also -1 oder
-  `false`. Für das Maximum gibt es diese Antwort nicht. Jeder Zahlenwert, den man für den leeren Rest erfindet, etwa 0,
-  kann das Ergebnis verfälschen, wenn alle echten Werte kleiner sind. Darum hört die Maximum-Rekursion beim letzten
-  echten Wert auf und verlangt die Vorbedingung, dass das Array nicht leer ist.
 ```
 
 ## Ein neues Array füllen oder das Array verändern
@@ -2232,16 +2214,6 @@ loesung: |
   Probe mit dem Beispiel: Bei `i = 1` tauscht 41 mit 30. Bei `i = 2` tauscht 18 mit 27. Bei `i = 4` tauscht 12 mit 18. Ergebnis `{12, 30, 27, 35, 18, 41}`.
 ```
 
-```reflexion
-frage: Warum legt man bei einem festen Methodenkopf wie `int[] differenzen(int[] alt, int[] neu, int index)` das neue Array im Basisfall an und nicht im Startaufruf?
-antwort: |
-  Der Startaufruf ist von außen gesehen besonders, aber in der Methode sieht er aus wie jeder andere Aufruf. Man
-  könnte ihn nur an `index == 0` erkennen, und auch dann hätte man keinen Weg, das neue Array an die Selbstaufrufe
-  weiterzugeben, denn der Kopf hat keinen Parameter dafür. Der Basisfall dagegen wird pro Startaufruf genau einmal
-  erreicht, und sein Rückgabewert kommt automatisch bei allen wartenden Aufrufen an. Jeder schreibt seinen Platz und
-  reicht dasselbe Array weiter. So entsteht genau ein Array.
-```
-
 ## Zwei Indizes: von beiden Enden zur Mitte
 
 ```aufgabe
@@ -2790,15 +2762,6 @@ loesung: |
   Die gerade Anzahl ist wichtig: Bei ungerader Anzahl gäbe es kein Paar mit `start + 1 == end`, und die Indizes liefen bei `(2, 2)` weiter zu `(3, 1)`.
   ---
   Probe mit `[2, 5]`: Paare (4, 6) mit Abstand 2 und (8, 1) mit Abstand 7. Ergebnis 7.
-```
-
-```reflexion
-frage: Warum genügt bei der Spiegel-Prüfung der Basisfall links >= rechts, während die Summe aller Werte im Bereich zusätzlich den Fall links == rechts braucht?
-antwort: |
-  Die Spiegel-Prüfung schaut nur Paare an. Ein einzelner Wert in der Mitte hat keinen Partner und kann den Spiegel
-  nicht stören, darum darf er im Basisfall einfach übergangen werden. Bei der Summe muss dagegen jeder Wert genau
-  einmal vorkommen, auch der mittlere. Mit `links >= rechts` würde er übergangen, mit nur `links > rechts` würde er als
-  Paar mit sich selbst doppelt gezählt. Darum braucht die Summe einen eigenen Fall für genau einen Wert.
 ```
 
 ## Teile und herrsche: das Array halbieren
@@ -3389,19 +3352,6 @@ loesung: |
   Warum die Nahtstelle? Jede Hälfte prüft nur Paare, deren beide Werte in ihr liegen. Das Paar aus `a[mitte]` und `a[mitte + 1]` hat einen Wert links und einen rechts. Ohne die Extra-Prüfung bliebe es ungeprüft.
   ---
   Probe mit `{1, 4, 6, 2, 7, 9}`: Die Mitte ist 2, und `6 <= 2` ist falsch. Wegen `&&` liefert die Methode sofort `false`, ohne die Hälften zu prüfen.
-```
-
-```reflexion
-frage: Teile und herrsche braucht für die Summe 2n - 1 Aufrufe, die lineare Rekursion nur n + 1. Warum lernt man das Halbieren trotzdem?
-antwort: |
-  Für die Summe ist das Halbieren tatsächlich kein Gewinn, denn jeder Wert muss ohnehin einmal angesehen werden. Der
-  Vorteil zeigt sich bei Aufgaben, bei denen man eine Hälfte gar nicht ansehen muss oder bei denen das Kombinieren
-  zweier Hälften leichter ist als das Bearbeiten Wert für Wert. Bei der binären Suche in einem sortierten Array
-  genügt eine einzige Hälfte (siehe [18.4 Binäre Suche: halbieren statt durchprobieren](/lernen/ep1/suchen/binaere-suche-halbieren-statt-durchprobieren)).
-  Bei Mergesort ist das Zusammenfügen zweier sortierter Hälften schnell. Dieses Verfahren wird in
-  [19.8 Laufzeit und Vergleich der Verfahren](/lernen/ep1/sortieren/laufzeit-und-vergleich-der-verfahren) nur kurz
-  erwähnt. Außerdem ist die Rekursionstiefe beim Halbieren viel kleiner: Bei 1000 Werten sind höchstens
-  etwa 11 Aufrufe gleichzeitig offen, bei der linearen Rekursion 1001.
 ```
 
 ## Gemischte Wiederholung
@@ -4266,58 +4216,7 @@ loesung: |
   Ein Array direkt mit `System.out.println(daten)` auszugeben, zeigt nur eine Speicherkennung wie `[I@1b6d3586`. Darum `Arrays.toString`.
 ```
 
-```aufgabe
-id: ra-pruef-feedback
-titel: Fragen im Feedbackgespräch
-niveau: 3
-punkte: 3
-lernziel: 6
-kompetenz: begruenden
-quelle: nach den Zusatzfragen der Aufgabenblätter 3 und 4 (WS 2021 bis WS 2023), umformuliert
-angabe: |
-  (Zeitrichtwert: 6 Minuten, je Frage 1 Punkt) Du hast die Methode `preisTrend(int[] alt, int[] neu, int index)`
-  aus [13.3 Ein neues Array füllen oder das Array verändern](/lernen/ep1/rekursion-arrays/ein-neues-array-fuellen-oder-das-array-veraendern) abgegeben. Sie legt das
-  `char`-Array im Basisfall an und befüllt es auf dem Rückweg. Beantworte die drei Fragen der Tutorin in je ein bis
-  zwei Sätzen.
-
-  1. Wozu braucht die Methode den Parameter `index`? Bei Strings kam die Rekursion ohne ihn aus.
-  2. Was passiert, wenn man im Selbstaufruf `index++` statt `index + 1` schreibt?
-  3. Warum entsteht das neue Array im Basisfall und nicht am Anfang jedes Aufrufs?
-teile:
-  - typ: text
-    muster: |
-      1. Ein Array kann man nicht kürzen wie einen String mit substring, und Kopieren ist verboten. Der Index sagt
-         jedem Aufruf, welche Stelle er bearbeitet und wo der Rest beginnt.
-      2. index++ liefert den alten Wert. Der Selbstaufruf bekommt denselben Index, die Rekursion endet nie und bricht
-         mit einem StackOverflowError ab.
-      3. Der Basisfall wird pro Startaufruf genau einmal erreicht, also entsteht genau ein Array. Am Anfang jedes
-         Aufrufs hätte jeder Aufruf ein eigenes Array mit nur einem befüllten Platz.
-hinweise:
-  - Denk an die drei Stichworte Fortschritt, Wert von `index++` und Anzahl der `new`-Ausführungen.
-  - Für Frage 3 hilft die Frage, wie oft der Basisfall bei einem Startaufruf erreicht wird.
-loesung: |
-  **Ansatz:** Jede Frage mit einem Begriff aus dem Kapitel beantworten: Rest ab einem Index, Wert von `index++`, Erzeugen im Basisfall.
-  ---
-  1. Der Index beschreibt den Rest, weil ein Array nicht kürzer werden kann.
-  ---
-  2. `index++` übergibt den alten Wert. Das ergibt einen `StackOverflowError`.
-  ---
-  3. Im Basisfall entsteht genau ein Array, das alle Aufrufe gemeinsam befüllen.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit der Zusammenfassung direkt darunter.
-antwort: |
-  Eine mögliche Auswahl: (1) Weil ein Array nicht kürzer werden kann, beschreibt ein Index-Parameter den Rest, der noch
-  zu bearbeiten ist. Basisfall ist `index == a.length`, Fortschritt `index + 1`, Startaufruf mit Index 0. (2) Soll ein
-  neues Array entstehen, legt man es im Basisfall an und befüllt es auf dem Rückweg. Soll das übergebene Array
-  verändert werden, schreibt man direkt hinein, und der Aufrufer sieht die Änderung. (3) Mit zwei Indizes arbeitet man
-  von beiden Enden zur Mitte (Basisfall `links >= rechts`), mit Teile und herrsche halbiert man den Bereich und
-  kombiniert zwei Teilergebnisse. Ebenso gute Antworten sind die Basisfälle für Maximum und Nachbarpaare oder die
-  Formel 2n - 1 für die Anzahl der Aufrufe.
-```
 
 :::zusammenfassung
 1. **Rest ab einem Index:** Ein Array kann man nicht kürzen, und Kopieren ist im Programmiertest verboten. Darum

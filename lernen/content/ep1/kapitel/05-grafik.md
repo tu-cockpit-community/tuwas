@@ -762,16 +762,6 @@ loesung: |
   Probe für `i = n - 1`: `n - 1` Leerzeichen und `2 · 1 − 1 = 1` Zeichen, also die Spitze. Für `n = 1` läuft die äußere Schleife einmal mit 0 Leerzeichen und einem `#`.
 ````
 
-```reflexion
-frage: Warum lohnt es sich, die Zeilennummer i ab 0 zu zählen und nicht ab 1? Was ändert sich an den Formeln, wenn du ab 1 zählst?
-antwort: |
-  Ab 0 gezählt ist der Wert in Zeile 0 direkt der Startwert b der Formel a * i + b. Man liest ihn einfach in der
-  ersten Tabellenzeile ab. Zählt man ab 1, verschiebt sich alles um eins. Die Pyramide hätte dann 2 * i - 1 Sterne
-  und n - i Leerzeichen. Beides ist richtig, solange Tabelle, Formel und Schleife dieselbe Zählweise benutzen.
-  Gefährlich ist nur das Mischen: eine Formel aus einer Tabelle ab 0, aber eine Schleife ab 1. Dann ist jede Zeile
-  um eine Stelle verschoben. Ab 0 zu zählen passt außerdem zu Strings und später zu Arrays, deren Indizes bei 0 beginnen.
-```
-
 ## Trapez, Raute und Tannenbaum
 
 ```aufgabe
@@ -1390,47 +1380,6 @@ loesung: |
   Probe mit `hoehe = 3`: Der letzte Abschnitt hat die Zeile `r = 2` mit 0 Leerzeichen und `o+++o`, also 5 Elementen. Das ist die breiteste Zeile, sie beginnt ganz links.
 ````
 
-```aufgabe
-id: gr-form-eine-schleife
-titel: "Zusatzfrage: Geht es mit einer Schleife?"
-niveau: 2
-lernziel: 2
-kompetenz: begruenden
-quelle: Aufgabenblatt 2 SS2020, Zusatzfrage zu Aufgabe 2
-angabe: |
-  Zum Tannenbaum stellte das Aufgabenblatt eine Zusatzfrage, die man schriftlich als Kommentar beantworten musste:
-  Lässt sich der Baum auch mit nur **einer** Schleife ausgeben, und wie ginge man dabei vor? Antworte in drei bis fünf
-  ganzen Sätzen.
-teile:
-  - typ: text
-    muster: |
-      Ja, wenn man darauf verzichtet, für jede Zeile eine eigene innere Schleife zu schreiben. Man lässt eine
-      einzige Schleife über alle **Zeichenpositionen** laufen. Der Baum hat insgesamt 1 + 2 + … + hoehe Zeilen,
-      und jede Zeile hat hoehe + r Positionen bis zum letzten Zeichen. In der Schleife merkt man sich in Variablen,
-      in welchem Abschnitt k, in welcher Zeile r und an welcher Position man gerade ist. Am Zeilenende gibt man
-      einen Zeilenumbruch aus, setzt die Position auf 0 und erhöht r. Wenn r den Wert k erreicht, beginnt ein
-      neuer Abschnitt. Ob an einer Position ein Leerzeichen, ein ^, ein o oder ein + steht, entscheidet ein if.
-      Das geht, ist aber schwerer zu lesen als drei verschachtelte Schleifen.
-hinweise:
-  - Eine Schleife kann auch über alle Zeichen des ganzen Bildes laufen statt über die Zeilen.
-  - 'Was muss sich das Programm dann in Variablen merken, damit es weiß, wo es gerade ist?'
-loesung: |
-  **Ansatz:** Verschachtelte Schleifen sind bequem, aber nicht nötig. Entscheidend ist, dass das Programm jederzeit weiß, welches Zeichen als nächstes kommt.
-  ---
-  Mit einer einzigen Schleife über alle Positionen führt man die Zähler für Abschnitt, Zeile und Spalte selbst als Variablen mit. Am Zeilenende wird die Spalte zurückgesetzt, am Abschnittsende die Zeile.
-  ---
-  Ein `if` entscheidet je Position über das Zeichen. Die Lösung ist möglich, aber unübersichtlicher. Wichtig ist, dass du das Weiterzählen der drei Zähler erklären kannst.
-```
-
-```reflexion
-frage: Bei der Raute verwendest du eine Schleife mit d = Math.abs(i - m). Warum braucht diese Lösung keine Sonderbehandlung für die Mittelzeile, die Lösung mit zwei Schleifen aber schon?
-antwort: |
-  Die eine Schleife läuft über jede Zeile genau einmal, von 0 bis h - 1. Die Mittelzeile ist einfach die Zeile mit
-  d = 0 und wird wie jede andere behandelt. Bei zwei Schleifen muss ich selbst festlegen, zu welcher Hälfte die
-  Mittelzeile gehört. Schreibe ich sie in beide, erscheint sie doppelt. Vergesse ich sie in beiden, fehlt sie. Die
-  Formel mit dem Abstand verlagert diese Entscheidung in die Rechnung, und die Rechnung kann sie nicht vergessen.
-```
-
 ## Muster mit Bedingungen: Rahmen, Diagonalen und Schachbrett
 
 ```aufgabe
@@ -1975,17 +1924,6 @@ loesung: |
   ---
   Probe mit `breite = 3`: zwei Stellen eingerückt `###`, dann eine Stelle eingerückt `# #`, dann ganz links `###`. Die letzte Spalte ist immer `#`, also gibt es keine Leerzeichen am Zeilenende.
 ````
-
-```reflexion
-frage: Wann planst du ein Muster mit einer Zeilentabelle (Leerzeichen, dann Zeichen) und wann mit einer Positionsbedingung? Gibt es Muster, für die beides geht?
-antwort: |
-  Die Zeilentabelle passt, wenn jede Zeile aus zusammenhängenden Blöcken besteht: erst Leerzeichen, dann eine
-  Gruppe gleicher Zeichen. Dreieck, Pyramide, Trapez und Raute sind so gebaut. Die Positionsbedingung passt, wenn
-  Zeichen und Lücken in einer Zeile wechseln, wie beim Rahmen, beim Kreuz oder beim Schachbrett. Beides geht zum
-  Beispiel bei einem rechtsbündigen Dreieck: Man kann eine feste Zeilenlänge n nehmen und mit der Bedingung
-  j >= n - 1 - i entscheiden, ob ein Stern kommt. Die Positionsbedingung ist allgemeiner. Sie ist auch die
-  Denkweise für zweidimensionale Arrays, wo man für jede Zelle (i, j) entscheidet, was hineinkommt.
-```
 
 ## CodeDraw mit Schleifen: Reihen, Raster und Verläufe
 
@@ -2596,16 +2534,6 @@ loesung: |
   Probe: Quadrat (3, 4) hat `s = 3 + 3 = 6` und `g = 1530 / 14 = 109`, ein dunkles Grau. Mit `255 / 14 * s` wäre es `18 · 6 = 108`, und links unten käme nur `18 · 14 = 252` heraus.
 ````
 
-```reflexion
-frage: Warum setzt man bei den konzentrischen Kreisen die Farbe in der Schleife, bei der Reihe aus blauen Quadraten aber vor der Schleife? Was wäre falsch daran, sie bei den Quadraten in die Schleife zu schreiben?
-antwort: |
-  Die Farbe gilt ab dem Aufruf von setColor für alle folgenden Formen. Haben alle Quadrate dieselbe Farbe, genügt ein
-  Aufruf vor der Schleife. Bei den Kreisen ändert sich die Farbe mit jedem Durchlauf, also muss sie in jedem Durchlauf
-  neu gesetzt werden, und zwar vor fillCircle. Bei den Quadraten wäre setColor in der Schleife nicht falsch, das Bild
-  bliebe gleich. Es würde nur fünfmal dieselbe Farbe gesetzt. Für die Lesbarkeit ist es besser, Dinge, die sich nicht
-  ändern, vor die Schleife zu ziehen. Dann sieht man auf einen Blick, was in der Schleife variiert.
-```
-
 ## Zeichnen nach Maßskizze
 
 ```aufgabe
@@ -3121,48 +3049,6 @@ loesung: |
   ```
   Probe: Die letzte Fächerlinie endet bei y = 25 + 250 = 275, noch über dem Startpunkt auf der Unterkante.
 ````
-
-```aufgabe
-id: gr-mass-summen
-titel: Summen im Code stehen lassen?
-niveau: 2
-lernziel: 5
-kompetenz: begruenden
-angabe: |
-  Zwei Lösungen derselben Maßskizze:
-
-  - Lösung A: `cd.fillSquare(50, 260, 90);`
-  - Lösung B: `cd.fillSquare(25 + 25, 375 - 25 - 90, 90);`
-
-  Beide zeichnen dasselbe. Welche würdest du abgeben, und warum? Nenne zwei Gründe in ganzen Sätzen.
-teile:
-  - typ: text
-    muster: |
-      Ich würde Lösung B abgeben. Erstens sieht man jeder Zahl an, aus welchen Maßen der Skizze sie stammt: 25 für
-      den Rahmen, 25 Abstand, 375 als Unterkante des Rahmens. Im Feedbackgespräch kann ich so jede Zahl sofort
-      erklären. Zweitens ist ein Rechenfehler leichter zu finden, weil man die Summe mit der Skizze vergleichen kann.
-      Ändert sich ein Maß, etwa der Rand, sieht man auch, welche Stellen betroffen sind. Noch besser wären Variablen
-      wie `int rahmen = 25;`, dann steht jede Zahl nur einmal im Programm.
-hinweise:
-  - Denk an das Feedbackgespräch, in dem du jede Zahl erklären musst.
-  - Was passiert, wenn sich ein Maß in der Skizze ändert?
-loesung: |
-  **Ansatz:** Beide Lösungen sind richtig. Es geht um Lesbarkeit und Erklärbarkeit.
-  ---
-  Lösung B zeigt die Herkunft jeder Zahl. Das hilft beim Erklären und beim Finden von Rechenfehlern.
-  ---
-  Am besten sind benannte Variablen für wiederkehrende Maße, etwa `rahmen` und `abstand`. Dann ändert man ein Maß an einer einzigen Stelle.
-```
-
-```reflexion
-frage: Warum rechnet man alle Maßketten vom Fensterrand aus und nicht von der jeweils zuletzt gezeichneten Form?
-antwort: |
-  Der Fensterrand hat eine bekannte, feste Koordinate: 0 links und oben, 400 rechts und unten. Jede Form, deren
-  Position ich davon ableite, ist eindeutig bestimmt. Rechne ich dagegen von Form zu Form, wandert jeder Fehler
-  weiter: Liegt das Quadrat falsch, liegt auch die Ellipse daneben falsch, und der Fehler fällt erst ganz am Ende auf.
-  Natürlich darf eine Kette über eine Form hinweglaufen, wie beim Quadrat und der Ellipse. Ihr Anfang ist aber
-  immer ein Rand, dessen Koordinate ich kenne.
-```
 
 ## Kreismuster: Gleitkomma und ungerades n
 
@@ -3713,15 +3599,6 @@ loesung: |
   ---
   Probe mit `n = 19`: `r ≈ 7,89`, `m = 9`. Der orange Kreis hat den Radius 8r ≈ 63,2 und füllt 8 mal 8 Zellen, die Spalten 10 bis 17 und die Zeilen 1 bis 8.
 ````
-
-```reflexion
-frage: Warum verlangt das Aufgabenblatt ein ungerades n? Was würde mit dem Kreuz aus Kreisen passieren, wenn man n = 6 zulässt?
-antwort: |
-  Bei ungeradem n gibt es eine mittlere Zelle m = n / 2, deren Mittelpunkt genau in der Fenstermitte liegt. Links
-  und rechts davon liegen gleich viele Zellen. Bei n = 6 ist m = 3, aber die Fenstermitte liegt auf der Grenze
-  zwischen Zelle 2 und Zelle 3. Die rote Spalte stünde dann rechts von der Mitte, mit drei Zellen links und nur zwei
-  rechts. Das Muster wäre nicht mehr symmetrisch. Darum prüft das Programm die Eingabe, bevor es zeichnet.
-```
 
 ## Optische Täuschungen: Café-Wall, Pinna und Ouchi
 
@@ -4343,16 +4220,6 @@ loesung: |
   ---
   Probe: Die Mitte beginnt bei 120 = 3 · 40, also genau an einer Spaltengrenze des Hintergrunds, und endet bei 120 + 160 = 280 = 7 · 40. Weil die Mitte zuletzt kommt, verdeckt sie den Hintergrund dort vollständig.
 ````
-
-```reflexion
-frage: Bei der Café-Wall-Variante kommen die Kreuze nach dem Schachbrett. Könnte man auch zuerst alle Kreuze und dann alle Quadrate zeichnen? Begründe mit dem Malerprinzip.
-antwort: |
-  Nein. Die Kreuze liegen genau auf den Ecken der Quadrate, jeder Balken ragt in vier Quadrate hinein. Zeichnet man
-  die Quadrate danach, übermalen sie die Balken vollständig, weil gefüllte Formen deckend sind. Man sähe nur das
-  Schachbrett. Nach dem Malerprinzip muss alles, was oben sichtbar sein soll, später gezeichnet werden. Die Reihenfolge
-  innerhalb einer Schicht ist dagegen egal, solange sich die Formen dieser Schicht nicht überlappen. Die Quadrate des
-  Schachbretts könnte man also in jeder Reihenfolge zeichnen.
-```
 
 ## Gemischte Wiederholung
 
@@ -5223,89 +5090,7 @@ loesung: |
   Zählprobe: 7 · 5 = 35 Quadrate und 6 · 4 = 24 Kreuze mit je 2 Balken, zusammen 35 + 48 = 83 Formen.
 ````
 
-```aufgabe
-id: gr-pa-gespraech
-titel: "Feedbackgespräch: Erkläre dein Trapez"
-niveau: 3
-lernziel: 2
-kompetenz: begruenden
-punkte: 2
-angabe: |
-  Im Feedbackgespräch zeigt dir der Tutor deine Lösung aus „Das Trapez programmieren“ und fragt:
-
-  a) Warum steht `int h = breite / 2;` und nicht `double h = breite / 2.0;`?
-  b) Was müsstest du ändern, damit das Trapez auf dem Kopf steht, also die lange Seite oben?
-
-  Antworte in ganzen Sätzen.
-teile:
-  - typ: text
-    muster: |
-      a) Die Aufgabe verlangt als Höhe die ganzzahlige Hälfte der Breite. Für Breite 7 sind das 3 Zeilen. Mit
-      `breite / 2.0` wäre die Höhe 3,5, und die Schleife `i < h` liefe für i = 0 bis 3, also viermal. Außerdem würden
-      die Formeln für Leerzeichen und Zeichen falsche Werte liefern, die unterste Zeile wäre 8 statt 7 Zeichen breit.
-      b) Ich drehe die Reihenfolge der Zeilen um. Entweder lasse ich die äußere Schleife rückwärts laufen,
-      `for (int i = h - 1; i >= 0; i--)`, und lasse den Rumpf gleich. Oder ich ändere die Formeln: Zeile i hat dann
-      i Leerzeichen und `breite - 2 * i` Zeichen.
-hinweise:
-  - Rechne für a) beide Varianten mit Breite 7 durch.
-  - Für b) überlege, welche Zeile zuerst kommen muss und wie sich dann die Zeilentabelle ändert.
-loesung: |
-  **Ansatz:** a) Ganzzahldivision und Schleifenanzahl. b) Zeilenreihenfolge umdrehen.
-  ---
-  a) `breite / 2` ergibt die verlangte ganzzahlige Höhe. Mit 2.0 läuft die Schleife bei ungerader Breite einmal zu oft, und die Zeichenzahlen stimmen nicht mehr.
-  ---
-  b) Äußere Schleife rückwärts laufen lassen oder die Formeln auf `i` Leerzeichen und `breite - 2 * i` Zeichen umstellen. Probe: Zeile 0 hat dann 0 Leerzeichen und `breite` Zeichen.
-```
-
-```aufgabe
-id: gr-pa-design
-titel: "Aufgabenblatt: Die Designaufgabe planen"
-niveau: 3
-lernziel: 7
-kompetenz: modellieren
-punkte: 2
-quelle: Aufgabenblatt 2 WS2023, Aufgabe 5 und Designaufgabe K1 WS2021 (Anforderungen nachgebaut)
-angabe: |
-  Die Designaufgabe verlangt ein eigenes CodeDraw-Programm mit mindestens zwei Verzweigungen, mindestens zwei
-  Schleifen, 50 bis 200 Codezeilen und ohne Übernahme von Programmen aus Vorlesung oder Übung. Plane ein Bild,
-  zum Beispiel eine Stadt bei Nacht. Beschreibe in ganzen Sätzen:
-
-  a) Welche Schichten zeichnest du in welcher Reihenfolge?
-  b) Wo kommen eine Schleife und eine Verzweigung vor, und wofür?
-  c) Welche Größe legst du als Variable fest, damit sich das Bild leicht anpassen lässt?
-teile:
-  - typ: text
-    muster: |
-      a) Zuerst der Himmel als dunkelblaues Rechteck über das ganze Fenster, dann der Mond als gelber Kreis, dann die
-      Häuser als graue Rechtecke, zuletzt die Fenster der Häuser. Was weiter vorne liegt, kommt später.
-      b) Eine Schleife setzt die Häuser nebeneinander, mit der Koordinatenformel x = rand + i * (breite + abstand).
-      Eine verschachtelte Schleife setzt in jedes Haus ein Raster aus Fenstern. Eine Verzweigung entscheidet je
-      Fenster mit einer Positionsbedingung wie (i * 3 + j) % 4 == 0, ob es dunkel oder gelb erleuchtet ist. Eine
-      zweite Verzweigung macht jedes zweite Haus höher, mit if (i % 2 == 0).
-      c) Die Anzahl der Häuser n ist eine Variable. Breite und Abstand werden aus der Fensterbreite berechnet, so wie
-      bei den gleich verteilten Quadraten. Ändere ich n, passt sich das ganze Bild an.
-hinweise:
-  - Nutze das Malerprinzip für a), Koordinatenformel und Positionsbedingung für b).
-  - Eine Größe, aus der Abstände berechnet werden, macht das Bild anpassbar.
-loesung: |
-  **Ansatz:** Ein Design ist gut planbar, wenn es aus Schichten, Rastern und Bedingungen besteht, also aus den Bausteinen dieses Kapitels.
-  ---
-  a) Schichten von hinten nach vorne. b) Schleifen für Wiederholungen (Häuser, Fenster), Verzweigungen für Unterschiede (Farbe, Höhe).
-  ---
-  c) Eine Variable wie die Anzahl `n`, aus der Größen und Abstände berechnet werden. Im Feedbackgespräch kannst du dann zeigen, dass dein Programm mehr ist als eine Liste fester Zahlen.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten.
-antwort: |
-  Eine mögliche Auswahl: (1) Ein Konsolenmuster plant man mit einer Zeilentabelle. Sie hält für jede Zeile die Zahl
-  der Leerzeichen und Zeichen fest, und aus ihr liest man Formeln der Form a * i + b ab. (2) Wechseln Zeichen innerhalb
-  einer Zeile, entscheidet eine Positionsbedingung in i und j, etwa (i + j) % 2 == 0 für ein Schachbrett. (3) In
-  CodeDraw berechnet die Koordinatenformel rand + i * (s + abstand) die Position jeder Form, und das Malerprinzip
-  legt fest, welche Form oben liegt. Gute Antworten sind auch die Maßkette vom Fensterrand oder der Radius als double.
-```
 
 :::zusammenfassung
 1. **Zeilentabelle:** Für jede Musterzeile `i` die Anzahl der Leerzeichen und der Zeichen notieren. Ändert sich eine Spalte um `a` je Zeile und beginnt bei `b`, lautet die Grenze `a * i + b`. Rechts vom letzten Zeichen wird nichts ausgegeben.

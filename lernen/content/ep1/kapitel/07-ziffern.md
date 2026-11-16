@@ -422,16 +422,6 @@ positiven Zahlen aufgerufen. Dann tritt das Problem gar nicht auf.
 5. Bei negativen Zahlen sind alle Reste negativ. Mache die Zahl vorher positiv, wenn du echte Ziffern brauchst.
 :::
 
-```reflexion
-frage: Warum liefert gerade `% 10` die letzte Ziffer und nicht etwa `% 9`? Überlege es dir an 4072, bevor du die Antwort aufdeckst.
-antwort: |
-  Im Dezimalsystem ist 4072 = 407 · 10 + 2. Alle Ziffern außer der letzten stecken im Teil 407 · 10, und der
-  ist durch 10 teilbar. Beim Teilen durch 10 bleibt also genau die letzte Ziffer als Rest übrig. Bei `% 9` ist
-  407 · 10 nicht durch 9 teilbar, darum mischen sich die anderen Ziffern in den Rest: `4072 % 9` ist 4. Die
-  Zahl 10 ist die Basis unseres Zahlensystems. Im Zweiersystem, mit dem der Computer intern arbeitet, würde
-  `% 2` die letzte Binärziffer liefern.
-```
-
 ```aufgabe
 id: zi-ab-ausgabe-vier
 titel: Vier Ausdrücke zu einer Zahl
@@ -964,15 +954,6 @@ Der Aufruf `printCrossSum(4072)` gibt `Quersumme von 0: 13` aus. Nach der Schlei
 genau dann endet die Schleife. Wer die ursprüngliche Zahl noch braucht, rechnet auf einer Kopie:
 `int n = number;` vor der Schleife und in der Schleife nur mit `n` arbeiten.
 :::
-
-```reflexion
-frage: Warum endet die Ziffernschleife für jede Zahl `n ≥ 0` nach endlich vielen Durchläufen? Wie viele Durchläufe sind es für eine `int`-Zahl höchstens?
-antwort: |
-  In jedem Durchlauf wird `n` durch 10 geteilt. Für `n > 0` ist `n / 10` echt kleiner als `n`, denn die letzte
-  Ziffer verschwindet. Eine ganze Zahl, die immer kleiner wird und nie unter 0 fällt, muss irgendwann 0
-  erreichen. Dann ist `n > 0` falsch. Der größte `int`-Wert ist 2147483647 und hat zehn Ziffern. Mehr als zehn
-  Durchläufe gibt es also nie. Bei negativem `n` läuft die Schleife dagegen gar nicht, weil `n > 0` sofort falsch ist.
-```
 
 ```aufgabe
 id: zi-zs-ausgabe-ziffern
@@ -1788,16 +1769,6 @@ Ziffer gesetzt wurde. So entstehen keine Lücken.
 4. Wird das Ergebnis größer als 2147483647, läuft `int` über. Dann hilft `long`.
 :::
 
-```reflexion
-frage: Warum steht bei `result = result * 10 + digit` die zuerst gelesene Ziffer am Ende ganz links? Erkläre es mit dem Wort „Stellenwert“.
-antwort: |
-  Jedes `* 10` rückt alle Ziffern, die schon in `result` stehen, um eine Stelle nach links und erhöht ihren
-  Stellenwert. Die zuerst gelesene Ziffer ist am längsten dabei und wird darum am öftesten mit 10
-  multipliziert. Bei vier Ziffern dreimal, also landet sie auf der Tausenderstelle. Die zuletzt gelesene Ziffer
-  wird gar nicht mehr verschoben und bleibt bei den Einern. Die Ziffernschleife liest aber die letzte Ziffer
-  zuerst. Deshalb kehrt sich die Reihenfolge um.
-```
-
 ```aufgabe
 id: zi-um-lueckentext-reverse
 titel: Die Umkehrzahl ergänzen
@@ -2470,16 +2441,6 @@ Der erste Teil ist durch 9 teilbar. Übrig bleibt die Quersumme 13. Darum haben 
 denselben Rest, nämlich 4. Weil 9 durch 3 teilbar ist, gilt dasselbe für 3. Für eine Harshad-Zahl nützt diese
 Regel nur indirekt. Sie ist aber eine gute Übung für „Warum“-Fragen, wie sie im Feedbackgespräch kommen können.
 
-```reflexion
-frage: Warum sollen `countHarshadNumbers`, `sumHarshadNumbers` und `printHarshadNumbers` die Methode `isHarshadNumber` aufrufen, statt die Quersumme jeweils selbst zu berechnen?
-antwort: |
-  Dann steht die Prüfung nur an einer Stelle. Ist sie richtig getestet, sind auch alle drei Intervallmethoden
-  richtig. Findet man einen Fehler, korrigiert man eine Methode statt drei. Außerdem lesen sich die
-  Intervallmethoden wie die Angabe: „für jede Zahl im Intervall: wenn sie eine Harshad-Zahl ist, dann zähle
-  sie“. Das ist dieselbe Idee wie bei den überladenen Methoden in [6.7 Methoden nach Vorgabe schreiben](/lernen/ep1/methoden/methoden-nach-vorgabe-schreiben).
-  Im Programmiertest sind Hilfsmethoden zwar verboten, auf dem Blatt aber erlaubt und erwünscht.
-```
-
 ```aufgabe
 id: zi-ha-code-isharshad
 titel: isHarshadNumber schreiben
@@ -2891,36 +2852,6 @@ loesung: |
   Kontrolle: Für [141, 143] gibt es keinen Treffer, es erscheint nur der Zeilenumbruch. Für [7, 7] erscheint `7` ohne Komma.
 ```
 
-```aufgabe
-id: zi-ha-text-neunerregel
-titel: Die Neunerregel begründen
-niveau: 3
-lernziel: 4
-kompetenz: begruenden
-angabe: |
-  Stell dir vor, im Feedbackgespräch fragt die Tutorin: „Warum hat 5832 beim Teilen durch 9 denselben Rest wie seine
-  Quersumme?“ Begründe es in drei bis fünf Sätzen. Rechne dabei mit den Stellenwerten von 5832.
-teile:
-  - typ: text
-    muster: |
-      Ich schreibe 5832 mit Stellenwerten: 5 · 1000 + 8 · 100 + 3 · 10 + 2. Jeder Stellenwert ist ein
-      Vielfaches von 9 plus 1, also 1000 = 999 + 1, 100 = 99 + 1 und 10 = 9 + 1. Damit ist
-      5832 = (5 · 999 + 8 · 99 + 3 · 9) + (5 + 8 + 3 + 2). Die erste Klammer ist durch 9 teilbar. Also
-      unterscheiden sich 5832 und die Quersumme 18 um ein Vielfaches von 9 und haben denselben Rest. Hier ist
-      der Rest 0, also ist 5832 durch 9 teilbar.
-hinweise:
-  - Schreib 5832 als Summe von Ziffer mal Stellenwert.
-  - 'Zerlege jeden Stellenwert in „Vielfaches von 9 plus 1“.'
-loesung: |
-  **Ansatz:** Mit Stellenwerten zeigen, dass Zahl und Quersumme sich um ein Vielfaches von 9 unterscheiden.
-  ---
-  5832 = 5 · 1000 + 8 · 100 + 3 · 10 + 2. Das ist dasselbe wie 5 · 999 + 8 · 99 + 3 · 9 + (5 + 8 + 3 + 2).
-  ---
-  Der Teil 5 · 999 + 8 · 99 + 3 · 9 ist durch 9 teilbar. Deshalb haben 5832 und 18 beim Teilen durch 9 denselben Rest.
-  ---
-  Probe: 5832 = 9 · 648, Rest 0. Und 18 = 9 · 2, Rest 0. Unabhängig davon gilt 5832 = 18 · 324. Das folgt nicht aus der Neunerregel, sondern ist eigens nachgerechnet. Also ist 5832 sogar eine Harshad-Zahl.
-```
-
 ## Fröhliche und narzisstische Zahlen
 
 ```aufgabe
@@ -3203,16 +3134,6 @@ loesung: |
 4. Potenz ohne `Math.pow`: `int p = 1;` und `e`-mal `p = p * b;`. Nie `^` verwenden.
 5. Werden die Zahlen groß, wechsle zu `long`. Auf dem Blatt aus dem Sommer 2023 hat `isNarcissisticNumber` darum einen `long`-Parameter.
 :::
-
-```reflexion
-frage: Dass die äußere Schleife in `isHappyNumber` endet, verdankt sie einer mathematischen Tatsache über Quadratsummen. Warum endet die narzisstische Prüfung auch ohne ein solches Zusatzwissen? Vergleiche die beiden Abbruchgründe.
-antwort: |
-  Die narzisstische Prüfung besteht nur aus Ziffernschleifen und einer `for`-Schleife mit fester Anzahl. Jede
-  davon endet, weil die Zahl mit jedem Durchlauf kleiner wird oder der Zähler seine Grenze erreicht. Bei
-  `isHappyNumber` wird die Zahl dagegen nicht immer kleiner: 19 wird zu 82, also größer. Dass die Schleife endet,
-  folgt erst aus einer mathematischen Tatsache. Jede Folge erreicht die 1 oder den Kreis mit der 4. Ohne dieses
-  Wissen könnte man das Ende nicht garantieren. Darum ist die Abbruchbedingung `n != 1 && n != 4` so wichtig.
-```
 
 ```aufgabe
 id: zi-fn-ausgabe-folge
@@ -3963,16 +3884,6 @@ dasselbe, und das für immer. Das ist eine **Endlosschleife**. Die Fassung mit `
 4. **ggT nach Euklid**: `r = a % b; a = b; b = r;` bis `b == 0`. Dann ist `a` der ggT.
 5. Teste jede dieser Methoden auch mit 0 und mit 1 als Argument.
 :::
-
-```reflexion
-frage: Warum endet die `%`-Fassung des Euklidischen Algorithmus für alle `a, b ≥ 0` immer? Denk an den Wert von `b`.
-antwort: |
-  In jedem Durchlauf wird `b` durch `a % b` ersetzt. Ein Rest beim Teilen durch `b` ist immer kleiner als `b`
-  und nie negativ, solange beide Zahlen nicht negativ sind. Also wird `b` mit jedem Durchlauf echt kleiner und
-  bleibt mindestens 0. Eine solche Folge ganzer Zahlen muss nach endlich vielen Schritten bei 0 ankommen. Dann
-  ist `b != 0` falsch, und die Schleife endet. Bei der subtrahierenden Fassung wird nur eine der beiden Zahlen
-  kleiner, und bei `a = 0` sogar keine. Darum braucht sie den Sonderfall.
-```
 
 ```aufgabe
 id: zi-re-gefuehrt-ggt-mod
@@ -4903,37 +4814,6 @@ loesung: |
   Summe 2 + 7 + 0 + 1 + 2 + 0 + 2 + 7 = 21. Ausgabe `8 21`.
 ```
 
-```aufgabe
-id: zi-mix-zahl-oder-string
-titel: Wann Zahl, wann String?
-niveau: 3
-lernziel: 7
-kompetenz: begruenden
-angabe: |
-  Auf Aufgabenblatt 2 waren bei der Quersummen-Aufgabe Strings verboten. Bei `removeNumbersInString` auf
-  demselben Blatt arbeitet man dagegen mit einem String. Erkläre in drei bis vier Sätzen, woran du erkennst,
-  ob eine Aufgabe mit `% 10` oder mit `charAt` gelöst wird. Nenne je ein Beispiel.
-teile:
-  - typ: text
-    muster: |
-      Entscheidend ist der Typ der Eingabe. Ist sie ein `int` oder `long`, gibt es keine Zeichen. Dann zerlege
-      ich die Zahl mit `% 10` und `/ 10`, zum Beispiel bei `calcCrossSum(int number)`. Ist die Eingabe ein
-      `String`, stehen die Ziffern schon als Zeichen da. Dann laufe ich mit `charAt` darüber und rechne bei
-      Bedarf mit `c - '0'`, zum Beispiel bei `removeNumbersInString(String text)`. Eine Zahl in einen String
-      umzuwandeln, nur um `charAt` zu nutzen, ist auf dem Blatt ausdrücklich verboten.
-hinweise:
-  - Schau auf den Parametertyp im Methodenkopf.
-  - Welche Operationen gibt es für `int`, welche für `String`?
-loesung: |
-  **Ansatz:** Der Parametertyp im Methodenkopf entscheidet über das Werkzeug.
-  ---
-  `int` oder `long`: Ziffernschleife mit `% 10` und `/ 10`. Beispiel `calcCrossSum(int number)`.
-  ---
-  `String`: Schleife über die Zeichen mit `charAt`, Ziffernwert mit `c - '0'`. Beispiel `removeNumbersInString(String text)`.
-  ---
-  Die Umwandlung `"" + number` würde die Einschränkung „keine Strings“ verletzen.
-```
-
 ## Prüfungsaufgaben
 
 Diese Aufgaben haben das Niveau von Aufgabenblatt, Quiz und Einstufungstest. Die erste ist eine ganze
@@ -5481,60 +5361,7 @@ loesung: |
   Für `exponent = 0` läuft die äußere Schleife nicht, Ergebnis 1. Für `base = 0` ist jedes `product` 0, also 0. Die Tests prüfen nicht, ob du `*` verwendet hast. Im Einstufungstest gäbe es dafür aber keine Punkte.
 ```
 
-```aufgabe
-id: zi-pruef-gespraech
-titel: Fragen aus dem Feedbackgespräch
-niveau: 3
-punkte: 3
-lernziel: 7
-kompetenz: begruenden
-quelle: angelehnt an die Zusatzfragen der Aufgabenblätter 2 (Schleifenwahl WS 2017; Parameter und Sichtbarkeit WS 2021 und SS 2020), Inhalt neu
-angabe: |
-  (Zeitrichtwert: 6 Minuten) Du hast `calcCrossSum` und `countCrossSumDividable` abgegeben. Beantworte die
-  vier Fragen in ganzen Sätzen, so wie im Feedbackgespräch.
-
-  1. Welche Schleife haben Sie in `calcCrossSum` verwendet, und warum?
-  2. Was liefert Ihre Methode für 0, und wäre das richtig?
-  3. Ihre Methode teilt `number` in der Schleife. Ändert das die Variable in `main`?
-  4. Ändern Sie `countCrossSumDividable` so, dass sie die Zahlen summiert statt zählt. Was müssen Sie ändern?
-teile:
-  - typ: text
-    muster: |
-      1. Eine `while`-Schleife mit der Bedingung `number > 0`. Ich weiß vorher nicht, wie viele Ziffern die
-         Zahl hat, also passt keine `for`-Schleife mit fester Anzahl. Die Schleife endet, wenn keine Ziffer
-         mehr übrig ist.
-      2. Für 0 läuft die Schleife nicht, und die Methode liefert 0. Die Quersumme von 0 ist tatsächlich 0, das
-         Ergebnis stimmt also. Laut Vorbedingung `number > 0` kommt 0 ohnehin nicht vor. Beim Ziffernzählen
-         wäre 0 dagegen falsch, dort bräuchte ich do-while.
-      3. Nein. Java übergibt `int`-Werte als Kopie (call-by-value). Die Methode teilt nur ihren Parameter,
-         die Variable in `main` bleibt gleich.
-      4. Ich ersetze `count++` durch `sum = sum + i;`, benenne die Variable um und gebe die Summe zurück. Die
-         Schleife über `[start, end]` und der Aufruf der Prüfmethode bleiben gleich.
-hinweise:
-  - Denk bei Frage 1 daran, was du vor Beginn der Schleife über die Zahl weißt.
-  - 'Frage 3 betrifft call-by-value aus Kapitel 6. Frage 4 ist die Variante „summieren statt zählen“.'
-loesung: |
-  **Ansatz:** Jede Antwort mit dem passenden Fachbegriff begründen: Abbruchbedingung, Sonderfall, call-by-value, Muster der Methodenfamilie.
-  ---
-  1: `while (number > 0)`, weil die Ziffernanzahl vorher unbekannt ist. 2: Ergebnis 0, das ist die richtige Quersumme von 0.
-  ---
-  3: Nein, call-by-value. Der Parameter ist eine Kopie.
-  ---
-  4: `count++` wird zu `sum = sum + i;`, Rückgabe der Summe. Der Rest bleibt gleich.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit der Zusammenfassung in diesem Abschnitt.
-antwort: |
-  Eine mögliche Auswahl: (1) `n % 10` liefert die letzte Ziffer, `n / 10` schneidet sie ab. In einer
-  Schleife mit `while (n > 0)` kommen so alle Ziffern von rechts nach links dran. (2) Mit
-  `r = r * 10 + ziffer` hängt man eine Ziffer rechts an und dreht damit die Zahl um. Mit einem Stellenwert `p`
-  bleibt die Reihenfolge erhalten. (3) Aufgaben wie Harshad-, fröhliche oder narzisstische Zahlen bestehen aus
-  einer Prüfmethode für eine Zahl und Methoden, die sie über ein Intervall aufrufen. Ebenso gute Antworten sind
-  der Sonderfall 0, der Überlauf bei großen Zahlen oder Euklids Algorithmus für den ggT.
-```
 
 :::zusammenfassung
 1. **Ziffern abspalten:** `n % 10` ist die letzte Ziffer, `n / 10` die Zahl ohne sie. Die Ziffer an Stelle `k` von rechts ist `n / 10^k % 10`. Bei negativen Zahlen sind die Reste negativ.

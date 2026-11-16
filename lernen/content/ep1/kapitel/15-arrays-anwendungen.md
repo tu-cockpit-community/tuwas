@@ -1027,16 +1027,6 @@ loesung: |
   Probe mit dem Beispiel: Das Feld `(0, 1)` hat die Minen `(0, 0)` und `(1, 2)` in seiner Umgebung, also 2. Das Feld `(1, 0)` sieht nur die Mine `(0, 0)`, also 1.
 ```
 
-```reflexion
-frage: Warum muss die Randprüfung im selben Ausdruck **vor** dem Zugriff `feld[nz][ns]` stehen? Was würde passieren, wenn du zuerst den Wert liest und danach prüfst, ob die Zelle im Feld liegt?
-antwort: |
-  Der Zugriff `feld[nz][ns]` ist nur erlaubt, wenn beide Indizes gültig sind. Ist ein Index ungültig, wirft Java
-  sofort eine ArrayIndexOutOfBoundsException, und eine spätere Prüfung kommt nie zum Zug. Bei `&&` wertet Java von
-  links nach rechts aus und hört beim ersten falschen Teil auf. Steht die Randprüfung links, schützt sie den Zugriff
-  rechts davon. Steht sie rechts, ist es zu spät. Aus demselben Grund prüft man in der Randprüfung zuerst die Zeile
-  und liest erst danach `feld[z].length`.
-```
-
 ## Der Sudoku-Prüfer: Zeilen, Spalten und Blöcke
 
 ```aufgabe
@@ -1496,16 +1486,6 @@ Wir verfolgen die Zeile `{2, 7, 5, 7, …}`. Bei der 2 wird `gesehen[2]` wahr, b
 Für Spalten und Blöcke schreibst du dieselbe Prüfung mit vertauschten Schleifen beziehungsweise mit den
 Blockschleifen aus `imBlock`. Die Lösung ist gültig, wenn alle drei Prüfungen `true` liefern.
 :::
-
-```reflexion
-frage: Die Regel sagt „jede Zahl von 1 bis 9 **genau einmal**“. Die Methode `zeilenOk` prüft aber nur, dass **keine Zahl doppelt** vorkommt. Warum reicht das bei einem vollständig ausgefüllten Feld mit Zahlen von 1 bis 9?
-antwort: |
-  Eine Zeile hat genau neun Zellen, und in jeder steht eine der neun Zahlen 1 bis 9. Kommt keine Zahl doppelt vor,
-  dann stehen neun verschiedene Zahlen in der Zeile. Es gibt aber nur neun mögliche Zahlen, also kommt jede genau
-  einmal vor. Fehlte eine Zahl, müsste eine andere ihren Platz einnehmen und doppelt vorkommen. Dieses Argument heißt
-  Schubfachprinzip: Neun Zahlen auf neun Fächer verteilt, ohne Doppelbelegung, füllen jedes Fach genau einmal. Bei
-  einem Feld mit leeren Zellen (0) gilt das nicht mehr.
-```
 
 :::achtung[Das Merk-Array nur einmal angelegt]
 Eine Mitschülerin legt das Merk-Array vor der äußeren Schleife an:
@@ -2671,16 +2651,6 @@ loesung: |
   Probe mit dem Beispiel: Die Ecke `(0, 0)` mittelt 12, 18, 24, 36. Das sind 90, geteilt durch 4 ergibt 22.
 ```
 
-```reflexion
-frage: Warum braucht ein Mittelwertfilter ein neues Ergebnis-Array, das Invertieren aber nicht? Formuliere eine allgemeine Regel, wann ein Filter direkt in das Bild schreiben darf.
-antwort: |
-  Beim Invertieren hängt der neue Wert eines Pixels nur von seinem eigenen alten Wert ab. Sobald er überschrieben ist,
-  braucht ihn niemand mehr. Beim Mittelwertfilter brauchen aber die Nachbarn den alten Wert noch. Wird er vorher
-  überschrieben, rechnen sie mit einem schon geglätteten Wert. Die Regel lautet: Ein Filter darf direkt ins Bild
-  schreiben, wenn jeder neue Wert nur vom alten Wert desselben Pixels abhängt (Punktoperation). Sobald Nachbarn
-  beteiligt sind (Nachbarschaftsoperation), braucht er ein neues Array.
-```
-
 ## Flood-Fill: zusammenhängende Flächen rekursiv füllen
 
 ```aufgabe
@@ -3316,16 +3286,6 @@ loesung: |
   Warum wird keine Zelle doppelt gezählt? Jede Zelle wird beim ersten Besuch markiert. Jeder weitere Aufruf für sie trifft auf `'+'` und liefert 0.
   ---
   Probe mit Test 1: `(0, 0)`, `(0, 1)` und `(1, 0)` sind die einzigen Punkte, die zusammenhängen. Ergebnis 3.
-```
-
-```reflexion
-frage: Bei der Rekursion in [10.1 Eine Methode ruft sich selbst auf](/lernen/ep1/rekursion/eine-methode-ruft-sich-selbst-auf) wurde ein Argument wie `n` bei jedem Aufruf kleiner. Bei Flood-Fill werden `z` und `s` mal größer, mal kleiner. Warum endet Flood-Fill trotzdem sicher? Was genau ist hier der Fortschritt?
-antwort: |
-  Der Fortschritt steckt nicht in den Argumenten, sondern im Bild. Jeder Aufruf, der nicht sofort in einem Basisfall
-  endet, färbt genau eine Zelle von der alten in die neue Farbe um. Danach hat diese Zelle nie wieder die alte Farbe,
-  weil `alt != neu` gilt. Die Zahl der Zellen mit der alten Farbe wird also mit jedem färbenden Aufruf um 1 kleiner.
-  Sie kann nicht unter 0 fallen. Darum gibt es nur endlich viele färbende Aufrufe, und jeder löst nur vier weitere aus.
-  Fehlt die Markierung (zu spätes Färben oder `alt == neu`), schrumpft diese Zahl nicht, und die Rekursion endet nie.
 ```
 
 ## Flood-Fill mit Schwellwert und Inseln zählen
@@ -4016,16 +3976,6 @@ loesung: |
   Die Randprüfung mit `karte[z].length` macht die Methode auch für Zeilen verschiedener Länge sicher (verdeckter Test).
   ---
   Probe mit dem Ring: Das erste `#` bei `(0, 0)` zählt, und `versenke` läuft einmal ganz um das Loch herum. Danach findet die Schleife kein Land mehr. Ergebnis 1.
-```
-
-```reflexion
-frage: Auf Aufgabenblatt 5 wird der Startwert `gVal` als eigener Parameter übergeben, obwohl man ihn auch aus `bild[z][s]` lesen könnte. Warum wäre es falsch, in jedem Aufruf `gVal = bild[z][s]` zu setzen?
-antwort: |
-  In jedem Aufruf steht an `(z, s)` ein anderer Pixel. Setzt man dort `gVal = bild[z][s]`, vergleicht jeder Pixel nur
-  noch mit sich selbst. Der Abstand ist immer 0, also passt jeder Pixel, und die Füllung läuft über das ganze
-  zusammenhängende Bild. Reicht man stattdessen den eigenen Wert an den nächsten Aufruf weiter, vergleicht jeder Pixel
-  mit seinem Vorgänger, und die Füllung driftet über weiche Verläufe weit in fremde Gebiete. Der Parameter `gVal` hält den Wert des angeklickten Pixels fest. So vergleicht jeder
-  Aufruf mit demselben Bezugswert, und die Toleranz bedeutet wirklich „höchstens so weit weg vom Klickpunkt“.
 ```
 
 ## Feuer und Fluss: Simulationen auf der Landkarte
@@ -4771,17 +4721,6 @@ loesung: |
   Das `return` nach der Teilung ist wichtig. Ohne es würde der Fels danach zu `'~'` überschrieben, und das Wasser flösse durch den Fels nach unten.
   ---
   Probe mit Test 2: Der Fels `(1, 1)` wird `X` und schickt Wasser nach `(1, 0)` und `(1, 2)`. `(1, 2)` ist ein Fels, wird `X` und schickt Wasser nach `(1, 1)` (schon `X`, Ende) und `(1, 3)`. Beide äußeren Läufe fließen nach unten.
-```
-
-```reflexion
-frage: Feuer, Inseln zählen und Flood-Fill auf dem Graubild sehen verschieden aus. Was haben die drei Methoden gemeinsam, und woran erkennst du in einer neuen Aufgabe, dass sie dieses Muster braucht?
-antwort: |
-  Alle drei sind Flood-Fill: Von einem Startfeld aus wird jedes Feld bearbeitet, das über eine Kette von Nachbarn mit
-  einer bestimmten Eigenschaft erreichbar ist. Jede Methode hat dieselben Basisfälle: außerhalb der Karte, schon
-  bearbeitet, Eigenschaft nicht erfüllt. Im rekursiven Fall markiert sie das Feld, bevor sie die Nachbarn aufruft.
-  Verschieden sind nur die Eigenschaft (gleiche Farbe, Wiese, Grauwert in der Toleranz) und die Markierung (neue Farbe,
-  `'F'`, -1). Eine Aufgabe braucht dieses Muster, wenn nach „allem, was zusammenhängt“ gefragt wird: eine Fläche füllen,
-  ihre Größe bestimmen, sie zählen oder sich auf ihr ausbreiten.
 ```
 
 ## Gemischte Wiederholung
@@ -5744,67 +5683,7 @@ loesung: |
   Probe mit Test 3: Bei `(1, 1)` ergibt sich `-18`, wie in der Aufgabe „Eine Kantenmaske anwenden“.
 ```
 
-```aufgabe
-id: aw-pruef-feedback
-titel: Zusatzfragen im Feedbackgespräch zu Flood-Fill
-niveau: 3
-punkte: 3
-lernziel: 4
-kompetenz: begruenden
-quelle: Zusatzfragen im Stil der Aufgabenblätter 3 und 4 (WS 2023), Inhalt neu
-angabe: |
-  (Zeitrichtwert: 10 Minuten, je Frage 1 Punkt) Beantworte jede Frage in zwei bis vier Sätzen, so wie du sie im
-  Feedbackgespräch sagen würdest.
-
-  **a)** Warum endet dein `floodFill`, obwohl `z` und `s` bei den Selbstaufrufen mal größer, mal kleiner werden?
-
-  **b)** Warum wurde im Projekt die Stapelgröße mit `-Xss16m` erhöht? Ist der Algorithmus ohne diese Option falsch?
-
-  **c)** Was würde passieren, wenn du den Pixel erst **nach** den vier Selbstaufrufen auf -1 setzt?
-teile:
-  - typ: text
-    label: a)
-    muster: |
-      Jeder Aufruf, der nicht sofort in einem Basisfall endet, markiert genau einen Pixel mit -1. Ein markierter Pixel
-      wird nie wieder bearbeitet, weil der Basisfall „schon markiert“ greift. Es gibt nur endlich viele Pixel, also nur
-      endlich viele markierende Aufrufe, und jeder löst nur vier weitere aus. Darum endet die Rekursion.
-  - typ: text
-    label: b)
-    muster: |
-      Bei einer großen zusammenhängenden Fläche können sehr viele Aufrufe gleichzeitig offen sein, bei einem Bild mit
-      vielen tausend Pixeln entsprechend viele. Jeder offene Aufruf belegt Platz auf dem Aufrufstapel. Der Standardstapel
-      reicht dafür nicht, und es käme zu einem StackOverflowError. Der Algorithmus ist trotzdem richtig, er braucht nur
-      mehr Stapelspeicher.
-  - typ: text
-    label: c)
-    muster: |
-      Dann wäre der Pixel während der Selbstaufrufe noch nicht als bearbeitet erkennbar. Der Nachbar rechts würde nach
-      links zurückrufen, dieser Aufruf fände einen passenden, unmarkierten Pixel und riefe wieder nach rechts. Die beiden
-      Pixel würden sich endlos gegenseitig aufrufen, bis ein StackOverflowError kommt.
-hinweise:
-  - Bei a) geht es um den Fortschritt. Was wird mit jedem färbenden Aufruf weniger?
-  - Bei b) und c) unterscheide zwischen „zu tief, aber endlich“ und „endlos“.
-loesung: |
-  **Ansatz:** Alle drei Fragen drehen sich um Markierung und Aufrufstapel.
-  ---
-  a) Der Fortschritt ist die Zahl der noch unmarkierten passenden Pixel. Sie sinkt mit jedem markierenden Aufruf um 1 und kann nicht unter 0 fallen.
-  ---
-  b) Die Rekursion ist endlich, aber sehr tief. Die Option `-Xss16m` vergrößert nur den Platz für offene Aufrufe. Am Algorithmus ändert sie nichts.
-  ---
-  c) Ohne rechtzeitige Markierung rufen sich zwei Nachbarn endlos auf. Diese Rekursion ist wirklich unendlich, kein größerer Stapel hilft.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Vor jedem Zugriff auf einen Nachbarn prüft man, ob er im Raster liegt, und zwar mit der
-  Zeile zuerst. Die Zeile ist immer der erste Index, auch wenn eine Aufgabe von x und y spricht. (2) Ein Filter, der
-  Nachbarn liest, schreibt in ein neues Array. Nur Punktoperationen dürfen direkt ins Bild schreiben. (3) Flood-Fill
-  hat drei Basisfälle (außerhalb, schon markiert, passt nicht) und markiert eine Zelle, bevor er die vier Nachbarn
-  aufruft. Ebenso gute Antworten sind der Blockstart `z / 3 * 3` beim Sudoku oder das Merk-Array.
-```
 
 :::zusammenfassung
 1. **Raster:** Die Zelle in Zeile `z` und Spalte `s` ist `feld[z][s]`. Die Zeile wächst nach unten, die Spalte nach rechts. Heißen die Koordinaten `x` und `y`, ist `x` die Spalte und `y` die Zeile, also `bild[y][x]`.

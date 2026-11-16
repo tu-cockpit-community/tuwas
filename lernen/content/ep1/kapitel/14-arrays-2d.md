@@ -820,15 +820,6 @@ loesung: |
   Probe mit `{{3}, {5}, {1}}`: `z = 2`, `s = 0`. Es zählen `a[0][0] = 3` und `a[2][0] = 1`, zusammen 4.
 ```
 
-```reflexion
-frage: Warum ist `a.length` bei einem zweidimensionalen Array die Anzahl der Zeilen und nicht die Anzahl aller Elemente?
-antwort: |
-  Ein zweidimensionales Array ist in Java ein Array, dessen Elemente Zeilen sind. `a` zeigt auf dieses äußere Array.
-  Seine Elemente sind die Zeilen `a[0]`, `a[1]` und so weiter. `length` zählt immer die Elemente des Arrays, auf das
-  man es anwendet. Beim äußeren Array sind das die Zeilen. Die Anzahl aller Zahlen ist bei einer rechteckigen Tabelle
-  das Produkt `a.length * a[0].length`. Eine eigene Angabe wie `length` gibt es dafür nicht.
-```
-
 ## Verschachtelte Schleifen über Zeilen und Spalten
 
 ```aufgabe
@@ -2119,16 +2110,6 @@ loesung: |
   Probe: `{{1, 2}, {3}}` und `{{1}, {2, 3}}` haben beide 3 Elemente. Die Zeilenlängen 2 und 1 passen aber nicht zu 1 und 2, also `false`.
 ```
 
-```reflexion
-frage: Warum kann man zwei Zeilen verschiedener Länge mit drei Zuweisungen tauschen, aber zwei Spalten nicht?
-antwort: |
-  Eine Zeile ist ein eigenes Array, und das äußere Array enthält nur Verweise auf die Zeilen. Beim Tausch zweier
-  Zeilen werden nur zwei Verweise vertauscht. Die Elemente bleiben, wo sie sind, darum spielt die Länge keine Rolle.
-  Eine Spalte ist dagegen kein eigenes Array. Ihre Elemente liegen verteilt in vielen verschiedenen Zeilen. Um zwei
-  Spalten zu tauschen, musst du in jeder Zeile zwei Elemente einzeln tauschen. Das braucht eine Schleife über alle
-  Zeilen und geht nur, wenn jede Zeile beide Spalten auch hat.
-```
-
 ## Deklaration und Kapazität mehrdimensionaler Arrays
 
 ```aufgabe
@@ -3326,16 +3307,6 @@ loesung: |
   Bei einer leeren Zeile (`n = 0`) wird nichts eingetragen. Die Nullen stammen vom Standardwert. Der Zugriff `input[i][n - 1]` wäre dort `input[i][-1]` und würde eine Exception auslösen.
   ---
   Probe: `{7, 1}` mit `max = 3` ergibt `7, 1` und dann den letzten Wert 1, also `{7, 1, 1}`.
-```
-
-```reflexion
-frage: Warum bestimmt man bei M1-Aufgaben zuerst die Form des Ergebnisses, bevor man irgendeinen Wert einträgt?
-antwort: |
-  Ein Array hat in Java eine feste Länge, die beim Anlegen mit `new` festgelegt wird. Es kann danach nicht mehr
-  wachsen. Wer mit dem Eintragen beginnt, bevor er die Länge kennt, legt das Array zu klein an und bekommt eine
-  ArrayIndexOutOfBoundsException, oder zu groß und hat Plätze mit falschen Standardwerten. Darum berechnet man zuerst
-  die Zeilenzahl und die Länge jeder Zeile. Oft braucht man dafür einen eigenen Durchlauf, etwa um die längste Zeile
-  zu finden. Erst danach legt man das Array an und befüllt es.
 ```
 
 ## Arrays an Ort und Stelle verändern (Muster M2)
@@ -5053,67 +5024,7 @@ loesung: |
   Probe für `n = 5`, Stelle `[1][2]`: Abstände 1, 2, 3, 2. Das Minimum ist 1, also steht dort 2. In der Mitte `[2][2]` sind alle Abstände 2, dort steht 3.
 ```
 
-```aufgabe
-id: zd-pruef-feedback
-titel: Zusatzfragen im Feedbackgespräch
-niveau: 3
-punkte: 4
-lernziel: 3
-kompetenz: begruenden
-quelle: nach den Zusatzfragen von Aufgabenblatt 4 WS2023 (Referenzen, Kopie, Länge ändern), auf 2D-Arrays übertragen
-angabe: |
-  (Zeitrichtwert: 8 Minuten) Beantworte die Fragen so, wie du sie im Feedbackgespräch sagen würdest, in ganzen Sätzen.
-
-  a) Deine Methode `void nachUnten(int[][] a)` hat kein `return`. Warum sieht `main` trotzdem die verschobenen Zeilen?
-
-  b) Jemand kopiert ein Array mit `b[i] = a[i]` für jede Zeile. Warum ist das keine echte Kopie, und wie zeigst du das in `main` mit einer einzigen Ausgabe?
-
-  c) Wie viele `int`-Werte kann `new int[4][][]` direkt nach der Deklaration aufnehmen, und warum?
-
-  d) Warum kann man eine Zeile nicht verlängern, und was macht man stattdessen?
-teile:
-  - typ: text
-    muster: |
-      a) Der Parameter `a` bekommt eine Kopie des Verweises auf das äußere Array von `main`. Beide zeigen auf dasselbe
-      äußere Array. Die Methode ändert die Plätze dieses Arrays, also worauf die Plätze zeigen. Darum sieht `main` die
-      neue Reihenfolge. Nur eine Zuweisung `a = …` wäre für `main` unsichtbar.
-
-      b) `b[i] = a[i]` kopiert nur den Verweis auf die Zeile. Beide Arrays teilen sich danach dieselben Zeilen, und eine
-      Änderung über `b` ändert auch `a`. Zeigen kann man das mit `System.out.println(b[0] == a[0]);`. Die Ausgabe `true`
-      heißt, dass es dieselbe Zeile ist. Für eine echte Kopie muss man jede Zeile mit `new` anlegen und elementweise
-      befüllen.
-
-      c) Null Werte. `new int[4][][]` legt nur das äußere Array mit vier Plätzen an, und jeder Platz ist `null`. Es gibt
-      noch keine Zeile und damit keinen Platz für einen `int`-Wert.
-
-      d) Die Länge eines Arrays wird beim Anlegen festgelegt und kann danach nicht mehr geändert werden. Man legt eine
-      neue, längere Zeile an, kopiert die alten Werte hinein, ergänzt die neuen und setzt sie mit `a[i] = neu` an den
-      Platz der alten Zeile.
-hinweise:
-  - Zeichne für a) und b) die Variablen mit Pfeilen auf das äußere Array und die Zeilen.
-  - Für c) überlege, welche Arrays `new` bei leeren Klammern wirklich anlegt.
-loesung: |
-  **Ansatz:** Jede Antwort auf das Speicherbild zurückführen. Variablen enthalten Verweise, das äußere Array enthält Verweise auf Zeilen.
-  ---
-  a) Gemeinsames äußeres Array, die Methode ändert seine Plätze. b) Gemeinsame Zeilen, Nachweis mit `==`.
-  ---
-  c) Kapazität 0, weil die Plätze `null` sind. d) Feste Länge, darum neue Zeile anlegen und einsetzen.
-  ---
-  Im Gespräch zählt, dass du die Begriffe **Verweis**, **gemeinsames Array** und **feste Länge** von dir aus verwendest und mit einem Beispiel belegst.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Ein zweidimensionales Array ist ein Array von Zeilen. `a.length` ist die Zeilenzahl,
-  `a[i].length` die Länge der Zeile `i`, und der Zugriff lautet immer `a[zeile][spalte]`. (2) Weil Zeilen eigene Arrays
-  und die Plätze des äußeren Arrays Verweise sind, dürfen Zeilen verschieden lang oder `null` sein, man kann sie mit drei
-  Zuweisungen tauschen, und `b[i] = a[i]` ist keine Kopie. (3) M1-Methoden bestimmen zuerst die Form, legen dann ein
-  neues Array an und befüllen es. M2-Methoden ändern Elemente oder ersetzen Zeilen mit `a[i] = neu`, aber nie den
-  Parameter selbst. Ebenso gute Antworten sind die Kapazitätsregel oder die drei Durchlaufmuster.
-```
 
 :::zusammenfassung
 1. **Zweidimensionales Array:** ein Array, dessen Elemente Zeilen sind. Typ `int[][]`, Zugriff `a[zeile][spalte]`, Zeilenzahl `a.length`, Länge der Zeile `i` `a[i].length`. Ausgabe mit `Arrays.deepToString(a)`.

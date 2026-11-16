@@ -513,33 +513,6 @@ loesung: |
 ```
 
 ```aufgabe
-id: wz-prog-bytecode-warum
-titel: Warum der Umweg über Bytecode?
-niveau: 3
-lernziel: 0
-kompetenz: begruenden
-angabe: |
-  Ein Mitstudent meint: „Der Bytecode ist ein unnötiger Umweg. Java sollte gleich Maschinensprache erzeugen.“
-  Erkläre in zwei bis drei Sätzen, welchen Vorteil der Bytecode hat und was man dafür braucht.
-teile:
-  - typ: text
-    muster: |
-      Maschinensprache gehört zu einem bestimmten Prozessor und Betriebssystem. Ein Programm in Maschinensprache
-      müsste man für jedes System neu übersetzen. Bytecode ist dagegen ein Zwischencode, den jede JVM ausführen kann.
-      Man übersetzt also einmal, und dieselbe `.class`-Datei läuft auf Windows, macOS und Linux.
-      Voraussetzung ist, dass auf dem Zielrechner eine JVM installiert ist.
-hinweise:
-  - Denke an drei Rechner mit verschiedenen Betriebssystemen, auf denen dasselbe Programm laufen soll.
-  - Wer führt den Bytecode aus, und was muss deshalb auf jedem Rechner vorhanden sein?
-loesung: |
-  **Ansatz:** Vergleiche, wie oft man übersetzen muss.
-  ---
-  Mit Maschinensprache bräuchte man für jedes System eine eigene Übersetzung.
-  ---
-  Mit Bytecode übersetzt man einmal. Jede JVM führt denselben Bytecode aus. Der Preis: Auf jedem Rechner muss eine JVM installiert sein.
-```
-
-```aufgabe
 id: wz-prog-gefuehrt
 titel: Vom Tippen zur Ausgabe, Schritt für Schritt
 niveau: 2
@@ -577,15 +550,6 @@ loesung: |
   Der erste Befehl ist `javac Zaehler.java`. Er prüft den Quelltext und übersetzt ihn.
   ---
   Danach liegt `Zaehler.class` im Ordner. Mit `java Zaehler` wird sie ausgeführt.
-```
-
-```reflexion
-frage: Erkläre in eigenen Worten, warum ein Programm, das der Compiler ohne Fehler übersetzt, trotzdem das Falsche ausgeben kann.
-antwort: |
-  Der Compiler prüft nur, ob das Programm nach den Regeln der Sprache gebaut ist: Klammern, Strichpunkte,
-  bekannte Namen. Ob die Anweisungen das tun, was ich wollte, kann er nicht wissen. Schreibe ich den falschen
-  Text in Anführungszeichen oder vertausche zwei Anweisungen, ist das Programm formal richtig. Es tut nur
-  etwas anderes, als ich wollte. Solche Fehler finde ich nur, wenn ich die Ausgabe mit dem Ziel vergleiche.
 ```
 
 ## IntelliJ: Projekt anlegen und Programm starten
@@ -998,15 +962,6 @@ loesung: |
   In `main` steht `System.out.println("Projekt laeuft!");`. Probe: Beim Start erscheint genau `Projekt laeuft!`.
 ````
 
-```reflexion
-frage: Warum verlangt Java, dass eine öffentliche Klasse genauso heißt wie ihre Datei? Überlege, was der Compiler sonst tun müsste.
-antwort: |
-  Wenn ein Programm die Klasse `Aufgabe1` braucht, kann Java direkt in der Datei `Aufgabe1.java` nachsehen.
-  Ohne die Regel müsste der Compiler alle Dateien öffnen und durchsuchen, um herauszufinden, wo die Klasse
-  steht. Die Regel macht das Finden einfach und eindeutig. Für mich heißt das: Klasse und Datei immer
-  gemeinsam benennen, sonst gibt es sofort einen Compilerfehler.
-```
-
 ## Hello World Zeile für Zeile
 
 ```aufgabe
@@ -1292,32 +1247,6 @@ loesung: |
   Zeile 3 gibt `Aufstehen!` aus und beginnt danach eine neue Zeile.
   ---
   Zeile 4 gibt `Kaffee kochen.` aus. Ergebnis: zwei Zeilen, ohne Anführungszeichen.
-```
-
-```aufgabe
-id: wz-hw-warum-main
-titel: Warum genau so?
-niveau: 2
-lernziel: 2
-kompetenz: begruenden
-angabe: |
-  Erkläre, warum man den Kopf `public static void main(String[] args)` nicht kreativ umformulieren darf,
-  zum Beispiel als `public static void Haupt(String[] args)`. Was passiert, und warum meldet der Compiler trotzdem keinen Fehler?
-teile:
-  - typ: text
-    muster: |
-      Die JVM sucht beim Start eine Methode mit genau diesem Kopf. Heißt sie `Haupt`, findet die JVM keinen
-      Startpunkt und bricht mit „Main method not found“ ab. Der Compiler meldet nichts, weil `Haupt` ein
-      erlaubter Methodenname ist. Er prüft nur die Form, nicht ob es einen Startpunkt gibt.
-hinweise:
-  - Wer sucht nach `main`, der Compiler oder die JVM?
-  - Ist `Haupt` ein erlaubter Name für eine Methode?
-loesung: |
-  **Ansatz:** Trennen, was der Compiler prüft und was die JVM beim Start braucht.
-  ---
-  Für den Compiler ist `Haupt` ein gültiger Name. Er übersetzt ohne Fehler.
-  ---
-  Die JVM sucht beim Start genau `main`. Sie findet sie nicht und meldet `Main method not found in class ...`.
 ```
 
 ```aufgabe
@@ -1835,15 +1764,6 @@ loesung: |
   Probe: 1 + 2 + 3 = 6 Anweisungen, drei davon `println`, also drei Zeilen. In [4.8 Verschachtelte Schleifen](/lernen/ep1/schleifen/verschachtelte-schleifen) lernst du, solche Muster mit Schleifen (Anweisungen, die Code wiederholen) für beliebig viele Zeilen zu erzeugen.
 ````
 
-```reflexion
-frage: Auf Aufgabenblättern ist die erwartete Ausgabe exakt vorgegeben. Warum reicht es nicht, wenn die Ausgabe „ungefähr“ stimmt?
-antwort: |
-  Programme werden oft automatisch geprüft, indem man ihre Ausgabe Zeichen für Zeichen mit der erwarteten
-  vergleicht. Ein fehlendes Leerzeichen oder eine Leerzeile zu viel ist dann ein Unterschied. Auch im echten
-  Leben liest oft ein anderes Programm die Ausgabe weiter, und das rät nicht. Darum gewöhne ich mich gleich
-  daran, die Ausgabe mit der Vorgabe genau zu vergleichen.
-```
-
 ## Kommentare und lesbarer Code
 
 ```aufgabe
@@ -2118,39 +2038,6 @@ loesung: |
   `A` und `D` sollen nicht erscheinen. Vor diese beiden Zeilen kommt `//`.
   ---
   `B` und `C` bleiben unverändert. Probe: Ausgabe `B`, `C`.
-```
-
-```aufgabe
-id: wz-ko-guter-kommentar
-titel: Ein besserer Kommentar
-niveau: 2
-lernziel: 4
-kompetenz: begruenden
-angabe: |
-  Ein Student hat kommentiert:
-
-  ```java
-  // gibt Summe: aus
-  System.out.print("Summe: ");
-  ```
-
-  Warum ist dieser Kommentar wenig hilfreich? Schreib einen besseren Kommentar und begründe.
-teile:
-  - typ: text
-    muster: |
-      Der Kommentar wiederholt nur, was im Code ohnehin steht. Er erklärt keinen Grund. Besser wäre zum Beispiel
-      `// print statt println: Der Wert kommt direkt dahinter in dieselbe Zeile`. Dieser Kommentar sagt, warum
-      hier `print` steht und warum das Leerzeichen nötig ist. Das ist genau die Information, die man beim
-      Lesen nicht sofort sieht.
-hinweise:
-  - Was erfährt man aus dem Kommentar, das man nicht schon aus dem Code weiß?
-  - Gute Kommentare beantworten die Frage „Warum?“.
-loesung: |
-  **Ansatz:** Prüfen, ob der Kommentar Information hinzufügt.
-  ---
-  „gibt Summe: aus“ steht wörtlich im Code. Der Kommentar fügt nichts hinzu.
-  ---
-  Ein guter Kommentar erklärt die Absicht, etwa warum `print` statt `println` steht.
 ```
 
 ```aufgabe
@@ -2718,15 +2605,6 @@ loesung: |
   Korrektur: Reihenfolge 3, 2, 1 und überall `println`. Probe: vier Zeilen wie gefordert.
 ````
 
-```reflexion
-frage: Warum ist ein Compilerfehler eigentlich die „angenehmste“ der drei Fehlerarten?
-antwort: |
-  Weil er mir Datei, Zeile und Ursache nennt, bevor das Programm überhaupt läuft. Ein Laufzeitfehler zeigt
-  sich erst beim Ausführen, und vielleicht nur bei bestimmten Eingaben. Ein logischer Fehler meldet sich gar
-  nicht. Den finde ich nur, wenn ich die Ausgabe sorgfältig mit dem Ziel vergleiche. Je früher ein Fehler
-  auffällt, desto leichter ist er zu beheben.
-```
-
 ## Kursmodus 2026W und Abgaberegeln
 
 ```aufgabe
@@ -3052,14 +2930,6 @@ loesung: |
   83 - 58 = 25 Testpunkte. 25 ist mehr als 15, die Hürde ist also automatisch erfüllt.
   ---
   Probe: 58 + 25 = 83, das ist genau Gut. Mit 24 Punkten wären es 82, nur Befriedigend.
-```
-
-```reflexion
-frage: Die Quiz bringen 40 Punkte, der Test 30. Trotzdem ist der Test in gewisser Weise „gefährlicher“. Warum?
-antwort: |
-  Weil der Test eine Hürde hat. Mit weniger als 15 Punkten zählt er gar nicht, und dann fehlen auf einen Schlag
-  bis zu 14 Punkte. Bei den Quiz zählt jeder Punkt einzeln, es gibt keine Mindestgrenze. Darum lohnt es sich,
-  das Programmieren am Rechner früh und regelmäßig zu üben und nicht erst kurz vor dem Test.
 ```
 
 ## CodeDraw einrichten und das erste Bild
@@ -3562,15 +3432,6 @@ loesung: |
   ---
   Probe: Umgekehrt (klein zuerst) würde der große rote Kreis alles verdecken, und man sähe nur eine rote Scheibe.
 ````
-
-```reflexion
-frage: Warum legt CodeDraw den Ursprung nach links oben und lässt y nach unten wachsen, obwohl das in der Mathematik anders ist?
-antwort: |
-  Bildschirme werden zeilenweise von oben nach unten aufgebaut, so wie man einen Text liest. Die erste
-  Pixelzeile ist oben, und die Zeilennummer wächst nach unten. Fast alle Grafikbibliotheken übernehmen
-  diese Zählweise. Für mich heißt das: „höher im Fenster“ bedeutet immer „kleineres y“. Diese Umstellung muss ich
-  bei jeder Rechnung bewusst machen, zum Beispiel bei der Spitze eines Dachs.
-```
 
 ## Gemischte Wiederholung
 
@@ -4148,16 +4009,6 @@ loesung: |
 ```
 
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten.
-antwort: |
-  Eine mögliche Auswahl: (1) Quelltext in `Name.java` wird von `javac` zu Bytecode in `Name.class` übersetzt, und die
-  JVM führt ihn mit `java Name` aus. (2) Jedes Programm braucht eine Klasse, deren Name zum Dateinamen passt, und
-  darin `public static void main(String[] args)`. (3) Fehlermeldungen liest man von oben: Datei, Zeile, Ursache, und
-  zuerst nur den ersten Fehler beheben. Gute Antworten sind auch der Unterschied zwischen `print` und `println`
-  oder die 50-Prozent-Hürde im Test.
-```
 
 :::zusammenfassung
 1. **Ein Programm** ist eine genaue Folge von Anweisungen, die von oben nach unten ausgeführt werden.

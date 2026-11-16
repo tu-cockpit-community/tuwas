@@ -718,46 +718,6 @@ loesung: |
   A ist vollständig. B ist richtig, aber zu knapp und würde eine Nachfrage auslösen. Die technische Grenze von 255 Parametern spielt in der Praxis keine Rolle.
 ```
 
-```aufgabe
-id: fg-ab-text-return
-titel: Eine Antwort nach dem Schema formulieren
-niveau: 3
-lernziel: 0
-kompetenz: begruenden
-angabe: |
-  Deine Methode `int zaehleVokale(String text)` zählt die Vokale und gibt die Anzahl mit `return` zurück. Die
-  Tutorin fragt: „Warum gibst du die Anzahl zurück, statt sie einfach mit `System.out.println` auszugeben?“
-
-  Schreib deine Antwort nach dem Schema Kernaussage, Begründung, Beleg und Grenzfall auf. Vergleiche danach selbst
-  mit der Musterantwort und prüfe, ob alle vier Teile vorkommen.
-teile:
-  - typ: text
-    muster: |
-      **Kernaussage:** Mit `return` kann der Aufrufer mit dem Ergebnis weiterarbeiten. Eine Ausgabe kann er nur lesen.
-      **Begründung:** Ein Rückgabewert ist ein Wert im Programm. Man kann ihn speichern, vergleichen oder in eine
-      Rechnung einsetzen. Eine Ausgabe landet nur auf der Konsole, das Programm selbst bekommt sie nicht zurück.
-      **Beleg:** In `main` schreibe ich `if (zaehleVokale(wort) > 3)`. Das ginge mit einer `void`-Methode nicht.
-      **Grenzfall:** Verlangt die Angabe ausdrücklich eine Ausgabe, wie bei einer Methode `druckeTrennlinie()`, ist `void` mit `println` richtig.
-hinweise:
-  - Was kann der Aufrufer mit einem zurückgegebenen Wert tun, das mit einer Ausgabe nicht geht?
-  - Für den Beleg reicht eine Zeile Code, die das Ergebnis weiterverwendet. Als Grenzfall denk an eine Methode, die laut Angabe ausgeben soll.
-loesung: |
-  **Ansatz:** Das Schema aus dieser Lektion Schritt für Schritt füllen.
-  ---
-  Kernaussage und Begründung: Ein Rückgabewert kann weiterverarbeitet werden, eine Konsolenausgabe nicht.
-  ---
-  Beleg und Grenzfall: eine Bedingung wie `zaehleVokale(wort) > 3` in `main`. Verlangt die Angabe eine Ausgabe, ist `void` richtig. Prüfe deine Antwort: Kommen alle vier Teile vor?
-```
-
-```reflexion
-frage: Denk an eine Zusatzfrage, die du schon einmal nur mit „Ja“ oder „Nein“ beantwortet hättest. Wie würde die Antwort nach dem Schema Kernaussage, Begründung, Beleg klingen?
-antwort: |
-  Zum Beispiel „Darf eine `while`-Schleife in einer `for`-Schleife stehen?“. Kernaussage: Ja, Schleifen darf man
-  beliebig ineinander schachteln. Begründung: Der Rumpf einer Schleife darf jede Anweisung enthalten, also auch eine
-  andere Schleife. Beleg: In meinem Trapez läuft eine `for`-Schleife über die Zeilen, darin eine `while`-Schleife über
-  die Zeichen. Schon dieser eine Zusatzsatz zeigt, dass du nicht geraten hast.
-```
-
 ## Zusatzfragen zu Verzweigungen, Schleifen und Datentypen
 
 ```aufgabe
@@ -1308,37 +1268,6 @@ loesung: |
   Achtung beim Ausprobieren: `javac` meldet zuerst nur den Fehler in Zeile 13. Das ist ein Fehler im Satzbau, und danach prüft der Compiler nicht weiter. Erst wenn du ihn behoben hast, meldet er auch Zeile 3.
 ```
 
-```aufgabe
-id: fg-vs-text-schleifen
-titel: Sind Schleifen austauschbar?
-niveau: 3
-lernziel: 1
-kompetenz: begruenden
-quelle: Zusatzfrage „Sind verschiedene Arten von Schleifen gegeneinander austauschbar?“, Blatt 1 WS2017 und SS2020
-angabe: |
-  Beantworte die Zusatzfrage „Kann man jede Schleifenart durch eine andere ersetzen?“ so, wie du es im
-  Gespräch tun würdest. Nenne auch, wann du welche Schleife wählst. Vergleiche danach mit der Musterantwort.
-teile:
-  - typ: text
-    muster: |
-      Ja, grundsätzlich schon. Jede `for`-Schleife lässt sich als `while`-Schleife schreiben: Der Startwert kommt vor
-      die Schleife, die Bedingung in die Klammer und der Schritt ans Ende des Rumpfs. Umgekehrt geht es auch.
-      Ein Unterschied ist `do-while`: Ihr Rumpf läuft mindestens einmal, weil die Bedingung erst am Ende geprüft wird.
-      Ersetzt man sie durch `while`, muss man den ersten Durchlauf eigens sicherstellen.
-      Ich wähle `for`, wenn die Zahl der Durchläufe vorher feststeht, zum Beispiel beim Durchlaufen eines Strings.
-      `while` nehme ich, wenn eine Bedingung entscheidet, etwa „bis der Buchstabe gefunden ist“.
-      `do-while` passt, wenn etwas mindestens einmal passieren muss, zum Beispiel eine Eingabe.
-hinweise:
-  - Beginne mit der Kernaussage. Erkläre dann, wie man eine `for`-Schleife in eine `while`-Schleife umbaut.
-  - Denk an den Sonderfall `do-while` und an je ein typisches Einsatzgebiet jeder Schleife.
-loesung: |
-  **Ansatz:** Kernaussage, Umbau als Begründung, dann der Sonderfall `do-while`.
-  ---
-  Kernaussage: Ja. Begründung: Startwert, Bedingung und Schritt lassen sich an andere Stellen verschieben, wie in der Lückentextaufgabe dieser Lektion.
-  ---
-  Grenzfall und Wahl: `do-while` läuft mindestens einmal. `for` passt bei bekannter Zahl von Durchläufen, `while` bei einer Abbruchbedingung. Prüfe deine Antwort auf alle drei Punkte.
-```
-
 ## Zusatzfragen zu Methoden und Eingabe
 
 ```aufgabe
@@ -1870,46 +1799,6 @@ loesung: |
   Kontrolle: `17 / 5 = 3` und `17 % 5 = 2`, also `{3, 2}`. Im Gespräch sagst du: „Es ist ein Rückgabewert, nämlich ein Array, das zwei Zahlen enthält.“
 ```
 
-```aufgabe
-id: fg-me-text-increment
-titel: Warum kann verdopple(z) nicht funktionieren?
-niveau: 3
-lernziel: 2
-kompetenz: begruenden
-quelle: Zusatzfrage zu einer void-Methode, die ihren Parameter erhöhen soll, Blatt 3 WS2017 (umformuliert, eigene Methode)
-angabe: |
-  **Zusatzfrage:** „Deine Methode `void verdopple(int z)` setzt `z = 2 * z;`. Warum hat die Variable des Aufrufers
-  danach trotzdem noch ihren alten Wert?“
-
-  ```text
-  int z = 3;
-  verdopple(z);
-  System.out.println(z);   // gibt 3 aus, nicht 6
-  ```
-
-  Erkläre den Grund und nenne zwei Wege, wie man das Ziel trotzdem erreicht. Vergleiche danach mit der Musterantwort.
-teile:
-  - typ: text
-    muster: |
-      Java übergibt bei primitiven Typen wie `int` (den einfachen Zahl-, Zeichen- und Wahrheitswert-Typen) eine
-      **Kopie des Werts**. Das Fachwort dafür ist **call-by-value**. Der Parameter `z` in `verdopple` ist eine eigene
-      lokale Variable, die nur zufällig genauso heißt. Wird sie verdoppelt, ändert sich nur die Kopie. Sie verschwindet
-      am Ende der Methode. Die Variable `z` des Aufrufers wird nie berührt.
-      Weg 1: Die Methode gibt den neuen Wert zurück, `int verdopple(int z) { return 2 * z; }`, und der Aufrufer
-      schreibt `z = verdopple(z);`.
-      Weg 2: Der Wert steckt in einem Array, zum Beispiel `int[] zahl = {3};`. Die Methode bekommt den Verweis auf das
-      Array und verdoppelt `zahl[0]`. Weil beide auf dasselbe Array zeigen, sieht der Aufrufer die Änderung.
-hinweise:
-  - Was genau wird beim Aufruf in den Parameter geschrieben, die Variable oder ihr Wert?
-  - Für die Wege denk an den Rückgabewert und an Arrays, deren Inhalt eine Methode verändern kann.
-loesung: |
-  **Ansatz:** Den Mechanismus call-by-value (Übergabe einer Kopie des Werts) benennen und auf das Beispiel anwenden.
-  ---
-  Der Parameter bekommt eine Kopie. Die Methode ändert nur diese Kopie, `z` des Aufrufers bleibt 3.
-  ---
-  Abhilfe: Rückgabewert mit `z = verdopple(z);`, oder ein Array, dessen Inhalt die Methode verändert, wie in [12.6 Arrays als Parameter und Rückgabewert](/lernen/ep1/arrays/arrays-als-parameter-und-rueckgabewert). Prüfe, ob deine Antwort den Begriff Kopie und beide Wege enthält.
-```
-
 ## Zusatzfragen zur Rekursion
 
 ```aufgabe
@@ -2434,48 +2323,6 @@ loesung: |
   Kontrolle mit `zaehleGroesser(1000, 0)`: Die Nullen bringen nichts, die 1 zählt. Ergebnis 1. Die Nullen beenden die Rekursion nicht, weil erst `zahl == 0` der Basisfall ist.
 ```
 
-```aufgabe
-id: fg-rk-text-fundiert
-titel: Fundiertheit und Fortschritt im Gespräch
-niveau: 3
-lernziel: 3
-kompetenz: begruenden
-angabe: |
-  Die Tutorin zeigt auf diese Methode und fragt: „Ist deine Rekursion fundiert, und hat sie Fortschritt? Woran siehst du
-  das?“
-
-  ```java
-  public static boolean enthaeltX(String text) {
-      if (text.length() == 0) {
-          return false;
-      }
-      if (text.charAt(0) == 'x') {
-          return true;
-      }
-      return enthaeltX(text.substring(1));
-  }
-  ```
-
-  Schreib deine Antwort auf. Vergleiche danach mit der Musterantwort.
-teile:
-  - typ: text
-    muster: |
-      Ja, die Rekursion ist fundiert. Es gibt zwei Basisfälle ohne Selbstaufruf: den leeren String, für den ich `false`
-      liefere, und ein `x` am Anfang, für das ich `true` liefere.
-      Sie hat Fortschritt, weil ich mich mit `text.substring(1)` aufrufe. Dieser String ist um genau ein Zeichen kürzer.
-      Nach höchstens `text.length()` Aufrufen ist er leer, und der erste Basisfall greift.
-      Darum endet die Methode für jeden String, der nicht `null` ist.
-hinweise:
-  - Zähle die Fälle, in denen die Methode ohne Selbstaufruf zurückkehrt.
-  - Wie verändert sich das Argument beim Selbstaufruf, und wohin führt das?
-loesung: |
-  **Ansatz:** Erst die Basisfälle suchen (Fundiertheit), dann die Änderung des Arguments (Fortschritt).
-  ---
-  Basisfälle: leerer String liefert `false`, `x` am Anfang liefert `true`.
-  ---
-  Fortschritt: `substring(1)` kürzt um ein Zeichen, also ist der String nach endlich vielen Aufrufen leer. Prüfe, ob deine Antwort beide Basisfälle und das Wort „kürzer“ enthält.
-```
-
 ## Zusatzfragen zu Arrays und Referenzen
 
 ```aufgabe
@@ -2991,37 +2838,6 @@ loesung: |
   ```
   ---
   Kontrolle: Beim Kürzen stoppt `i < laenge`, beim Verlängern stoppt `i < a.length`. Die restlichen Plätze behalten den Standardwert 0. `a` wird nur gelesen, nie verändert.
-```
-
-```aufgabe
-id: fg-ar-text-gleich
-titel: Arrays mit == vergleichen
-niveau: 3
-lernziel: 4
-kompetenz: begruenden
-quelle: Zusatzfrage 4, Aufgabe 1, Blatt 4 WS2023
-angabe: |
-  Beantworte die Zusatzfrage „Taugt `==`, um zwei Arrays zu vergleichen? Was genau wird dabei verglichen?“ so, wie du
-  es im Gespräch tun würdest. Nenne auch, wie man den Inhalt vergleicht.
-  Vergleiche danach mit der Musterantwort.
-teile:
-  - typ: text
-    muster: |
-      Meistens nicht. Eine Array-Variable enthält nur einen Verweis auf das Array. `==` vergleicht diese Verweise. Das
-      Ergebnis ist also nur dann `true`, wenn beide Variablen auf dasselbe Array zeigen, zum Beispiel nach `b = a`.
-      Zwei verschiedene Arrays mit gleichem Inhalt, etwa zweimal `{1, 2, 3}`, ergeben `false`.
-      Sinnvoll ist `==` nur, wenn man genau das wissen will: ob zwei Namen dasselbe Array meinen.
-      Den Inhalt vergleiche ich so: Zuerst prüfe ich, ob die Längen gleich sind. Dann gehe ich mit einer Schleife alle
-      Indizes durch. Beim ersten Unterschied liefere ich `false`, nach der Schleife `true`.
-hinweise:
-  - Was steckt in einer Array-Variable, die Werte oder ein Verweis?
-  - Für den Inhaltsvergleich brauchst du die Länge und eine Schleife mit frühem `return false`.
-loesung: |
-  **Ansatz:** Den Begriff Verweis nennen und daraus die Bedeutung von `==` ableiten.
-  ---
-  `==` ist genau dann `true`, wenn beide Variablen auf dasselbe Array zeigen. Gleicher Inhalt genügt nicht.
-  ---
-  Inhaltsvergleich: Längen prüfen, dann Element für Element mit frühem `return false`. Prüfe, ob deine Antwort ein Beispiel mit zwei gleichen, aber getrennten Arrays enthält.
 ```
 
 ## Variationsaufträge: Ändere deinen Code
@@ -3601,47 +3417,6 @@ loesung: |
   Kontrolle mit `"aaa"`: Rückweg 0, 1, 2, 3. Fundiertheit: leerer String. Fortschritt: jeder Aufruf hat ein Zeichen weniger.
 ```
 
-```aufgabe
-id: fg-va-text-plan
-titel: Einen Variationsauftrag laut planen
-niveau: 3
-lernziel: 5
-kompetenz: begruenden
-angabe: |
-  Deine Lösung gibt die Zeichen eines Strings rückwärts aus, jedes in einer eigenen Zeile:
-
-  ```text
-  for (int i = text.length() - 1; i >= 0; i--) {
-      System.out.println(text.charAt(i));
-  }
-  ```
-
-  Die Tutorin sagt: „Gib die Zeichen jetzt rückwärts in **einer** Zeile aus, getrennt durch Bindestriche, ohne
-  Bindestrich am Ende.“ Beschreibe in den vier Schritten dieser Lektion, wie du vorgehst. Nenne auch die neue Ausgabe
-  für `"EP1"` und einen Grenzfall. Vergleiche danach mit der Musterantwort.
-teile:
-  - typ: text
-    muster: |
-      1. Auftrag wiederholen: Dieselben Zeichen, rückwärts, in einer Zeile, dazwischen `-`. Für `"EP1"` erwarte ich
-         `1-P-E`.
-      2. Stellen finden: Die Ausgabezeile im Rumpf. Dazu brauche ich eine Regel für das Trennzeichen und einen
-         Zeilenumbruch nach der Schleife.
-      3. Ändern: `println` wird `print`. Vor jedem Zeichen außer dem ersten ausgegebenen kommt ein `-`. Das erste
-         ausgegebene Zeichen hat den Index `text.length() - 1`, also schreibe ich
-         `if (i < text.length() - 1) System.out.print("-");` vor die Ausgabe. Nach der Schleife kommt `System.out.println();`.
-      4. Grenzfall: Beim leeren String läuft die Schleife nicht, es erscheint nur der Zeilenumbruch. Bei einem
-         einzelnen Zeichen erscheint es ohne Bindestrich.
-hinweise:
-  - Das Trennzeichen soll **zwischen** den Zeichen stehen. Vor welchem ausgegebenen Zeichen darf es nicht stehen?
-  - Rückwärts ist das erste ausgegebene Zeichen das mit dem Index `text.length() - 1`. Als Grenzfälle eignen sich der leere String und ein einzelnes Zeichen.
-loesung: |
-  **Ansatz:** Die vier Schritte dieser Lektion der Reihe nach durchgehen.
-  ---
-  Sollausgabe `1-P-E`. Geändert werden die Ausgabezeile und ein Zeilenumbruch nach der Schleife.
-  ---
-  Bindestrich vor jedem Zeichen außer dem ersten ausgegebenen, also wenn `i < text.length() - 1`. Grenzfälle leerer String und ein Zeichen. Prüfe, ob deine Antwort alle vier Schritte enthält.
-```
-
 ## Erkläre deinen Code: Zweck, Ablauf und Rückfragen
 
 ```aufgabe
@@ -4092,42 +3867,6 @@ loesung: |
   `i = 1`: `a` und `|`. `i = 2`: `ab`, dann `2`, weil 2 gerade ist, dann `|`. `i = 3`: `abc` und `|`.
   ---
   Ergebnis `a|ab2|abc|`. Die Länge ist 2 + 4 + 4 = 10.
-```
-
-```aufgabe
-id: fg-ek-text-spaghetti
-titel: Spaghetticode beschreiben
-niveau: 3
-lernziel: 6
-kompetenz: begruenden
-quelle: Blatt 3 A1 a und b, WS2023 (eigener Code)
-angabe: |
-  Auf Blatt 3 sollte man unübersichtlichen Code analysieren und beschreiben. Code ohne Struktur, der schwer zu lesen
-  ist, heißt **Spaghetticode**. Beschreibe die Funktionsweise dieses Codes in zwei bis drei Sätzen. Nenne danach zwei
-  Stellen, die du ändern würdest, und warum.
-
-  ```java
-  int a=4;for(int b=0;b<a;b++){for(int c=0;c<a;c++){if((b+c)%2==0)System.out.print("#");else System.out.print(".");}System.out.println();}
-  ```
-teile:
-  - typ: text
-    muster: |
-      **Funktionsweise:** Der Code gibt ein Schachbrettmuster aus 4 Zeilen und 4 Spalten aus. Die äußere Schleife läuft
-      über die Zeilen, die innere über die Spalten. Ist die Summe aus Zeilen- und Spaltennummer gerade, erscheint `#`,
-      sonst ein Punkt. So wechseln sich die Zeichen in jeder Zeile und von Zeile zu Zeile ab. Die erste Zeile lautet `#.#.`.
-      **Änderungen:** Erstens aussagekräftige Namen, also `groesse`, `zeile` und `spalte` statt `a`, `b` und `c`.
-      Zweitens eine Anweisung pro Zeile mit Einrückung und Klammern auch um `if` und `else`, damit man die
-      Verschachtelung sieht. Drittens eine Methode `druckeSchachbrett(int groesse)`, damit man verschiedene Größen
-      ausgeben kann, ohne den Code zu kopieren.
-hinweise:
-  - Formatiere den Code zuerst auf Papier mit einer Anweisung pro Zeile. Spiel dann die erste Zeile durch.
-  - Für die Änderungen denk an Namen, Einrückung und an eine Methode mit Parameter.
-loesung: |
-  **Ansatz:** Erst umformatieren, dann den Zweck in Alltagssprache beschreiben, dann verbessern.
-  ---
-  Zweck: ein 4 mal 4 großes Schachbrett aus `#` und `.`. Das Zeichen hängt davon ab, ob Zeilen- plus Spaltennummer gerade ist.
-  ---
-  Verbesserungen: sprechende Namen, Einrückung, eine Methode mit dem Parameter `groesse`. So zerlegt man Spaghetticode, wie in [9.3 Spaghetticode in Methoden zerlegen](/lernen/ep1/codequalitaet/spaghetticode-in-methoden-zerlegen). Prüfe, ob deine Antwort Zweck, Regel für `#` und zwei Verbesserungen enthält.
 ```
 
 ## Gemischte Wiederholung
@@ -4593,82 +4332,6 @@ loesung: |
 ```
 
 ```aufgabe
-id: fg-pa-blatt2
-titel: Gesprächsrunde zu Blatt 2
-niveau: 3
-lernziel: 2
-kompetenz: begruenden
-punkte: 4
-quelle: Taschenrechner, Blatt 2 A4 WS2023, und Zusatzfragen zum Scanner, Blatt 2 WS2021 (nachgebaut)
-angabe: |
-  **Zeitrichtwert: 10 Minuten.** Deine Abgabe liest zwei ganze Zahlen ein und gibt den Rest der Division aus.
-
-  **a)** (2 P) Die Tutorin tippt `sieben 17 x 5.0 5`. Was gibt das Programm aus?
-
-  **b)** (1 P) Welche Aussage über `leseZahl` ist richtig?
-
-  **c)** (1 P) Zusatzfrage: „Warum steht in der Schleife `sc.next()`?“ Antworte in zwei Sätzen und vergleiche danach.
-teile:
-  - typ: ausgabe
-    label: a)
-    code: |
-      import java.util.Scanner;
-
-      public class Rest {
-          public static int leseZahl(Scanner sc) {
-              while (!sc.hasNextInt()) {
-                  System.out.println("Fehler: " + sc.next());
-              }
-              return sc.nextInt();
-          }
-
-          public static void main(String[] args) {
-              Scanner sc = new Scanner(System.in);
-              int a = leseZahl(sc);
-              int b = leseZahl(sc);
-              System.out.println(a + " % " + b + " = " + (a % b));
-          }
-      }
-    stdin: "sieben 17 x 5.0 5\n"
-    loesung: |
-      Fehler: sieben
-      Fehler: x
-      Fehler: 5.0
-      17 % 5 = 2
-    fehler:
-      - wert: "Fehler: sieben\nFehler: x\n17 % 5 = 2"
-        meldung: '`5.0` ist keine ganze Zahl. `hasNextInt()` liefert dafür `false`, und das Token wird als Fehler gemeldet.'
-      - wert: "Fehler: sieben\nFehler: x\nFehler: 5.0\n17 % 5 = 3.4"
-        meldung: '`%` liefert den Rest der ganzzahligen Division. 17 geteilt durch 5 ist 3 mit Rest 2.'
-  - typ: auswahl
-    label: b)
-    optionen:
-      - "`leseZahl` bekommt den Scanner als Parameter, damit beide Aufrufe denselben Puffer lesen."
-      - "`leseZahl` darf keinen Parameter haben, weil sie einen Rückgabewert hat."
-      - "`leseZahl` könnte auch `void` sein, weil sie die Zahl schon in `sc` speichert."
-    richtig: [0]
-    fehler:
-      - wert: 1
-        meldung: Parameter und Rückgabewert sind unabhängig voneinander. Eine Methode darf beides haben.
-      - wert: 2
-        meldung: Ohne Rückgabewert käme die gelesene Zahl nie in `a` oder `b` an.
-  - typ: text
-    label: c)
-    muster: |
-      `hasNextInt()` prüft nur, ob das nächste Token eine ganze Zahl ist, und entfernt nichts. Ohne `sc.next()` bliebe das
-      ungültige Token vorne im Puffer, die Schleife würde es immer wieder prüfen und nie enden.
-hinweise:
-  - Geh die Token einzeln durch. `leseZahl` wird zweimal aufgerufen und liest jeweils bis zur nächsten ganzen Zahl.
-  - Für b) denk daran, dass ein zweiter Scanner den Puffer des ersten nicht kennt.
-loesung: |
-  **Ansatz:** Token für Token verfolgen, welcher Aufruf von `leseZahl` gerade läuft.
-  ---
-  a) Der erste Aufruf meldet `sieben` und liest 17. Der zweite meldet `x` und `5.0` und liest 5. Dann folgt `17 % 5 = 2`.
-  ---
-  b) Antwort 1: Beide Aufrufe teilen sich einen Scanner und damit einen Puffer. c) `hasNextInt()` entfernt nichts. Ohne `next()` entstünde eine Endlosschleife.
-```
-
-```aufgabe
 id: fg-pa-blatt3
 titel: Gesprächsrunde zu Blatt 3
 niveau: 3
@@ -5003,17 +4666,6 @@ loesung: |
 ```
 
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Zusammenfassungskasten, der auf diese Frage folgt.
-antwort: |
-  Eine mögliche Auswahl: (1) Im Gespräch zählt, dass du deinen eigenen Code verstehst. Eine gute Antwort hat Kernaussage,
-  Begründung und einen Beleg im eigenen Code. (2) Die meisten Zusatzfragen drehen sich um wenige Mechanismen: Kopie des
-  Werts beim Aufruf, Verweise bei Arrays, Basisfall und Fortschritt bei der Rekursion, Grenzen von Schleifen.
-  (3) Variationsaufträge und Rückfragen löst man nicht durch Raten, sondern indem man die betroffenen Stellen sucht und
-  einen kleinen Fall durchspielt. Ebenso gut ist die Aussage, dass Zahlen wie die Zahl der Aufrufe immer zum eigenen Code
-  passen müssen.
-```
 
 :::zusammenfassung
 1. **Das Gespräch:** Die Aufgabenblätter bringen 24 Punkte. Bewertet wird im Feedbackgespräch, ob du deine angekreuzten Aufgaben verstehst und ihre Zusatzfragen beantwortest. Dass du auch kleine Änderungen umsetzen sollst, ist eine Annahme dieses Kapitels. Was nicht angekreuzt ist, zählt nicht.

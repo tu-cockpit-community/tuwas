@@ -694,15 +694,6 @@ loesung: |
   Ausgabe mit Leerzeichen dazwischen: `-5 20 -120`.
 ```
 
-```reflexion
-frage: Warum ist es sinnvoll, dass Java schon beim Übersetzen meldet, dass `float rabatt = 0.15;` nicht passt, statt einfach still zu runden?
-antwort: |
-  Weil ein stiller Genauigkeitsverlust ein Fehler ist, den man sonst lange nicht bemerkt. Der Compiler zwingt dich,
-  dich bewusst zu entscheiden: Entweder du schreibst `0.15f` und nimmst die geringere Genauigkeit von `float` in Kauf,
-  oder du verwendest `double`. Fehler, die der Compiler findet, sind die billigsten Fehler. Sie fallen auf, bevor das
-  Programm überhaupt läuft.
-```
-
 ```aufgabe
 id: au-var-lieblingswerte
 titel: Variablen anlegen und ausgeben
@@ -1615,57 +1606,6 @@ loesung: |
 ```
 
 ```aufgabe
-id: au-dbl-ristorante
-titel: Hundert oder hundert Komma null?
-niveau: 2
-lernziel: 2
-kompetenz: begruenden
-quelle: Übung 1 WS2021, Aufgabe 3 (nachgebaut)
-angabe: |
-  In einem Lokal kosten Getränke netto 80 Euro und Speisen 135 Euro. Auf Speisen kommen 10 Prozent Steuer.
-
-  ```java
-  int getraenke = 80;
-  int speisen = 135;
-  double brutto = getraenke + speisen + speisen * 10 / 100;
-  System.out.println(brutto);
-  ```
-teile:
-  - typ: ausgabe
-    label: a) Was gibt das Programm aus?
-    codeAnzeigen: false
-    code: |
-      int getraenke = 80;
-      int speisen = 135;
-      double brutto = getraenke + speisen + speisen * 10 / 100;
-      System.out.println(brutto);
-    loesung: |
-      228.0
-    fehler:
-      - wert: "228.5"
-        meldung: Rechts vom `=` stehen nur `int`. `1350 / 100` ist eine Ganzzahldivision und liefert 13, nicht 13,5.
-      - wert: "228"
-        meldung: '`brutto` ist ein `double`. Bei der Zuweisung wird `228` zu `228.0`, und so erscheint es auch in der Ausgabe.'
-  - typ: text
-    label: b) Was ändert sich, wenn man `100` durch `100.0` ersetzt? Und könnte `brutto` dann ein `int` sein?
-    muster: |
-      Mit `100.0` wird `1350 / 100.0` in `double` gerechnet und ergibt `13.5`. Die Ausgabe ist dann `228.5`.
-      Ein `int` ginge dann nicht mehr: Rechts steht ein `double`, und `int brutto = …` übersetzt nicht
-      (`possible lossy conversion from double to int`). Man müsste ausdrücklich casten und verlöre die 50 Cent.
-hinweise:
-  - Bestimme bei `speisen * 10 / 100` den Typ jeder Teilrechnung.
-  - 'Bei b) denk an die Typregel: Ein `double`-Operand macht das ganze Ergebnis zum `double`.'
-loesung: |
-  **Ansatz:** Den Typ jeder Teilrechnung bestimmen. Alle Operanden sind `int`.
-  ---
-  `speisen * 10 = 1350`, `1350 / 100 = 13` (abgeschnitten). `80 + 135 + 13 = 228`.
-  ---
-  Bei der Zuweisung an `double` wird `228` zu `228.0`. Ausgabe: `228.0`.
-  ---
-  Mit `100.0` ergibt sich `13.5` und die Ausgabe `228.5`. Dann ist der Ausdruck ein `double`, und `int brutto` würde nicht übersetzen.
-```
-
-```aufgabe
 id: au-dbl-schnitt-code
 titel: Durchschnitt als Methode
 niveau: 3
@@ -2171,69 +2111,6 @@ loesung: |
   Ein `(double)` um die ganze Division, also `(double) (punkte / aufgaben)`, wäre zu spät und ergäbe `9.0`.
 ```
 
-```aufgabe
-id: au-cast-byte-summe
-titel: Summe und byte-Summe vergleichen
-niveau: 3
-lernziel: 3
-kompetenz: begruenden
-quelle: Übungsblatt WS2021, Aufgabe 1f–h (nachgebaut, eigene Werte)
-angabe: |
-  Was gibt das Programm aus? Welche Variablen verursachen den Unterschied zwischen den beiden Summen?
-teile:
-  - typ: ausgabe
-    label: a) Ausgabe
-    code: |
-      float f = 2.75f;
-      double d = 1.5;
-      int h = 0x10;
-      int o = 017;
-      int g = 200;
-      long l = 300L;
-      char c = '1';
-      System.out.println((int) (f + d + h + o + g + l + c));
-      System.out.println((byte) f + (byte) d + (byte) h + (byte) o + (byte) g + (byte) l + (byte) c);
-    loesung: |
-      584
-      71
-    fehler:
-      - wert: "584\n584"
-        meldung: Ein `byte` reicht nur bis 127. `(byte) 200` ist −56 und `(byte) 300` ist 44.
-      - wert: "536\n23"
-        meldung: Der `char` `'1'` geht mit seinem Zahlenwert 49 in die Rechnung ein, nicht mit 1.
-      - wert: "585\n71"
-        meldung: Der Cast `(int)` wirkt erst auf die fertige Summe 584,25 und schneidet ab. Es wird nicht gerundet.
-  - typ: text
-    label: b) Welche Variablen verursachen den Unterschied, und warum?
-    muster: |
-      Den Unterschied verursachen `g` und `l`. Ihre Werte 200 und 300 passen nicht in einen `byte` (−128 bis 127).
-      Beim Cast bleiben nur die unteren 8 Bit, also wird um 256 verschoben: aus 200 wird −56, aus 300 wird 44.
-      Zusammen fehlen dadurch 2 · 256 = 512. Dazu kommt ein kleiner Unterschied von 1: In der `byte`-Summe werden die
-      Nachkommastellen von `f` und `d` (0,75 und 0,5) einzeln abgeschnitten, zusammen 1,25. In der ersten Summe wird nur
-      am Ende einmal abgeschnitten, dort gehen nur 0,25 verloren.
-hinweise:
-  - Rechne zuerst die Werte aus. `0x10` = 16, `017` = 15, `'1'` hat den Zahlenwert 49.
-  - Die erste Summe ist 2,75 + 1,5 + 16 + 15 + 200 + 300 + 49. Für die zweite jeden Wert einzeln in `byte` umwandeln.
-loesung: |
-  **Ansatz:** Zuerst jeden Wert bestimmen, dann einmal ganz summieren und einmal Wert für Wert nach `byte` casten.
-  ---
-  Werte: 2,75; 1,5; 16; 15; 200; 300; 49 (der Code von `'1'`). Summe 584,25, mit `(int)` abgeschnitten: `584`.
-  ---
-  Byte-Werte: 2, 1, 16, 15, −56 (200 − 256), 44 (300 − 256), 49. Summe: `71`.
-  ---
-  Der Unterschied ist 584 − 71 = 513. Davon kommen 512 von den beiden Verschiebungen um 256 bei `g` und `l`.
-  Die restliche 1 entsteht, weil 0,75 und 0,5 einzeln abgeschnitten werden (zusammen 1,25 statt 0,25).
-```
-
-```reflexion
-frage: Warum erlaubt Java `double d = i;` mit `int i` ohne Cast, verlangt aber für `int i = (int) d;` einen Cast?
-antwort: |
-  Weil die Umwandlung von `int` nach `double` keinen Wert zerstört: Jede ganze Zahl im `int`-Bereich lässt sich als
-  `double` darstellen. Umgekehrt gehen bei `double` nach `int` die Nachkommastellen verloren, und zu große Werte passen
-  gar nicht hinein. Java führt verlustbehaftete Umwandlungen nie heimlich aus. Mit dem Cast bestätigst du, dass du den
-  Verlust bewusst in Kauf nimmst.
-```
-
 ## Zeichen sind Zahlen: der Typ char
 
 ```aufgabe
@@ -2350,15 +2227,6 @@ geht mit `c++;`, mit `c += 1;` oder mit dem Cast `c = (char) (c + 1);`. Vergleic
 `'a' < 'b'` ist `true` (wahr), und auch `'Z' < 'a'` ist `true`, weil 90 kleiner als 97 ist. Das Zeichen `<` heißt
 „kleiner als“. Alle Vergleichsoperatoren erklärt
 [2.8 Vergleiche, boolean und die Klasse Math](/lernen/ep1/ausdruecke/vergleiche-boolean-und-die-klasse-math).
-
-```reflexion
-frage: Warum funktioniert der Trick `z - '0'` für jede Ziffer, und warum gäbe es mit `z - 'a'` bei Buchstaben dieselbe Idee?
-antwort: |
-  Weil die Zeichen `'0'` bis `'9'` in der Unicode-Tabelle lückenlos hintereinander stehen, mit den Nummern 48 bis 57.
-  Der Abstand eines Ziffernzeichens zu `'0'` ist darum genau sein Ziffernwert, etwa 55 − 48 = 7 für `'7'`. Die
-  Kleinbuchstaben stehen ebenso lückenlos von 97 bis 122. Darum liefert `z - 'a'` die Position im Alphabet, 0 für `a`
-  bis 25 für `z`. Stünden die Zeichen verstreut, gäbe es keine so einfache Rechnung.
-```
 
 :::merke[Rezept: Ausdrücke mit char]
 1. Steht der `char` allein in `println` oder in einer Verkettung mit einem `String`, erscheint das **Zeichen**.
@@ -2953,53 +2821,6 @@ loesung: |
 ```
 
 ```aufgabe
-id: au-str-blatt
-titel: Vor und nach dem Text
-niveau: 3
-lernziel: 5
-kompetenz: begruenden
-quelle: Übungsblatt WS2021, Aufgabe 1j (nachgebaut, eigene Werte)
-angabe: |
-  Was gibt das Programm aus? Erkläre anschließend, warum die Zahl vor `Kurs` anders aussieht als die nach `Kurs`.
-teile:
-  - typ: ausgabe
-    label: a) Ausgabe
-    code: |
-      String st = "Kurs";
-      int i = 12;
-      char c = '3';
-      System.out.println(st + i + c);
-      System.out.println(i + c + st);
-      System.out.println(c + i + st + c + i);
-    loesung: |
-      Kurs123
-      63Kurs
-      63Kurs312
-    fehler:
-      - wert: "Kurs123\n123Kurs\n312Kurs312"
-        meldung: Vor dem ersten String wird gerechnet. `i + c` ist 12 plus die Nummer von `'3'`, also 12 + 51.
-      - wert: "Kurs15\n63Kurs\n63Kurs15"
-        meldung: Nach dem String wird nur noch angehängt. `"Kurs" + 12` ist `"Kurs12"`, dann kommt das Zeichen `3` dazu.
-  - typ: text
-    label: b) Warum unterscheiden sich die Ausgaben vor und nach `Kurs`?
-    muster: |
-      Java wertet `+` von links nach rechts aus. Solange noch kein String vorkam, ist `+` eine Addition: `i + c`
-      rechnet 12 plus die Unicode-Nummer von `'3'` (51) und ergibt 63. Steht der String schon links, ist jedes weitere
-      `+` eine Verkettung: `12` und das Zeichen `3` werden als Text angehängt.
-hinweise:
-  - '`''3''` hat die Nummer 51 (`''0''` ist 48).'
-  - Markiere in jeder Zeile das erste `+`, an dem ein String beteiligt ist. Links davon wird gerechnet, rechts davon angehängt.
-loesung: |
-  **Ansatz:** In jeder Zeile die Stelle suchen, ab der ein String vorliegt.
-  ---
-  Zeile 1: `st` steht ganz links. `"Kurs" + 12 + '3'` ergibt `Kurs123`.
-  ---
-  Zeile 2: `12 + '3'` ist eine Rechnung: 12 + 51 = 63. Dann `"63Kurs"`.
-  ---
-  Zeile 3: `'3' + 12` = 63, dann `"63Kurs"`, dann `'3'` als Zeichen und `12` als Text: `63Kurs312`.
-```
-
-```aufgabe
 id: au-str-rechnung-code
 titel: Eine Rechnung als Text liefern
 niveau: 3
@@ -3044,15 +2865,6 @@ loesung: |
   return a + " + " + b + " = " + (a + b) + ", " + a + " * " + b + " = " + a * b;
   ```
   Probe: Für 3 und 4 entsteht `3 + 4 = 7, 3 * 4 = 12`. Auch das erste `a + " + "` ist schon eine Verkettung, weil `" + "` ein String ist.
-```
-
-```reflexion
-frage: Warum schreiben viele Programmierer bei Ausgaben ein `"" +` an den Anfang, und wann ist das gefährlich?
-antwort: |
-  Der leere String am Anfang sorgt dafür, dass schon das erste `+` eine Verkettung ist. Dann werden alle folgenden
-  Werte als Text angehängt, auch zwei Zeichen hintereinander (`"" + 'o' + 'k'` ergibt `"ok"`). Gefährlich ist das, wenn
-  man eigentlich etwas addieren will: `"" + a + b` hängt die Ziffern aneinander, statt zu rechnen. Wo gerechnet werden
-  soll, braucht es dann Klammern, zum Beispiel `"" + (a + b)`.
 ```
 
 ## String-Methoden und der Vergleich mit equals
@@ -3943,14 +3755,6 @@ loesung: |
   Die Wurzel aus 50 ist etwa 7,07. `(int)` liefert 7, `Math.round` liefert ebenfalls 7. Die Verkettung ergibt `7 7`.
 ```
 
-```reflexion
-frage: Warum liefert `Math.pow` immer einen double, selbst bei `Math.pow(2, 3)`?
-antwort: |
-  Weil `Math.pow` auch Potenzen wie `Math.pow(2, 0.5)` (die Wurzel aus 2) oder `Math.pow(2, -1)` (also 0,5) berechnen
-  muss. Deren Ergebnisse sind keine ganzen Zahlen. Eine Methode hat in Java genau einen Rückgabetyp, und nur `double`
-  passt für alle Fälle. Darum musst du bei ganzzahligen Potenzen selbst casten oder einfach multiplizieren.
-```
-
 ## Gemischte Wiederholung
 
 In diesem Abschnitt sind die Aufgaben bunt gemischt, auch mit Stoff aus [Kapitel 1](/lernen/ep1/werkzeuge). Das ist
@@ -4618,16 +4422,6 @@ loesung: |
 ```
 
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Jede einzelne Rechnung hat einen Typ, der sich aus ihren beiden Operanden ergibt. Bei zwei
-  `int` ist `/` eine Ganzzahldivision, die zur 0 hin abschneidet. (2) Ein `+` verkettet, sobald ein Operand ein String
-  ist, und es wird von links nach rechts ausgewertet. Davor wird gerechnet, auch mit `char` als Zahl. (3) Strings
-  vergleicht man mit `equals`, weil `==` nur prüft, ob es dasselbe Objekt ist. Andere gute Antworten sind die Kette der
-  impliziten Typumwandlungen oder „Ein Cast schneidet ab und rundet nicht“.
-```
 
 :::zusammenfassung
 1. **Variablen** haben Namen, Typ und Wert. Bei einer Zuweisung wird zuerst die rechte Seite ausgewertet, dann wird ihr Wert kopiert. Literale bestimmen ihren Typ selbst: `5` ist `int`, `5L` ist `long`, `5.0` ist `double`, `5.0f` ist `float`, `'5'` ist `char` und `"5"` ist `String`. `017` ist oktal (15), `0x1F` ist hexadezimal (31).

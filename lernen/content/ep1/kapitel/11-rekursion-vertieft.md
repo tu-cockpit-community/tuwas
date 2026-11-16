@@ -886,16 +886,6 @@ loesung: |
   `q(8)`: 8, 4, 2, 1, also 4 Aufrufe. `q(5)`: 5, 2, 1, 3, 1, 2, 1, also 7 Aufrufe. Der Wert ist `q(2) + q(3) = 1 + 2 = 3`. Aussagen 2 und 3 sind richtig.
 ```
 
-```reflexion
-frage: Warum ist für die Einordnung als linear oder verzweigt egal, wie oft der Methodenname im Text steht? Erkläre es an `schritte` und `zweige`.
-antwort: |
-  Entscheidend ist, was bei einem einzelnen Aufruf tatsächlich passiert. In `schritte` stehen zwei Selbstaufrufe im
-  Text, aber in getrennten Zweigen mit `return`. Jeder Durchlauf nimmt genau einen davon, also entsteht eine Kette, und
-  die Methode ist linear. In `zweige` stehen die zwei Aufrufe im selben Ausdruck. Jeder Durchlauf führt beide aus, also
-  verzweigt sich jeder Aufruf in zwei, und es entsteht ein Baum. Die Zahl im Text sagt nur, was passieren **kann**.
-  Die Einordnung fragt, was in einem Durchlauf passiert.
-```
-
 ## Endrekursion: das Ergebnis auf dem Hinweg berechnen
 
 ```aufgabe
@@ -1532,16 +1522,6 @@ loesung: |
   `rest.charAt(0) + bisher` ist eine Verkettung, weil `bisher` ein String ist. Probe `("abc", "")`: ("bc", "a"), ("c", "ba"), ("", "cba"). Ergebnis `"cba"`.
 ```
 
-```reflexion
-frage: Warum muss eine endrekursive Methode auf dem Rückweg nichts mehr tun, und warum ist das in Java trotzdem kein Schutz vor einem StackOverflowError?
-antwort: |
-  Bei einer endrekursiven Methode ist der Selbstaufruf die letzte Aktion. Alles, was ein Aufruf beitragen will, steckt
-  schon im Argument, meist im Sammelparameter. Der Basisfall hat deshalb das fertige Ergebnis, und alle wartenden
-  Aufrufe reichen es nur noch weiter. Trotzdem legt Java für jeden Aufruf einen Rahmen auf den Aufrufstapel und räumt ihn
-  erst auf dem Rückweg ab. Die Zahl der gleichzeitig offenen Rahmen ist also genauso groß wie ohne Sammelparameter. Bei
-  sehr vielen Aufrufen läuft der Stapel deshalb auch hier über.
-```
-
 ## Der Aufrufbaum: Reihenfolge bei zwei Selbstaufrufen
 
 ```aufgabe
@@ -2122,15 +2102,6 @@ loesung: |
   Zum Schluss gibt `println` den Text ` = 3` aus. Erste Ausgabe von `f` ist `<3`, letzte ist `3>`.
 ```
 
-```reflexion
-frage: Warum liegt bei einer verzweigten Rekursion nie der ganze Aufrufbaum gleichzeitig auf dem Aufrufstapel?
-antwort: |
-  Auf dem Stapel liegen nur Aufrufe, die begonnen haben und noch nicht fertig sind. Wegen der Reihenfolge „Tiefe
-  zuerst“ ist ein linker Teilbaum immer schon ganz fertig und abgeräumt, bevor der rechte beginnt. Gleichzeitig offen
-  sind deshalb nur die Aufrufe auf dem Weg von der Wurzel zum gerade laufenden Knoten. Das ist höchstens ein Weg, so
-  lang wie die Rekursionstiefe. Der Baum zeigt dagegen alle Aufrufe, die im Lauf der Zeit passieren.
-```
-
 ## Aufrufe und Ausgaben zählen
 
 ```aufgabe
@@ -2681,16 +2652,6 @@ loesung: |
   Probe mit `n = 2`: Der erste Selbstaufruf gibt `L -> M` aus, dann folgt `L -> R`, der zweite Selbstaufruf gibt `M -> R` aus. Für `n = 3` entstehen 7 Züge.
 ```
 
-```reflexion
-frage: Warum ist es bei einer verzweigten Rekursion klüger, mit einer Tabelle von unten zu zählen, statt den Aufrufbaum zu zeichnen?
-antwort: |
-  Der Aufrufbaum wächst bei jeder Ebene um ein Vielfaches. Schon für kleine Argumente hat er Dutzende oder Hunderte
-  Knoten, und beim Zeichnen verzählt man sich leicht. Die Tabelle nutzt aus, dass gleiche Teilbäume gleich viele Aufrufe
-  haben. Jede Zeile braucht nur die Zeilen darüber und eine Addition. So zählt man auch `u(8)` mit 35 Aufrufen in
-  wenigen Zeilen. Das ist dieselbe Idee wie bei der Rekursion selbst: Die große Aufgabe wird aus den Antworten der
-  kleineren zusammengesetzt.
-```
-
 ## Rekursionen beurteilen: Ergebnis und Terminierung
 
 ```aufgabe
@@ -3173,53 +3134,6 @@ loesung: |
 ```
 
 ```aufgabe
-id: rv-tb-text-ggt
-titel: Warum endet der ggT durch Abziehen?
-niveau: 3
-lernziel: 5
-kompetenz: begruenden
-angabe: |
-  Gegeben ist die Methode aus [11.2 Endrekursion](/lernen/ep1/rekursion-vertieft/endrekursion-das-ergebnis-auf-dem-hinweg-berechnen):
-
-  ```java
-  public static int ggt(int a, int b) {
-      if (a == b) {
-          return a;
-      }
-      if (a > b) {
-          return ggt(a - b, b);
-      }
-      return ggt(a, b - a);
-  }
-  ```
-
-  a) Begründe, warum die Methode für alle `a > 0` und `b > 0` endet. Nenne eine Größe, die bei jedem Aufruf kleiner wird.
-
-  b) Was passiert bei `ggt(5, 0)`? Erkläre es mit den Begriffen Fundiertheit und Fortschritt.
-teile:
-  - typ: text
-    muster: |
-      a) Ich betrachte die Summe a + b. Bei jedem Selbstaufruf wird die größere Zahl durch die Differenz ersetzt, also
-      wird a + b um die kleinere Zahl kleiner. Weil beide Zahlen positiv sind und positiv bleiben (die Differenz einer
-      größeren und einer kleineren positiven Zahl ist positiv), sinkt a + b bei jedem Aufruf um mindestens 1. Eine
-      positive ganze Zahl kann nur endlich oft kleiner werden. Spätestens wenn a == b gilt, greift der Basisfall.
-      b) ggt(5, 0): Es ist a > b, also folgt ggt(5 - 0, 0), das ist wieder ggt(5, 0). Die Methode ist fundiert, aber
-      sie macht keinen Fortschritt, weil die Differenz mit 0 nichts verändert. Sie ruft sich endlos auf und endet mit
-      einem StackOverflowError. Deshalb verlangt die Vorbedingung a > 0 und b > 0.
-hinweise:
-  - Betrachte die Summe `a + b`. Um wie viel wird sie bei einem Selbstaufruf kleiner?
-  - Setze für b) die Werte ein und schreib den nächsten Aufruf hin.
-loesung: |
-  **Ansatz:** Für die Terminierung eine Größe suchen, die bei jedem Schritt um mindestens 1 sinkt und nicht unter eine Grenze fallen kann.
-  ---
-  a) Die Summe `a + b` sinkt bei jedem Aufruf um die kleinere der beiden Zahlen, also um mindestens 1. Beide Zahlen bleiben positiv. Darum kann das nur endlich oft passieren.
-  ---
-  b) `ggt(5, 0)` ruft `ggt(5, 0)` auf. Der Basisfall existiert, wird aber nie erreicht. Es fehlt der Fortschritt, weil das Abziehen von 0 nichts ändert.
-  ---
-  Ergebnis: Die Vorbedingung `a > 0, b > 0` ist nötig. Mit ihr endet die Methode immer.
-```
-
-```aufgabe
 id: rv-tb-code-reparieren
 titel: Eine Binärdarstellung reparieren
 niveau: 3
@@ -3278,15 +3192,6 @@ loesung: |
   `"" + n` macht aus der Zahl einen String. In der letzten Zeile ist `binaer(n / 2)` ein String, darum wird `n % 2` angehängt und nicht addiert.
   ---
   Probe: `binaer(6)` ist `binaer(3) + 0`, und `binaer(3)` ist `binaer(1) + 1 = "11"`. Ergebnis `"110"`. `binaer(0)` liefert jetzt `"0"`.
-```
-
-```reflexion
-frage: Warum genügt es im Quiz nicht, eine Implementierung mit den Beispielen aus der Angabe zu testen?
-antwort: |
-  Die Beispiele zeigen nur einige erlaubte Eingaben. Die Frage verlangt aber, dass die Implementierung für **alle**
-  erlaubten Eingaben endet und das Richtige liefert. Typische Fehler stecken gerade in den Randfällen, die selten als
-  Beispiel dastehen: der leere String, die Zahl 0, eine gerade statt einer ungeraden Länge. Deshalb prüfe ich zusätzlich
-  das kleinste erlaubte Argument und überlege mit Fundiertheit und Fortschritt, ob der Basisfall immer erreicht wird.
 ```
 
 ## Rekursive Grafik: Fraktale mit CodeDraw
@@ -3875,53 +3780,6 @@ loesung: |
   Die Farbe wird direkt vor `fillSquare` gesetzt. Die Selbstaufrufe ändern die Farbe nämlich zwischendurch.
   ---
   Kontrolle für `s = 96`: Seiten 96, 48, 24 und 12. Das sind `1 + 4 + 16 + 64 = 85` Quadrate, davon 64 auf der letzten Ebene. Mit den 256 Aufrufen mit `s = 6` gibt es 341 Aufrufe.
-```
-
-```aufgabe
-id: rv-gr-text-variante
-titel: Kleine Quadrate nach oben
-niveau: 3
-lernziel: 7
-kompetenz: begruenden
-quelle: Zusatzfrage zu Aufgabenblatt 3, Aufgabe 5 (WS 2021), auf das Fliesenmuster übertragen
-angabe: |
-  Im Feedbackgespräch fragt die Tutorin zu deiner Lösung von `fliese` aus der vorigen Aufgabe „Ein Fliesenmuster aus Quadraten“:
-
-  1. Was musst du ändern, damit die **kleineren** Quadrate oben liegen?
-  2. Warum musst du die Farbe direkt vor `fillSquare` setzen und nicht am Anfang der Methode?
-  3. Wie viele Quadrate werden bei `fliese(cd, 200, 200, 32, true)` gezeichnet, und wie viele Aufrufe gibt es?
-
-  Beantworte jede Frage in ein bis zwei Sätzen.
-teile:
-  - typ: text
-    muster: |
-      1. Ich verschiebe setColor und fillSquare vor die vier Selbstaufrufe. Dann wird jedes Quadrat auf dem Hinweg
-         gezeichnet, also vor seinen kleineren Kindern, und die Kinder liegen darüber.
-      2. Die Selbstaufrufe setzen ihre eigenen Farben. Wenn ich am Anfang die Farbe setze, ist nach den Aufrufen
-         noch die Farbe des zuletzt gezeichneten Kinds eingestellt. Mein Quadrat bekäme dann die falsche Farbe.
-      3. Seiten 32, 16 und 8 werden gezeichnet: 1 + 4 + 16 = 21 Quadrate. Dazu kommen 64 Aufrufe mit s = 4, die
-         sofort enden. Insgesamt sind es 85 Aufrufe.
-hinweise:
-  - Für Frage 1 überlege, ob auf dem Hinweg oder auf dem Rückweg gezeichnet werden muss.
-  - Für Frage 3 liste die Seiten 32, 16, 8, 4 auf und zähle auf jeder Ebene viermal so viele Aufrufe.
-loesung: |
-  **Ansatz:** Jede Frage mit einem Begriff des Abschnitts beantworten: Zeichenreihenfolge, Zustand des Fensters, Zählen nach Ebenen.
-  ---
-  1. Zeichnen vor den Selbstaufrufen, also auf dem Hinweg. Dann entstehen die kleinen Quadrate später und liegen oben.
-  ---
-  2. `setColor` legt die Zeichenfarbe für alle folgenden Formen fest. Die Kinder stellen zwischendurch ihre eigene Farbe ein. Deshalb setzt jeder Aufruf seine Farbe unmittelbar vor seinem eigenen `fillSquare`.
-  ---
-  3. Gezeichnet wird bei 32, 16 und 8, das sind `1 + 4 + 16 = 21` Quadrate. Mit den 64 Aufrufen bei `s = 4` gibt es `21 + 64 = 85` Aufrufe.
-```
-
-```reflexion
-frage: Warum bestimmt bei einer rekursiven Zeichnung die Stelle des Zeichenbefehls, welche Formen oben liegen? Verbinde die Antwort mit dem Hinweg und dem Rückweg aus Kapitel 10.
-antwort: |
-  CodeDraw malt jede Form über das, was schon da ist. Oben liegt also, was zuletzt gezeichnet wird. Ein Zeichenbefehl vor
-  den Selbstaufrufen läuft auf dem Hinweg. Ein Aufruf zeichnet dann seine Form, bevor seine Kinder ihre kleineren Formen
-  zeichnen, und die kleineren landen oben. Ein Zeichenbefehl nach den Selbstaufrufen läuft auf dem Rückweg. Dann sind
-  alle kleineren Formen im Teilbaum schon gezeichnet, und die große Form malt darüber. Es ist dieselbe Regel wie bei
-  Ausgaben vor und nach dem Selbstaufruf, nur dass man das Ergebnis sieht, statt es zu lesen.
 ```
 
 ## Gemischte Wiederholung
@@ -4791,67 +4649,7 @@ loesung: |
   Kontrolle für `r = 48`: Radien 48, 24, 12 und 6, also `1 + 3 + 9 + 27 = 40` Kreise.
 ```
 
-```aufgabe
-id: rv-pruef-feedback-binom
-titel: Fragen im Feedbackgespräch zum Binomialkoeffizienten
-niveau: 3
-punkte: 3
-lernziel: 2
-kompetenz: begruenden
-quelle: Zusatzfragen der Aufgabenblätter 3 (Anzahl der Aufrufe, Grenzen der Rekursion), auf den Binomialkoeffizienten übertragen
-angabe: |
-  (Zeitrichtwert: 6 Minuten) Du hast `binom` aus
-  [11.3 Der Aufrufbaum](/lernen/ep1/rekursion-vertieft/der-aufrufbaum-reihenfolge-bei-zwei-selbstaufrufen) so abgegeben:
-
-  ```java
-  public static long binom(int n, int k) {
-      if (k == 0 || k == n) {
-          return 1;
-      }
-      return binom(n - 1, k - 1) + binom(n - 1, k);
-  }
-  ```
-
-  Beantworte die Fragen der Tutorin in je ein bis zwei Sätzen.
-
-  1. Wie oft wird `binom` beim Aufruf `binom(5, 2)` insgesamt aufgerufen? Wie kommst du darauf?
-  2. Wie groß ist die Rekursionstiefe bei `binom(5, 2)`?
-  3. `binom(30, 15)` braucht über 300 Millionen Aufrufe. Warum ist diese Methode so langsam?
-teile:
-  - typ: text
-    muster: |
-      1. Ich zähle mit einer Tabelle: Aufrufe(n, k) = 1 + Aufrufe(n - 1, k - 1) + Aufrufe(n - 1, k), Basisfälle zählen 1.
-         Für (4, 1) sind es 7 und für (4, 2) sind es 11. Also hat binom(5, 2) genau 1 + 7 + 11 = 19 Aufrufe.
-      2. Jeder Selbstaufruf verkleinert n um 1. Der längste Weg ist etwa (5, 2), (4, 1), (3, 1), (2, 1), (1, 0).
-         Höchstens 5 Rahmen liegen gleichzeitig auf dem Stapel.
-      3. Die Methode ist verzweigt und berechnet dieselben Teilaufgaben immer wieder neu, zum Beispiel binom(3, 1)
-         mehrmals. Jedes Blatt liefert 1, also hat der Baum so viele Blätter, wie das Ergebnis groß ist. Für
-         binom(30, 15) sind das 155117520 Blätter und insgesamt doppelt so viele Aufrufe, weniger 1.
-hinweise:
-  - Für Frage 1 hilft eine Zähltabelle. Rechne zuerst die Aufrufe für `(4, 1)` und `(4, 2)` aus.
-  - Für Frage 2 folge einem Weg, auf dem man möglichst spät einen Basisfall erreicht.
-loesung: |
-  **Ansatz:** Die Begriffe des Kapitels verwenden: Zähltabelle, Rekursionstiefe, verzweigte Rekursion mit wiederholten Teilaufgaben.
-  ---
-  1. Aufrufe für `(4, 1)`: 7, für `(4, 2)`: 11. Zusammen mit dem Startaufruf `1 + 7 + 11 = 19`.
-  ---
-  2. `n` sinkt bei jedem Aufruf um 1. Der längste Weg hat 5 Aufrufe, etwa bis `(1, 0)`. Die Rekursionstiefe ist 5.
-  ---
-  3. Gleiche Teilaufgaben werden in verschiedenen Zweigen des Baums neu berechnet. Jedes Blatt liefert 1, also gibt es für `binom(30, 15) = 155117520` genauso viele Blätter. Mit den inneren Knoten sind es 310235039 Aufrufe.
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten darunter.
-antwort: |
-  Eine mögliche Auswahl: (1) Ob eine Rekursion linear oder verzweigt ist, hängt davon ab, wie viele Selbstaufrufe ein
-  einzelner Durchlauf ausführt, nicht davon, wie oft der Name im Text steht. (2) Eine verzweigte Rekursion bildet einen
-  Aufrufbaum. Java durchläuft ihn Tiefe zuerst, links vor rechts. Ausgaben vor, zwischen und nach den Selbstaufrufen
-  erscheinen beim Betreten, nach dem linken Teilbaum und am Ende. (3) Aufrufe und Ausgaben zählt man mit einer Tabelle
-  von unten, und bei Grafiken bestimmt die Stelle des Zeichenbefehls, was oben liegt. Ebenso gute Antworten sind die
-  Endrekursion mit Sammelparameter oder das Prüfen von Implementierungen mit Fundiertheit und Fortschritt.
-```
 
 :::zusammenfassung
 1. **Arten:** Eine Rekursion ist **linear**, wenn jeder Durchlauf höchstens einen Selbstaufruf ausführt, und **verzweigt**, wenn mindestens ein Durchlauf zwei oder mehr ausführt. Steht ein Selbstaufruf im Argument eines anderen, ist sie **verschachtelt**. Rufen sich zwei Methoden gegenseitig auf, ist sie **wechselseitig**.

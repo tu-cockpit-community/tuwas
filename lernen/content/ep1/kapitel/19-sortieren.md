@@ -798,16 +798,6 @@ loesung: |
   Probe mit `{1, 4, 2, 9, 3}`: Bei `i = 0` ist `1 > 4` falsch, bei `i = 1` ist `4 > 2` wahr. Ergebnis 1. Das spätere falsche Paar `9, 3` spielt keine Rolle, weil wir den **kleinsten** Index suchen.
 ```
 
-```reflexion
-frage: Die Methode istSortiert vergleicht nur Nachbarn, nie etwa a[0] mit a[3]. Warum reicht das trotzdem aus, um sicher zu sein, dass das ganze Array sortiert ist?
-antwort: |
-  Wenn jedes Nachbarpaar stimmt, gilt eine Kette: `a[0] <= a[1]`, `a[1] <= a[2]` und `a[2] <= a[3]`. Aus
-  „kleiner oder gleich“ hintereinander folgt wieder „kleiner oder gleich“. Also gilt auch `a[0] <= a[3]`, und
-  genauso für jedes andere Paar weiter auseinander. Umgekehrt muss in einem unsortierten Array mindestens ein
-  Nachbarpaar falsch herum stehen. Sonst würde die Kette ja gelten. Darum genügen die Nachbarvergleiche, und
-  es sind nur `a.length - 1` Vergleiche nötig.
-```
-
 ## Bubblesort: benachbarte Werte vertauschen
 
 ```aufgabe
@@ -1300,17 +1290,6 @@ loesung: |
   Nach jedem Durchlauf steht jetzt der **kleinste** Wert ganz rechts. Probe mit `{1, 2}`: 1 < 2, Tausch, Ergebnis `{2, 1}`. Den Tausch kannst du auch in eine eigene Methode `exchange` auslagern, wenn die Aufgabe Hilfsmethoden erlaubt.
 ```
 
-```reflexion
-frage: Warum darf die innere Schleife von bubbleSort im Durchlauf i schon bei data.length - i - 1 aufhören? Was würde passieren, wenn sie trotzdem bis data.length - 1 liefe?
-antwort: |
-  Nach dem Durchlauf mit der Nummer `i` stehen die `i + 1` größten Werte an ihren endgültigen Plätzen am rechten Ende.
-  Vor dem Durchlauf `i` sind also schon `i` Plätze rechts fertig. Jedes Paar dort steht richtig herum, denn rechts
-  stehen die größten Werte in sortierter Reihenfolge. Die Vergleiche dort würden nie zu einem Tausch führen. Liefe die
-  Schleife trotzdem bis `data.length - 1`, wäre das Ergebnis also genauso richtig. Das Verfahren würde nur unnötige
-  Vergleiche machen. Gefährlich wäre dagegen eine Grenze **ohne** das `- 1`, weil dann `data[j + 1]` über das Array
-  hinaus liest.
-```
-
 ## Selectionsort: das Minimum nach vorne holen
 
 ```aufgabe
@@ -1727,16 +1706,6 @@ loesung: |
   ```
   ---
   Probe mit `{6, 2, 9, 4, 1}`: `i = 0` holt die 9 ans Ende, `{6, 2, 1, 4, 9}`. `i = 1` holt die 6 auf Index 3, `{4, 2, 1, 6, 9}`. Dann die 4 auf Index 2 und die 2 auf Index 1. Ergebnis `{1, 2, 4, 6, 9}`.
-```
-
-```reflexion
-frage: Selectionsort ruft exchange bei jedem nicht leeren Array genau data.length - 1 Mal auf, Bubblesort dagegen je nach Array gar nicht oder sehr oft. Wann könnte das ein Vorteil von Selectionsort sein?
-antwort: |
-  Wenn ein Tausch teuer ist. Bei `int`-Werten kostet ein Tausch kaum etwas. Man kann aber auch große Datensätze
-  sortieren, etwa ganze Zeilen einer Tabelle mit vielen Einträgen. Dann ist das Umkopieren aufwändiger als ein
-  Vergleich. Selectionsort kommt immer mit `n - 1` Tauschen aus, während Bubblesort im schlechtesten Fall rund
-  `n · n / 2` Tausche braucht. Die Zahl der Vergleiche ist bei beiden gleich, rund `n · n / 2`. Genau diesen Vorteil
-  nennen auch die Folien: Selectionsort ist besser, falls Vertauschungen sehr aufwändig sind.
 ```
 
 ## Insertionsort: einfügen wie bei Spielkarten
@@ -2206,16 +2175,6 @@ loesung: |
   Probe mit `{2, 5, 8, 3, 1}` und `k = 3`: `karte = 3`. Die 8 rückt nach Index 3, die 5 nach Index 2, dann ist `2 > 3` falsch. Die 3 kommt an Index 1: `{2, 3, 5, 8, 1}`. Mit `einfuegen(a, i)` für `i = 1` bis `a.length - 1` entsteht ein vollständiger Insertionsort.
 ```
 
-```reflexion
-frage: Bubblesort und Selectionsort machen bei Länge n immer gleich viele Vergleiche. Bei Insertionsort hängt die Zahl vom Array ab. Woran liegt das, und welches Array ist für Insertionsort am günstigsten?
-antwort: |
-  Die inneren Schleifen von Bubblesort und Selectionsort haben feste Grenzen, die nur von `i` und der Länge abhängen.
-  Bei Insertionsort steht in der Bedingung der inneren Schleife auch ein Vergleich der Werte. Die Schleife endet,
-  sobald die neue Karte nicht mehr kleiner ist als ihr linker Nachbar. Am günstigsten ist ein schon sortiertes Array.
-  Dann endet jede innere Schleife nach einem einzigen Vergleich, insgesamt sind es nur `n - 1` Vergleiche und kein
-  Tausch. Am ungünstigsten ist ein absteigend sortiertes Array, bei dem jede Karte bis ganz nach vorne wandern muss.
-```
-
 ## Zwischenzustände erkennen
 
 ```aufgabe
@@ -2642,16 +2601,6 @@ loesung: |
   ```
   ---
   Probe mit `{3, 2, 1}` und `k = 1`: Der eine Durchlauf ergibt `{2, 1, 3}`. Mit dieser Methode kannst du jede Quizfrage zu Bubblesort selbst nachprüfen: Rufe sie für `k = 1` bis `n - 1` auf und vergleiche.
-```
-
-```reflexion
-frage: Warum genügt bei Insertionsort der Fingerabdruck, um eine Belegung als möglich zu erkennen, bei Bubblesort aber nicht?
-antwort: |
-  Bei Insertionsort steht nach dem Durchlauf `i` genau fest, was im Array steht: links die ersten `i + 1` Werte der
-  Ausgangsbelegung in sortierter Reihenfolge, rechts alles unverändert. Mehr Spielraum gibt es nicht. Wer das prüft,
-  hat den ganzen Zustand geprüft. Bei Bubblesort sagt der Fingerabdruck nur etwas über den rechten Teil, die größten
-  Werte. Wie die übrigen Werte links davon angeordnet sind, hängt davon ab, welche Paare in den bisherigen Durchläufen
-  getauscht wurden. Dafür gibt es keine einfache Regel, und man muss die Durchläufe nachrechnen.
 ```
 
 ## Stabilität: gleiche Schlüssel behalten ihre Reihenfolge
@@ -3081,17 +3030,6 @@ loesung: |
   ```
   ---
   Probe mit `{12, 30, 12, 25}`: Ben (30) wandert vor Ada. Cem (12) bleibt hinter Ada, weil `12 > 12` falsch ist. Dora (25) wandert an Cem und Ada vorbei bis hinter Ben. Ergebnis Ben, Dora, Ada, Cem.
-```
-
-```reflexion
-frage: Selectionsort wird nicht stabil, weil es über große Entfernungen tauscht. Warum genügt es nicht, das Vergleichszeichen zu ändern, um es stabil zu machen?
-antwort: |
-  Das Vergleichszeichen bestimmt nur, welches der gleichen Minima ausgewählt wird. Bei `<` ist es das erste, bei `<=`
-  das letzte. Das Problem liegt aber im Tausch selbst. Der Wert, der an der Stelle `i` stand, springt an die Stelle
-  des Minimums, also womöglich weit nach rechts. Dabei kann er über einen gleichen Wert hinwegspringen, der vorher
-  hinter ihm stand. Bei `{2a, 2b, 1}` springt `2a` hinter `2b`, egal wie das Minimum gesucht wird. Um Selectionsort
-  stabil zu machen, müsste man das Minimum einfügen und die Werte dazwischen um eins nach rechts schieben, wie bei
-  Insertionsort. Dann wäre es aber ein anderes Verfahren mit vielen Verschiebungen.
 ```
 
 ## Veränderten Sortiercode beurteilen
@@ -3563,17 +3501,6 @@ loesung: |
   Fehler 1: `int i = 2` überspringt das Einfügen von `data[1]`. Bei `{2, 1}` läuft die äußere Schleife gar nicht. Richtig ist `int i = 1`.
   ---
   Fehler 2: `j >= 0` lässt `j = 0` zu, dann wird `data[-1]` gelesen. Richtig ist `j > 0`. Die anderen Zeilen stimmen: Getauscht wird nur bei echt kleiner, also bleibt das Verfahren stabil.
-```
-
-```reflexion
-frage: Warum genügt für „falsch“ ein einziges Gegenbeispiel, während du für „richtig“ ein Argument für alle Arrays brauchst?
-antwort: |
-  Die Aussage im Quiz behauptet etwas für **alle** Arrays: Jedes wird sortiert, bei jedem endet der Algorithmus. Eine
-  solche Allaussage ist schon falsch, wenn sie für ein einziges Array nicht stimmt. Umgekehrt beweisen auch viele
-  gelungene Beispiele nicht, dass es kein misslungenes gibt. Darum argumentiert man für „richtig“ über den Code: Die
-  geänderte Fassung vergleicht dieselben Paare, oder sie macht nur zusätzliche Durchläufe, die nichts ändern können.
-  Im Quiz ist das eine gute Arbeitsteilung: Erst kurz nach einem Gegenbeispiel suchen, und wenn keines auftaucht,
-  begründen, warum die Änderung harmlos ist.
 ```
 
 ## Laufzeit und Vergleich der Verfahren
@@ -4094,17 +4021,6 @@ loesung: |
   ```
   ---
   Probe mit `{6, 2, 9, 4, 1}`: Die Methode liefert 7, genau die Tausche von Bubblesort und Insertionsort für dieses Array. Die Laufzeit liegt in $O(n^2)$.
-```
-
-```reflexion
-frage: Insertionsort und Selectionsort liegen beide in O(n²). Warum ist es trotzdem sinnvoll zu wissen, welches Verfahren bei welchen Daten wie viel arbeitet?
-antwort: |
-  Die gemeinsame Schranke $O(n^2)$ beschreibt hier nur das Wachstum im schlechtesten Fall. In der Praxis zählen aber auch die konkreten
-  Daten und die Art der Arbeit. Bei fast sortierten Daten macht Insertionsort nur etwa `n` Vergleiche, Selectionsort
-  dagegen immer rund `n · n / 2`. Ist dagegen ein Tausch sehr teuer, etwa weil große Datensätze kopiert werden,
-  gewinnt Selectionsort mit nur `n - 1` Tauschen. Und wenn gleiche Schlüssel ihre Reihenfolge behalten müssen, kommt
-  Selectionsort gar nicht in Frage, weil es nicht stabil ist. Die richtige Wahl hängt also von den Daten und den
-  Anforderungen ab, nicht nur von der O-Klasse.
 ```
 
 ## Gemischte Wiederholung
@@ -4886,56 +4802,7 @@ loesung: |
   Randfälle: Eine leere Zeile hat die Länge 0, dann ist `1 < 0` falsch und nichts passiert. Ein Array ohne Zeilen lässt die äußere Schleife keinmal laufen. Probe mit `{9, 4}`: Die 4 wandert vor die 9.
 ```
 
-```aufgabe
-id: so-pa-gespraech
-titel: Im Feedbackgespräch erklären
-niveau: 3
-punkte: 3
-lernziel: 5
-kompetenz: begruenden
-angabe: |
-  **Zeitrichtwert: 6 Minuten.** Im Feedbackgespräch fragt die Tutorin: „Sie haben für Ihre Rangliste Insertionsort
-  verwendet. Warum nicht Selectionsort? Das braucht doch weniger Tausche.“
-
-  Formuliere eine Antwort in ganzen Sätzen, so wie du sie mündlich geben würdest. Erkläre dabei, was Stabilität ist,
-  und zeige an einem kleinen Beispiel, warum Selectionsort nicht stabil ist.
-teile:
-  - typ: text
-    muster: |
-      Selectionsort braucht tatsächlich nur `n - 1` Tausche, Insertionsort dagegen einen pro Fehlstand. Für die Rangliste
-      war mir aber Stabilität wichtig. Stabil heißt: Einträge mit gleicher Punktzahl stehen nach dem Sortieren in
-      derselben Reihenfolge wie vorher. Meine Liste war vorher nach Anmeldezeit geordnet, und bei Gleichstand sollte
-      die frühere Anmeldung vorne bleiben.
-
-      Selectionsort ist nicht stabil, weil es über große Entfernungen tauscht. Beispiel: `{2a, 2b, 1}`, wobei a und b
-      zwei Einträge mit 2 Punkten markieren. Im ersten Durchlauf tauscht die 1 mit `2a`, und es entsteht
-      `{1, 2b, 2a}`. Die beiden Zweier haben die Reihenfolge gewechselt. Insertionsort tauscht nur Nachbarn und nur bei
-      echt kleiner, darum überholen sich gleiche Werte nie.
-hinweise:
-  - Beginne damit, das Argument der Tutorin ernst zu nehmen. Dann nenne die Eigenschaft, die für die Rangliste wichtiger ist.
-  - 'Ein gutes Gegenbeispiel hat drei Werte: zwei gleiche vorne und einen kleineren hinten.'
-loesung: |
-  **Ansatz:** Eine gute Antwort hat drei Teile: das Gegenargument anerkennen, Stabilität erklären, ein Gegenbeispiel zeigen.
-  ---
-  Anerkennen: Selectionsort tauscht nur `n - 1`-mal und ist bei teuren Tauschen im Vorteil.
-  ---
-  Erklären: Stabil heißt, gleiche Schlüssel behalten ihre Reihenfolge. Das braucht man, wenn bei Gleichstand eine frühere Ordnung gelten soll.
-  ---
-  Beispiel: `{2a, 2b, 1}` wird bei Selectionsort zu `{1, 2b, 2a}`. Insertionsort tauscht nur Nachbarn bei echt kleiner, darum ist es stabil. Vergleiche deine Antwort mit dem Muster: Kommen alle drei Teile vor?
-```
-
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Bubblesort tauscht benachbarte Werte, bis der größte rechts steht. Selectionsort holt
-  das Minimum des Rests nach vorne. Insertionsort fügt jede neue Karte in den sortierten Anfang ein. (2) Bubblesort
-  und Insertionsort sind stabil, weil sie nur Nachbarn und nur bei echt größer tauschen. Selectionsort ist nicht
-  stabil. (3) Alle drei liegen im schlechtesten Fall in $O(n^2)$. Insertionsort braucht auf sortierten Daten nur
-  `n - 1` Vergleiche. Ebenso gute Antworten sind die Fingerabdrücke der Zwischenzustände oder die Prüfliste für
-  veränderten Code.
-```
 
 :::zusammenfassung
 1. **Sortiert:** Ein Array ist aufsteigend sortiert, wenn `a[i] <= a[i + 1]` für jedes Nachbarpaar gilt. Geprüft wird mit einer Schleife bis `a.length - 2` und `return true;` hinter der Schleife. Getauscht wird immer mit einer Hilfsvariable, die Sortiermethoden arbeiten in-place über die Referenz.

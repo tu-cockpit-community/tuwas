@@ -724,16 +724,6 @@ loesung: |
   Darum lautet der Basisfall `index >= seq.length`. Die Vorbedingung gilt nur für den Aufruf von außen.
 ```
 
-```reflexion
-frage: Warum lohnt es sich, das Beispielbild einer Angabe von Hand nachzurechnen, bevor du die erste Zeile Code schreibst?
-antwort: |
-  Das Beispielbild ist die einzige Stelle, an der die Angabe ihre Beschreibung mit echten Zahlen vorführt. Wenn ich es
-  von Hand nachrechne und auf dasselbe Ergebnis komme, habe ich den Text richtig verstanden. Komme ich auf ein anderes
-  Ergebnis, habe ich einen Satz falsch gelesen, und das merke ich nach einer Minute statt nach zwanzig Minuten
-  Programmieren. Außerdem sehe ich dabei die Form des Ergebnisses, also Zeilenzahl und Zeilenlängen. Genau das brauche
-  ich als Erstes, wenn ich ein neues Array anlege.
-```
-
 ```aufgabe
 id: pt-an-code-summe
 titel: Eine Summe in beide Richtungen
@@ -1277,16 +1267,6 @@ loesung: |
   Die leere Zeile wird zu `{0}`. Bei `new int[][]{}` läuft die äußere Schleife nie, und das Ergebnis hat keine Zeile.
   ---
   Probe: `{7, 8}` hat die Länge 2. Die neue Zeile ist `{2, 7, 8}`.
-```
-
-```reflexion
-frage: Die Einschränkung „Methodenköpfe nicht erweitern“ verbietet dir, einer rekursiven String-Methode einen Index-Parameter hinzuzufügen. Wie kommst du trotzdem durch den String?
-antwort: |
-  Statt eines Index verkürze ich den String selbst. Jeder Aufruf schaut nur auf das erste Zeichen mit `charAt(0)` und
-  gibt den Rest `substring(1)` an den Selbstaufruf weiter. Der Rest wird mit jedem Aufruf um ein Zeichen kürzer, also
-  ist der leere String ein sicherer Basisfall. Brauche ich das letzte Zeichen, nehme ich `charAt(s.length() - 1)` und
-  `substring(0, s.length() - 1)`. Steht ein Index schon im vorgegebenen Kopf, wie bei Methoden auf Arrays, benutze ich
-  ihn und rufe mit `index + 1` auf.
 ```
 
 ```aufgabe
@@ -1866,15 +1846,6 @@ loesung: |
   Leere Zeilen bleiben unberührt und behalten ihre Nullen. Ohne die Abfrage `n > 0` würde `j % 0` eine Exception werfen.
   ---
   Probe: `{3, 1}` mit `max = 4` ergibt die Indizes 0, 1, 0, 1, also `{3, 1, 3, 1}`.
-```
-
-```reflexion
-frage: In fast jeder M1-Aufgabe prüfen die Tests, ob `result[0] == input[0]` den Wert `false` liefert. Warum ist es ein Fehler, eine Zeile einfach zu übernehmen, wenn ihr Inhalt doch stimmt?
-antwort: |
-  Weil dann zwei Arrays dieselbe Zeile teilen. Die Angabe verlangt ein neues Array, und ein neues Array soll vom Original
-  unabhängig sein. Ändert später eine M2-Methode die Eingabe, ändert sie unbemerkt auch das Ergebnis mit, und umgekehrt.
-  In `main` steht oft genau diese Folge, erst M1, dann M2 auf demselben Testarray. Mit geteilten Zeilen sind dann beide
-  Ausgaben falsch, obwohl jede Methode für sich korrekt aussieht. `==` vergleicht Verweise und deckt das sofort auf.
 ```
 
 ```aufgabe
@@ -2539,16 +2510,6 @@ loesung: |
   Die Abfrage schützt vor Spalten, die es in einer kurzen Zeile nicht gibt.
   ---
   Probe: Zeile 2 mit Spalten 1 und 3 ergibt `{6, 0, 8, 0}`. Zeile 3 hat nur Spalte 0 und bleibt `{1}`.
-```
-
-```reflexion
-frage: Warum ersetzt man eine Zeile durch eine neue, wenn sie länger oder kürzer werden soll, statt sie direkt zu verändern?
-antwort: |
-  Ein Array hat in Java eine feste Länge, die beim Anlegen mit `new` entsteht. Eine Zeile eines zweidimensionalen Arrays
-  ist selbst ein Array und kann darum weder wachsen noch schrumpfen. Ich lege also eine neue Zeile mit der gewünschten
-  Länge an, kopiere die Werte hinein und speichere den Verweis an derselben Stelle `a[i]`. Weil das äußere Array dem
-  Aufrufer gehört, sieht er danach die neue Zeile. Ein bloßes Umschreiben der Werte reicht nur, wenn die Länge gleich
-  bleibt.
 ```
 
 ```aufgabe
@@ -3223,15 +3184,6 @@ loesung: |
   Weil der Rest mindestens ein Zeichen hat, steht hinter jedem `sep` wieder ein Zeichen. Am Ende entsteht kein überzähliger Trenner.
   ---
   Probe: `"Tor"` ergibt `'T' + "-" + ('o' + "-" + "r")`, also `"T-o-r"`.
-```
-
-```reflexion
-frage: Bei `genauKMal` und `genauNFallend` wird ein Parameter heruntergezählt, statt einen Zähler zu führen. Warum ist das im Programmiertest besonders praktisch?
-antwort: |
-  Weil die Einschränkungen Klassenvariablen und zusätzliche Parameter verbieten. Ein Zähler, der Treffer aufsummiert,
-  hätte im vorgegebenen Kopf keinen Platz. Der Parameter `k` oder `n` ist aber schon da. Wenn ich ihn bei jedem Treffer
-  um 1 verkleinere, steht im Basisfall fest, ob genau die verlangte Anzahl gefunden wurde: Das ist genau dann der Fall,
-  wenn der Rest 0 ist. So passt die ganze Information in die vorhandenen Parameter und den Rückgabewert.
 ```
 
 ```aufgabe
@@ -4008,16 +3960,6 @@ loesung: |
   Probe: `"Lampe"` enthält ein kleines `p`, aber kein großes `P`. Ausgaben `true` und `false`.
 ```
 
-```reflexion
-frage: Warum gehören die Ausgaben in main und nicht in die Methoden selbst, obwohl es bequemer wäre, das Ergebnis gleich in der Methode zu drucken?
-antwort: |
-  Eine Methode soll genau eine Aufgabe erledigen: M1 liefert ein Array, M2 verändert eines, M3 liefert einen Wert. Wer
-  die Methode benutzt, entscheidet selbst, was mit dem Ergebnis passiert. Druckt die Methode selbst, entstehen bei jedem
-  Aufruf zusätzliche Zeilen, auch in fremden Tests, und die Ausgabe passt nicht mehr zur erwarteten. Bei einer
-  rekursiven Methode wäre es noch schlimmer, weil jeder Selbstaufruf drucken würde. Darum verlangen die Angaben
-  ausdrücklich: Ausgaben nur in main.
-```
-
 ```aufgabe
 id: pt-ma-code-main-gross
 titel: Ein vollständiges main mit Zusatztest
@@ -4678,16 +4620,6 @@ loesung: |
   Lücke 2 bleibt `k - 1`. Lücke 1 wird `k <= 0`. Zu viele Treffer machen `k` negativ, und das ist bei „mindestens“ erlaubt.
   ---
   Probe: `mindestensKMal("aaa", 'a', 2)` endet mit `k = -1`, und `-1 <= 0` liefert `true`.
-```
-
-```reflexion
-frage: Warum lohnt es sich, eine alte Testangabe nicht nur einmal zu lösen, sondern danach auch ihre Variante zu programmieren?
-antwort: |
-  Weil die Tests einander stark ähneln, die Unterschiede aber genau dort liegen, wo eine auswendig gelernte Lösung
-  scheitert. Wer nur eine Fassung kennt, schreibt aus Gewohnheit die alte Parameterreihenfolge, die alte Konstante oder
-  den alten Basisfall. Beim Umbau auf die Variante muss ich jede Zeile fragen: Gilt das noch? So lerne ich, welche Teile
-  einer Lösung zur Idee gehören und welche nur zur einen Angabe. Genau diese Unterscheidung brauche ich, wenn im Test eine
-  dritte, mir unbekannte Variante kommt.
 ```
 
 ```aufgabe
@@ -5780,17 +5712,6 @@ loesung: |
 ```
 
 ## Zusammenfassung
-
-```reflexion
-frage: Schreib zuerst selbst die drei wichtigsten Aussagen dieses Kapitels auf, ohne nachzuschauen. Vergleiche danach mit dem Kasten unten.
-antwort: |
-  Eine mögliche Auswahl: (1) Der Test besteht aus M1 (neues Array, Form zuerst bestimmen, keine Zeile teilen), M2
-  (Array an Ort und Stelle verändern, nie `a = neu`) und M3 (Rekursion ohne Schleifen mit passendem Basisfall), dazu
-  3 Punkte für `main`. (2) Die Einschränkungen und die Vorbedingungen sind Teil der Aufgabe: Was die Vorbedingung nicht
-  ausschließt, muss funktionieren, und ein Verstoß gegen eine Einschränkung kostet die Methode. (3) Mit einem
-  übersetzbaren Gerüst, einem Zeitbudget pro Methode und einer Kontrolle am Ende sammelt man in allen Teilen Punkte.
-  Ebenso gute Antworten sind die Umsetzung der Testtabelle oder das Erkennen von Varianten.
-```
 
 :::zusammenfassung
 1. **Aufbau:** Ein Programmiertest hatte 2021 bis 2023 drei Methoden und `main`. M1 erzeugt ein neues Array, M2
