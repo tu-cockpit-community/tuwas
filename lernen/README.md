@@ -62,9 +62,6 @@ db/           SQLite-Datei lernen.db und Migrationen
 scripts/      Validator, Index-Erzeugung, Migration, Datenbank-Sicherung
 ```
 
-Einen neuen Kurs anlegen (Ablauf, benötigtes Material, Prompts für Claude Code, Einhängen in die App):
-[`content/ANLEITUNG-NEUE-KURSE.md`](content/ANLEITUNG-NEUE-KURSE.md).
-
 Kursinhalte schreiben und prüfen: [`content/AUTHORING.md`](content/AUTHORING.md) (Format),
 [`content/QUALITAET.md`](content/QUALITAET.md) (didaktische Rubrik), [`content/SPRACHE.md`](content/SPRACHE.md)
 (Sprachleitfaden), [`content/WIDGETS.md`](content/WIDGETS.md) (Widget-Optionen).
