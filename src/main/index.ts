@@ -7,6 +7,7 @@ import { startCalendarSync } from './calendar'
 import { syncCourseFolders } from './courseNotes'
 import { startExamSync, syncExams } from './exams'
 import { startNotesWatch } from './notes'
+import { showSplash } from './splash'
 import { handleNotesScheme, registerNotesScheme } from './notesProtocol'
 import { refreshUrgent, startReminders } from './reminders'
 import { registerIpc } from './ipc'
@@ -28,7 +29,7 @@ import {
   tuwelCallsFile,
   tuwelDumpFile
 } from './smoke'
-import { fixCursorSize, missingStartupArgs, trayHostAvailable } from './system'
+import { fixCursorSize, missingStartupArgs, trayHostAvailable, wslgRelaunchArgs, X11_FLAG } from './system'
 import { startTasksSync } from './tasks'
 import { startTuwelExtras } from './tuwelExtras'
 import { startStudies } from './studies'
@@ -58,6 +59,10 @@ const APP_ID = 'io.github.tu-cockpit-community.tuwas'
 // backend that means windows on Wayland, a GPU process drawing for X11, and nothing shows up.
 // So if TUWAS was started without them, start it again with them. `npm run dev` passes them itself.
 const missingArgs = process.env['ELECTRON_RENDERER_URL'] ? [] : missingStartupArgs(process.argv)
+// WSLg: X11 windows get no visible mouse pointer, so a start with the X11 flag (npm scripts, packaged launchers)
+// is started again on Wayland. Not for the development dump and smoke runs, which pass their flags on purpose.
+const diagnosticRun = process.argv.some((arg) => /^--(smoke-test|dump-tiss|dump-exams|dump-tuwel|tuwel-calls|probe-tuwel|try-renewal)\b/.test(arg))
+const wslgArgs = process.env['ELECTRON_RENDERER_URL'] || diagnosticRun ? null : wslgRelaunchArgs(process.argv)
 
 fixCursorSize()
 registerNotesScheme()
@@ -70,9 +75,10 @@ const tuwelDump = tuwelDumpFile(process.argv)
 const examsDump = examsDumpFile(process.argv)
 const tuwelCallsDump = tuwelCallsFile(process.argv)
 
-if (missingArgs.length > 0) {
+if (wslgArgs || missingArgs.length > 0) {
   // An AppImage runs from a temporary mount that is gone after exit: start the AppImage file itself again.
-  app.relaunch({ execPath: process.env['APPIMAGE'] ?? process.execPath, args: [...process.argv.slice(1), ...missingArgs] })
+  const args = wslgArgs ? [...wslgArgs, ...missingArgs.filter((arg) => !wslgArgs.includes(arg) && arg !== X11_FLAG)] : [...process.argv.slice(1), ...missingArgs]
+  app.relaunch({ execPath: process.env['APPIMAGE'] ?? process.execPath, args })
   app.exit(0)
 } else if (smokeDir) {
   void runSmokeTest(smokeDir)
@@ -108,6 +114,9 @@ if (missingArgs.length > 0) {
 let started = false
 
 async function start(): Promise<void> {
+  // Splash while starting up – only when the main window is going to open (not for --mini or a hidden autostart).
+  const hiddenStart = startedByAutostart() && getSettings().startHiddenOnAutostart
+  if (!process.argv.includes(MINI_ARG) && !hiddenStart) showSplash()
   Menu.setApplicationMenu(process.platform === 'darwin' ? Menu.buildFromTemplate(MAC_MENU) : null)
   applyTheme()
   refreshAutostart()

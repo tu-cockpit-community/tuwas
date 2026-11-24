@@ -463,6 +463,8 @@ export interface UpdateState {
 
 export interface TuwasApi {
   getInfo(): Promise<AppInfo>
+  /** Own window controls (only drawn where the system gives the window no usable title bar, see windows.ts). */
+  windowControl(action: 'minimize' | 'maximize' | 'close'): void
   getSettings(): Promise<Settings>
   updateSettings(patch: Partial<Settings>): Promise<Settings>
   getAutostart(): Promise<boolean>
@@ -574,6 +576,7 @@ export interface TuwasApi {
 
 export const IPC = {
   getInfo: 'tuwas:get-info',
+  windowControl: 'tuwas:window-control',
   getSettings: 'tuwas:get-settings',
   updateSettings: 'tuwas:update-settings',
   getAutostart: 'tuwas:get-autostart',

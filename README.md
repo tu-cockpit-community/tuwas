@@ -499,6 +499,11 @@ TUWAS läuft unter Linux über XWayland (`--ozone-platform=x11`), weil Wayland A
 platzieren lässt – das Mini-Fenster muss aber oben rechts unter dem Tray-Symbol sitzen. Außerdem startet es mit
 `--lang=de-AT`, damit Datumsfelder und Menüs deutsch sind, auch wenn das System auf Englisch steht.
 
+**Ausnahme WSL (WSLg):** Dort ist der Mauszeiger in X11-Fenstern auf manchen Monitor-Anordnungen unsichtbar – die
+App bekommt ihn, Windows zeigt aber keinen. TUWAS startet unter WSLg deshalb mit `--ozone-platform=wayland`
+(Tray und Mini-Fenster-Platzierung gibt es dort ohnehin nicht). Wird es mit dem X11-Schalter gestartet, etwa über
+`npm start` oder einen Starter, startet es sich einmal selbst auf Wayland neu.
+
 Electron liest beide Schalter, bevor der App-Code läuft, deshalb müssen sie beim Start übergeben werden. Die
 npm-Skripte, der Befehl `tuwas` und der Autostart machen das automatisch; fehlen sie, startet TUWAS sich einmal
 selbst mit ihnen neu.

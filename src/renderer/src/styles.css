@@ -295,6 +295,48 @@ p {
 .app {
   display: flex;
   height: 100%;
+  /* Window controls drawn over the page (WSLg/Wayland, set by the main process): keep the strip free and draggable. */
+  padding-top: var(--titlebar-h, 0px);
+}
+
+/* Own window controls; --titlebar-controls is set by the main process only where they are needed. */
+.window-controls {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1001;
+  display: var(--titlebar-controls, none);
+  height: var(--titlebar-h, 0px);
+  -webkit-app-region: no-drag;
+}
+
+.window-controls button {
+  width: 46px;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: default;
+}
+
+.window-controls button:hover {
+  background: var(--accent-soft);
+}
+
+.window-controls button.close:hover {
+  background: #c42b1c;
+  color: #fff;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--titlebar-h, 0px);
+  -webkit-app-region: drag;
+  z-index: 1000;
 }
 
 .app > main {

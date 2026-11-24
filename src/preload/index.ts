@@ -13,6 +13,7 @@ function subscribe<Args extends unknown[]>(channel: string, listener: (...args: 
 
 const api: TuwasApi = {
   getInfo: () => ipcRenderer.invoke(IPC.getInfo),
+  windowControl: (action) => ipcRenderer.send(IPC.windowControl, action),
   getSettings: () => ipcRenderer.invoke(IPC.getSettings),
   updateSettings: (patch) => ipcRenderer.invoke(IPC.updateSettings, patch),
   getAutostart: () => ipcRenderer.invoke(IPC.getAutostart),

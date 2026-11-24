@@ -1,5 +1,7 @@
 import { app } from 'electron'
 import { execFile, execFileSync } from 'node:child_process'
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 import type { AppInfo } from '../shared/types'
 
 export const X11_FLAG = '--ozone-platform=x11'
@@ -17,7 +19,7 @@ const XRDB_WAIT_SECONDS = 4
  * a few seconds instead of asking once too early.
  */
 export function fixCursorSize(): void {
-  if (process.env['XCURSOR_SIZE'] || !process.argv.includes(X11_FLAG)) return
+  if (process.env['XCURSOR_SIZE'] || !process.argv.includes(X11_FLAG) || useWslgWayland()) return
   const script = [
     'command -v xrdb >/dev/null || exit 1',
     `i=0; while [ $i -lt ${XRDB_WAIT_SECONDS * 4} ]; do`,
@@ -43,8 +45,41 @@ export function fixCursorSize(): void {
  */
 export function startupArgs(): string[] {
   const args = ['--lang=de-AT']
-  if (process.platform === 'linux' && process.env['DISPLAY']) args.unshift(X11_FLAG)
+  if (useWslgWayland()) args.unshift(WAYLAND_FLAG)
+  else if (process.platform === 'linux' && process.env['DISPLAY']) args.unshift(X11_FLAG)
   return args
+}
+
+export const WAYLAND_FLAG = '--ozone-platform=wayland'
+/** Where WSLg keeps its Wayland socket. */
+const WSLG_RUNTIME_DIR = '/mnt/wslg/runtime-dir'
+
+/**
+ * Under WSLg the mouse pointer is invisible in X11 windows (XWayland) on some monitor setups – the app gets the
+ * pointer, but Windows shows none. Wayland windows are fine, so TUWAS uses Wayland there. WSLg has no tray, so the
+ * reason for X11 (placing the mini window under the tray icon) does not apply.
+ */
+export function useWslgWayland(): boolean {
+  return (
+    process.platform === 'linux' &&
+    Boolean(process.env['WSL_DISTRO_NAME'] || process.env['WSL_INTEROP']) &&
+    existsSync(join(WSLG_RUNTIME_DIR, 'wayland-0'))
+  )
+}
+
+/**
+ * Arguments for a relaunch if this start is wrong for WSLg (X11 flag given, or a Wayland flag without a runtime
+ * folder that holds the socket), else null. The runtime folder is fixed in the environment of the relaunch: Chromium
+ * connects to Wayland before any of our code runs, so it cannot be changed in the running process.
+ */
+export function wslgRelaunchArgs(argv: string[]): string[] | null {
+  if (!useWslgWayland()) return null
+  const runtimeDir = process.env['XDG_RUNTIME_DIR']
+  const socketReachable = Boolean(runtimeDir) && existsSync(join(runtimeDir as string, 'wayland-0'))
+  const wrongPlatform = argv.includes(X11_FLAG)
+  if (!wrongPlatform && (socketReachable || !argv.includes(WAYLAND_FLAG))) return null
+  if (!socketReachable) process.env['XDG_RUNTIME_DIR'] = WSLG_RUNTIME_DIR
+  return [...argv.slice(1).filter((arg) => arg !== X11_FLAG), ...(argv.includes(WAYLAND_FLAG) ? [] : [WAYLAND_FLAG])]
 }
 
 /** The startup flags not given on this command line (an explicit other value counts as given). */

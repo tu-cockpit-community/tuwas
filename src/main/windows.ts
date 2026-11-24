@@ -6,6 +6,8 @@ import { IPC, type View } from '../shared/types'
 import { readJson, writeJson } from './jsonFile'
 import { preloadPath, rendererHtml, resourcePath, windowIcon } from './paths'
 import { getSettings, updateSettings } from './settings'
+import { closeSplash } from './splash'
+import { useWslgWayland } from './system'
 
 const MINI_SIZE = { width: 360, height: 560 }
 const MINI_MARGIN = 8
@@ -35,6 +37,26 @@ function backgroundColor(): string {
   const { lightPalette, darkPalette } = getSettings()
   return nativeTheme.shouldUseDarkColors ? palette(DARK_PALETTES, darkPalette).background : palette(LIGHT_PALETTES, lightPalette).background
 }
+
+/** Height of the strip at the top of the page that holds our own window controls (see --titlebar-h in the style sheet). */
+const OVERLAY_HEIGHT = 32
+
+/**
+ * WSLg + Wayland: Chromium's own title bar there has a close button only (no minimize, no maximize) and cannot be
+ * configured, and Electron's overlay buttons follow the same layout. So the window gets no system title bar and the page
+ * draws minimize / maximize / close itself in a strip at the top.
+ */
+function ownControlsWanted(): boolean {
+  return useWslgWayland() && app.commandLine.getSwitchValue('ozone-platform') === 'wayland'
+}
+
+ipcMain.on(IPC.windowControl, (event, action: unknown) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  if (!win || win.isDestroyed()) return
+  if (action === 'minimize') win.minimize()
+  else if (action === 'maximize') win.isMaximized() ? win.unmaximize() : win.maximize()
+  else if (action === 'close') win.close()
+})
 
 let followingSystem = false
 
@@ -173,6 +195,7 @@ export function createMainWindow(view: View, show = true, note?: string): Browse
     title: 'TUWAS',
     icon: windowIcon(),
     backgroundColor: backgroundColor(),
+    ...(ownControlsWanted() ? { titleBarStyle: 'hidden' as const } : {}),
     // plugins: Chromium's PDF viewer, for slides next to a note.
     webPreferences: { preload: preloadPath(), sandbox: true, contextIsolation: true, plugins: true }
   })
@@ -191,7 +214,17 @@ export function createMainWindow(view: View, show = true, note?: string): Browse
   win.on('enter-full-screen', fitSoon)
   win.on('leave-full-screen', fitSoon)
   win.webContents.on('did-finish-load', fitSoon)
-  if (show) win.once('ready-to-show', () => win.show())
+  if (ownControlsWanted()) win.webContents.on('did-finish-load', () => void win.webContents.insertCSS(`:root { --titlebar-h: ${OVERLAY_HEIGHT}px; --titlebar-controls: flex }`))
+  if (show) {
+    // 'ready-to-show' needs a first painted frame, which a hidden window does not always produce on Wayland (WSLg):
+    // the window then stayed invisible. So also show it shortly after the page has loaded.
+    const reveal = (): void => {
+      if (!win.isDestroyed() && !win.isVisible()) win.show()
+    }
+    win.once('ready-to-show', reveal)
+    win.webContents.once('did-finish-load', () => setTimeout(reveal, 1500))
+  }
+  win.once('show', closeSplash)
   // Closing destroys the window to free memory; the app itself keeps running in the tray.
   win.on('closed', () => {
     mainWindow = null

@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
-import { Award, BookOpen, CalendarDays, ClipboardList, GraduationCap, NotebookPen, PanelLeftClose, PanelLeftOpen, Settings, Sun, type LucideIcon } from 'lucide-react'
+import { Award, BookOpen, CalendarDays, ClipboardList, GraduationCap, Minus, NotebookPen, PanelLeftClose, PanelLeftOpen, Settings, Square, Sun, X, type LucideIcon } from 'lucide-react'
 import type { View } from '../../shared/types'
 import { Logo, ResizeHandle } from './components'
 import { currentSemester } from './lib/dates'
@@ -106,6 +106,18 @@ export default function App({ initialView, initialNote }: { initialView: View; i
   }, [back, forward])
 
   return (
+    <>
+      <div className="window-controls">
+        <button type="button" title="Minimieren" aria-label="Minimieren" onClick={() => window.tuwas.windowControl('minimize')}>
+          <Minus size={15} />
+        </button>
+        <button type="button" title="Maximieren / Wiederherstellen" aria-label="Maximieren oder Wiederherstellen" onClick={() => window.tuwas.windowControl('maximize')}>
+          <Square size={12} />
+        </button>
+        <button type="button" className="close" title="Schließen" aria-label="Schließen" onClick={() => window.tuwas.windowControl('close')}>
+          <X size={16} />
+        </button>
+      </div>
     <div className="app">
       <aside className={`sidebar${collapsed ? ' collapsed' : ''}`} style={{ width: collapsed ? SIDEBAR.collapsed : sidebarWidth }}>
         <div className="brand">
@@ -181,6 +193,7 @@ export default function App({ initialView, initialNote }: { initialView: View; i
         )
       )}
     </div>
+    </>
   )
 }
 
