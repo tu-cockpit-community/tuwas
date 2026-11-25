@@ -1,11 +1,14 @@
 "use client";
 
 import { useId, useRef } from "react";
+import { JavaTokens } from "./JavaCode";
 
 /**
  * Schlanker Code-Editor: <textarea> in Monospace mit Zeilennummern. Tab rueckt ein (Shift+Tab aus),
  * Enter uebernimmt die Einrueckung. Damit Tab keine Tastaturfalle ist: Esc, danach verlaesst Tab das Feld.
  * Aenderungen laufen ueber execCommand("insertText"), damit Strg+Z weiter funktioniert.
+ * Die Java-Farben kommen aus einer zweiten Ebene hinter dem (durchsichtigen) Textfeld; Schrift, Abstaende und
+ * Scrollstand beider Ebenen sind gleich (siehe .code-editor-farbe in lernen.css).
  */
 
 const EINZUG = "    ";
@@ -43,6 +46,7 @@ export function CodeEditor({
 }) {
   const id = useId();
   const nummern = useRef<HTMLDivElement>(null);
+  const farbe = useRef<HTMLElement>(null);
   const tabFrei = useRef(false);
   const zeilen = wert.split("\n").length;
 
@@ -105,26 +109,37 @@ export function CodeEditor({
             ))}
           </div>
         </div>
-        <textarea
-          id={id}
-          className="code-editor-feld"
-          value={wert}
-          disabled={gesperrt}
-          aria-label={label ? undefined : beschriftung}
-          aria-describedby={`${id}-hilfe`}
-          rows={Math.max(zeilen, zeilenMin)}
-          wrap="off"
-          spellCheck={false}
-          autoCapitalize="off"
-          autoComplete="off"
-          autoCorrect="off"
-          onFocus={() => (tabFrei.current = false)}
-          onKeyDown={taste}
-          onScroll={(e) => {
-            if (nummern.current) nummern.current.style.transform = `translateY(${-e.currentTarget.scrollTop}px)`;
-          }}
-          onChange={(e) => setze(e.target.value)}
-        />
+        <div className="code-editor-flaeche">
+          {/* Farbschicht hinter dem Textfeld: gleiche Schrift und Abstände, Text im Feld ist durchsichtig. */}
+          <pre className="code-editor-farbe" aria-hidden="true">
+            <code ref={farbe}>
+              {/* der abschließende Zeilenumbruch hält die Höhe gleich, wenn die letzte Zeile leer ist */}
+              <JavaTokens code={`${wert}\n`} />
+            </code>
+          </pre>
+          <textarea
+            id={id}
+            className="code-editor-feld"
+            value={wert}
+            disabled={gesperrt}
+            aria-label={label ? undefined : beschriftung}
+            aria-describedby={`${id}-hilfe`}
+            rows={Math.max(zeilen, zeilenMin)}
+            wrap="off"
+            spellCheck={false}
+            autoCapitalize="off"
+            autoComplete="off"
+            autoCorrect="off"
+            onFocus={() => (tabFrei.current = false)}
+            onKeyDown={taste}
+            onScroll={(e) => {
+              const { scrollTop, scrollLeft } = e.currentTarget;
+              if (nummern.current) nummern.current.style.transform = `translateY(${-scrollTop}px)`;
+              if (farbe.current) farbe.current.style.transform = `translate(${-scrollLeft}px, ${-scrollTop}px)`;
+            }}
+            onChange={(e) => setze(e.target.value)}
+          />
+        </div>
       </div>
       <p id={`${id}-hilfe`} className="eingabe-hilfe">
         Tab rückt ein, Shift+Tab rückt aus. Zum Verlassen des Editors erst Esc, dann Tab.

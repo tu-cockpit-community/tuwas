@@ -233,6 +233,21 @@ html[data-embed="1"]:not([data-theme="dark"]) .lernen {
 .tabelle-huelle tr:last-child td {
   border-bottom: 0;
 }
+/* Test/Result-Tabellen der Quiz-Aufgaben: Ein mehrzeiliges Ergebnis steht in Folgezeilen mit leerer erster Zelle.
+   Diese Zeilen rücken eng zusammen und haben keine Trennlinie, dann liest es sich wie ein Ergebnisblock. */
+.tabelle-huelle tr:has(> td:first-child:empty) td {
+  padding-top: 0;
+  border-top: 0;
+}
+.tabelle-huelle tr:has(+ tr > td:first-child:empty) td {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+/* Inline-Code ohne Ligaturen: `++`, `==`, `!=` bleiben so, wie man sie tippt. */
+.lern-md code {
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
 
 /* ===================================== Kaesten ====================================== */
 .kasten {
@@ -2153,6 +2168,9 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   overflow-x: auto;
   white-space: pre;
   tab-size: 4;
+  /* so wie getippt: `==` bleibt `==` (keine Ligatur) */
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
 }
 .lern-md .code-block code,
 .code-block code {
@@ -2232,21 +2250,60 @@ details.kasten:not([open]) .kasten-aufklapp-auf {
   min-width: 2.8em;
   font-variant-numeric: tabular-nums;
 }
-.code-editor-feld {
+/* Textfeld und Farbschicht liegen übereinander und müssen in Schrift, Abstand und Zeilenhöhe identisch sein.
+   Ohne Ligaturen: JetBrains Mono zieht sonst `==`, `!=`, `<=` zu einem Zeichen zusammen, und man sieht nicht mehr,
+   was man getippt hat. */
+.code-editor-flaeche {
+  position: relative;
   flex: 1;
   min-width: 0;
-  border: 0;
-  outline: none;
-  resize: vertical;
+}
+.code-editor-feld,
+.code-editor-farbe {
   padding: 0.6rem 0.75rem;
   font-family: var(--font-mono);
   font-size: 0.92rem;
   line-height: 1.5;
-  background: transparent;
-  color: var(--color-ink);
   white-space: pre;
-  overflow: auto;
   tab-size: 4;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+  letter-spacing: normal;
+}
+.code-editor-feld {
+  display: block;
+  position: relative;
+  width: 100%;
+  border: 0;
+  outline: none;
+  resize: vertical;
+  background: transparent;
+  /* Der Text kommt aus der Farbschicht; das Feld zeigt nur Cursor und Auswahl. */
+  color: transparent;
+  caret-color: var(--color-ink);
+  overflow: auto;
+}
+.code-editor-farbe {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--color-ink);
+  background: none;
+  border: 0;
+}
+.code-editor-farbe code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  font: inherit;
+  background: none;
+  padding: 0;
+  will-change: transform;
+}
+.code-editor-nr {
+  font-variant-ligatures: none;
 }
 .eingabe-code .code-eingabe-leiste {
   display: flex;
